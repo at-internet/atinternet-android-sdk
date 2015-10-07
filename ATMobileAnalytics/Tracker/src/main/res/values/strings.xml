@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tracker</string>
+    <string name="event_viewer">Event Viewer</string>
+    <string name="offline_hits">Offline Hits</string>
+    <string name="hit_detail">Hit Detail</string>
+    <string name="event_detail">Event Detail</string>
+    <string name="no_event_detected">No event detected</string>
+    <string name="no_offline_hits">No stored hits</string>
+    <string name="empty" />
+
+</resources>
