@@ -85,7 +85,12 @@ public class TVTracking {
             String remanentCampaign = tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
             if (remanentCampaign != null) {
                 JSONObject remanentObject = new JSONObject(remanentCampaign);
-                int lifetime = Integer.parseInt((String) remanentObject.get("lifetime"));
+                int lifetime;
+                if (remanentObject.get("lifetime") instanceof String) {
+                    lifetime = Integer.parseInt((String) remanentObject.get("lifetime"));
+                } else {
+                    lifetime = (Integer) remanentObject.get("lifetime");
+                }
                 long savedLifetime = tracker.getPreferences().getLong(TrackerKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
 
                 if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), savedLifetime) >= lifetime) {

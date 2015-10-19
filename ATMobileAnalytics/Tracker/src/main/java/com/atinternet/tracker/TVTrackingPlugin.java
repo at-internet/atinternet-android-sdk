@@ -31,6 +31,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * TVTracking plugin
@@ -49,17 +54,20 @@ class TVTrackingPlugin extends Plugin {
     private static final String REMANENT = "remanent";
     private static final String INFO = "info";
     private static final String VERSION = "version";
-    private static final String VERSION_TVT_CODE = "1.2.1m";
+    private static final String VERSION_TVT_CODE = "1.2.2m";
     private static final String MESSAGE = "message";
     private static final String ERROR = "errors";
     private static final String TVTRACKING = "tvtracking";
     private static final String UNDEFINED = "undefined";
     private static final String PRIORITY = "priority";
     private static final String CHANNEL = "channel";
+    private static final String TIME = "time";
     private static final String LIFETIME = "lifetime";
 
+    private static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
     enum TVTrackingStatusCase {
-        channelUndefined, noChannel, noData, ok
+        channelUndefined, noChannel, noData, timeError, ok
     }
 
     @Override
@@ -131,22 +139,26 @@ class TVTrackingPlugin extends Plugin {
             switch ((TVTrackingStatusCase) checkResult[0]) {
                 case noChannel:
                     // invalid data
-                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.noChannel, connection);
+                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.noChannel, connection, null);
                     break;
                 case channelUndefined:
                     // no diffusion
-                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.channelUndefined, connection);
+                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.channelUndefined, connection, null);
+                    break;
+                case timeError:
+                    // Bad time
+                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.timeError, connection, checkResult);
                     break;
                 default:
                     // valid campaign
                     JSONObject directObject = (JSONObject) checkResult[1];
                     tracker.getPreferences().edit().putString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, directObject.toString()).apply();
                     tvtrackingObject.put(DIRECT, directObject);
-                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.ok, connection);
+                    infoObject = putInfos(infoSaved, TVTrackingStatusCase.ok, connection, checkResult);
                     break;
             }
         } else {
-            infoObject = putInfos(infoSaved, TVTrackingStatusCase.noData, connection);
+            infoObject = putInfos(infoSaved, TVTrackingStatusCase.noData, connection, null);
         }
         tracker.getPreferences().edit().putString(TrackerKeys.INFO_CAMPAIGN_SAVED, infoObject.toString()).apply();
 
@@ -172,8 +184,18 @@ class TVTrackingPlugin extends Plugin {
             String remanentCampaign = tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
             if (remanentCampaign != null) {
                 JSONObject remanentObject = new JSONObject(remanentCampaign);
-                int directPriority = Integer.parseInt((String) directObject.get(PRIORITY));
-                int remanentPriority = Integer.parseInt((String) remanentObject.get(PRIORITY));
+                int directPriority;
+                int remanentPriority;
+                if (directObject.get(PRIORITY) instanceof String) {
+                    directPriority = Integer.parseInt((String) directObject.get(PRIORITY));
+                } else {
+                    directPriority = (Integer) directObject.get(PRIORITY);
+                }
+                if (remanentObject.get(PRIORITY) instanceof String) {
+                    remanentPriority = Integer.parseInt((String) remanentObject.get(PRIORITY));
+                } else {
+                    remanentPriority = (Integer) remanentObject.get(PRIORITY);
+                }
                 if (directPriority == 1 || (directPriority == 0 && remanentPriority == 1)) {
                     tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, directCampaign).apply();
                 }
@@ -209,6 +231,23 @@ class TVTrackingPlugin extends Plugin {
             if (response.get(LIFETIME).equals(UNDEFINED)) {
                 response.put(LIFETIME, "30");
             }
+
+            String partnerTime = (String) response.get(TIME);
+            SimpleDateFormat sdf = null;
+            Date date = null;
+
+            // UTC
+            try {
+                sdf = new SimpleDateFormat(UTC_DATE_FORMAT, Locale.getDefault());
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                date = sdf.parse(partnerTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (date == null || Tool.getMinutesBetweenTimes(System.currentTimeMillis(), date.getTime()) > (Integer) tracker.getConfiguration().get(TrackerKeys.TVT_SPOT_VALIDITY_TIME)) {
+                return new Object[]{TVTrackingStatusCase.timeError, partnerTime};
+            }
         }
         return new Object[]{TVTrackingStatusCase.ok, response};
     }
@@ -232,7 +271,7 @@ class TVTrackingPlugin extends Plugin {
      * @return JSONObject
      * @throws JSONException
      */
-    private JSONObject putInfos(String infoSaved, TVTrackingStatusCase status, HttpURLConnection connection) throws JSONException, IOException {
+    private JSONObject putInfos(String infoSaved, TVTrackingStatusCase status, HttpURLConnection connection, Object[] checkResult) throws JSONException, IOException {
         // if session is not expired
         if (infoSaved != null) {
             return new JSONObject(infoSaved);
@@ -254,6 +293,11 @@ class TVTrackingPlugin extends Plugin {
                     return infoObject.put(VERSION, VERSION_TVT_CODE)
                             .put(MESSAGE, String.valueOf(connection.getResponseCode()))
                             .put(ERROR, "noData");
+                case timeError:
+                    // Bad time
+                    return infoObject.put(VERSION, VERSION_TVT_CODE)
+                            .put(MESSAGE, String.valueOf(connection.getResponseCode()) + "-" + String.valueOf(checkResult[1]))
+                            .put(ERROR, "timeError");
                 default:
                     // Valid campaign
                     return infoObject.put(VERSION, VERSION_TVT_CODE)

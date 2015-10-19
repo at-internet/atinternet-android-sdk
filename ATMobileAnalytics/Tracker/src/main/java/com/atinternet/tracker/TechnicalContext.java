@@ -62,7 +62,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.0.6";
+            return "2.0.7";
         }
     };
 
@@ -281,6 +281,25 @@ class TechnicalContext {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 ((WindowManager) context.getApplicationContext().getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
                 return displayMetrics.widthPixels + "x" + displayMetrics.heightPixels;
+            }
+        };
+    }
+
+    /**
+     * Get the download SDK source
+     *
+     * @return Closure
+     */
+    static Closure getDownloadSource(final Tracker tracker) {
+        return new Closure() {
+            @Override
+            public String execute() {
+                Object dls = tracker.getConfiguration().get(TrackerKeys.DOWNLOAD_SOURCE);
+                if (dls != null) {
+                    return String.valueOf(dls);
+                } else {
+                    return "ext";
+                }
             }
         };
     }

@@ -140,6 +140,11 @@ public class TrackerKeys {
     public static final String TVT_VISIT_DURATION = "tvtVisitDuration";
 
     /**
+     * Constant for tvt spot validity time configuration
+     */
+    public static final String TVT_SPOT_VALIDITY_TIME = "tvtSpotValidityTime";
+
+    /**
      * Constant for campaign remanence configuration
      */
     public static final String CAMPAIGN_LAST_PERSISTENCE = "campaignLastPersistence";
@@ -148,4 +153,9 @@ public class TrackerKeys {
      * Constant for lifetime marketing campaign
      */
     public static final String CAMPAIGN_LIFETIME = "campaignLifetime";
+
+    /**
+     * Constant for download SDK source
+     */
+    static final String DOWNLOAD_SOURCE = "downloadSource";
 }

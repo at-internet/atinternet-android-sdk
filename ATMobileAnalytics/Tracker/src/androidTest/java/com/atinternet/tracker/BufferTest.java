@@ -64,7 +64,7 @@ public final class BufferTest extends AbstractTestClass {
     @Test
     public void addPersistentParameterTest() {
         buffer.getPersistentParams().add(param);
-        assertEquals(14, buffer.getPersistentParams().size());
+        assertEquals(15, buffer.getPersistentParams().size());
     }
 
     @Test
@@ -108,8 +108,8 @@ public final class BufferTest extends AbstractTestClass {
     @Test
     public void addContextVariablesTest() throws Exception {
         buffer.getPersistentParams().clear();
-        executePrivateMethod(buffer, "addContextVariables", new Object[0]);
-        assertEquals(13, buffer.getPersistentParams().size());
+        executePrivateMethod(buffer, "addContextVariables", new Object[]{tracker});
+        assertEquals(14, buffer.getPersistentParams().size());
         assertEquals(TechnicalContext.VTAG.execute(), buffer.getPersistentParams().get(0).getValue().execute());
         assertEquals("Android", buffer.getPersistentParams().get(1).getValue().execute());
     }

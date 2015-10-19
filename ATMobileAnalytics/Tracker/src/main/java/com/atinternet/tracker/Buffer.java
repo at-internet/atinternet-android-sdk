@@ -107,13 +107,13 @@ class Buffer {
         identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerKeys.IDENTIFIER));
 
         initConstantClosures();
-        addContextVariables();
+        addContextVariables(tracker);
     }
 
     /**
      * Add context variables in persistent parameters list
      */
-    private void addContextVariables() {
+    private void addContextVariables(Tracker tracker) {
         // Boolean isPersistent have to be true in all cases
         ParamOption persistent = new ParamOption().setPersistent(true);
         ParamOption persistentWithEncoding = new ParamOption().setPersistent(true).setEncode(true);
@@ -130,6 +130,7 @@ class Buffer {
         persistentParams.add(new Param("car", TechnicalContext.getCarrier(), Type.String, persistentWithEncoding));
         persistentParams.add(new Param("cn", TechnicalContext.getConnectionType(), Type.String, persistentWithEncoding));
         persistentParams.add(new Param("ts", Tool.getTimeStamp(), Type.String, persistent));
+        persistentParams.add(new Param("dls", TechnicalContext.getDownloadSource(tracker), Type.String, persistent));
         persistentParams.add(new Param("idclient", TechnicalContext.getUserId(identifierKey), Type.String, persistent));
     }
 

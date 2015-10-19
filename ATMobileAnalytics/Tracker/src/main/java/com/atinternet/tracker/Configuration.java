@@ -67,6 +67,7 @@ class Configuration extends LinkedHashMap<String, Object> {
     }
 
     // FIXME TESTS ONLY
+
     /**
      * Override configuration
      *
@@ -84,7 +85,7 @@ class Configuration extends LinkedHashMap<String, Object> {
      * @return JSONObject
      */
     private JSONObject getDefaultConfiguration(Context context) {
-        JSONObject result = null;
+        JSONObject result = new JSONObject();
         String stringResult;
         try {
             InputStream inputStream = getClass().getResourceAsStream("/" + JSON_FILE);
@@ -101,7 +102,28 @@ class Configuration extends LinkedHashMap<String, Object> {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            try {
+                result.put("log", "logp")
+                        .put("logSSL", "logs")
+                        .put("domain", "xiti.com")
+                        .put("pixelPath", "/hit.xiti")
+                        .put("site", 552987)
+                        .put("secure", false)
+                        .put("identifier", "androidId")
+                        .put("enableCrashDetection", true)
+                        .put("plugins", "tvtracking")
+                        .put("storage", "required")
+                        .put("hashUserId", false)
+                        .put("persistIdentifiedVisitor", true)
+                        .put("tvtURL", "")
+                        .put("tvtVisitDuration", 10)
+                        .put("tvtSpotValidityTime", 5)
+                        .put("campaignLastPersistence", false)
+                        .put("campaignLifetime", 30);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+
         }
 
         return result;

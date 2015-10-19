@@ -53,7 +53,7 @@ public class ConfigurationTest extends AbstractTestClass {
     // On vérifie que la création d'une configuration par défaut pour téléphone possède bien les valeurs présentes dans le fichier JSON
     @Test
     public void phoneConfigurationTest() {
-        assertEquals(17, emulatePhoneConfig.size());
+        assertEquals(19, emulatePhoneConfig.size());
         assertEquals("logp", emulatePhoneConfig.get("log"));
         assertEquals("logsPhone", emulatePhoneConfig.get("logSSL"));
         assertEquals(123, emulatePhoneConfig.get("site"));
@@ -71,12 +71,14 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(true, emulatePhoneConfig.get("enableCrashDetection"));
         assertEquals(true, emulatePhoneConfig.get("campaignLastPersistence"));
         assertEquals(10, emulatePhoneConfig.get("campaignLifetime"));
+        assertEquals(5, emulatePhoneConfig.get("tvtSpotValidityTime"));
+        assertEquals("int", emulatePhoneConfig.get("downloadSource"));
     }
 
     // On vérifie que la création d'une configuration par défaut pour tablette possède bien les valeurs présentes dans le fichier JSON
     @Test
     public void tabletConfigurationTest() {
-        assertEquals(17, emulateTabletConfig.size());
+        assertEquals(19, emulateTabletConfig.size());
         assertEquals("logTablet", emulateTabletConfig.get("log"));
         assertEquals("logsTablet", emulateTabletConfig.get("logSSL"));
         assertEquals(456, emulateTabletConfig.get("site"));
@@ -94,6 +96,8 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(true, emulatePhoneConfig.get("enableCrashDetection"));
         assertEquals(true, emulatePhoneConfig.get("campaignLastPersistence"));
         assertEquals(10, emulatePhoneConfig.get("campaignLifetime"));
+        assertEquals(5, emulatePhoneConfig.get("tvtSpotValidityTime"));
+        assertEquals("int", emulatePhoneConfig.get("downloadSource"));
     }
 
     // On vérifie que la configuration faite par le client écrase la configuration par défaut

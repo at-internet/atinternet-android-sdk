@@ -249,6 +249,17 @@ class Tool {
     }
 
     /**
+     * Get minutes count between two millis time
+     *
+     * @param nowMillis  long
+     * @param timeMillis long
+     * @return int
+     */
+    static int getMinutesBetweenTimes(long nowMillis, long timeMillis) {
+        return (int) TimeUnit.MINUTES.convert((nowMillis - timeMillis), TimeUnit.MILLISECONDS);
+    }
+
+    /**
      * Get seconds count between two millis time
      *
      * @param nowMillis  long

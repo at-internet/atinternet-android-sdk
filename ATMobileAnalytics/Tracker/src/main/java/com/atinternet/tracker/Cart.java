@@ -56,7 +56,7 @@ public class Cart extends BusinessObject {
     }
 
     public Cart set(String cartId) {
-        if (!this.cartId.equals(cartId) && products != null) {
+        if (this.cartId != null && !this.cartId.equals(cartId) && products != null) {
             products.removeAll();
         }
         tracker.getBusinessObjects().put(id, this);
