@@ -111,7 +111,11 @@ public class SelfPromotion extends OnAppAd {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), TechnicalContext.level2);
             }
         }
-        ParamOption append = new ParamOption().setAppend(true);
-        tracker.setParam(action.stringValue(), selfPromotion, append);
+
+        if (action == Action.View) {
+            tracker.setParam(action.stringValue(), selfPromotion, new ParamOption().setAppend(true));
+        } else {
+            tracker.setParam(action.stringValue(), selfPromotion, new ParamOption().setAppend(true).setEncode(true));
+        }
     }
 }

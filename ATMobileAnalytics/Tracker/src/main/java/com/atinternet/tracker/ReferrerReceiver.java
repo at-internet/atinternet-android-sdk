@@ -22,8 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import android.content.BroadcastReceiver;
-import android.content.Intent;
+import android.content.*;
 
 public class ReferrerReceiver extends BroadcastReceiver {
 
@@ -40,6 +39,9 @@ public class ReferrerReceiver extends BroadcastReceiver {
             if (action != null && action.equals(REFERRER_INTENT_ACTION)) {
                 String referrer = intent.getStringExtra(REFERRER);
                 if (referrer != null) {
+                    context.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE)
+                            .edit().putString(TrackerKeys.REFERRER, referrer.replace("&", "%26"))
+                            .apply();
                     referrer = Tool.percentDecode(referrer);
                     String[] campaignParams = referrer.split("&");
                     for (String param : campaignParams) {

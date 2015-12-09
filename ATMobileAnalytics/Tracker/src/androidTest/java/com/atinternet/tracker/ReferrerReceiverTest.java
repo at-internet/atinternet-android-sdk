@@ -50,32 +50,35 @@ public class ReferrerReceiverTest extends AbstractTestClass {
     }
 
     @Test
-    public void onReceiveGoodTest() {
+    public void onReceiveWithReferrerAndXtor() {
         Intent intent = new Intent();
         intent.setAction("com.android.vending.INSTALL_REFERRER");
         intent.putExtra("referrer", "test=value&xtor=campaign");
         referrerReceiver.onReceive(Robolectric.application, intent);
 
+        assertEquals("test=value%26xtor=campaign", preferences.getString(TrackerKeys.REFERRER, null));
         assertEquals("campaign", preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
     }
 
     @Test
-    public void onReceiveBadOneTest() {
+    public void onReceiveWithReferrer() {
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
+        intent.setAction("com.android.vending.INSTALL_REFERRER");
         intent.putExtra("referrer", "test_value_set");
         referrerReceiver.onReceive(Robolectric.application, intent);
 
+        assertEquals("test_value_set", preferences.getString(TrackerKeys.REFERRER, null));
         assertNull(preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
     }
 
     @Test
-    public void onReceiveBadTwoTest() {
+    public void onReceiveWithoutReferrer() {
         Intent intent = new Intent();
         intent.setAction("com.android.vending.INSTALL_REFERRER");
         intent.putExtra("id", "test_value_set");
         referrerReceiver.onReceive(Robolectric.application, intent);
 
+        assertNull(preferences.getString(TrackerKeys.REFERRER, null));
         assertNull(preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
     }
 }

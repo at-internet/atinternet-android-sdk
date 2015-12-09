@@ -54,6 +54,9 @@ public class TrackerKeys {
     //Global key representing date of last hit sent
     static final String LAST_TVT_EXECUTE_TIME = "ATLastTVTExecuteTime";
 
+    //Global key representing date of last hit sent
+    static final String REFERRER = "ATReferrer";
+
     //Global key representing current tvtracking campaign
     static final String DIRECT_CAMPAIGN_SAVED = "ATDirectCampaignSaved";
 

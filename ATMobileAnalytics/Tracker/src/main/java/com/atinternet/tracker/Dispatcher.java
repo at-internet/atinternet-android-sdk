@@ -23,6 +23,7 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 
@@ -126,6 +127,12 @@ class Dispatcher {
         tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(tracker.getPreferences()), appendWithEncoding);
         if ((Boolean) tracker.getConfiguration().get(TrackerKeys.ENABLE_CRASH_DETECTION)) {
             tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), appendWithEncoding);
+        }
+
+        String referrer = tracker.getPreferences().getString(TrackerKeys.REFERRER, null);
+        if(!TextUtils.isEmpty(referrer)){
+            tracker.setParam("refstore", referrer);
+            tracker.getPreferences().edit().putString(TrackerKeys.REFERRER, null).apply();
         }
 
         Builder builder = new Builder(tracker);

@@ -196,7 +196,10 @@ public class Publisher extends OnAppAd {
             }
         }
 
-        ParamOption append = new ParamOption().setAppend(true);
-        tracker.setParam(action.stringValue(), publisher, append);
+        if (action == Action.View) {
+            tracker.setParam(action.stringValue(), publisher, new ParamOption().setAppend(true));
+        } else {
+            tracker.setParam(action.stringValue(), publisher, new ParamOption().setAppend(true).setEncode(true));
+        }
     }
 }
