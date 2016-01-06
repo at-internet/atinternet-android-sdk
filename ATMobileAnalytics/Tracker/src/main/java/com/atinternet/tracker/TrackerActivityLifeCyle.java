@@ -56,7 +56,7 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
             if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) >= DELTA) {
                 LifeCycle.updateFirstLaunch(Tracker.getPreferences());
             }
-            if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) > sessionBackgroundDuration) {
+            if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) >= (sessionBackgroundDuration + DELTA)) {
                 LifeCycle.newLaunchInit(Tracker.getPreferences());
                 timeInBackground = -1;
             }
