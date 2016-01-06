@@ -22,7 +22,10 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -247,9 +250,14 @@ public class Tracker {
     /**
      * Get Preferences
      */
-    SharedPreferences getPreferences() {
+    static SharedPreferences getPreferences() {
         return appContext.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
+
+    /**
+     * Boolean to detect if activity lifecycle tracking is enabled
+     */
+    static boolean isTrackerActivityLifeCycleEnabled = false;
 
     /**
      * Get user ID for webview
@@ -540,10 +548,10 @@ public class Tracker {
         String identifierKey = String.valueOf(configuration.get(TrackerKeys.IDENTIFIER));
         String offlineMode = String.valueOf(configuration.get(TrackerKeys.STORAGE));
 
-        if (identifierKey != null && !identifierKey.isEmpty()) {
+        if (!TextUtils.isEmpty(identifierKey)) {
             buffer.setIdentifierKey(identifierKey);
         }
-        if (offlineMode != null && !offlineMode.isEmpty()) {
+        if (!TextUtils.isEmpty(offlineMode)) {
             storage.setOfflineMode(Tool.convertStringToOfflineMode(offlineMode));
         }
     }
@@ -555,7 +563,7 @@ public class Tracker {
      */
     private void initTracker(android.content.Context context) {
         listener = null;
-        Tracker.appContext = context;
+        Tracker.appContext = context.getApplicationContext();
         storage = new Storage(context);
         storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerKeys.STORAGE)));
         buffer = new Buffer(this);
@@ -564,6 +572,17 @@ public class Tracker {
             Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(context, Thread.getDefaultUncaughtExceptionHandler()));
         }
         getPreferences().edit().putBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, false).apply();
+
+        if (!isTrackerActivityLifeCycleEnabled) {
+            setTrackerActivityLifecycle(Integer.parseInt(String.valueOf(configuration.get(TrackerKeys.SESSION_BACKGROUND_DURATION))));
+        }
+    }
+
+    private void setTrackerActivityLifecycle(int sessionBackgroundDuration) {
+        isTrackerActivityLifeCycleEnabled = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            ((Application) appContext).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(sessionBackgroundDuration));
+        }
     }
 
     /**

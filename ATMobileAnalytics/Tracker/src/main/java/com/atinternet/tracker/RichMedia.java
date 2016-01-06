@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -231,7 +233,7 @@ public abstract class RichMedia extends BusinessObject {
             }
 
             if (!isEmbedded) {
-                if (TechnicalContext.screenName != null && !TechnicalContext.screenName.isEmpty()) {
+                if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
                     tracker.setParam("prich", TechnicalContext.screenName, encode);
                 }
 

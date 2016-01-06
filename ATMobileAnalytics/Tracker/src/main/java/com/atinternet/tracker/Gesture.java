@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 public class Gesture extends BusinessObject {
 
     public enum Action {
@@ -101,7 +103,7 @@ public class Gesture extends BusinessObject {
 
     @Override
     void setEvent() {
-        if (TechnicalContext.screenName != null && !TechnicalContext.screenName.isEmpty()) {
+        if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
             tracker.setParam(Hit.HitParam.TouchScreen.stringValue(), TechnicalContext.screenName, new ParamOption().setEncode(true));
         }
 

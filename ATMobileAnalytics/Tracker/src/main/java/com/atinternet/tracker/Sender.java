@@ -23,6 +23,7 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -238,7 +239,7 @@ class Sender implements Runnable {
      */
     void saveHitDatabase(final Hit hit) {
         final String url = storage.saveHit(hit.getUrl(), System.currentTimeMillis(), oltParameter);
-        if (url != null && !url.isEmpty()) {
+        if (!TextUtils.isEmpty(url)) {
             Tool.executeCallback(trackerListener, CallbackType.save, hit.getUrl());
             updateDebugger(url, "save48", true);
         } else {

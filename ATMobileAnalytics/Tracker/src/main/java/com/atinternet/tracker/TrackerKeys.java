@@ -88,7 +88,7 @@ public class TrackerKeys {
     public static final String HASH_USER_ID = "hashUserId";
 
     /**
-     * Constant for hashuserid configuration
+     * Constant for enableCrashDetection configuration
      */
     public static final String ENABLE_CRASH_DETECTION = "enableCrashDetection";
 
@@ -161,4 +161,9 @@ public class TrackerKeys {
      * Constant for download SDK source
      */
     static final String DOWNLOAD_SOURCE = "downloadSource";
+
+    /**
+     * Constant for session duration
+     */
+    static final String SESSION_BACKGROUND_DURATION = "sessionBackgroundDuration";
 }

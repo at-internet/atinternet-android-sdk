@@ -18,6 +18,7 @@
     "enableCrashDetection": true,
     "campaignLastPersistence": true,
     "campaignLifetime": 10,
+    "sessionBackgroundDuration": 60,
     "downloadSource": "int"
   },
   "tablet": {
@@ -39,6 +40,7 @@
     "enableCrashDetection": true,
     "campaignLastPersistence": true,
     "campaignLifetime": 10,
+    "sessionBackgroundDuration": 60,
     "downloadSource": "int"
   }
 }

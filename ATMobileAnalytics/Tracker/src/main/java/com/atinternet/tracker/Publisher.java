@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 
 public class Publisher extends OnAppAd {
@@ -187,7 +189,7 @@ public class Publisher extends OnAppAd {
         }
 
         if (action == Action.Touch) {
-            if (TechnicalContext.screenName != null && !TechnicalContext.screenName.isEmpty()) {
+            if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchScreen.stringValue(), TechnicalContext.screenName, new ParamOption().setEncode(true));
             }
 
@@ -196,10 +198,6 @@ public class Publisher extends OnAppAd {
             }
         }
 
-        if (action == Action.View) {
-            tracker.setParam(action.stringValue(), publisher, new ParamOption().setAppend(true));
-        } else {
-            tracker.setParam(action.stringValue(), publisher, new ParamOption().setAppend(true).setEncode(true));
-        }
+        tracker.setParam(action.stringValue(), publisher, new ParamOption().setAppend(true).setEncode(true));
     }
 }

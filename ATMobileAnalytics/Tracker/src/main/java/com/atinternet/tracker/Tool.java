@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,7 +115,7 @@ class Tool {
      * @return String
      */
     static String convertToString(Object value, String separator) {
-        separator = (separator != null && !separator.isEmpty()) ? separator : ",";
+        separator = (!TextUtils.isEmpty(separator)) ? separator : ",";
         String result = "";
         boolean isFirst = true;
 
@@ -240,34 +241,34 @@ class Tool {
     /**
      * Get days count between two millis time
      *
-     * @param nowMillis  long
-     * @param timeMillis long
+     * @param latestTimeMillis  long
+     * @param oldestTimeMillis long
      * @return int
      */
-    static int getDaysBetweenTimes(long nowMillis, long timeMillis) {
-        return (int) TimeUnit.DAYS.convert((nowMillis - timeMillis), TimeUnit.MILLISECONDS);
+    static int getDaysBetweenTimes(long latestTimeMillis, long oldestTimeMillis) {
+        return (int) TimeUnit.DAYS.convert((latestTimeMillis - oldestTimeMillis), TimeUnit.MILLISECONDS);
     }
 
     /**
      * Get minutes count between two millis time
      *
-     * @param nowMillis  long
-     * @param timeMillis long
+     * @param latestTimeMillis  long
+     * @param oldestTimeMillis long
      * @return int
      */
-    static int getMinutesBetweenTimes(long nowMillis, long timeMillis) {
-        return (int) TimeUnit.MINUTES.convert((nowMillis - timeMillis), TimeUnit.MILLISECONDS);
+    static int getMinutesBetweenTimes(long latestTimeMillis, long oldestTimeMillis) {
+        return (int) TimeUnit.MINUTES.convert((latestTimeMillis - oldestTimeMillis), TimeUnit.MILLISECONDS);
     }
 
     /**
      * Get seconds count between two millis time
      *
-     * @param nowMillis  long
-     * @param timeMillis long
+     * @param latestTimeMillis  long
+     * @param oldestTimeMillis long
      * @return int
      */
-    static int getSecondsBetweenTimes(long nowMillis, long timeMillis) {
-        return (int) TimeUnit.SECONDS.convert((nowMillis - timeMillis), TimeUnit.MILLISECONDS);
+    static int getSecondsBetweenTimes(long latestTimeMillis, long oldestTimeMillis) {
+        return (int) TimeUnit.SECONDS.convert((latestTimeMillis - oldestTimeMillis), TimeUnit.MILLISECONDS);
     }
 
     /**

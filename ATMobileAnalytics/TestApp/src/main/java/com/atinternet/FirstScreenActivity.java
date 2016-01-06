@@ -1,15 +1,17 @@
 package com.atinternet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-import com.atinternet.tracker.ATInternet;
-import com.atinternet.tracker.SetConfigCallback;
 import com.atinternet.tracker.Tracker;
 
-import java.util.HashMap;
-
 public class FirstScreenActivity extends Activity {
+
+    Button goToSecondScreen;
+    Button loopToFirstScreen;
 
 
     @Override
@@ -21,8 +23,23 @@ public class FirstScreenActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        final Tracker mySpecificTracker = ((ATInternet) getApplication()).getDefaultTracker();
-        mySpecificTracker.Screens().add(FirstScreenActivity.this).sendView();
+        final Tracker mySpecificTracker = new Tracker(this);
 
+        mySpecificTracker.Screens().add("FirstScreen").sendView();
+        loopToFirstScreen = (Button) findViewById(R.id.loopToFirstScreen);
+        loopToFirstScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(FirstScreenActivity.this, FirstScreenActivity.class));
+            }
+        });
+
+        goToSecondScreen = (Button) findViewById(R.id.goToSecondScreenId);
+        goToSecondScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(FirstScreenActivity.this, SecondScreenActivity.class));
+            }
+        });
     }
 }

@@ -10,28 +10,16 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/validSpot"
+            android:id="@+id/loopToFirstScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="valid spot"/>
+            android:text="Loop To First Screen"/>
 
         <Button
-            android:id="@+id/noDataSpot"
+            android:id="@+id/goToSecondScreenId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="spot not found"/>
-
-        <Button
-            android:id="@+id/noChannelSpot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="no channel spot"/>
-
-        <Button
-            android:id="@+id/channelUndefinedSpot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="channel undefined spot"/>
+            android:text="Go to second screen"/>
 
     </LinearLayout>
 </ScrollView>

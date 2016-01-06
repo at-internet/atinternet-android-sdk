@@ -245,7 +245,7 @@ class TVTrackingPlugin extends Plugin {
                 e.printStackTrace();
             }
 
-            if (date == null || Tool.getMinutesBetweenTimes(System.currentTimeMillis(), date.getTime()) > (Integer) tracker.getConfiguration().get(TrackerKeys.TVT_SPOT_VALIDITY_TIME)) {
+            if (date == null || Tool.getMinutesBetweenTimes(System.currentTimeMillis(), date.getTime()) > Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerKeys.TVT_SPOT_VALIDITY_TIME)))) {
                 return new Object[]{TVTrackingStatusCase.timeError, partnerTime};
             }
         }

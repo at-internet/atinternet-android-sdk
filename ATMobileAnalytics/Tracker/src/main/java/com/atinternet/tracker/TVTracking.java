@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,14 +72,14 @@ public class TVTracking {
         visitDuration = 10;
 
         String url = (String) tracker.getConfiguration().get(TrackerKeys.TVT_URL);
-        if (url != null && !url.isEmpty()) {
+        if (!TextUtils.isEmpty(url)) {
             campaignURL = url;
         } else {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "TVTracking URL not set");
         }
 
-        Integer visit = (Integer) tracker.getConfiguration().get(TrackerKeys.TVT_VISIT_DURATION);
-        if (visit != null && visit != 0) {
+        Integer visit = Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerKeys.TVT_VISIT_DURATION)));
+        if (visit != 0) {
             visitDuration = visit;
         }
 

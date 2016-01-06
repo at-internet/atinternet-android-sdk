@@ -101,7 +101,6 @@ class Configuration extends LinkedHashMap<String, Object> {
                 result = json.getJSONObject(PHONE_CONFIGURATION);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             try {
                 result.put("log", "logp")
                         .put("logSSL", "logs")
@@ -119,11 +118,11 @@ class Configuration extends LinkedHashMap<String, Object> {
                         .put("tvtVisitDuration", 10)
                         .put("tvtSpotValidityTime", 5)
                         .put("campaignLastPersistence", false)
-                        .put("campaignLifetime", 30);
+                        .put("campaignLifetime", 30)
+                        .put("sessionBackgroundDuration", 60);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
-
         }
 
         return result;

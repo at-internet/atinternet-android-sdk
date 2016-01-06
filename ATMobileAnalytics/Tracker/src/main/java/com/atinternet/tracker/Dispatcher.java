@@ -99,7 +99,7 @@ class Dispatcher {
             CrashDetectionHandler.setCrashLastScreen(TechnicalContext.screenName);
 
             String level2 = Tool.appendParameterValues(Hit.HitParam.Level2.stringValue(), tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams());
-            TechnicalContext.level2 = (level2 != null && !level2.isEmpty()) ? Integer.parseInt(level2) : 0;
+            TechnicalContext.level2 = (!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0;
 
             SharedPreferences preferences = tracker.getPreferences();
             if (!preferences.getBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, false)) {
@@ -130,7 +130,7 @@ class Dispatcher {
         }
 
         String referrer = tracker.getPreferences().getString(TrackerKeys.REFERRER, null);
-        if(!TextUtils.isEmpty(referrer)){
+        if (!TextUtils.isEmpty(referrer)) {
             tracker.setParam("refstore", referrer);
             tracker.getPreferences().edit().putString(TrackerKeys.REFERRER, null).apply();
         }

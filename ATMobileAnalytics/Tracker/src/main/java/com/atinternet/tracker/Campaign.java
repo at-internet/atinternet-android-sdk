@@ -53,7 +53,7 @@ public class Campaign extends ScreenInfo {
         preferences.edit().putBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, true).apply();
 
         if (remanentMarketingCampaign != null) {
-            if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), campaignDate) > ((Integer) tracker.getConfiguration().get(TrackerKeys.CAMPAIGN_LIFETIME))) {
+            if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), campaignDate) > (Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerKeys.CAMPAIGN_LIFETIME))))) {
                 preferences.edit().putString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null).apply();
                 remanentMarketingCampaign = null;
             } else {

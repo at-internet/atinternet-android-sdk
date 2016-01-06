@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -186,7 +188,7 @@ public class Hit {
     public HitType getHitType() {
         HitType type = HitType.Screen;
 
-        if (url != null && !url.isEmpty()) {
+        if (!TextUtils.isEmpty(url)) {
             String[] hitComponents = url.split("&");
 
             for (int i = 1; i < hitComponents.length; i++) {

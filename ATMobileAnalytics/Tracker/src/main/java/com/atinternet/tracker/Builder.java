@@ -23,6 +23,8 @@ SOFTWARE.
 
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,28 +112,28 @@ class Builder implements Runnable {
         int hitConfigChunks = 0;
 
         boolean isSecure = (Boolean) configuration.get(TrackerKeys.SECURE);
-        String log = (String) configuration.get(TrackerKeys.LOG);
-        String logSecure = (String) configuration.get(TrackerKeys.LOG_SSL);
-        String domain = (String) configuration.get(TrackerKeys.DOMAIN);
-        String pixelPath = (String) configuration.get(TrackerKeys.PIXEL_PATH);
-        int siteID = (Integer) configuration.get(TrackerKeys.SITE);
+        String log = String.valueOf(configuration.get(TrackerKeys.LOG));
+        String logSecure = String.valueOf(configuration.get(TrackerKeys.LOG_SSL));
+        String domain = String.valueOf(configuration.get(TrackerKeys.DOMAIN));
+        String pixelPath = String.valueOf(configuration.get(TrackerKeys.PIXEL_PATH));
+        String siteID = String.valueOf(configuration.get(TrackerKeys.SITE));
 
         if (isSecure) {
-            if (logSecure != null && !logSecure.isEmpty()) {
+            if (!TextUtils.isEmpty(logSecure)) {
                 conf += "https://" + logSecure + ".";
                 hitConfigChunks++;
             }
         } else {
-            if (log != null && !log.isEmpty()) {
+            if (!TextUtils.isEmpty(log)) {
                 conf += "http://" + log + ".";
                 hitConfigChunks++;
             }
         }
-        if (domain != null && !domain.isEmpty()) {
+        if (!TextUtils.isEmpty(domain)) {
             conf += domain;
             hitConfigChunks++;
         }
-        if (pixelPath != null && !pixelPath.isEmpty()) {
+        if (!TextUtils.isEmpty(pixelPath)) {
             conf += pixelPath;
             hitConfigChunks++;
         }
@@ -165,7 +167,7 @@ class Builder implements Runnable {
         int MAX_LENGTH_AVAILABLE = HIT_MAX_LENGTH - (configuration.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
 
         LinkedHashMap<String, Object[]> dictionary = new LinkedHashMap<String, Object[]>();
-        if (!configuration.isEmpty()) {
+        if (!TextUtils.isEmpty(configuration)) {
             dictionary = prepareQuery();
             Set<String> keySet = dictionary.keySet();
 
@@ -448,6 +450,7 @@ class Builder implements Runnable {
             if (value != null) {
                 if (p.getOptions() != null && p.getOptions().isEncode()) {
                     value = Tool.percentEncode(value);
+                    p.getOptions().setSeparator(Tool.percentEncode(p.getOptions().getSeparator()));
                 }
                 int duplicateParamIndex = -1;
                 String duplicateParamKey = null;

@@ -75,7 +75,7 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void getConfigurationTest() {
-        assertEquals(19, tracker.getConfiguration().size());
+        assertEquals(20, tracker.getConfiguration().size());
         assertTrue(tracker.getConfiguration().containsKey("log"));
         assertTrue(tracker.getConfiguration().containsKey("logSSL"));
         assertTrue(tracker.getConfiguration().containsKey("site"));
@@ -94,6 +94,7 @@ public class TrackerTest extends AbstractTestClass {
         assertTrue(tracker.getConfiguration().containsKey("campaignLifetime"));
         assertTrue(tracker.getConfiguration().containsKey("tvtSpotValidityTime"));
         assertTrue(tracker.getConfiguration().containsKey("downloadSource"));
+        assertTrue(tracker.getConfiguration().containsKey("sessionBackgroundDuration"));
     }
 
     @Test

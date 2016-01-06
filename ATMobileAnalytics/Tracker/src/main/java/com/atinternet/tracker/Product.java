@@ -207,7 +207,7 @@ public class Product extends BusinessObject {
     void setEvent() {
         tracker.setParam("type", "pdt");
 
-        tracker.setParam("pdtl", buildProductName(), new ParamOption().setAppend(true).setSeparator("|"));
+        tracker.setParam("pdtl", buildProductName(), new ParamOption().setAppend(true).setEncode(true).setSeparator("|"));
     }
 
     String buildProductName() {
