@@ -218,12 +218,14 @@ class LifeCycle {
         sessionId = UUID.randomUUID().toString();
     }
 
-    static void newLaunchInit(SharedPreferences preferences) {
+    static void updateFirstLaunch(SharedPreferences preferences) {
         preferences.edit()
                 .putBoolean(FIRST_LAUNCH_KEY, false)
                 .putBoolean(FIRST_LAUNCH_AFTER_UPDATE_KEY, false)
                 .apply();
+    }
 
+    static void newLaunchInit(SharedPreferences preferences) {
         try {
             // Calcul dsfl
             String firstLaunchDate = preferences.getString(FIRST_LAUNCH_DATE_KEY, "");

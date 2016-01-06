@@ -30,6 +30,8 @@ import android.os.Bundle;
 @TargetApi(android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks {
 
+    private static final int DELTA = 2;
+
     private long timeInBackground;
     private int sessionBackgroundDuration;
     private Activity savedActivity;
@@ -50,9 +52,14 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
 
     @Override
     public void onActivityStarted(Activity activity) {
-        if (timeInBackground > -1 && Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) > sessionBackgroundDuration) {
-            LifeCycle.newLaunchInit(Tracker.getPreferences());
-            timeInBackground = -1;
+        if (timeInBackground > -1) {
+            if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) >= DELTA) {
+                LifeCycle.updateFirstLaunch(Tracker.getPreferences());
+            }
+            if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) > sessionBackgroundDuration) {
+                LifeCycle.newLaunchInit(Tracker.getPreferences());
+                timeInBackground = -1;
+            }
         }
     }
 

@@ -101,7 +101,7 @@ class Dispatcher {
             String level2 = Tool.appendParameterValues(Hit.HitParam.Level2.stringValue(), tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams());
             TechnicalContext.level2 = (!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0;
 
-            SharedPreferences preferences = tracker.getPreferences();
+            SharedPreferences preferences = Tracker.getPreferences();
             if (!preferences.getBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, false)) {
                 String xtor = preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null);
                 if (xtor != null) {
@@ -124,15 +124,15 @@ class Dispatcher {
         setIdentifiedVisitorInfos();
 
         ParamOption appendWithEncoding = new ParamOption().setAppend(true).setEncode(true);
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(tracker.getPreferences()), appendWithEncoding);
+        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), appendWithEncoding);
         if ((Boolean) tracker.getConfiguration().get(TrackerKeys.ENABLE_CRASH_DETECTION)) {
             tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), appendWithEncoding);
         }
 
-        String referrer = tracker.getPreferences().getString(TrackerKeys.REFERRER, null);
+        String referrer = Tracker.getPreferences().getString(TrackerKeys.REFERRER, null);
         if (!TextUtils.isEmpty(referrer)) {
             tracker.setParam("refstore", referrer);
-            tracker.getPreferences().edit().putString(TrackerKeys.REFERRER, null).apply();
+            Tracker.getPreferences().edit().putString(TrackerKeys.REFERRER, null).apply();
         }
 
         Builder builder = new Builder(tracker);
@@ -155,9 +155,9 @@ class Dispatcher {
                     .setRelativePosition(ParamOption.RelativePosition.before)
                     .setRelativeParameterKey(Hit.HitParam.JSON.stringValue()).setEncode(true);
 
-            String visitorNumericID = tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
-            String visitorCategory = tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
-            String visitorTextID = tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
+            String visitorNumericID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
+            String visitorCategory = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
+            String visitorTextID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
             if (visitorNumericID != null) {
                 tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
             }

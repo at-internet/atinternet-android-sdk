@@ -148,6 +148,7 @@ public class LifeCycleTest extends AbstractTestClass {
         LifeCycle.firstLaunchInit(preferences, null);
         preferences.edit().putString(LifeCycle.VERSION_CODE_KEY, "test").apply();
         LifeCycle.isInitialized = false;
+        LifeCycle.updateFirstLaunch(preferences);
         LifeCycle.newLaunchInit(preferences);
 
         JSONObject obj = new JSONObject(LifeCycle.getMetrics(preferences).execute());
