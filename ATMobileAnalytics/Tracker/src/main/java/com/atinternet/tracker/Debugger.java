@@ -87,7 +87,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private LinearLayout eventViewer;
     private LinearLayout offlineViewer;
     private LinearLayout hitDetailViewer;
-    private RelativeLayout bubbleLayout;
+    private static RelativeLayout bubbleLayout;
     private RelativeLayout noEventsLayout;
     private RelativeLayout noOfflineHitsLayout;
     private ListView eventListView;
@@ -126,6 +126,11 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     public static void show(Context context, Tracker tracker) {
         new Debugger(context, tracker);
     }
+
+    public static void setViewerVisibility(boolean visible) {
+        setVisibleViewWithAnimation(bubbleLayout, visible);
+    }
+
 
     /**
      * Constructor

@@ -166,12 +166,12 @@ class LifeCycle {
      * @param context Context
      */
     static void initLifeCycle(Context context) {
+        SharedPreferences preferences = Tracker.getPreferences();
         try {
             versionCode = String.valueOf(context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).versionCode);
-            SharedPreferences preferences = Tracker.getPreferences();
 
             // Not first launch
-            if (!preferences.getBoolean(FIRST_LAUNCH_KEY, true)) {
+            if (!preferences.getBoolean(FIRST_LAUNCH_KEY, true) || preferences.getBoolean("ATFirstInitLifecycleDone", false)) {
                 newLaunchInit(preferences);
             } else {
                 SharedPreferences backwardPreferences = context.getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
@@ -180,6 +180,7 @@ class LifeCycle {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        preferences.edit().putBoolean("ATFirstInitLifecycleDone", true).apply();
         isInitialized = true;
     }
 
@@ -227,6 +228,8 @@ class LifeCycle {
 
     static void newLaunchInit(SharedPreferences preferences) {
         try {
+
+            updateFirstLaunch(preferences);
             // Calcul dsfl
             String firstLaunchDate = preferences.getString(FIRST_LAUNCH_DATE_KEY, "");
             if (!TextUtils.isEmpty(firstLaunchDate)) {

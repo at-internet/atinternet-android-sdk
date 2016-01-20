@@ -44,7 +44,7 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        if (!activity.getClass().getCanonicalName().equals(savedActivity.getClass().getCanonicalName())
+        if (savedActivity == null || !activity.getClass().getCanonicalName().equals(savedActivity.getClass().getCanonicalName())
                 || activity.getTaskId() == savedActivity.getTaskId()) {
             timeInBackground = -1;
         }
