@@ -34,18 +34,19 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
 
     private long timeInBackground;
     private int sessionBackgroundDuration;
-    private Activity savedActivity;
+    private String savedActivityName;
+    private int savedActivityTaskId;
 
     TrackerActivityLifeCyle(int sessionBackgroundDuration) {
         timeInBackground = -1;
         this.sessionBackgroundDuration = sessionBackgroundDuration;
-        savedActivity = null;
+        savedActivityName = null;
     }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        if (savedActivity == null || !activity.getClass().getCanonicalName().equals(savedActivity.getClass().getCanonicalName())
-                || activity.getTaskId() == savedActivity.getTaskId()) {
+        if (savedActivityName == null || !activity.getClass().getCanonicalName().equals(savedActivityName)
+                || activity.getTaskId() == savedActivityTaskId) {
             timeInBackground = -1;
         }
     }
@@ -70,7 +71,8 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
 
     @Override
     public void onActivityPaused(Activity activity) {
-        savedActivity = activity;
+        savedActivityName = activity.getClass().getCanonicalName();
+        savedActivityTaskId = activity.getTaskId();
         timeInBackground = System.currentTimeMillis();
     }
 

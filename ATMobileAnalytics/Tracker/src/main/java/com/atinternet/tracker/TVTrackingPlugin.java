@@ -86,10 +86,10 @@ class TVTrackingPlugin extends Plugin {
                 response = getTvTrackingResponse(stringifyTvTResponse(connection), connection);
                 connection.disconnect();
             } else {
-                response = getTvTrackingResponse(tracker.getPreferences().getString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, null), null);
+                response = getTvTrackingResponse(Tracker.getPreferences().getString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, null), null);
             }
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.partner, "TV Tracking : " + response);
-            tracker.getPreferences().edit().putLong(TrackerKeys.LAST_TVT_EXECUTE_TIME, System.currentTimeMillis()).apply();
+            Tracker.getPreferences().edit().putLong(TrackerKeys.LAST_TVT_EXECUTE_TIME, System.currentTimeMillis()).apply();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,7 +131,7 @@ class TVTrackingPlugin extends Plugin {
 
         JSONObject tvtrackingObject = new JSONObject();
         JSONObject infoObject = new JSONObject();
-        String infoSaved = tracker.getPreferences().getString(TrackerKeys.INFO_CAMPAIGN_SAVED, null);
+        String infoSaved = Tracker.getPreferences().getString(TrackerKeys.INFO_CAMPAIGN_SAVED, null);
 
         // if tvt send data
         if (directCampaign != null) {
@@ -152,7 +152,7 @@ class TVTrackingPlugin extends Plugin {
                 default:
                     // valid campaign
                     JSONObject directObject = (JSONObject) checkResult[1];
-                    tracker.getPreferences().edit().putString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, directObject.toString()).apply();
+                    Tracker.getPreferences().edit().putString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, directObject.toString()).apply();
                     tvtrackingObject.put(DIRECT, directObject);
                     infoObject = putInfos(infoSaved, TVTrackingStatusCase.ok, connection, checkResult);
                     break;
@@ -160,9 +160,9 @@ class TVTrackingPlugin extends Plugin {
         } else {
             infoObject = putInfos(infoSaved, TVTrackingStatusCase.noData, connection, null);
         }
-        tracker.getPreferences().edit().putString(TrackerKeys.INFO_CAMPAIGN_SAVED, infoObject.toString()).apply();
+        Tracker.getPreferences().edit().putString(TrackerKeys.INFO_CAMPAIGN_SAVED, infoObject.toString()).apply();
 
-        String remanentCampaignSaved = tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
+        String remanentCampaignSaved = Tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
         if (remanentCampaignSaved != null) {
             JSONObject remanentObject = new JSONObject(remanentCampaignSaved);
             tvtrackingObject.put(REMANENT, remanentObject);
@@ -178,10 +178,10 @@ class TVTrackingPlugin extends Plugin {
      * @throws JSONException
      */
     private void setDirectCampaignToRemanent() throws JSONException {
-        String directCampaign = tracker.getPreferences().getString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, null);
+        String directCampaign = Tracker.getPreferences().getString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, null);
         if (directCampaign != null) {
             JSONObject directObject = new JSONObject(directCampaign);
-            String remanentCampaign = tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
+            String remanentCampaign = Tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
             if (remanentCampaign != null) {
                 JSONObject remanentObject = new JSONObject(remanentCampaign);
                 int directPriority;
@@ -197,16 +197,16 @@ class TVTrackingPlugin extends Plugin {
                     remanentPriority = (Integer) remanentObject.get(PRIORITY);
                 }
                 if (directPriority == 1 || (directPriority == 0 && remanentPriority == 1)) {
-                    tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, directCampaign).apply();
+                    Tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, directCampaign).apply();
                 }
             } else {
-                tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, directCampaign).apply();
+                Tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, directCampaign).apply();
             }
-            tracker.getPreferences().edit().putLong(TrackerKeys.REMANENT_CAMPAIGN_TIME_SAVED, System.currentTimeMillis())
+            Tracker.getPreferences().edit().putLong(TrackerKeys.REMANENT_CAMPAIGN_TIME_SAVED, System.currentTimeMillis())
                     .putString(TrackerKeys.DIRECT_CAMPAIGN_SAVED, null)
                     .apply();
         }
-        tracker.getPreferences().edit().putString(TrackerKeys.INFO_CAMPAIGN_SAVED, null).apply();
+        Tracker.getPreferences().edit().putString(TrackerKeys.INFO_CAMPAIGN_SAVED, null).apply();
     }
 
     /**

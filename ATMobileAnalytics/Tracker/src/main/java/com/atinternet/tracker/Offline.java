@@ -50,7 +50,7 @@ public class Offline {
     /**
      * Get offline hits
      *
-     * @return ArrayList<Hit>
+     * @return ArrayList
      */
     public ArrayList<Hit> get() {
         return storage.getOfflineHits();

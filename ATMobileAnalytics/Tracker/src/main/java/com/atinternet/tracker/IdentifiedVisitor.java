@@ -126,7 +126,7 @@ public class IdentifiedVisitor {
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue());
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierText.stringValue());
         tracker.unsetParam(Hit.HitParam.VisitorCategory.stringValue());
-        tracker.getPreferences().edit().putString(VISITOR_NUMERIC, null)
+        Tracker.getPreferences().edit().putString(VISITOR_NUMERIC, null)
                 .putString(VISITOR_CATEGORY, null)
                 .putString(VISITOR_TEXT, null).apply();
     }
@@ -140,7 +140,7 @@ public class IdentifiedVisitor {
      */
     private void save(String key, String preferencesKey, String value) {
         if (persistIdentifiedVisitor) {
-            tracker.getPreferences().edit().putString(preferencesKey, value).apply();
+            Tracker.getPreferences().edit().putString(preferencesKey, value).apply();
         } else {
             tracker.setParam(key, value, option);
         }

@@ -84,7 +84,7 @@ public class TVTracking {
         }
 
         try {
-            String remanentCampaign = tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
+            String remanentCampaign = Tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
             if (remanentCampaign != null) {
                 JSONObject remanentObject = new JSONObject(remanentCampaign);
                 int lifetime;
@@ -93,10 +93,10 @@ public class TVTracking {
                 } else {
                     lifetime = (Integer) remanentObject.get("lifetime");
                 }
-                long savedLifetime = tracker.getPreferences().getLong(TrackerKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
+                long savedLifetime = Tracker.getPreferences().getLong(TrackerKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
 
                 if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), savedLifetime) >= lifetime) {
-                    tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null).apply();
+                    Tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null).apply();
                 }
             }
         } catch (JSONException e) {

@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -241,7 +242,7 @@ class Tool {
     /**
      * Get days count between two millis time
      *
-     * @param latestTimeMillis  long
+     * @param latestTimeMillis long
      * @param oldestTimeMillis long
      * @return int
      */
@@ -252,7 +253,7 @@ class Tool {
     /**
      * Get minutes count between two millis time
      *
-     * @param latestTimeMillis  long
+     * @param latestTimeMillis long
      * @param oldestTimeMillis long
      * @return int
      */
@@ -263,7 +264,7 @@ class Tool {
     /**
      * Get seconds count between two millis time
      *
-     * @param latestTimeMillis  long
+     * @param latestTimeMillis long
      * @param oldestTimeMillis long
      * @return int
      */
@@ -404,7 +405,8 @@ class Tool {
      * @param colorId int
      * @return int
      */
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
+    @SuppressLint("deprecation")
     static int getColor(Context context, int colorId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return context.getResources().getColor(colorId, null);

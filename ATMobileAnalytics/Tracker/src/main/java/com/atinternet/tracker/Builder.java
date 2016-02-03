@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -540,7 +541,7 @@ class Builder implements Runnable {
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
 
-        return String.format(MHID_FORMAT, hour, minute, second, randId);
+        return String.format(Locale.getDefault(), MHID_FORMAT, hour, minute, second, randId);
     }
 
     /**

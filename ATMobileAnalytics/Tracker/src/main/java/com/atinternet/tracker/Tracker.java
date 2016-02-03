@@ -483,7 +483,9 @@ public class Tracker {
     /**
      * Set a new configuration
      *
-     * @param conf HashMap<String, Object>
+     * @param conf              HashMap
+     * @param override          boolean
+     * @param setConfigCallback SetConfigCallback
      */
     public void setConfig(final HashMap<String, Object> conf, final boolean override, final SetConfigCallback setConfigCallback) {
         TrackerQueue.getInstance().put(new Runnable() {
@@ -511,8 +513,9 @@ public class Tracker {
     /**
      * Change a configuration value for an existing key
      *
-     * @param key   String
-     * @param value Object
+     * @param key               String
+     * @param value             Object
+     * @param setConfigCallback SetConfigCallback
      */
     public void setConfig(final String key, final Object value, final SetConfigCallback setConfigCallback) {
         TrackerQueue.getInstance().put(new Runnable() {
@@ -533,6 +536,8 @@ public class Tracker {
 
     /**
      * Set a new listener
+     *
+     * @param trackerListener TrackerListener
      */
     public void setListener(TrackerListener trackerListener) {
         this.listener = trackerListener;
@@ -602,7 +607,7 @@ public class Tracker {
      * Init with new configuration
      *
      * @param context       Context
-     * @param configuration HashMap<String, Object>
+     * @param configuration HashMap
      */
     public Tracker(android.content.Context context, final HashMap<String, Object> configuration) {
         this.configuration = new Configuration(configuration);
