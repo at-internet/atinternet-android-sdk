@@ -62,7 +62,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.1.2";
+            return "2.2.0";
         }
     };
 
@@ -294,7 +294,7 @@ class TechnicalContext {
         return new Closure() {
             @Override
             public String execute() {
-                Object dls = tracker.getConfiguration().get(TrackerKeys.DOWNLOAD_SOURCE);
+                Object dls = tracker.getConfiguration().get(TrackerConfigurationKeys.DOWNLOAD_SOURCE);
                 if (dls != null) {
                     return String.valueOf(dls);
                 } else {
@@ -315,7 +315,7 @@ class TechnicalContext {
             @Override
             public String execute() {
                 final android.content.Context context = Tracker.getAppContext();
-                if (context.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerKeys.DO_NOT_TRACK_ENABLED, false)) {
+                if (context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false)) {
                     return "opt-out";
                 } else if (identifier.equals(ANDROID_ID_KEY)) {
                     return getString(context.getContentResolver(), ANDROID_ID);
@@ -348,7 +348,7 @@ class TechnicalContext {
      * @param enabled boolean
      */
     static void doNotTrack(android.content.Context context, boolean enabled) {
-        context.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).edit().putBoolean(TrackerKeys.DO_NOT_TRACK_ENABLED, enabled).apply();
+        context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).edit().putBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, enabled).apply();
     }
 
     /**
@@ -358,6 +358,6 @@ class TechnicalContext {
      * @return boolean
      */
     static boolean doNotTrackEnabled(android.content.Context context) {
-        return context.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerKeys.DO_NOT_TRACK_ENABLED, false);
+        return context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false);
     }
 }

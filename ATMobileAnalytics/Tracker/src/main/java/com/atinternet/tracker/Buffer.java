@@ -104,7 +104,7 @@ class Buffer {
     public Buffer(Tracker tracker) {
         persistentParams = new ArrayList<Param>();
         volatileParams = new ArrayList<Param>();
-        identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerKeys.IDENTIFIER));
+        identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER));
 
         initConstantClosures();
         addContextVariables(tracker);

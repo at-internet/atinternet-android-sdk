@@ -91,7 +91,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
     public CrashDetectionHandler(Context context, Thread.UncaughtExceptionHandler defaultHandler) {
         this.defaultHandler = defaultHandler;
         this.context = context;
-        preferences = context.getApplicationContext().getSharedPreferences(TrackerKeys.PREFERENCES, Context.MODE_PRIVATE);
+        preferences = context.getApplicationContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override

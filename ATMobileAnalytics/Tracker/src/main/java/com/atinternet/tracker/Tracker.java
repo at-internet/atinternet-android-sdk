@@ -26,6 +26,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,9 +41,35 @@ import static com.atinternet.tracker.Tool.CallbackType;
 public class Tracker {
 
     /**
+     * Enum for different offline mode
+     */
+    public enum OfflineMode {
+        never, required, always
+    }
+
+    /**
+     * Enum for different identifier
+     */
+    public enum IdentifierType {
+        androidId, advertisingId
+    }
+
+    /**
+     * Enum for different plugin
+     */
+    public enum PluginKey {
+        tvtracking, nuggad
+    }
+
+    /**
      * Context
      */
     private static android.content.Context appContext;
+
+    /**
+     * Crash Default Handler
+     */
+    private static Thread.UncaughtExceptionHandler defaultCrashHandler;
 
     /**
      * Listener for callbacks
@@ -251,7 +278,7 @@ public class Tracker {
      * Get Preferences
      */
     static SharedPreferences getPreferences() {
-        return appContext.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        return appContext.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
     /**
@@ -269,8 +296,8 @@ public class Tracker {
             @Override
             public void run() {
                 if (callback != null) {
-                    String userID = TechnicalContext.getUserId((String) configuration.get(TrackerKeys.IDENTIFIER)).execute();
-                    if ((Boolean) configuration.get(TrackerKeys.HASH_USER_ID) && !doNotTrackEnabled()) {
+                    String userID = TechnicalContext.getUserId((String) configuration.get(TrackerConfigurationKeys.IDENTIFIER)).execute();
+                    if ((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !doNotTrackEnabled()) {
                         callback.receiveUserId(Tool.SHA_256(userID));
                     } else {
                         callback.receiveUserId(userID);
@@ -480,6 +507,179 @@ public class Tracker {
         return mediaPlayers == null ? (mediaPlayers = new MediaPlayers(this)) : mediaPlayers;
     }
 
+    public void setLog(String log, SetConfigCallback setConfigCallback) {
+        if (TextUtils.isEmpty(log)) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for log, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.LOG, log, setConfigCallback);
+        }
+    }
+
+    public void setSecuredLog(String securedLog, SetConfigCallback setConfigCallback) {
+        if (TextUtils.isEmpty(securedLog)) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for secured log, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.LOG_SSL, securedLog, setConfigCallback);
+        }
+    }
+
+    public void setDomain(String domain, SetConfigCallback setConfigCallback) {
+        if (TextUtils.isEmpty(domain)) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for domain, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.DOMAIN, domain, setConfigCallback);
+        }
+    }
+
+    public void setSiteId(int siteId, SetConfigCallback setConfigCallback) {
+        if (siteId <= 0) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for site id, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.SITE, siteId, setConfigCallback);
+        }
+    }
+
+    public void setOfflineMode(OfflineMode offlineMode, SetConfigCallback setConfigCallback) {
+        if (offlineMode == null) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for offline mode, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.OFFLINE_MODE, offlineMode.toString(), setConfigCallback);
+        }
+    }
+
+    public void setSecureModeEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
+        setConfig(TrackerConfigurationKeys.SECURE, enabled, setConfigCallback);
+    }
+
+    public void setIdentifierType(IdentifierType identifierType, SetConfigCallback setConfigCallback) {
+        if (identifierType == null) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for identifier type, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.IDENTIFIER, identifierType.toString(), setConfigCallback);
+        }
+    }
+
+    public void setHashUserIdEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
+        setConfig(TrackerConfigurationKeys.HASH_USER_ID, enabled, setConfigCallback);
+    }
+
+    public void setPlugins(List<PluginKey> plugins, SetConfigCallback setConfigCallback) {
+        if (plugins == null) {
+            setConfig(TrackerConfigurationKeys.PLUGINS, "", setConfigCallback);
+        } else {
+            String value = "";
+            boolean isFirst = true;
+            for (PluginKey plugin : plugins) {
+                if (isFirst) {
+                    isFirst = false;
+                } else {
+                    value += ",";
+                }
+                value += plugin.toString();
+            }
+            setConfig(TrackerConfigurationKeys.PLUGINS, value, setConfigCallback);
+        }
+    }
+
+    public void setPixelPath(String pixelPath, SetConfigCallback setConfigCallback) {
+        if (TextUtils.isEmpty(pixelPath)) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for pixel path, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.PIXEL_PATH, pixelPath, setConfigCallback);
+        }
+    }
+
+    public void setPersistentIdentifiedVisitorEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
+        setConfig(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR, enabled, setConfigCallback);
+    }
+
+    public void setTvTrackingUrl(String url, SetConfigCallback setConfigCallback) {
+        if (TextUtils.isEmpty(url)) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for tv tracking url, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.TVTRACKING_URL, url, setConfigCallback);
+        }
+    }
+
+    public void setTvTrackingVisitDuration(int visitDuration, SetConfigCallback setConfigCallback) {
+        if (visitDuration <= 0) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for tv tracking visit duration, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION, visitDuration, setConfigCallback);
+        }
+    }
+
+    public void setTvTrackingSpotValidityTime(int time, SetConfigCallback setConfigCallback) {
+        if (time <= 0) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for tv tracking spot validity time, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME, time, setConfigCallback);
+        }
+    }
+
+    public void setCrashDetectionEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
+        setConfig(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION, enabled, setConfigCallback);
+    }
+
+    public void setCampaignLastPersistenceEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
+        setConfig(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE, enabled, setConfigCallback);
+    }
+
+    public void setCampaignLifetime(int lifetime, SetConfigCallback setConfigCallback) {
+        if (lifetime <= 0) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for campaign lifetime, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.CAMPAIGN_LIFETIME, lifetime, setConfigCallback);
+        }
+    }
+
+    public void setSessionBackgroundDuration(int duration, SetConfigCallback setConfigCallback) {
+        if (duration <= 0) {
+            Tool.executeCallback(listener, CallbackType.warning, "Bad value for session background duration, default value retained");
+        } else {
+            setConfig(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION, duration, setConfigCallback);
+        }
+    }
+
+    public TrackerListener createDefaultTrackerListener() {
+        return new TrackerListener() {
+            @Override
+            public void trackerNeedsFirstLaunchApproval(String message) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: First Launch \n\tMessage: " + message);
+            }
+
+            @Override
+            public void buildDidEnd(HitStatus status, String message) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Building Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
+            }
+
+            @Override
+            public void sendDidEnd(HitStatus status, String message) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Sending Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
+            }
+
+            @Override
+            public void didCallPartner(String response) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Calling Partner \n\tResponse: " + response);
+            }
+
+            @Override
+            public void warningDidOccur(String message) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Warning \n\tMessage: " + message);
+            }
+
+            @Override
+            public void saveDidEnd(String message) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Saving Hit \n\tMessage: " + message);
+            }
+
+            @Override
+            public void errorDidOccur(String message) {
+                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Error \n\tMessage: " + message);
+            }
+        };
+    }
+
     /**
      * Set a new configuration
      *
@@ -541,7 +741,7 @@ public class Tracker {
      */
     public void setListener(TrackerListener trackerListener) {
         this.listener = trackerListener;
-        if (getPreferences().getBoolean(LifeCycle.FIRST_LAUNCH_KEY, false)) {
+        if (getPreferences().getBoolean(LifeCycle.FIRST_SESSION, false)) {
             listener.trackerNeedsFirstLaunchApproval("Tracker First Launch");
         }
     }
@@ -550,14 +750,25 @@ public class Tracker {
      * Changes all the values concerned by configuration overriding
      */
     private void refreshConfigurationDependencies() {
-        String identifierKey = String.valueOf(configuration.get(TrackerKeys.IDENTIFIER));
-        String offlineMode = String.valueOf(configuration.get(TrackerKeys.STORAGE));
+        String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
+        String offlineMode = String.valueOf(configuration.get(TrackerConfigurationKeys.OFFLINE_MODE));
+        boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
 
         if (!TextUtils.isEmpty(identifierKey)) {
             buffer.setIdentifierKey(identifierKey);
         }
         if (!TextUtils.isEmpty(offlineMode)) {
             storage.setOfflineMode(Tool.convertStringToOfflineMode(offlineMode));
+        }
+
+        if (enableCrashDetectionHandler) {
+            if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
+            }
+        } else {
+            if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {
+                Thread.setDefaultUncaughtExceptionHandler(defaultCrashHandler);
+            }
         }
     }
 
@@ -568,25 +779,26 @@ public class Tracker {
      */
     private void initTracker(android.content.Context context) {
         listener = null;
-        Tracker.appContext = context.getApplicationContext();
+        appContext = context.getApplicationContext();
+        defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         storage = new Storage(context);
-        storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerKeys.STORAGE)));
+        storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE)));
         buffer = new Buffer(this);
         dispatcher = new Dispatcher(this);
-        if ((Boolean) configuration.get(TrackerKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(context, Thread.getDefaultUncaughtExceptionHandler()));
+        if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+            Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
         }
-        getPreferences().edit().putBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, false).apply();
+        getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
 
         if (!isTrackerActivityLifeCycleEnabled) {
-            setTrackerActivityLifecycle(Integer.parseInt(String.valueOf(configuration.get(TrackerKeys.SESSION_BACKGROUND_DURATION))));
+            setTrackerActivityLifecycle();
         }
     }
 
-    private void setTrackerActivityLifecycle(int sessionBackgroundDuration) {
+    private void setTrackerActivityLifecycle() {
         isTrackerActivityLifeCycleEnabled = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            ((Application) appContext).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(sessionBackgroundDuration));
+            ((Application) appContext).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(configuration));
         }
     }
 

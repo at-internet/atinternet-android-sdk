@@ -35,6 +35,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import static com.atinternet.tracker.Tracker.OfflineMode;
+import static com.atinternet.tracker.Tracker.doNotTrackEnabled;
+import static com.atinternet.tracker.Tracker.getAppContext;
+import static com.atinternet.tracker.Tracker.getStorage;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNotSame;
@@ -55,7 +59,7 @@ public class TrackerTest extends AbstractTestClass {
     public void setUp() throws Exception {
         super.setUp();
         today = String.valueOf(DateFormat.format(pattern, System.currentTimeMillis()));
-        storage = Tracker.getStorage();
+        storage = getStorage();
         buffer = tracker.getBuffer();
         buffer.getPersistentParams().clear();
         buffer.getVolatileParams().clear();
@@ -75,14 +79,14 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void getConfigurationTest() {
-        assertEquals(20, tracker.getConfiguration().size());
+        assertEquals(18, tracker.getConfiguration().size());
         assertTrue(tracker.getConfiguration().containsKey("log"));
         assertTrue(tracker.getConfiguration().containsKey("logSSL"));
         assertTrue(tracker.getConfiguration().containsKey("site"));
         assertTrue(tracker.getConfiguration().containsKey("domain"));
         assertTrue(tracker.getConfiguration().containsKey("pixelPath"));
-        assertTrue(tracker.getConfiguration().containsKey("storageduration"));
         assertTrue(tracker.getConfiguration().containsKey("storage"));
+        assertTrue(tracker.getConfiguration().containsKey("plugins"));
         assertTrue(tracker.getConfiguration().containsKey("identifier"));
         assertTrue(tracker.getConfiguration().containsKey("secure"));
         assertTrue(tracker.getConfiguration().containsKey("hashUserId"));
@@ -93,13 +97,12 @@ public class TrackerTest extends AbstractTestClass {
         assertTrue(tracker.getConfiguration().containsKey("campaignLastPersistence"));
         assertTrue(tracker.getConfiguration().containsKey("campaignLifetime"));
         assertTrue(tracker.getConfiguration().containsKey("tvtSpotValidityTime"));
-        assertTrue(tracker.getConfiguration().containsKey("downloadSource"));
         assertTrue(tracker.getConfiguration().containsKey("sessionBackgroundDuration"));
     }
 
     @Test
     public void getContextTest() {
-        assertEquals(Robolectric.application, Tracker.getAppContext());
+        assertEquals(Robolectric.application, getAppContext());
     }
 
     @Test
@@ -148,6 +151,170 @@ public class TrackerTest extends AbstractTestClass {
         tracker.setListener(listener);
         assertNotNull(tracker.getListener());
         assertEquals(listener, tracker.getListener());
+    }
+
+    @Test
+    public void setConfigTest() throws Exception {
+        assertFalse(tracker.getConfiguration().containsKey("key"));
+        tracker.setConfig("key", "value", null);
+        Thread.sleep(200);
+        assertTrue(tracker.getConfiguration().containsKey("key"));
+        assertEquals(tracker.getConfiguration().get("key"), "value");
+    }
+
+    @Test
+    public void setLogTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logp");
+        tracker.setLog("logtest", null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest");
+    }
+
+    @Test
+    public void setSecuredLogTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logs");
+        tracker.setSecuredLog("logstest", null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest");
+    }
+
+    @Test
+    public void setDomainTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "xiti.com");
+        tracker.setDomain("domain", null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain");
+    }
+
+    @Test
+    public void setSiteIdTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 552987);
+        tracker.setSiteId(123, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 123);
+    }
+
+    @Test
+    public void setOfflineModeTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "required");
+        tracker.setOfflineMode(OfflineMode.always, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
+    }
+
+    @Test
+    public void setPlugins() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
+        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
+            add(Tracker.PluginKey.tvtracking);
+        }}, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString());
+        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
+            add(Tracker.PluginKey.tvtracking);
+            add(Tracker.PluginKey.nuggad);
+        }}, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString() + "," + Tracker.PluginKey.nuggad.toString());
+        tracker.setPlugins(null, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
+    }
+
+    @Test
+    public void setSecureTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
+        tracker.setSecureModeEnabled(true, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), true);
+    }
+
+    @Test
+    public void setIdentifierTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "androidId");
+        tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
+    }
+
+    @Test
+    public void setHashUserIdModeTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), false);
+        tracker.setHashUserIdEnabled(true, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), true);
+    }
+
+    @Test
+    public void setPixelPathTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/hit.xiti");
+        tracker.setPixelPath("/test.xiti", null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti");
+    }
+
+    @Test
+    public void setPersistIdentifiedVisitorTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), true);
+        tracker.setPersistentIdentifiedVisitorEnabled(false, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), false);
+    }
+
+    @Test
+    public void setTVTUrlTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL), "");
+        tracker.setTvTrackingUrl("test.com", null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL), "test.com");
+    }
+
+    @Test
+    public void setTVTVisitDurationTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION), 10);
+        tracker.setTvTrackingVisitDuration(5, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION), 5);
+    }
+
+    @Test
+    public void setTVTSpotValidityTimeTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME), 5);
+        tracker.setTvTrackingSpotValidityTime(3, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME), 3);
+    }
+
+    @Test
+    public void setCrashDetectionTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), true);
+        tracker.setCrashDetectionEnabled(false, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), false);
+    }
+
+    @Test
+    public void setCampaignLastPersistenceTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), false);
+        tracker.setCampaignLastPersistenceEnabled(true, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), true);
+    }
+
+    @Test
+    public void setCampaigLifetimeTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 30);
+        tracker.setCampaignLifetime(10, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 10);
+    }
+
+    @Test
+    public void setSessionBackgroundDurationTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
+        tracker.setSessionBackgroundDuration(15, null);
+        Thread.sleep(200);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 15);
     }
 
     @Test
@@ -302,6 +469,19 @@ public class TrackerTest extends AbstractTestClass {
         MediaPlayers mediaPlayers = tracker.Players();
         assertNotNull(tracker.Players());
         assertEquals(tracker.Players(), mediaPlayers);
+    }
+
+    @Test
+    public void toStringEnumTest() {
+        assertEquals("always", OfflineMode.always.toString());
+        assertEquals("required", OfflineMode.required.toString());
+        assertEquals("never", OfflineMode.never.toString());
+
+        assertEquals("androidId", Tracker.IdentifierType.androidId.toString());
+        assertEquals("advertisingId", Tracker.IdentifierType.advertisingId.toString());
+
+        assertEquals("tvtracking", Tracker.PluginKey.tvtracking.toString());
+        assertEquals("nuggad", Tracker.PluginKey.nuggad.toString());
     }
 
     @Test
@@ -489,7 +669,7 @@ public class TrackerTest extends AbstractTestClass {
         config.put("identifier", "idTest");
         config.put("storage", "always");
         executePrivateMethod(tracker, "refreshConfigurationDependencies", new Object[0]);
-        assertEquals(Storage.OfflineMode.always, storage.getOfflineMode());
+        assertEquals(OfflineMode.always, storage.getOfflineMode());
 
     }
 
@@ -516,6 +696,6 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void doNotTrackEnabledTest() {
-        assertFalse(Tracker.doNotTrackEnabled());
+        assertFalse(doNotTrackEnabled());
     }
 }

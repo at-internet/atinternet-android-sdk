@@ -32,9 +32,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
-import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
-
 /**
  * Hit configuration
  */
@@ -52,7 +49,7 @@ class Configuration extends LinkedHashMap<String, Object> {
      * Configuration defined by UI
      */
     Configuration(Context context) {
-        JSONObject jsonObject = getDefaultConfiguration(context);
+        JSONObject jsonObject = getDefaultConfiguration(Tool.isTablet(context));
         if (jsonObject != null) {
             Iterator<String> iterator = jsonObject.keys();
             while (iterator.hasNext()) {
@@ -66,8 +63,6 @@ class Configuration extends LinkedHashMap<String, Object> {
         }
     }
 
-    // FIXME TESTS ONLY
-
     /**
      * Override configuration
      *
@@ -75,16 +70,30 @@ class Configuration extends LinkedHashMap<String, Object> {
      */
     Configuration(HashMap<String, Object> configuration) {
         clear();
-        putAll(configuration);
+        JSONObject jsonObject = getDefaultConfiguration(false);
+        if (jsonObject != null) {
+            Iterator<String> iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                try {
+                    put(key, jsonObject.get(key));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        for (String key : configuration.keySet()) {
+            put(key, configuration.get(key));
+        }
     }
 
     /**
      * Get configuration defined in the UI
      *
-     * @param context Context
+     * @param isTablet boolean
      * @return JSONObject
      */
-    private JSONObject getDefaultConfiguration(Context context) {
+    private JSONObject getDefaultConfiguration(boolean isTablet) {
         JSONObject result = new JSONObject();
         String stringResult;
         try {
@@ -95,22 +104,22 @@ class Configuration extends LinkedHashMap<String, Object> {
             inputStream.close();
             stringResult = new String(buffer, ENCODING);
             JSONObject json = new JSONObject(stringResult);
-            if (isTablet(context)) {
+            if (isTablet) {
                 result = json.getJSONObject(TABLET_CONFIGURATION);
             } else {
                 result = json.getJSONObject(PHONE_CONFIGURATION);
             }
         } catch (Exception e) {
             try {
-                result.put("log", "logp")
-                        .put("logSSL", "logs")
+                result.put("log", "")
+                        .put("logSSL", "")
                         .put("domain", "xiti.com")
                         .put("pixelPath", "/hit.xiti")
-                        .put("site", 552987)
+                        .put("site", "")
                         .put("secure", false)
                         .put("identifier", "androidId")
                         .put("enableCrashDetection", true)
-                        .put("plugins", "tvtracking")
+                        .put("plugins", "")
                         .put("storage", "required")
                         .put("hashUserId", false)
                         .put("persistIdentifiedVisitor", true)
@@ -126,15 +135,5 @@ class Configuration extends LinkedHashMap<String, Object> {
         }
 
         return result;
-    }
-
-    /**
-     * Device is tablet
-     *
-     * @param context Context
-     * @return boolean
-     */
-    private boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) >= SCREENLAYOUT_SIZE_LARGE;
     }
 }

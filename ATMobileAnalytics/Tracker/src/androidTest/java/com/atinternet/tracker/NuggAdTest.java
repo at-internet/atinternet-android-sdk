@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -42,6 +43,9 @@ public class NuggAdTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Configuration configuration = tracker.getConfiguration();
+        configuration.put("plugins", "nuggad");
+        tracker = new Tracker(Robolectric.application, configuration);
         nuggAd = new NuggAd(tracker);
         buffer = tracker.getBuffer();
     }

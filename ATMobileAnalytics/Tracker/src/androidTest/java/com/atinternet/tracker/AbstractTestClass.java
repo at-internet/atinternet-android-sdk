@@ -22,17 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.robolectric.Robolectric;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 public abstract class AbstractTestClass {
 
@@ -42,8 +37,27 @@ public abstract class AbstractTestClass {
 
     @Before
     public void setUp() throws Exception {
-        Configuration configuration = new Configuration(createDefaultConfiguration(false));
-        tracker = new Tracker(Robolectric.application, configuration);
+        HashMap<String, Object> conf = new HashMap<String, Object>() {{
+            put("log", "logp");
+            put("logSSL", "logs");
+            put("domain", "xiti.com");
+            put("pixelPath", "/hit.xiti");
+            put("site", 552987);
+            put("secure", false);
+            put("identifier", "androidId");
+            put("enableCrashDetection", true);
+            put("plugins", "");
+            put("storage", "required");
+            put("hashUserId", false);
+            put("persistIdentifiedVisitor", true);
+            put("tvtURL", "");
+            put("tvtVisitDuration", 10);
+            put("tvtSpotValidityTime", 5);
+            put("campaignLastPersistence", false);
+            put("campaignLifetime", 30);
+            put("sessionBackgroundDuration", 60);
+        }};
+        tracker = new Tracker(Robolectric.application, conf);
     }
 
     // Méthode rendant accessible un attribut privé
@@ -63,34 +77,5 @@ public abstract class AbstractTestClass {
         Method m = c.getDeclaredMethod(name, types);
         m.setAccessible(true);
         return m.invoke(instance, params);
-    }
-
-    // Méthode de simulation de récupération de la configuration par défaut
-    LinkedHashMap<String, Object> createDefaultConfiguration(boolean isTablet) throws IOException, JSONException {
-        String jsonString;
-        InputStream is = Robolectric.application.getAssets().open("defaultConfiguration.json");
-        int size = is.available();
-        byte[] buffer = new byte[size];
-        is.read(buffer);
-        is.close();
-        jsonString = new String(buffer, "UTF-8");
-
-        JSONObject jsonObject = new JSONObject(jsonString);
-
-        JSONObject config;
-        if (isTablet) {
-            config = jsonObject.getJSONObject("tablet");
-        } else {
-            config = jsonObject.getJSONObject("phone");
-        }
-
-        LinkedHashMap<String, Object> dictionary = new LinkedHashMap<String, Object>();
-        Iterator<String> iterator = config.keys();
-        while (iterator.hasNext()) {
-            String key = iterator.next();
-            dictionary.put(key, config.get(key));
-        }
-
-        return dictionary;
     }
 }

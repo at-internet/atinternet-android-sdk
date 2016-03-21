@@ -48,7 +48,7 @@ public class CrashDetectionHandlerTest extends AbstractTestClass {
     public void setUp() throws Exception {
         super.setUp();
         crashDetectionHandler = new CrashDetectionHandler(Robolectric.application, Thread.getDefaultUncaughtExceptionHandler());
-        preferences = Robolectric.application.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        preferences = Robolectric.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
     @Test

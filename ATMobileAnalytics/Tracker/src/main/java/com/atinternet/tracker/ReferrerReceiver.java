@@ -39,8 +39,8 @@ public class ReferrerReceiver extends BroadcastReceiver {
             if (action != null && action.equals(REFERRER_INTENT_ACTION)) {
                 String referrer = intent.getStringExtra(REFERRER);
                 if (referrer != null) {
-                    context.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE)
-                            .edit().putString(TrackerKeys.REFERRER, referrer.replace("&", "%26"))
+                    context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE)
+                            .edit().putString(TrackerConfigurationKeys.REFERRER, referrer.replace("&", "%26"))
                             .apply();
                     referrer = Tool.percentDecode(referrer);
                     String[] campaignParams = referrer.split("&");
@@ -48,9 +48,9 @@ public class ReferrerReceiver extends BroadcastReceiver {
                         String[] paramComponents = param.split("=");
                         String key = paramComponents[0];
                         if (key.equals(Hit.HitParam.RemanentSource.stringValue())) {
-                            context.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE)
-                                    .edit().putString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, paramComponents[1])
-                                    .putLong(TrackerKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
+                            context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE)
+                                    .edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, paramComponents[1])
+                                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
                                     .apply();
                         }
                     }

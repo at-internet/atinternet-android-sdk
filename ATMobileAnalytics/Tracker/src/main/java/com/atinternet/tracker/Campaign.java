@@ -45,29 +45,29 @@ public class Campaign extends ScreenInfo {
     @Override
     void setEvent() {
         SharedPreferences preferences = Tracker.getPreferences();
-        String remanentMarketingCampaign = preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null);
-        long campaignDate = preferences.getLong(TrackerKeys.LAST_MARKETING_CAMPAIGN_TIME, -1);
+        String remanentMarketingCampaign = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
+        long campaignDate = preferences.getLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, -1);
 
         ParamOption encoding = new ParamOption().setEncode(true);
         tracker.setParam(Hit.HitParam.Source.stringValue(), campaignId, encoding);
-        preferences.edit().putBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, true).apply();
+        preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
 
         if (remanentMarketingCampaign != null) {
-            if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), campaignDate) > (Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerKeys.CAMPAIGN_LIFETIME))))) {
-                preferences.edit().putString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null).apply();
+            if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), campaignDate) > (Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME))))) {
+                preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null).apply();
                 remanentMarketingCampaign = null;
             } else {
                 tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), remanentMarketingCampaign, encoding);
             }
         } else {
-            preferences.edit().putString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
-                    .putLong(TrackerKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
+            preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
+                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
                     .apply();
         }
 
-        if (((Boolean) tracker.getConfiguration().get(TrackerKeys.CAMPAIGN_LAST_PERSISTENCE)) || remanentMarketingCampaign == null) {
-            preferences.edit().putString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
-                    .putLong(TrackerKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
+        if (((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE)) || remanentMarketingCampaign == null) {
+            preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
+                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
                     .apply();
         }
     }

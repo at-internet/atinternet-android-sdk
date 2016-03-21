@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import com.atinternet.tracker.Tracker.OfflineMode;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,13 +59,13 @@ public class StorageTest extends AbstractTestClass {
 
     @Test
     public void getOfflineModeTest() {
-        assertEquals(Storage.OfflineMode.required, storage.getOfflineMode());
+        assertEquals(OfflineMode.required, storage.getOfflineMode());
     }
 
     @Test
     public void setOfflineModeTest() {
-        storage.setOfflineMode(Storage.OfflineMode.always);
-        assertEquals(Storage.OfflineMode.always, storage.getOfflineMode());
+        storage.setOfflineMode(OfflineMode.always);
+        assertEquals(OfflineMode.always, storage.getOfflineMode());
     }
 
     @Test
@@ -152,7 +154,7 @@ public class StorageTest extends AbstractTestClass {
         storage.saveHit("hit3", System.currentTimeMillis() / 5, null);
         storage.saveHit("hit4", System.currentTimeMillis() / 20, null);
         assertEquals(4, storage.getCountOfflineHits());
-        storage.removeOldOfflineHits((Integer) tracker.getConfiguration().get("storageduration"));
+        storage.removeOldOfflineHits(4);
         assertEquals(1, storage.getCountOfflineHits());
     }
 }

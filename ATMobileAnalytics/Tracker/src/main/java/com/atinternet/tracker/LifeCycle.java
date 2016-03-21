@@ -32,7 +32,6 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -46,94 +45,54 @@ class LifeCycle {
     static final String VERSION_CODE_KEY = "VersionCode";
 
     /**
-     * Key representing if it's first launch
+     * Key representing if it's first session
      */
-    static final String FIRST_LAUNCH_KEY = "FirstLaunch";
+    static final String FIRST_SESSION = "FirstLaunch";
 
     /**
-     * Key representing if it's first launch after update
+     * Key representing if it's first session after update
      */
-    static final String FIRST_LAUNCH_AFTER_UPDATE_KEY = "FirstLaunchAfterUpdate";
+    static final String FIRST_SESSION_AFTER_UPDATE = "FirstLaunchAfterUpdate";
 
     /**
-     * Key representing if it's first launch after update
+     * Key representing first session date
      */
-    static final String APPLICATION_UPDATED_KEY = "ApplicationUpdated";
+    static final String FIRST_SESSION_DATE = "FirstLaunchDate";
 
     /**
-     * Key representing first launch date
+     * Key representing first session date after update
      */
-    static final String FIRST_LAUNCH_DATE_KEY = "FirstLaunchDate";
+    static final String FIRST_SESSION_DATE_AFTER_UPDATE = "FirstLaunchDateAfterUpdate";
 
     /**
-     * Key representing first launch date after update
+     * Key representing last session date
      */
-    static final String UPDATE_LAUNCH_DATE = "FirstLaunchDateAfterUpdate";
+    static final String LAST_SESSION_DATE = "LastLaunchDate";
 
     /**
-     * Key representing last launch date
+     * Key representing the app session count
      */
-    static final String LAST_LAUNCH_DATE_KEY = "LastLaunchDate";
+    static final String SESSION_COUNT = "LaunchCount";
 
     /**
-     * Key representing the app launch count
+     * Key representing the app session count since update
      */
-    static final String LAUNCH_COUNT_KEY = "LaunchCount";
+    static final String SESSION_COUNT_SINCE_UPDATE = "LaunchCountSinceUpdate";
 
     /**
-     * Key representing the app launch count on day
+     * Key representing count of days since first session
      */
-    static final String LAUNCH_COUNT_ON_DAY_KEY = "LaunchCountOnDay";
+    static final String DAYS_SINCE_FIRST_SESSION = "DaysSinceFirstLaunch";
 
     /**
-     * Key representing the app launch count on week
+     * Key representing count of days since first session after update
      */
-    static final String LAUNCH_COUNT_ON_WEEK_KEY = "LaunchCountOnWeek";
+    static final String DAYS_SINCE_UPDATE = "DaysSinceFirstLaunchAfterUpdate";
 
     /**
-     * Key representing the app launch count on month
+     * Key representing count of days since last session
      */
-    static final String LAUNCH_COUNT_ON_MONTH_KEY = "LaunchCountOnMonth";
-
-    /**
-     * Key representing the app launch count since update
-     */
-    static final String LAUNCH_COUNT_SINCE_UPDATE_KEY = "LaunchCountSinceUpdate";
-
-    /**
-     * Key representing count of days since first launch
-     */
-    static final String DAYS_SINCE_FIRST_LAUNCH_KEY = "DaysSinceFirstLaunch";
-
-    /**
-     * Key representing count of days since first launch after update
-     */
-    static final String DAYS_SINCE_UPDATE_KEY = "DaysSinceFirstLaunchAfterUpdate";
-
-    /**
-     * Key representing count of days since last use
-     */
-    static final String DAYS_SINCE_LAST_USE_KEY = "DaysSinceLastUse";
-
-    /**
-     * Key representing id day on year
-     */
-    static final String ID_DAY_ON_YEAR_KEY = "IdDayOnYear";
-
-    /**
-     * Key representing id week on year
-     */
-    static final String ID_WEEK_ON_YEAR_KEY = "IdWeekOnYear";
-
-    /**
-     * Key representing id month
-     */
-    static final String ID_MONTH_KEY = "IdMonth";
-
-    /**
-     * Key representing id year
-     */
-    static final String ID_YEAR_KEY = "IdYear";
+    static final String DAYS_SINCE_LAST_SESSION = "DaysSinceLastUse";
 
     /**
      * String pattern to get fld and uld
@@ -170,12 +129,12 @@ class LifeCycle {
         try {
             versionCode = String.valueOf(context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).versionCode);
 
-            // Not first launch
-            if (!preferences.getBoolean(FIRST_LAUNCH_KEY, true) || preferences.getBoolean("ATFirstInitLifecycleDone", false)) {
-                newLaunchInit(preferences);
+            // Not first session
+            if (!preferences.getBoolean(FIRST_SESSION, true) || preferences.getBoolean("ATFirstInitLifecycleDone", false)) {
+                newSessionInit(preferences);
             } else {
                 SharedPreferences backwardPreferences = context.getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
-                firstLaunchInit(preferences, backwardPreferences);
+                firstSessionInit(preferences, backwardPreferences);
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -184,32 +143,25 @@ class LifeCycle {
         isInitialized = true;
     }
 
-    static void firstLaunchInit(SharedPreferences preferences, SharedPreferences backwardPreferences) {
+    static void firstSessionInit(SharedPreferences preferences, SharedPreferences backwardPreferences) {
         // If SDKV1 lifecycle exists
         if (backwardPreferences != null && backwardPreferences.getString("ATFirstLaunch", null) != null) {
-            preferences.edit().putBoolean(FIRST_LAUNCH_KEY, false)
-                    .putString(FIRST_LAUNCH_DATE_KEY, backwardPreferences.getString("ATFirstLaunch", ""))
-                    .putInt(LAUNCH_COUNT_KEY, backwardPreferences.getInt("ATLaunchCount", 0))
-                    .putString(LAST_LAUNCH_DATE_KEY, backwardPreferences.getString("ATLastLaunch", "")).apply();
+            preferences.edit().putBoolean(FIRST_SESSION, false)
+                    .putString(FIRST_SESSION_DATE, backwardPreferences.getString("ATFirstLaunch", ""))
+                    .putInt(SESSION_COUNT, backwardPreferences.getInt("ATLaunchCount", 0))
+                    .putString(LAST_SESSION_DATE, backwardPreferences.getString("ATLastLaunch", "")).apply();
 
             backwardPreferences.edit().putString("ATFirstLaunch", null).apply();
         } else {
-            Calendar calendar = Calendar.getInstance();
             preferences.edit()
-                    .putBoolean(FIRST_LAUNCH_KEY, true)
-                    .putBoolean(FIRST_LAUNCH_AFTER_UPDATE_KEY, false)
-                    .putInt(ID_YEAR_KEY, calendar.get(Calendar.YEAR))
-                    .putInt(ID_DAY_ON_YEAR_KEY, calendar.get(Calendar.DAY_OF_YEAR))
-                    .putInt(ID_MONTH_KEY, calendar.get(Calendar.MONTH))
-                    .putInt(ID_WEEK_ON_YEAR_KEY, calendar.get(Calendar.WEEK_OF_YEAR))
-                    .putInt(LAUNCH_COUNT_ON_DAY_KEY, 1)
-                    .putInt(LAUNCH_COUNT_ON_WEEK_KEY, 1)
-                    .putInt(LAUNCH_COUNT_ON_MONTH_KEY, 1)
-                    .putInt(LAUNCH_COUNT_KEY, 1)
-                    .putInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, 1)
-                    .putInt(DAYS_SINCE_FIRST_LAUNCH_KEY, 0)
-                    .putInt(DAYS_SINCE_LAST_USE_KEY, 0)
-                    .putString(FIRST_LAUNCH_DATE_KEY, simpleDateFormat.format(new Date()))
+                    .putBoolean(FIRST_SESSION, true)
+                    .putBoolean(FIRST_SESSION_AFTER_UPDATE, false)
+                    .putInt(SESSION_COUNT, 1)
+                    .putInt(SESSION_COUNT_SINCE_UPDATE, 1)
+                    .putInt(DAYS_SINCE_FIRST_SESSION, 0)
+                    .putInt(DAYS_SINCE_LAST_SESSION, 0)
+                    .putString(FIRST_SESSION_DATE, simpleDateFormat.format(new Date()))
+                    .putString(LAST_SESSION_DATE, simpleDateFormat.format(new Date()))
                     .apply();
         }
 
@@ -219,107 +171,56 @@ class LifeCycle {
         sessionId = UUID.randomUUID().toString();
     }
 
-    static void updateFirstLaunch(SharedPreferences preferences) {
+    static void updateFirstSession(SharedPreferences preferences) {
         preferences.edit()
-                .putBoolean(FIRST_LAUNCH_KEY, false)
-                .putBoolean(FIRST_LAUNCH_AFTER_UPDATE_KEY, false)
+                .putBoolean(FIRST_SESSION, false)
+                .putBoolean(FIRST_SESSION_AFTER_UPDATE, false)
                 .apply();
     }
 
-    static void newLaunchInit(SharedPreferences preferences) {
+    static void newSessionInit(SharedPreferences preferences) {
         try {
 
-            updateFirstLaunch(preferences);
-            // Calcul dsfl
-            String firstLaunchDate = preferences.getString(FIRST_LAUNCH_DATE_KEY, "");
+            updateFirstSession(preferences);
+            // Calcul dsfs
+            String firstLaunchDate = preferences.getString(FIRST_SESSION_DATE, "");
             if (!TextUtils.isEmpty(firstLaunchDate)) {
                 long timeSinceFirstLaunch = simpleDateFormat.parse(firstLaunchDate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_FIRST_LAUNCH_KEY, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceFirstLaunch)).apply();
+                preferences.edit().putInt(DAYS_SINCE_FIRST_SESSION, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceFirstLaunch)).apply();
             }
 
             // Calcul dsu
-            String firstLaunchDateAfterUpdate = preferences.getString(UPDATE_LAUNCH_DATE, "");
+            String firstLaunchDateAfterUpdate = preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, "");
             if (!TextUtils.isEmpty(firstLaunchDateAfterUpdate)) {
                 long timeSinceFirstLaunchAfterUpdate = simpleDateFormat.parse(firstLaunchDateAfterUpdate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_UPDATE_KEY, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceFirstLaunchAfterUpdate)).apply();
+                preferences.edit().putInt(DAYS_SINCE_UPDATE, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceFirstLaunchAfterUpdate)).apply();
             }
 
-            // Calcul dslu
-            String lastLaunchDate = preferences.getString(LAST_LAUNCH_DATE_KEY, "");
+            // Calcul dsls
+            String lastLaunchDate = preferences.getString(LAST_SESSION_DATE, "");
             if (!TextUtils.isEmpty(lastLaunchDate)) {
                 long timeSinceLastUse = simpleDateFormat.parse(lastLaunchDate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_LAST_USE_KEY, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceLastUse)).apply();
+                preferences.edit().putInt(DAYS_SINCE_LAST_SESSION, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceLastUse)).apply();
             }
-            preferences.edit().putString(LAST_LAUNCH_DATE_KEY, simpleDateFormat.format(new Date())).apply();
+            preferences.edit().putString(LAST_SESSION_DATE, simpleDateFormat.format(new Date())).apply();
 
-            if (!isInitialized) {
+            // sc
+            preferences.edit().putInt(SESSION_COUNT, preferences.getInt(SESSION_COUNT, 0) + 1).apply();
 
-                // lc
-                preferences.edit().putInt(LAUNCH_COUNT_KEY, preferences.getInt(LAUNCH_COUNT_KEY, 0) + 1).apply();
-
-
-                // Calcul lcsu
-                if (preferences.getBoolean(APPLICATION_UPDATED_KEY, false)) {
-                    int launchCountSinceUpdate = preferences.getInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, 0);
-                    preferences.edit().putInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, launchCountSinceUpdate + 1).apply();
-                }
-
-                Calendar calendar = Calendar.getInstance();
-                int idYear = preferences.getInt(ID_YEAR_KEY, -1);
-                int idCurrentYear = calendar.get(Calendar.YEAR);
-
-                // ldc
-                int idCurrentDayOnYear = calendar.get(Calendar.DAY_OF_YEAR);
-                int dayOnYear = preferences.getInt(ID_DAY_ON_YEAR_KEY, -1);
-                int launchCountOnDay;
-                if (dayOnYear == -1 || dayOnYear != idCurrentDayOnYear || idYear == -1 || idYear != idCurrentYear) {
-                    preferences.edit().putInt(ID_DAY_ON_YEAR_KEY, idCurrentDayOnYear).apply();
-                    launchCountOnDay = 0;
-                } else {
-                    launchCountOnDay = preferences.getInt(LAUNCH_COUNT_ON_DAY_KEY, 0);
-                }
-                preferences.edit().putInt(LAUNCH_COUNT_ON_DAY_KEY, launchCountOnDay + 1).apply();
-
-                // lwc
-                int idCurrentWeekOnYear = calendar.get(Calendar.WEEK_OF_YEAR);
-                int weekOnYear = preferences.getInt(ID_WEEK_ON_YEAR_KEY, -1);
-                int launchCountOnWeek;
-                if (weekOnYear == -1 || weekOnYear != idCurrentWeekOnYear || idYear == -1 || idYear != idCurrentYear) {
-                    preferences.edit().putInt(ID_WEEK_ON_YEAR_KEY, idCurrentWeekOnYear).apply();
-                    launchCountOnWeek = 0;
-                } else {
-                    launchCountOnWeek = preferences.getInt(LAUNCH_COUNT_ON_WEEK_KEY, 0);
-                }
-                preferences.edit().putInt(LAUNCH_COUNT_ON_WEEK_KEY, launchCountOnWeek + 1).apply();
-
-                // lmc
-                int idCurrentMonth = calendar.get(Calendar.MONTH);
-                int month = preferences.getInt(ID_MONTH_KEY, -1);
-                int launchCountOnMonth;
-                if (month == -1 || month != idCurrentMonth || idYear == -1 || idYear != idCurrentYear) {
-                    preferences.edit().putInt(ID_MONTH_KEY, idCurrentMonth).apply();
-                    launchCountOnMonth = 0;
-                } else {
-                    launchCountOnMonth = preferences.getInt(LAUNCH_COUNT_ON_MONTH_KEY, 0);
-                }
-                preferences.edit().putInt(LAUNCH_COUNT_ON_MONTH_KEY, launchCountOnMonth + 1).apply();
-
-                preferences.edit().putInt(ID_YEAR_KEY, idCurrentYear).apply();
-            }
+            // Calcul scsu
+            preferences.edit().putInt(SESSION_COUNT_SINCE_UPDATE, preferences.getInt(SESSION_COUNT_SINCE_UPDATE, 0) + 1).apply();
 
             // Application version changed
             String savedApvr = preferences.getString(VERSION_CODE_KEY, "");
             // Update detected
             if (!versionCode.equals(savedApvr)) {
                 preferences.edit()
-                        .putString(UPDATE_LAUNCH_DATE, simpleDateFormat.format(new Date()))
+                        .putString(FIRST_SESSION_DATE_AFTER_UPDATE, simpleDateFormat.format(new Date()))
                         .putString(VERSION_CODE_KEY, versionCode)
-                        .putInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, 1)
-                        .putInt(DAYS_SINCE_UPDATE_KEY, 0)
-                        .putBoolean(FIRST_LAUNCH_AFTER_UPDATE_KEY, true)
+                        .putInt(SESSION_COUNT_SINCE_UPDATE, 1)
+                        .putInt(DAYS_SINCE_UPDATE, 0)
+                        .putBoolean(FIRST_SESSION_AFTER_UPDATE, true)
                         .apply();
-            } else if (!isInitialized) {
-                preferences.edit().putInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, preferences.getInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, 0) + 1).apply();
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -339,26 +240,22 @@ class LifeCycle {
                 try {
                     LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
 
-                    // fl
-                    map.put("fl", preferences.getBoolean(FIRST_LAUNCH_KEY, false) ? 1 : 0);
+                    // fs
+                    map.put("fs", preferences.getBoolean(FIRST_SESSION, false) ? 1 : 0);
 
-                    // flau
-                    map.put("flau", preferences.getBoolean(FIRST_LAUNCH_AFTER_UPDATE_KEY, false) ? 1 : 0);
+                    // fsau
+                    map.put("fsau", preferences.getBoolean(FIRST_SESSION_AFTER_UPDATE, false) ? 1 : 0);
 
-                    map.put("ldc", preferences.getInt(LAUNCH_COUNT_ON_DAY_KEY, 0));
-                    map.put("lwc", preferences.getInt(LAUNCH_COUNT_ON_WEEK_KEY, 0));
-                    map.put("lmc", preferences.getInt(LAUNCH_COUNT_ON_MONTH_KEY, 0));
-
-                    if (!TextUtils.isEmpty(preferences.getString(UPDATE_LAUNCH_DATE, ""))) {
-                        map.put("lcsu", preferences.getInt(LAUNCH_COUNT_SINCE_UPDATE_KEY, 0));
-                        map.put("uld", Integer.parseInt(preferences.getString(UPDATE_LAUNCH_DATE, "")));
-                        map.put("dsu", preferences.getInt(DAYS_SINCE_UPDATE_KEY, 0));
+                    if (!TextUtils.isEmpty(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, ""))) {
+                        map.put("scsu", preferences.getInt(SESSION_COUNT_SINCE_UPDATE, 0));
+                        map.put("fsdau", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, "")));
+                        map.put("dsu", preferences.getInt(DAYS_SINCE_UPDATE, 0));
                     }
 
-                    map.put("lc", preferences.getInt(LAUNCH_COUNT_KEY, 0));
-                    map.put("fld", Integer.parseInt(preferences.getString(FIRST_LAUNCH_DATE_KEY, "")));
-                    map.put("dslu", preferences.getInt(DAYS_SINCE_LAST_USE_KEY, 0));
-                    map.put("dsfl", preferences.getInt(DAYS_SINCE_FIRST_LAUNCH_KEY, 0));
+                    map.put("sc", preferences.getInt(SESSION_COUNT, 0));
+                    map.put("fsd", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE, "")));
+                    map.put("dsls", preferences.getInt(DAYS_SINCE_LAST_SESSION, 0));
+                    map.put("dsfs", preferences.getInt(DAYS_SINCE_FIRST_SESSION, 0));
                     map.put("sessionId", sessionId);
 
                     return new JSONObject().put("lifecycle", new JSONObject(map)).toString();

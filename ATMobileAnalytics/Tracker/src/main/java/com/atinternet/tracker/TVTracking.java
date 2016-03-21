@@ -70,21 +70,22 @@ public class TVTracking {
     TVTracking(Tracker tracker) {
         this.tracker = tracker;
         visitDuration = 10;
+        campaignURL = "";
 
-        String url = (String) tracker.getConfiguration().get(TrackerKeys.TVT_URL);
+        String url = (String) tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL);
         if (!TextUtils.isEmpty(url)) {
             campaignURL = url;
         } else {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "TVTracking URL not set");
         }
 
-        Integer visit = Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerKeys.TVT_VISIT_DURATION)));
+        Integer visit = Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION)));
         if (visit != 0) {
             visitDuration = visit;
         }
 
         try {
-            String remanentCampaign = Tracker.getPreferences().getString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null);
+            String remanentCampaign = Tracker.getPreferences().getString(TrackerConfigurationKeys.REMANENT_CAMPAIGN_SAVED, null);
             if (remanentCampaign != null) {
                 JSONObject remanentObject = new JSONObject(remanentCampaign);
                 int lifetime;
@@ -93,10 +94,10 @@ public class TVTracking {
                 } else {
                     lifetime = (Integer) remanentObject.get("lifetime");
                 }
-                long savedLifetime = Tracker.getPreferences().getLong(TrackerKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
+                long savedLifetime = Tracker.getPreferences().getLong(TrackerConfigurationKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
 
                 if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), savedLifetime) >= lifetime) {
-                    Tracker.getPreferences().edit().putString(TrackerKeys.REMANENT_CAMPAIGN_SAVED, null).apply();
+                    Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REMANENT_CAMPAIGN_SAVED, null).apply();
                 }
             }
         } catch (JSONException e) {

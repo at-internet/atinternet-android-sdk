@@ -61,7 +61,7 @@ public class BuilderTest extends AbstractTestClass {
     public void buildPhoneConfigurationTest() throws Exception {
         builder = new Builder(tracker);
         String result = (String) executePrivateMethod(builder, "buildConfiguration", new Object[0]);
-        assertEquals(result, "http://logp.xiti.com/hit.xiti?s=123");
+        assertEquals(result, "http://logp.xiti.com/hit.xiti?s=552987");
     }
 
     @Test

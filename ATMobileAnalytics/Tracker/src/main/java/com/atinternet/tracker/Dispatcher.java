@@ -102,21 +102,21 @@ class Dispatcher {
             TechnicalContext.level2 = (!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0;
 
             SharedPreferences preferences = Tracker.getPreferences();
-            if (!preferences.getBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, false)) {
-                String xtor = preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null);
+            if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
+                String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
                 if (xtor != null) {
                     ParamOption beforeStcPositionWithEncoding = new ParamOption()
                             .setRelativePosition(ParamOption.RelativePosition.before)
                             .setRelativeParameterKey(Hit.HitParam.JSON.stringValue())
                             .setEncode(true);
 
-                    if (preferences.getBoolean(TrackerKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
+                    if (preferences.getBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
                         tracker.setParam(Hit.HitParam.Source.stringValue(), xtor, beforeStcPositionWithEncoding);
-                        preferences.edit().putBoolean(TrackerKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
+                        preferences.edit().putBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
                     } else {
                         tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), xtor, beforeStcPositionWithEncoding);
                     }
-                    preferences.edit().putBoolean(TrackerKeys.CAMPAIGN_ADDED_KEY, true).apply();
+                    preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
                 }
             }
         }
@@ -125,14 +125,14 @@ class Dispatcher {
 
         ParamOption appendWithEncoding = new ParamOption().setAppend(true).setEncode(true);
         tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), appendWithEncoding);
-        if ((Boolean) tracker.getConfiguration().get(TrackerKeys.ENABLE_CRASH_DETECTION)) {
+        if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
             tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), appendWithEncoding);
         }
 
-        String referrer = Tracker.getPreferences().getString(TrackerKeys.REFERRER, null);
+        String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
         if (!TextUtils.isEmpty(referrer)) {
             tracker.setParam("refstore", referrer);
-            Tracker.getPreferences().edit().putString(TrackerKeys.REFERRER, null).apply();
+            Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
         }
 
         Builder builder = new Builder(tracker);
@@ -146,7 +146,7 @@ class Dispatcher {
      * Add identified visitor infos
      */
     void setIdentifiedVisitorInfos() {
-        if ((Boolean) tracker.getConfiguration().get(TrackerKeys.PERSIST_IDENTIFIED_VISITOR)) {
+        if (Boolean.parseBoolean(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR)))) {
             ParamOption beforeStcPosition = new ParamOption()
                     .setRelativePosition(ParamOption.RelativePosition.before)
                     .setRelativeParameterKey(Hit.HitParam.JSON.stringValue());

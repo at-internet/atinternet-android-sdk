@@ -25,6 +25,7 @@ package com.atinternet.tracker;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -40,6 +41,9 @@ public class IdentifiedVisitorTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Configuration configuration = tracker.getConfiguration();
+        configuration.put(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR, false);
+        tracker = new Tracker(Robolectric.application, configuration);
         identifiedVisitor = new IdentifiedVisitor(tracker);
         buffer = tracker.getBuffer();
         buffer.getPersistentParams().clear();

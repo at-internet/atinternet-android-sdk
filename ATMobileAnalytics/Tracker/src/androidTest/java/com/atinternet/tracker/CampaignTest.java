@@ -64,7 +64,7 @@ public class CampaignTest extends AbstractTestClass {
 
     @Test
     public void setEventWithoutRemanenceTest() {
-        assertNull(Tracker.getPreferences().getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertNull(Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
         campaign.setCampaignId("campaign").setEvent();
         assertEquals(1, buffer.getVolatileParams().size());
@@ -72,7 +72,7 @@ public class CampaignTest extends AbstractTestClass {
         assertEquals("xto", buffer.getVolatileParams().get(0).getKey());
         assertEquals("campaign", buffer.getVolatileParams().get(0).getValue().execute());
 
-        assertEquals("campaign", Tracker.getPreferences().getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
     }
 
@@ -82,10 +82,10 @@ public class CampaignTest extends AbstractTestClass {
         conf.put("campaignLastPersistence", false);
         tracker = new Tracker(Robolectric.application, conf);
 
-        assertNull(Tracker.getPreferences().getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
-        Tracker.getPreferences().edit().putString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, "campaign").apply();
-        Tracker.getPreferences().edit().putLong(TrackerKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis()).apply();
-        assertEquals("campaign", Tracker.getPreferences().getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertNull(Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
+        Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, "campaign").apply();
+        Tracker.getPreferences().edit().putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis()).apply();
+        assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
         campaign.setCampaignId("test").setEvent();
         assertEquals(2, buffer.getVolatileParams().size());
@@ -96,7 +96,7 @@ public class CampaignTest extends AbstractTestClass {
         assertEquals("xtor", buffer.getVolatileParams().get(1).getKey());
         assertEquals("campaign", buffer.getVolatileParams().get(1).getValue().execute());
 
-        assertEquals("campaign", Tracker.getPreferences().getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
     }
 }

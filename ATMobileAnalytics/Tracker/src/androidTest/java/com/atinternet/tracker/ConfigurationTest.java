@@ -22,111 +22,84 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class ConfigurationTest extends AbstractTestClass {
 
-    private LinkedHashMap<String, Object> emulatePhoneConfig;
-    private LinkedHashMap<String, Object> emulateTabletConfig;
+    private Configuration defaultConfiguration;
 
-    // On initialise une fausse configuration
     @Before
-    public void setUp() throws IOException, JSONException {
-        emulatePhoneConfig = createDefaultConfiguration(false);
-        emulateTabletConfig = createDefaultConfiguration(true);
+    public void setUp() {
+        defaultConfiguration = new Configuration(Robolectric.application);
     }
 
-    // On vérifie que la création d'une configuration par défaut pour téléphone possède bien les valeurs présentes dans le fichier JSON
     @Test
-    public void phoneConfigurationTest() {
-        assertEquals(20, emulatePhoneConfig.size());
-        assertEquals("logp", emulatePhoneConfig.get("log"));
-        assertEquals("logsPhone", emulatePhoneConfig.get("logSSL"));
-        assertEquals(123, emulatePhoneConfig.get("site"));
-        assertEquals("required", emulatePhoneConfig.get("storage"));
-        assertEquals(4, emulatePhoneConfig.get("storageduration"));
-        assertEquals("nuggad,tvtracking", emulatePhoneConfig.get("plugins").toString());
-        assertEquals("xiti.com", emulatePhoneConfig.get("domain"));
-        assertEquals("androidId", emulatePhoneConfig.get("identifier"));
-        assertEquals(false, emulatePhoneConfig.get("secure"));
-        assertEquals(false, emulatePhoneConfig.get("hashUserId"));
-        assertEquals("/hit.xiti", emulatePhoneConfig.get("pixelPath"));
-        assertEquals(false, emulatePhoneConfig.get("persistIdentifiedVisitor"));
-        assertEquals("test.com", emulatePhoneConfig.get("tvtURL"));
-        assertEquals(12, emulatePhoneConfig.get("tvtVisitDuration"));
-        assertEquals(true, emulatePhoneConfig.get("enableCrashDetection"));
-        assertEquals(true, emulatePhoneConfig.get("campaignLastPersistence"));
-        assertEquals(10, emulatePhoneConfig.get("campaignLifetime"));
-        assertEquals(5, emulatePhoneConfig.get("tvtSpotValidityTime"));
-        assertEquals("int", emulatePhoneConfig.get("downloadSource"));
-        assertEquals(60, emulatePhoneConfig.get("sessionBackgroundDuration"));
+    public void getDefaultConfigurationTest() {
+        assertEquals(18, defaultConfiguration.size());
+        assertEquals("", defaultConfiguration.get("log"));
+        assertEquals("", defaultConfiguration.get("logSSL"));
+        assertEquals("", defaultConfiguration.get("site"));
+        assertEquals("required", defaultConfiguration.get("storage"));
+        assertEquals("", defaultConfiguration.get("plugins"));
+        assertEquals("xiti.com", defaultConfiguration.get("domain"));
+        assertEquals("androidId", defaultConfiguration.get("identifier"));
+        assertEquals(false, defaultConfiguration.get("secure"));
+        assertEquals(false, defaultConfiguration.get("hashUserId"));
+        assertEquals("/hit.xiti", defaultConfiguration.get("pixelPath"));
+        assertEquals(true, defaultConfiguration.get("persistIdentifiedVisitor"));
+        assertEquals("", defaultConfiguration.get("tvtURL"));
+        assertEquals(10, defaultConfiguration.get("tvtVisitDuration"));
+        assertEquals(true, defaultConfiguration.get("enableCrashDetection"));
+        assertEquals(false, defaultConfiguration.get("campaignLastPersistence"));
+        assertEquals(30, defaultConfiguration.get("campaignLifetime"));
+        assertEquals(5, defaultConfiguration.get("tvtSpotValidityTime"));
+        assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
     }
 
-    // On vérifie que la création d'une configuration par défaut pour tablette possède bien les valeurs présentes dans le fichier JSON
-    @Test
-    public void tabletConfigurationTest() {
-        assertEquals(20, emulateTabletConfig.size());
-        assertEquals("logTablet", emulateTabletConfig.get("log"));
-        assertEquals("logsTablet", emulateTabletConfig.get("logSSL"));
-        assertEquals(456, emulateTabletConfig.get("site"));
-        assertEquals("required", emulatePhoneConfig.get("storage"));
-        assertEquals(4, emulatePhoneConfig.get("storageduration"));
-        assertEquals("xiti.com", emulateTabletConfig.get("domain"));
-        assertEquals("nuggad,tvtracking", emulatePhoneConfig.get("plugins").toString());
-        assertEquals("androidId", emulateTabletConfig.get("identifier"));
-        assertEquals(false, emulateTabletConfig.get("secure"));
-        assertEquals(false, emulatePhoneConfig.get("hashUserId"));
-        assertEquals("/hit.xiti", emulateTabletConfig.get("pixelPath"));
-        assertEquals(false, emulatePhoneConfig.get("persistIdentifiedVisitor"));
-        assertEquals("test.com", emulatePhoneConfig.get("tvtURL"));
-        assertEquals(12, emulatePhoneConfig.get("tvtVisitDuration"));
-        assertEquals(true, emulatePhoneConfig.get("enableCrashDetection"));
-        assertEquals(true, emulatePhoneConfig.get("campaignLastPersistence"));
-        assertEquals(10, emulatePhoneConfig.get("campaignLifetime"));
-        assertEquals(5, emulatePhoneConfig.get("tvtSpotValidityTime"));
-        assertEquals("int", emulatePhoneConfig.get("downloadSource"));
-        assertEquals(60, emulatePhoneConfig.get("sessionBackgroundDuration"));
-    }
-
-    // On vérifie que la configuration faite par le client écrase la configuration par défaut
     @Test
     public void configurationWithDictionaryTest() {
-        Configuration config = new Configuration(emulatePhoneConfig);
 
         LinkedHashMap<String, Object> dictionary = new LinkedHashMap<String, Object>();
-        dictionary.put("log", "logp");
-        dictionary.put("logs", "");
-        dictionary.put("site", "552987");
-        dictionary.put("domain", "xiti.com");
-        dictionary.put("pixelPath", "/hit.xiti");
+        dictionary.put("log", "logtest");
+        dictionary.put("logSSL", "");
+        dictionary.put("site", "123456");
+        dictionary.put("domain", "test.com");
+        dictionary.put("pixelPath", "/test.xiti");
         dictionary.put("secure", false);
         dictionary.put("hashUserId", true);
         dictionary.put("identifier", "androidId");
 
-        config = new Configuration(dictionary);
+        defaultConfiguration = new Configuration(dictionary);
 
-        assertEquals("logp", config.get("log"));
-        assertEquals("", config.get("logs"));
-        assertEquals("552987", config.get("site"));
-        assertFalse((Boolean) config.get("secure"));
-        assertTrue((Boolean) config.get("hashUserId"));
-        assertEquals("/hit.xiti", config.get("pixelPath"));
-        assertEquals("xiti.com", config.get("domain"));
-        assertEquals("androidId", config.get("identifier"));
-        assertEquals(8, config.size());
+        assertEquals(18, defaultConfiguration.size());
+        assertEquals("logtest", defaultConfiguration.get("log"));
+        assertEquals("", defaultConfiguration.get("logSSL"));
+        assertEquals("123456", defaultConfiguration.get("site"));
+        assertEquals("required", defaultConfiguration.get("storage"));
+        assertEquals("", defaultConfiguration.get("plugins"));
+        assertEquals("test.com", defaultConfiguration.get("domain"));
+        assertEquals("androidId", defaultConfiguration.get("identifier"));
+        assertEquals(false, defaultConfiguration.get("secure"));
+        assertEquals(true, defaultConfiguration.get("hashUserId"));
+        assertEquals("/test.xiti", defaultConfiguration.get("pixelPath"));
+        assertEquals(true, defaultConfiguration.get("persistIdentifiedVisitor"));
+        assertEquals("", defaultConfiguration.get("tvtURL"));
+        assertEquals(10, defaultConfiguration.get("tvtVisitDuration"));
+        assertEquals(true, defaultConfiguration.get("enableCrashDetection"));
+        assertEquals(false, defaultConfiguration.get("campaignLastPersistence"));
+        assertEquals(30, defaultConfiguration.get("campaignLifetime"));
+        assertEquals(5, defaultConfiguration.get("tvtSpotValidityTime"));
+        assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
     }
 }

@@ -41,6 +41,9 @@ public class TVTrackingTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Configuration configuration = tracker.getConfiguration();
+        configuration.put("plugins", "tvtracking");
+        tracker = new Tracker(Robolectric.application, configuration);
         tvTracking = new TVTracking(tracker);
         buffer = tracker.getBuffer();
         buffer.getPersistentParams().clear();
@@ -48,12 +51,12 @@ public class TVTrackingTest extends AbstractTestClass {
 
     @Test
     public void getCampaignURLTest() {
-        assertEquals("test.com", tvTracking.getCampaignURL());
+        assertEquals("", tvTracking.getCampaignURL());
     }
 
     @Test
     public void getVisitDurationURLTest() {
-        assertEquals(12, tvTracking.getVisitDuration());
+        assertEquals(10, tvTracking.getVisitDuration());
     }
 
     @Test
@@ -71,8 +74,8 @@ public class TVTrackingTest extends AbstractTestClass {
     public void setOneTest() {
         tvTracking.set();
 
-        assertEquals("test.com", tvTracking.getCampaignURL());
-        assertEquals(12, tvTracking.getVisitDuration());
+        assertEquals("", tvTracking.getCampaignURL());
+        assertEquals(10, tvTracking.getVisitDuration());
         assertEquals(1, buffer.getPersistentParams().size());
         assertEquals("tvt", buffer.getPersistentParams().get(0).getKey());
         assertEquals("true", buffer.getPersistentParams().get(0).getValue().execute());
@@ -83,7 +86,7 @@ public class TVTrackingTest extends AbstractTestClass {
         tvTracking.set("titi.fr");
 
         assertEquals("titi.fr", tvTracking.getCampaignURL());
-        assertEquals(12, tvTracking.getVisitDuration());
+        assertEquals(10, tvTracking.getVisitDuration());
         assertEquals(1, buffer.getPersistentParams().size());
         assertEquals("tvt", buffer.getPersistentParams().get(0).getKey());
         assertEquals("true", buffer.getPersistentParams().get(0).getValue().execute());

@@ -34,10 +34,10 @@ module.exports = function (grunt) {
                 src: 'index.html',
                 dest: 'delivery/' + alphaVersion
             },
-            alphaManifests: {
+            alphaJsonFiles: {
                 expand: true,
                 flatten: true,
-                src: '*.manifest.json',
+                src: '*.json',
                 dest: 'delivery/' + alphaVersion
             },
             betaLib: {
@@ -58,10 +58,10 @@ module.exports = function (grunt) {
                 src: 'index.html',
                 dest: 'delivery/' + betaVersion
             },
-            betaManifests: {
+            betaJsonFiles: {
                 expand: true,
                 flatten: true,
-                src: '*.manifest.json',
+                src: '*.json',
                 dest: 'delivery/' + betaVersion
             },
             lib: {
@@ -82,10 +82,10 @@ module.exports = function (grunt) {
                 src: 'index.html',
                 dest: 'delivery/' + prodVersion
             },
-            manifests: {
+            jsonFiles: {
                 expand: true,
                 flatten: true,
-                src: '*.manifest.json',
+                src: '*.json',
                 dest: 'delivery/' + prodVersion
             }
         }
@@ -94,9 +94,9 @@ module.exports = function (grunt) {
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('alphaDelivery', ['clean:all', 'copy:alphaLib','copy:alphaConfig', 'copy:alphaDoc','copy:alphaManifests']);
-    grunt.registerTask('betaDelivery', ['clean:all', 'copy:betaLib', 'copy:betaConfig','copy:betaDoc','copy:betaManifests']);
-    grunt.registerTask('delivery', ['clean:all', 'copy:lib', 'copy:config','copy:doc','copy:manifests']);
+    grunt.registerTask('alphaDelivery', ['clean:all', 'copy:alphaLib','copy:alphaConfig', 'copy:alphaDoc','copy:alphaJsonFiles']);
+    grunt.registerTask('betaDelivery', ['clean:all', 'copy:betaLib', 'copy:betaConfig','copy:betaDoc','copy:betaJsonFiles']);
+    grunt.registerTask('delivery', ['clean:all', 'copy:lib', 'copy:config','copy:doc','copy:jsonFiles']);
     grunt.registerTask('getVersion',function(){
         grunt.file.write('../version.txt', prodVersion);
     });

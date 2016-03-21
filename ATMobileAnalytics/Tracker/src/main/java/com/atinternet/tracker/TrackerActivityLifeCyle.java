@@ -33,13 +33,13 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
     private static final int DELTA = 2;
 
     private long timeInBackground;
-    private int sessionBackgroundDuration;
+    private Configuration configuration;
     private String savedActivityName;
     private int savedActivityTaskId;
 
-    TrackerActivityLifeCyle(int sessionBackgroundDuration) {
+    TrackerActivityLifeCyle(Configuration configuration) {
         timeInBackground = -1;
-        this.sessionBackgroundDuration = sessionBackgroundDuration;
+        this.configuration = configuration;
         savedActivityName = null;
     }
 
@@ -54,11 +54,9 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
     @Override
     public void onActivityStarted(Activity activity) {
         if (timeInBackground > -1) {
-            if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) >= DELTA) {
-                LifeCycle.updateFirstLaunch(Tracker.getPreferences());
-            }
+            int sessionBackgroundDuration = Integer.parseInt(String.valueOf(configuration.get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION)));
             if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) >= (sessionBackgroundDuration < DELTA ? DELTA : sessionBackgroundDuration)) {
-                LifeCycle.newLaunchInit(Tracker.getPreferences());
+                LifeCycle.newSessionInit(Tracker.getPreferences());
                 timeInBackground = -1;
             }
         }

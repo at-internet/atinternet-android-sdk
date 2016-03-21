@@ -32,14 +32,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-class Storage extends SQLiteOpenHelper {
+import static com.atinternet.tracker.Tracker.*;
 
-    /**
-     * Enum for different offline mode
-     */
-    public enum OfflineMode {
-        never, required, always
-    }
+class Storage extends SQLiteOpenHelper {
 
     /**
      * Offline mode

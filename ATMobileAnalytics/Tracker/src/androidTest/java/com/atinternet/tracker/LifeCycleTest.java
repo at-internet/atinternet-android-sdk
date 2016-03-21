@@ -52,7 +52,7 @@ public class LifeCycleTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        preferences = Robolectric.application.getSharedPreferences(TrackerKeys.PREFERENCES, Context.MODE_PRIVATE);
+        preferences = Robolectric.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
         preferences.edit().clear().apply();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         today = sdf.format(new Date());
@@ -68,7 +68,7 @@ public class LifeCycleTest extends AbstractTestClass {
 
         SharedPreferences backwardPrefs = Robolectric.application.getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
         backwardPrefs.edit()
-                .putString("ATFirstLaunch", "fld")
+                .putString("ATFirstLaunch", "fsd")
                 .putInt("ATLaunchCount", 6)
                 .putString("ATLastLaunch", "yesterday")
                 .apply();
@@ -78,93 +78,81 @@ public class LifeCycleTest extends AbstractTestClass {
         assertTrue(preferences.getString("LastLaunchDate", "").isEmpty());
         assertTrue(preferences.getInt("LaunchCount", 0) == 0);
 
-        LifeCycle.firstLaunchInit(preferences, backwardPrefs);
+        LifeCycle.firstSessionInit(preferences, backwardPrefs);
 
         assertFalse(preferences.getBoolean("FirstLaunch", true));
-        assertEquals("fld", preferences.getString("FirstLaunchDate", ""));
+        assertEquals("fsd", preferences.getString("FirstLaunchDate", ""));
         assertEquals("yesterday", preferences.getString("LastLaunchDate", ""));
         assertEquals(6, preferences.getInt("LaunchCount", 0));
     }
 
     @Test
     public void firstLaunchInitTest() {
-        LifeCycle.firstLaunchInit(preferences, null);
-        assertTrue(preferences.getBoolean(LifeCycle.FIRST_LAUNCH_KEY, false));
-        assertFalse(preferences.getBoolean(LifeCycle.FIRST_LAUNCH_AFTER_UPDATE_KEY, false));
-        assertEquals(today, preferences.getString(LifeCycle.FIRST_LAUNCH_DATE_KEY, null));
+        LifeCycle.firstSessionInit(preferences, null);
+        assertTrue(preferences.getBoolean(LifeCycle.FIRST_SESSION, false));
+        assertFalse(preferences.getBoolean(LifeCycle.FIRST_SESSION_AFTER_UPDATE, false));
+        assertEquals(today, preferences.getString(LifeCycle.FIRST_SESSION_DATE, null));
 
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_SINCE_UPDATE_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_ON_DAY_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_ON_WEEK_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_ON_MONTH_KEY, 0));
-        assertEquals(0, preferences.getInt(LifeCycle.DAYS_SINCE_FIRST_LAUNCH_KEY, 1));
-        assertEquals(0, preferences.getInt(LifeCycle.DAYS_SINCE_LAST_USE_KEY, 1));
+        assertEquals(1, preferences.getInt(LifeCycle.SESSION_COUNT, 0));
+        assertEquals(1, preferences.getInt(LifeCycle.SESSION_COUNT_SINCE_UPDATE, 0));
+        assertEquals(0, preferences.getInt(LifeCycle.DAYS_SINCE_FIRST_SESSION, 1));
+        assertEquals(0, preferences.getInt(LifeCycle.DAYS_SINCE_LAST_SESSION, 1));
         assertEquals("1", preferences.getString(LifeCycle.VERSION_CODE_KEY, null));
     }
 
     @Test
     public void newLaunchInitTest() throws JSONException {
 
-        LifeCycle.firstLaunchInit(preferences, null);
+        LifeCycle.firstSessionInit(preferences, null);
         JSONObject obj = new JSONObject(LifeCycle.getMetrics(preferences).execute());
         JSONObject life = obj.getJSONObject("lifecycle");
         String sesssionId = life.getString("sessionId");
 
-        LifeCycle.newLaunchInit(preferences);
+        LifeCycle.newSessionInit(preferences);
         obj = new JSONObject(LifeCycle.getMetrics(preferences).execute());
         life = obj.getJSONObject("lifecycle");
 
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_SINCE_UPDATE_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_ON_DAY_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_ON_WEEK_KEY, 0));
-        assertEquals(1, preferences.getInt(LifeCycle.LAUNCH_COUNT_ON_MONTH_KEY, 0));
+        assertEquals(2, preferences.getInt(LifeCycle.SESSION_COUNT, 0));
+        assertEquals(2, preferences.getInt(LifeCycle.SESSION_COUNT_SINCE_UPDATE, 0));
         assertNotSame(sesssionId, life.getString("sessionId"));
     }
 
     public void lifecycleContainedInHitTest() throws JSONException {
-        LifeCycle.firstLaunchInit(preferences, null);
+        LifeCycle.firstSessionInit(preferences, null);
         JSONObject obj = new JSONObject(LifeCycle.getMetrics(preferences).execute());
         JSONObject life = obj.getJSONObject("lifecycle");
 
-        assertEquals(1, life.getInt("fl"));
-        assertEquals(0, life.getInt("flau"));
-        assertEquals(1, life.getInt("lc"));
-        assertEquals(1, life.getInt("lmc"));
-        assertEquals(1, life.getInt("lwc"));
-        assertEquals(1, life.getInt("ldc"));
-        assertEquals(Integer.parseInt(today), life.getInt("fld"));
-        assertEquals(0, life.getInt("dslu"));
-        assertEquals(0, life.getInt("dsfl"));
+        assertEquals(1, life.getInt("fs"));
+        assertEquals(0, life.getInt("fsau"));
+        assertEquals(1, life.getInt("sc"));
+        assertEquals(Integer.parseInt(today), life.getInt("fsd"));
+        assertEquals(0, life.getInt("dsls"));
+        assertEquals(0, life.getInt("dsfs"));
 
         assertTrue(life.isNull("dsu"));
-        assertTrue(life.isNull("lcsu"));
-        assertTrue(life.isNull("uld"));
+        assertTrue(life.isNull("scsu"));
+        assertTrue(life.isNull("fsdau"));
     }
 
     @Test
     public void afterUpdateTest() throws JSONException {
-        LifeCycle.firstLaunchInit(preferences, null);
+        LifeCycle.firstSessionInit(preferences, null);
         preferences.edit().putString(LifeCycle.VERSION_CODE_KEY, "test").apply();
         LifeCycle.isInitialized = false;
-        LifeCycle.updateFirstLaunch(preferences);
-        LifeCycle.newLaunchInit(preferences);
+        LifeCycle.updateFirstSession(preferences);
+        LifeCycle.newSessionInit(preferences);
 
         JSONObject obj = new JSONObject(LifeCycle.getMetrics(preferences).execute());
         JSONObject life = obj.getJSONObject("lifecycle");
 
-        assertEquals(0, life.getInt("fl"));
-        assertEquals(1, life.getInt("flau"));
-        assertEquals(2, life.getInt("lc"));
-        assertEquals(2, life.getInt("lmc"));
-        assertEquals(2, life.getInt("lwc"));
-        assertEquals(2, life.getInt("ldc"));
-        assertEquals(Integer.parseInt(today), life.getInt("fld"));
-        assertEquals(0, life.getInt("dslu"));
-        assertEquals(0, life.getInt("dsfl"));
+        assertEquals(0, life.getInt("fs"));
+        assertEquals(1, life.getInt("fsau"));
+        assertEquals(2, life.getInt("sc"));
+        assertEquals(Integer.parseInt(today), life.getInt("fsd"));
+        assertEquals(0, life.getInt("dsls"));
+        assertEquals(0, life.getInt("dsfs"));
         assertEquals(0, life.getInt("dsu"));
-        assertEquals(1, life.getInt("lcsu"));
-        assertEquals(Integer.parseInt(today), life.getInt("uld"));
+        assertEquals(1, life.getInt("scsu"));
+        assertEquals(Integer.parseInt(today), life.getInt("fsdau"));
     }
 }

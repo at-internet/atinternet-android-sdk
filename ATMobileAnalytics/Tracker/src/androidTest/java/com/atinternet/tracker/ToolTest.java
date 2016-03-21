@@ -32,9 +32,9 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.atinternet.tracker.Storage.OfflineMode.always;
-import static com.atinternet.tracker.Storage.OfflineMode.never;
-import static com.atinternet.tracker.Storage.OfflineMode.required;
+import static com.atinternet.tracker.Tracker.OfflineMode.always;
+import static com.atinternet.tracker.Tracker.OfflineMode.never;
+import static com.atinternet.tracker.Tracker.OfflineMode.required;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

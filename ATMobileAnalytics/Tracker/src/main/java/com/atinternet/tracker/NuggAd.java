@@ -56,7 +56,7 @@ public class NuggAd extends BusinessObject {
 
     @Override
     void setEvent() {
-        if (new ArrayList<String>(Arrays.asList(((String) tracker.getConfiguration().get(TrackerKeys.PLUGINS)).split(","))).contains("nuggad")) {
+        if (new ArrayList<String>(Arrays.asList(((String) tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS)).split(","))).contains("nuggad")) {
             try {
                 tracker.setParam(Hit.HitParam.JSON.stringValue(), new JSONObject().put("nuggad", nuggAdData).toString(), new ParamOption().setAppend(true).setEncode(true));
             } catch (JSONException e) {

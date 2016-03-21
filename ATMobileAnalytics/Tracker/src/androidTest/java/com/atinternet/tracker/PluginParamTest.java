@@ -22,13 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -39,7 +38,11 @@ import static org.junit.Assert.assertEquals;
 public class PluginParamTest extends AbstractTestClass {
 
     @Test
-    public void getPluginsDictionaryTest() throws IOException, JSONException {
+    public void getPluginsDictionaryTest() throws Exception {
+        Configuration configuration = tracker.getConfiguration();
+        configuration.put("plugins", "tvtracking");
+        tracker = new Tracker(Robolectric.application, configuration);
+
         HashMap<String, String> plugins = PluginParam.get(tracker);
         assertEquals(1, plugins.size());
         assertEquals("com.atinternet.tracker.TVTrackingPlugin", plugins.get("tvt"));

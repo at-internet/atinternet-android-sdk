@@ -112,12 +112,12 @@ class Builder implements Runnable {
         String conf = EMPTY_VALUE;
         int hitConfigChunks = 0;
 
-        boolean isSecure = (Boolean) configuration.get(TrackerKeys.SECURE);
-        String log = String.valueOf(configuration.get(TrackerKeys.LOG));
-        String logSecure = String.valueOf(configuration.get(TrackerKeys.LOG_SSL));
-        String domain = String.valueOf(configuration.get(TrackerKeys.DOMAIN));
-        String pixelPath = String.valueOf(configuration.get(TrackerKeys.PIXEL_PATH));
-        String siteID = String.valueOf(configuration.get(TrackerKeys.SITE));
+        boolean isSecure = (Boolean) configuration.get(TrackerConfigurationKeys.SECURE);
+        String log = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG));
+        String logSecure = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL));
+        String domain = String.valueOf(configuration.get(TrackerConfigurationKeys.DOMAIN));
+        String pixelPath = String.valueOf(configuration.get(TrackerConfigurationKeys.PIXEL_PATH));
+        String siteID = String.valueOf(configuration.get(TrackerConfigurationKeys.SITE));
 
         if (isSecure) {
             if (!TextUtils.isEmpty(logSecure)) {
@@ -281,15 +281,15 @@ class Builder implements Runnable {
                     }
                 }
             }
+            if (tracker.getListener() != null) {
+                String message = "";
+                for (String hit : hitsList) {
+                    message += hit + "\n";
+                }
+                Tool.executeCallback(tracker.getListener(), CallbackType.build, message, TrackerListener.HitStatus.Success);
+            }
         }
 
-        if (tracker.getListener() != null) {
-            String message = "";
-            for (String hit : hitsList) {
-                message += hit + "\n";
-            }
-            Tool.executeCallback(tracker.getListener(), CallbackType.build, message, TrackerListener.HitStatus.Success);
-        }
         return new Object[]{hitsList, oltParameter};
     }
 
@@ -439,7 +439,7 @@ class Builder implements Runnable {
             } else if (key.equals(Hit.HitParam.UserId.stringValue())) {
                 if (TechnicalContext.doNotTrackEnabled(Tracker.getAppContext())) {
                     value = OPT_OUT;
-                } else if (((Boolean) configuration.get(TrackerKeys.HASH_USER_ID))) {
+                } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
                     value = Tool.SHA_256(value);
                 }
             }

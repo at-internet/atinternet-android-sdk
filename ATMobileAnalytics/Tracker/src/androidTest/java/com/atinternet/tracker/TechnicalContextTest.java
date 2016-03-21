@@ -75,6 +75,12 @@ public final class TechnicalContextTest extends AbstractTestClass {
     }
 
     @Test
+    public void getDownloadSourceTest() {
+        assertNotNull(TechnicalContext.getDownloadSource(tracker).execute());
+        assertEquals("ext", TechnicalContext.getDownloadSource(tracker).execute());
+    }
+
+    @Test
     public void getLocalHourTest() {
         assertNotNull(TechnicalContext.getLocalHour().execute());
         assertNotSame("", TechnicalContext.getLocalHour().execute());
@@ -101,7 +107,7 @@ public final class TechnicalContextTest extends AbstractTestClass {
     @Test
     public void doNotTrackTest() {
         TechnicalContext.doNotTrack(Robolectric.application, true);
-        assertTrue(Robolectric.application.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerKeys.DO_NOT_TRACK_ENABLED, false));
+        assertTrue(Robolectric.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false));
     }
 
     @Test

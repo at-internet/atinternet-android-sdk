@@ -47,7 +47,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.atinternet.tracker.Storage.OfflineMode;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
+import static com.atinternet.tracker.Tracker.*;
 import static com.atinternet.tracker.TrackerListener.HitStatus;
 
 /**
@@ -190,6 +192,10 @@ class Tool {
                 return afterZero.length() > 1 ? Long.toString(d) + afterZero.substring(1) : "";
             }
         };
+    }
+
+    static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) >= SCREENLAYOUT_SIZE_LARGE;
     }
 
 

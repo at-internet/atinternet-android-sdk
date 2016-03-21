@@ -61,7 +61,7 @@ public class IdentifiedVisitor {
      */
     IdentifiedVisitor(Tracker tracker) {
         this.tracker = tracker;
-        persistIdentifiedVisitor = (Boolean) tracker.getConfiguration().get(TrackerKeys.PERSIST_IDENTIFIED_VISITOR);
+        persistIdentifiedVisitor = Boolean.parseBoolean(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR)));
         option.setPersistent(true).setEncode(true);
     }
 

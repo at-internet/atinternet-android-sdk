@@ -46,7 +46,7 @@ public class ReferrerReceiverTest extends AbstractTestClass {
     public void setUp() throws Exception {
         super.setUp();
         referrerReceiver = new ReferrerReceiver();
-        preferences = Robolectric.application.getSharedPreferences(TrackerKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        preferences = Robolectric.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
     @Test
@@ -56,8 +56,8 @@ public class ReferrerReceiverTest extends AbstractTestClass {
         intent.putExtra("referrer", "test=value&xtor=campaign");
         referrerReceiver.onReceive(Robolectric.application, intent);
 
-        assertEquals("test=value%26xtor=campaign", preferences.getString(TrackerKeys.REFERRER, null));
-        assertEquals("campaign", preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertEquals("test=value%26xtor=campaign", preferences.getString(TrackerConfigurationKeys.REFERRER, null));
+        assertEquals("campaign", preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
     }
 
     @Test
@@ -67,8 +67,8 @@ public class ReferrerReceiverTest extends AbstractTestClass {
         intent.putExtra("referrer", "test_value_set");
         referrerReceiver.onReceive(Robolectric.application, intent);
 
-        assertEquals("test_value_set", preferences.getString(TrackerKeys.REFERRER, null));
-        assertNull(preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertEquals("test_value_set", preferences.getString(TrackerConfigurationKeys.REFERRER, null));
+        assertNull(preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class ReferrerReceiverTest extends AbstractTestClass {
         intent.putExtra("id", "test_value_set");
         referrerReceiver.onReceive(Robolectric.application, intent);
 
-        assertNull(preferences.getString(TrackerKeys.REFERRER, null));
-        assertNull(preferences.getString(TrackerKeys.MARKETING_CAMPAIGN_SAVED, null));
+        assertNull(preferences.getString(TrackerConfigurationKeys.REFERRER, null));
+        assertNull(preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
     }
 }

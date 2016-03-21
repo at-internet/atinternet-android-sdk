@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import static com.atinternet.tracker.TechnicalContext.ConnectionType;
 import static com.atinternet.tracker.TechnicalContext.getConnection;
 import static com.atinternet.tracker.Tool.CallbackType;
+import static com.atinternet.tracker.Tracker.*;
 
 class Sender implements Runnable {
 
@@ -89,7 +90,7 @@ class Sender implements Runnable {
      */
     Sender(TrackerListener trackerListener, Hit hit, boolean forceSendOfflineHits, String... oltParameter) {
         this.trackerListener = trackerListener;
-        this.storage = Tracker.getStorage();
+        this.storage = getStorage();
         this.hit = hit;
         this.forceSendOfflineHits = forceSendOfflineHits;
         this.oltParameter = oltParameter.length > 0 ? oltParameter[0] : "";
@@ -100,13 +101,13 @@ class Sender implements Runnable {
      */
     private void send(final Hit hit) {
 
-        if (storage.getOfflineMode() == Storage.OfflineMode.always && !forceSendOfflineHits) {
+        if (storage.getOfflineMode() == OfflineMode.always && !forceSendOfflineHits) {
             saveHitDatabase(hit);
         }
         // Si pas de connexion
         else if (getConnection() == ConnectionType.offline || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
             // Si le hit ne provient pas du offline
-            if (storage.getOfflineMode() != Storage.OfflineMode.never && !hit.isOffline()) {
+            if (storage.getOfflineMode() != OfflineMode.never && !hit.isOffline()) {
                 saveHitDatabase(hit);
             }
         } else {
@@ -124,7 +125,7 @@ class Sender implements Runnable {
 
                 // Le hit n'a pas pu être envoyé
                 if (statusCode != 200) {
-                    if (storage.getOfflineMode() != Storage.OfflineMode.never) {
+                    if (storage.getOfflineMode() != OfflineMode.never) {
                         if (!hit.isOffline()) {
                             saveHitDatabase(hit);
                         } else {
@@ -152,7 +153,7 @@ class Sender implements Runnable {
                         storage.deleteHit(hit.getUrl());
                     }
                 } else {
-                    if (storage.getOfflineMode() != Storage.OfflineMode.never) {
+                    if (storage.getOfflineMode() != OfflineMode.never) {
                         if (!hit.isOffline()) {
                             saveHitDatabase(hit);
                         } else {
@@ -194,7 +195,7 @@ class Sender implements Runnable {
      * @param forceSendOfflineHits boolean
      */
     public static void sendOfflineHits(TrackerListener listener, Storage storage, boolean forceSendOfflineHits, boolean async) {
-        if ((storage.getOfflineMode() != Storage.OfflineMode.always || forceSendOfflineHits) && TechnicalContext.getConnection() != ConnectionType.offline && !OfflineHitProcessing) {
+        if ((storage.getOfflineMode() != OfflineMode.always || forceSendOfflineHits) && TechnicalContext.getConnection() != ConnectionType.offline && !OfflineHitProcessing) {
 
             if (TrackerQueue.getEnabledFillQueueFromDatabase() && storage.getCountOfflineHits() > 0) {
                 ArrayList<Hit> offlineHits = storage.getOfflineHits();
