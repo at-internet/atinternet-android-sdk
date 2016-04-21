@@ -36,6 +36,7 @@ public class Hit {
         UserId("idclient"),
         Action("action"),
         Refstore("refstore"),
+        Referrer("ref"),
         HitType("type"),
         Touch("click"),
         TouchScreen("pclick"),

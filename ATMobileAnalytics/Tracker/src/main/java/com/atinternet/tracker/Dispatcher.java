@@ -131,7 +131,7 @@ class Dispatcher {
 
         String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
         if (!TextUtils.isEmpty(referrer)) {
-            tracker.setParam("refstore", referrer);
+            tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
             Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
         }
 

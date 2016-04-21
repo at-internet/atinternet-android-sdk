@@ -35,7 +35,7 @@ import java.util.LinkedHashMap;
 /**
  * Hit configuration
  */
-class Configuration extends LinkedHashMap<String, Object> {
+public class Configuration extends LinkedHashMap<String, Object> {
 
     /**
      * Properties to get configuration from json file in archive
@@ -135,5 +135,22 @@ class Configuration extends LinkedHashMap<String, Object> {
         }
 
         return result;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Tracker configuration : \n");
+        Iterator<Entry<String, Object>> iter = entrySet().iterator();
+        while (iter.hasNext()) {
+            Entry<String, Object> entry = iter.next();
+            sb.append("\t").append(entry.getKey());
+            sb.append('=').append('"');
+            sb.append(entry.getValue());
+            sb.append('"');
+            if (iter.hasNext()) {
+                sb.append('\n');
+            }
+        }
+        return sb.toString();
+
     }
 }

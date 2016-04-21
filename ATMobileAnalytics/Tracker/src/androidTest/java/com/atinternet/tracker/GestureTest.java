@@ -66,7 +66,7 @@ public class GestureTest extends AbstractTestClass {
 
     @Test
     public void setEventTest() {
-        gesture.setName("gesture").setEvent();
+        gesture.setName("gesture").setChapter2("chapter2").setEvent();
         assertEquals(5, buffer.getVolatileParams().size());
 
         assertEquals("click", buffer.getVolatileParams().get(0).getKey());
@@ -79,6 +79,25 @@ public class GestureTest extends AbstractTestClass {
         assertEquals("A", buffer.getVolatileParams().get(2).getValue().execute());
 
         assertEquals("p", buffer.getVolatileParams().get(3).getKey());
-        assertEquals("gesture", buffer.getVolatileParams().get(3).getValue().execute());
+        assertEquals("chapter2::gesture", buffer.getVolatileParams().get(3).getValue().execute());
+    }
+
+    @Test
+    public void setEventOnlyChaptersTest() {
+        gesture.setChapter1("chapter1").setChapter3("chapter3").setEvent();
+
+        assertEquals(5, buffer.getVolatileParams().size());
+
+        assertEquals("click", buffer.getVolatileParams().get(0).getKey());
+        assertEquals("A", buffer.getVolatileParams().get(0).getValue().execute());
+
+        assertEquals("type", buffer.getVolatileParams().get(1).getKey());
+        assertEquals("click", buffer.getVolatileParams().get(1).getValue().execute());
+
+        assertEquals("action", buffer.getVolatileParams().get(2).getKey());
+        assertEquals("A", buffer.getVolatileParams().get(2).getValue().execute());
+
+        assertEquals("p", buffer.getVolatileParams().get(3).getKey());
+        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get(3).getValue().execute());
     }
 }

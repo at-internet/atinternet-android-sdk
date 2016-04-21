@@ -42,8 +42,20 @@ public class DynamicScreens extends Helper {
      * @param name     String
      * @param update   Date
      * @return DynamicScreen
+     * @deprecated use {@link #add(String, String, Date)} instead.
      */
     public DynamicScreen add(int screenId, String name, Date update) {
+        DynamicScreen dynamicScreen = new DynamicScreen(tracker)
+                .setScreenId(screenId)
+                .setName(name)
+                .setUpdate(update);
+
+        tracker.getBusinessObjects().put(dynamicScreen.getId(), dynamicScreen);
+
+        return dynamicScreen;
+    }
+
+    public DynamicScreen add(String screenId, String name, Date update) {
         DynamicScreen dynamicScreen = new DynamicScreen(tracker)
                 .setScreenId(screenId)
                 .setName(name)
@@ -62,8 +74,14 @@ public class DynamicScreens extends Helper {
      * @param update   Date
      * @param chapter1 String
      * @return DynamicScreen
+     * @deprecated use {@link #add(String, String, Date, String)} instead.
      */
+    @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1) {
+        return add(screenId, name, update).setChapter1(chapter1);
+    }
+
+    public DynamicScreen add(String screenId, String name, Date update, String chapter1) {
         return add(screenId, name, update).setChapter1(chapter1);
     }
 
@@ -76,8 +94,14 @@ public class DynamicScreens extends Helper {
      * @param chapter1 String
      * @param chapter2 String
      * @return DynamicScreen
+     * @deprecated use {@link #add(String, String, Date, String, String)} instead.
      */
+    @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1, String chapter2) {
+        return add(screenId, name, update, chapter1).setChapter2(chapter2);
+    }
+
+    public DynamicScreen add(String screenId, String name, Date update, String chapter1, String chapter2) {
         return add(screenId, name, update, chapter1).setChapter2(chapter2);
     }
 
@@ -91,8 +115,14 @@ public class DynamicScreens extends Helper {
      * @param chapter2 String
      * @param chapter3 String
      * @return DynamicScreen
+     * @deprecated use {@link #add(String, String, Date, String, String, String)} instead.
      */
+    @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1, String chapter2, String chapter3) {
+        return add(screenId, name, update, chapter1, chapter2).setChapter3(chapter3);
+    }
+
+    public DynamicScreen add(String screenId, String name, Date update, String chapter1, String chapter2, String chapter3) {
         return add(screenId, name, update, chapter1, chapter2).setChapter3(chapter3);
     }
 }

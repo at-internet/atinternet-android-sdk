@@ -73,11 +73,10 @@ public class BuilderTest extends AbstractTestClass {
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
 
-        String homeFormat = hit.split("&")[1];
-        String dateFormat = hit.split("&")[2];
-
-        assertEquals("home", homeFormat.split("=")[1]);
-        assertEquals(today, dateFormat.split("=")[1]);
+        assertEquals("p=home", hit.split("&")[1]);
+        assertEquals("date=" + today, hit.split("&")[2]);
+        assertEquals("refstore=test", hit.split("&")[3]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[4]);
     }
 
     @Test
@@ -86,9 +85,10 @@ public class BuilderTest extends AbstractTestClass {
 
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
-        String floatFormat = hit.split("&")[1];
 
-        assertEquals("3.145", floatFormat.split("=")[1]);
+        assertEquals("float=3.145", hit.split("&")[1]);
+        assertEquals("refstore=test", hit.split("&")[2]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[3]);
     }
 
     @Test
@@ -96,9 +96,10 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().add(intParam);
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
-        String intFormat = hit.split("&")[1];
 
-        assertEquals("20", intFormat.split("=")[1]);
+        assertEquals("int=20", hit.split("&")[1]);
+        assertEquals("refstore=test", hit.split("&")[2]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[3]);
     }
 
     @Test
@@ -107,11 +108,12 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().add(new Param("falseBoolean", closureValue(false), Param.Type.Array));
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
-        String trueBooleanFormat = hit.split("&")[1];
-        String falseBooleanFormat = hit.split("&")[2];
 
-        assertEquals("true", trueBooleanFormat.split("=")[1]);
-        assertEquals("false", falseBooleanFormat.split("=")[1]);
+        assertEquals("trueBoolean=true", hit.split("&")[1]);
+        assertEquals("falseBoolean=false", hit.split("&")[2]);
+        assertEquals("refstore=test", hit.split("&")[3]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[4]);
+
     }
 
     @Test
@@ -119,9 +121,10 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().add(mapParam);
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
-        String mapFormat = hit.split("&")[1];
 
-        assertEquals("{\"fruit\":\"orange\"}", mapFormat.split("=")[1]);
+        assertEquals("map={\"fruit\":\"orange\"}", hit.split("&")[1]);
+        assertEquals("refstore=test", hit.split("&")[2]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[3]);
     }
 
     @Test
@@ -129,9 +132,10 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().add(arrayParam);
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
-        String arrayFormat = hit.split("&")[1];
 
-        assertEquals("jeu,dvd,bluray", arrayFormat.split("=")[1]);
+        assertEquals("array=jeu,dvd,bluray", hit.split("&")[1]);
+        assertEquals("refstore=test", hit.split("&")[2]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[3]);
     }
 
     @Test
@@ -144,9 +148,10 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().add(arrayParam);
         builder = new Builder(tracker);
         String hit = ((ArrayList<String>) builder.build()[0]).get(0);
-        String arrayFormat = hit.split("&")[1];
 
-        assertEquals("jeu/dvd/bluray", arrayFormat.split("=")[1]);
+        assertEquals("array=jeu/dvd/bluray", hit.split("&")[1]);
+        assertEquals("refstore=test", hit.split("&")[2]);
+        assertEquals("ref=www.atinternet.com?test1=1$test2=2$test3=script/script", hit.split("&")[3]);
     }
 
     @Test
@@ -160,6 +165,7 @@ public class BuilderTest extends AbstractTestClass {
 
         ArrayList<String> hits = (ArrayList<String>) builder.build()[0];
         String hit = hits.get(0);
+
         assertTrue(hit.contains("mherr=1"));
         assertEquals(1, hits.size());
     }
@@ -231,12 +237,14 @@ public class BuilderTest extends AbstractTestClass {
         builder = new Builder(tracker);
         ArrayList<Param> organizeParams = (ArrayList<Param>) executePrivateMethod(builder, "organizeParameters", new Object[]{completeBuffer});
 
+        assertEquals(7, organizeParams.size());
         assertEquals("p", organizeParams.get(0).getKey());
         assertEquals("map", organizeParams.get(1).getKey());
         assertEquals("array", organizeParams.get(2).getKey());
         assertEquals("trueBoolean", organizeParams.get(3).getKey());
         assertEquals("int", organizeParams.get(4).getKey());
-        assertEquals(5, organizeParams.size());
+        assertEquals("refstore", organizeParams.get(5).getKey());
+        assertEquals("ref", organizeParams.get(6).getKey());
     }
 
     @Test
@@ -249,12 +257,14 @@ public class BuilderTest extends AbstractTestClass {
         builder = new Builder(tracker);
         LinkedHashMap<String, Object[]> result = (LinkedHashMap<String, Object[]>) executePrivateMethod(builder, "prepareQuery", new Object[0]);
 
-        assertEquals(5, result.size());
+        assertEquals(7, result.size());
         assertEquals("&p=home", result.get("p")[1]);
         assertEquals("&map=" + "{\"fruit\":\"orange\"}", result.get("map")[1]);
-        assertEquals("&array=" +"jeu,dvd,bluray", result.get("array")[1]);
+        assertEquals("&array=" + "jeu,dvd,bluray", result.get("array")[1]);
         assertEquals("&trueBoolean=true", result.get("trueBoolean")[1]);
         assertEquals("&int=20", result.get("int")[1]);
+        assertEquals("&refstore=test", result.get("refstore")[1]);
+        assertEquals("&ref=www.atinternet.com?test1=1$test2=2$test3=script/script", result.get("ref")[1]);
     }
 
     @Test
@@ -268,20 +278,33 @@ public class BuilderTest extends AbstractTestClass {
         builder = new Builder(tracker);
         LinkedHashMap<String, Object[]> result = (LinkedHashMap<String, Object[]>) executePrivateMethod(builder, "prepareQuery", new Object[0]);
 
-        assertEquals(6, result.size());
+        assertEquals(8, result.size());
         assertEquals("&p=home", result.get("p")[1]);
         assertEquals("&map=" + "{\"fruit\":\"orange\"}", result.get("map")[1]);
         assertEquals("&array=" + "jeu,dvd,bluray", result.get("array")[1]);
         assertEquals("&trueBoolean=true", result.get("trueBoolean")[1]);
         assertEquals("&int=20", result.get("int")[1]);
         assertEquals("&car=", result.get("car")[1]);
+        assertEquals("&refstore=test", result.get("refstore")[1]);
+        assertEquals("&ref=www.atinternet.com?test1=1$test2=2$test3=script/script", result.get("ref")[1]);
     }
 
     private void prepareBuilderForTest() {
         buffer = tracker.getBuffer();
-
-        // Virer les variables de contexte pour les tests
         buffer.getPersistentParams().clear();
+        buffer.getVolatileParams().add(new Param("ref", new Closure() {
+            @Override
+            public String execute() {
+                return "www.atinternet.com?test1=1&test2=2&test3=<script></script>";
+
+            }
+        }, Param.Type.Closure));
+        buffer.getVolatileParams().add(new Param("refstore", new Closure() {
+            @Override
+            public String execute() {
+                return "test";
+            }
+        }, Param.Type.Closure));
 
         today = String.valueOf(DateFormat.format(pattern, System.currentTimeMillis()));
         closureParam = new Param("date", getDate(), Param.Type.Closure);

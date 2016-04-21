@@ -320,19 +320,8 @@ class Builder implements Runnable {
         ArrayList<int[]> indexes;
         ArrayList<Param> params = new ArrayList<Param>();
 
-        Param refParam = null;
-        ArrayList<int[]> refParamPositions = Tool.findParameterPosition(Hit.HitParam.Refstore.stringValue(), completeBuffer);
-        int indexRef = refParamPositions.isEmpty() ? -1 : refParamPositions.get(refParamPositions.size() - 1)[1];
-
-        if (indexRef != -1) {
-            refParam = completeBuffer.get(indexRef);
-            completeBuffer.remove(indexRef);
-            if (refParam.getOptions() != null &&
-                    refParam.getOptions().getRelativePosition() != last &&
-                    refParam.getOptions().getRelativePosition() != none) {
-                Tool.executeCallback(tracker.getListener(), CallbackType.warning, "ref= parameter will be put in last position");
-            }
-        }
+        Param refstore = getRefOrRefstoreParam(Hit.HitParam.Refstore.stringValue(), completeBuffer);
+        Param ref = getRefOrRefstoreParam(Hit.HitParam.Referrer.stringValue(), completeBuffer);
 
         for (Param param : completeBuffer) {
 
@@ -396,9 +385,14 @@ class Builder implements Runnable {
             params.add(lastParam);
         }
 
+        // Insertion du refstore si existant
+        if (refstore != null) {
+            params.add(refstore);
+        }
+
         // Insertion du ref si existant
-        if (refParam != null) {
-            params.add(refParam);
+        if (ref != null) {
+            params.add(ref);
         }
 
         return params;
@@ -412,9 +406,10 @@ class Builder implements Runnable {
     private LinkedHashMap<String, Object[]> prepareQuery() {
         LinkedHashMap<String, Object[]> formattedParameters = new LinkedHashMap<String, Object[]>();
 
-        ArrayList<Param> completeBuffer = new ArrayList<Param>();
-        completeBuffer.addAll(persistentParams);
-        completeBuffer.addAll(volatileParams);
+        ArrayList<Param> completeBuffer = new ArrayList<Param>() {{
+            addAll(persistentParams);
+            addAll(volatileParams);
+        }};
 
         ArrayList<Param> params = organizeParameters(completeBuffer);
 
@@ -449,6 +444,13 @@ class Builder implements Runnable {
             }
 
             if (value != null) {
+                // Referrer processing
+                if (key.equals(Hit.HitParam.Referrer.stringValue())) {
+
+                    value = value.replace("&", "$")
+                            .replaceAll("[<>]", "");
+                }
+
                 if (p.getOptions() != null && p.getOptions().isEncode()) {
                     value = Tool.percentEncode(value);
                     p.getOptions().setSeparator(Tool.percentEncode(p.getOptions().getSeparator()));
@@ -553,5 +555,22 @@ class Builder implements Runnable {
      */
     private String makeSubQuery(String key, String value) {
         return "&" + key + "=" + value;
+    }
+
+    private Param getRefOrRefstoreParam(String key, ArrayList<Param> completeBuffer) {
+        Param ref = null;
+        ArrayList<int[]> refParamPositions = Tool.findParameterPosition(key, completeBuffer);
+        int indexRef = refParamPositions.isEmpty() ? -1 : refParamPositions.get(refParamPositions.size() - 1)[1];
+
+        if (indexRef != -1) {
+            ref = completeBuffer.remove(indexRef);
+            if (ref.getOptions() != null &&
+                    ref.getOptions().getRelativePosition() != last &&
+                    ref.getOptions().getRelativePosition() != none) {
+                Tool.executeCallback(tracker.getListener(), CallbackType.warning, key + "= parameter will be put in last position");
+            }
+        }
+
+        return ref;
     }
 }

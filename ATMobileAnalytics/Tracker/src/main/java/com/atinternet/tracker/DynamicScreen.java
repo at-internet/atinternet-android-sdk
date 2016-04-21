@@ -30,11 +30,11 @@ public class DynamicScreen extends AbstractScreen {
 
     private static final String UPDATE_FORMAT = "yyyyMMddHHmm";
 
-    private int screenId;
+    private String screenId;
 
     private Date update;
 
-    public int getScreenId() {
+    public String getScreenId() {
         return screenId;
     }
 
@@ -42,7 +42,16 @@ public class DynamicScreen extends AbstractScreen {
         return update;
     }
 
+    /**
+     * @deprecated use {@link #setScreenId(String)} instead.
+     */
+    @Deprecated
     public DynamicScreen setScreenId(int screenId) {
+        this.screenId = String.valueOf(screenId);
+        return this;
+    }
+
+    public DynamicScreen setScreenId(String screenId) {
         this.screenId = screenId;
         return this;
     }
@@ -97,7 +106,7 @@ public class DynamicScreen extends AbstractScreen {
      */
     DynamicScreen(Tracker tracker) {
         super(tracker);
-        screenId = -1;
+        screenId = null;
         chapter1 = null;
         chapter2 = null;
         chapter3 = null;
@@ -107,6 +116,11 @@ public class DynamicScreen extends AbstractScreen {
     @Override
     void setEvent() {
         super.setEvent();
+
+        if (screenId.length() > 255) {
+            screenId = "";
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "screenId too long, replaced by empty value");
+        }
 
         tracker.setParam("pid", screenId);
         String value = chapter1;

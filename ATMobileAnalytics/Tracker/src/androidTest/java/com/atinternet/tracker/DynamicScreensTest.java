@@ -47,9 +47,9 @@ public class DynamicScreensTest extends AbstractTestClass {
     @Test
     public void addTest() {
         Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add(8, "test", date);
+        DynamicScreen dynamicScreen = dynamicScreens.add("8", "test", date);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(8, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
+        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
         assertEquals("test", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
         assertEquals(date, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getUpdate());
     }
@@ -57,9 +57,9 @@ public class DynamicScreensTest extends AbstractTestClass {
     @Test
     public void addTwoTest() {
         Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add(8, "name", date, "chapter1");
+        DynamicScreen dynamicScreen = dynamicScreens.add("8", "name", date, "chapter1");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(8, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
+        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
         assertEquals("name", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
         assertEquals("chapter1", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter1());
         assertEquals(date, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getUpdate());
@@ -68,9 +68,9 @@ public class DynamicScreensTest extends AbstractTestClass {
     @Test
     public void addThreeTest() {
         Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add(8, "name", date, "chapter1", "chapter2");
+        DynamicScreen dynamicScreen = dynamicScreens.add("8", "name", date, "chapter1", "chapter2");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(8, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
+        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
         assertEquals("name", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
         assertEquals("chapter1", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter1());
         assertEquals("chapter2", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter2());
@@ -80,9 +80,9 @@ public class DynamicScreensTest extends AbstractTestClass {
     @Test
     public void addFourTest() {
         Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add(8, "name", date, "chapter1", "chapter2", "chapter3");
+        DynamicScreen dynamicScreen = dynamicScreens.add("8", "name", date, "chapter1", "chapter2", "chapter3");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(8, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
+        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
         assertEquals("name", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
         assertEquals("chapter1", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter1());
         assertEquals("chapter2", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter2());

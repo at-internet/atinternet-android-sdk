@@ -50,6 +50,21 @@ public class Gesture extends BusinessObject {
     private String name;
 
     /**
+     * Chapter 1
+     */
+    private String chapter1;
+
+    /**
+     * Chapter 2
+     */
+    private String chapter2;
+
+    /**
+     * Chapter 3
+     */
+    private String chapter3;
+
+    /**
      * Action type
      */
     private Action action;
@@ -63,6 +78,18 @@ public class Gesture extends BusinessObject {
         return name;
     }
 
+    public String getChapter1() {
+        return chapter1;
+    }
+
+    public String getChapter2() {
+        return chapter2;
+    }
+
+    public String getChapter3() {
+        return chapter3;
+    }
+
     public Action getAction() {
         return action;
     }
@@ -73,6 +100,24 @@ public class Gesture extends BusinessObject {
 
     Gesture setName(String name) {
         this.name = name;
+
+        return this;
+    }
+
+    Gesture setChapter1(String chapter1) {
+        this.chapter1 = chapter1;
+
+        return this;
+    }
+
+    Gesture setChapter2(String chapter2) {
+        this.chapter2 = chapter2;
+
+        return this;
+    }
+
+    Gesture setChapter3(String chapter3) {
+        this.chapter3 = chapter3;
 
         return this;
     }
@@ -115,8 +160,26 @@ public class Gesture extends BusinessObject {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
 
+        String value = chapter1;
+        if (value == null) {
+            value = chapter2;
+        } else {
+            value += chapter2 == null ? "" : "::" + chapter2;
+        }
+        if (value == null) {
+            value = chapter3;
+        } else {
+            value += chapter3 == null ? "" : "::" + chapter3;
+        }
+
+        if (value == null) {
+            value = name;
+        } else {
+            value += name == null ? "" : "::" + name;
+        }
+
         tracker.setParam(Hit.HitParam.Touch.stringValue(), action.stringValue())
-                .Event().set("click", action.stringValue(), name);
+                .Event().set("click", action.stringValue(), value);
     }
 
     /**

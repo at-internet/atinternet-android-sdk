@@ -52,7 +52,7 @@ public class DynamicScreenTest extends AbstractTestClass {
 
     @Test
     public void initTest() {
-        assertEquals(-1, dynamicScreen.getScreenId());
+        assertNull(dynamicScreen.getScreenId());
         assertNull(dynamicScreen.getChapter1());
         assertNull(dynamicScreen.getUpdate());
     }
@@ -65,7 +65,8 @@ public class DynamicScreenTest extends AbstractTestClass {
     @Test
     public void setTest() {
         Date date = new Date();
-        assertEquals(123, dynamicScreen.setScreenId(123).getScreenId());
+        assertEquals("123", dynamicScreen.setScreenId(123).getScreenId());
+        assertEquals("test", dynamicScreen.setScreenId("test").getScreenId());
         assertEquals("chapter1", dynamicScreen.setChapter1("chapter1").getChapter1());
         assertEquals("chapter2", dynamicScreen.setChapter2("chapter2").getChapter2());
         assertEquals("chapter3", dynamicScreen.setChapter3("chapter3").getChapter3());
@@ -75,11 +76,40 @@ public class DynamicScreenTest extends AbstractTestClass {
     @Test
     public void setEventTest() {
         Date date = new Date();
-        dynamicScreen.setScreenId(123).setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
+        dynamicScreen.setScreenId("test").setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
 
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals("pid", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("123", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals("test", buffer.getVolatileParams().get(0).getValue().execute());
+
+        assertEquals("pchap", buffer.getVolatileParams().get(1).getKey());
+        assertEquals("chapter1", buffer.getVolatileParams().get(1).getValue().execute());
+
+        assertEquals("pidt", buffer.getVolatileParams().get(2).getKey());
+        assertEquals(new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(date), buffer.getVolatileParams().get(2).getValue().execute());
+
+        assertEquals("type", buffer.getVolatileParams().get(3).getKey());
+        assertEquals("screen", buffer.getVolatileParams().get(3).getValue().execute());
+
+        assertEquals("action", buffer.getVolatileParams().get(4).getKey());
+        assertEquals("view", buffer.getVolatileParams().get(4).getValue().execute());
+
+        assertEquals("p", buffer.getVolatileParams().get(5).getKey());
+        assertEquals("name", buffer.getVolatileParams().get(5).getValue().execute());
+    }
+
+    @Test
+    public void setEventWithTooLongScreenIdTest() {
+        Date date = new Date();
+        String id = "";
+        for (int i = 0; i < 256; i++){
+            id += i;
+        }
+        dynamicScreen.setScreenId(id).setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
+
+        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals("pid", buffer.getVolatileParams().get(0).getKey());
+        assertEquals("", buffer.getVolatileParams().get(0).getValue().execute());
 
         assertEquals("pchap", buffer.getVolatileParams().get(1).getKey());
         assertEquals("chapter1", buffer.getVolatileParams().get(1).getValue().execute());
@@ -100,11 +130,11 @@ public class DynamicScreenTest extends AbstractTestClass {
     @Test
     public void setEventWithChapter2Test() {
         Date date = new Date();
-        dynamicScreen.setScreenId(123).setName("toto").setChapter1("toto").setChapter2("tata").setUpdate(date).setEvent();
+        dynamicScreen.setScreenId("test").setName("toto").setChapter1("toto").setChapter2("tata").setUpdate(date).setEvent();
 
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals("pid", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("123", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals("test", buffer.getVolatileParams().get(0).getValue().execute());
 
         assertEquals("pchap", buffer.getVolatileParams().get(1).getKey());
         assertEquals("toto::tata", buffer.getVolatileParams().get(1).getValue().execute());

@@ -35,7 +35,7 @@ public class HitParamTest extends AbstractTestClass {
 
     @Test
     public void stringValueTest() {
-        assertEquals(23, Hit.HitParam.values().length);
+        assertEquals(24, Hit.HitParam.values().length);
 
         assertEquals("action", Hit.HitParam.Action.stringValue());
         assertEquals("bg", Hit.HitParam.BackgroundMode.stringValue());
@@ -57,6 +57,7 @@ public class HitParamTest extends AbstractTestClass {
         assertEquals("an", Hit.HitParam.VisitorIdentifierNumeric.stringValue());
         assertEquals("at", Hit.HitParam.VisitorIdentifierText.stringValue());
         assertEquals("refstore", Hit.HitParam.Refstore.stringValue());
+        assertEquals("ref", Hit.HitParam.Referrer.stringValue());
         assertEquals("tvt", Hit.HitParam.TVT.stringValue());
         assertEquals("xto", Hit.HitParam.Source.stringValue());
         assertEquals("xtor", Hit.HitParam.RemanentSource.stringValue());
