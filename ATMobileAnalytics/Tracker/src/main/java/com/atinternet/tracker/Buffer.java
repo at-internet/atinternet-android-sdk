@@ -55,6 +55,9 @@ class Buffer {
     private String device;
     private Closure deviceClosure;
 
+    private String diagonal;
+    private Closure diagonalClosure;
+
     private String apid;
     private String apvr;
     private Closure apidClosure;
@@ -127,6 +130,7 @@ class Buffer {
         persistentParams.add(new Param("apvr", apvrClosure, Type.String, persistentWithEncoding));
         persistentParams.add(new Param("hl", TechnicalContext.getLocalHour(), Type.String, persistent));
         persistentParams.add(new Param("r", TechnicalContext.getResolution(), Type.String, persistent));
+        persistentParams.add(new Param("dg", diagonalClosure, Type.String, persistent));
         persistentParams.add(new Param("car", TechnicalContext.getCarrier(), Type.String, persistentWithEncoding));
         persistentParams.add(new Param("cn", TechnicalContext.getConnectionType(), Type.String, persistentWithEncoding));
         persistentParams.add(new Param("ts", Tool.getTimeStamp(), Type.String, persistent));
@@ -142,6 +146,7 @@ class Buffer {
         device = TechnicalContext.getDevice().execute();
         apid = TechnicalContext.getApplicationIdentifier().execute();
         apvr = TechnicalContext.getApplicationVersion().execute();
+        diagonal = TechnicalContext.getDiagonal().execute();
 
         osClosure = new Closure() {
             @Override
@@ -168,6 +173,13 @@ class Buffer {
             @Override
             public String execute() {
                 return apvr;
+            }
+        };
+
+        diagonalClosure = new Closure() {
+            @Override
+            public String execute() {
+                return diagonal;
             }
         };
     }

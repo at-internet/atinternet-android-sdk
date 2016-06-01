@@ -22,12 +22,15 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
 
 import java.text.SimpleDateFormat;
@@ -62,7 +65,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.2.1";
+            return "2.2.2";
         }
     };
 
@@ -281,6 +284,51 @@ class TechnicalContext {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 ((WindowManager) context.getApplicationContext().getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
                 return displayMetrics.widthPixels + "x" + displayMetrics.heightPixels;
+            }
+        };
+    }
+
+    /**
+     * Get diagonal
+     *
+     * @return Closure
+     */
+    static Closure getDiagonal() {
+        return new Closure() {
+            @Override
+            public String execute() {
+                DisplayMetrics metrics = new DisplayMetrics();
+                Display d = ((WindowManager) Tracker.getAppContext().getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+                d.getMetrics(metrics);
+
+                // since SDK_INT = 1;
+                int widthPixels = metrics.widthPixels;
+                int heightPixels = metrics.heightPixels;
+
+                try {
+                    // includes window decorations (statusbar bar/menu bar)
+                    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17) {
+                        widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
+                        heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
+                    }
+                    // includes window decorations (statusbar bar/menu bar)
+                    if (Build.VERSION.SDK_INT >= 17) {
+                        Point realSize = new Point();
+                        d.getRealSize(realSize);
+
+                        widthPixels = realSize.x;
+                        heightPixels = realSize.y;
+
+                    }
+                } catch (Exception ignored) {
+                }
+
+                double x = Math.pow(widthPixels / metrics.xdpi, 2);
+                double y = Math.pow(heightPixels / metrics.ydpi, 2);
+
+
+                return String.format(Locale.getDefault(), "%.1f", Math.sqrt(x + y));
             }
         };
     }

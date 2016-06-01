@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 9
@@ -34,7 +34,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.2.1"
+version = "2.2.2"
 
 install {
     repositories.mavenInstaller {
@@ -79,7 +79,7 @@ bintray {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.google.android.gms:play-services-ads:8.4.0'
+    provided 'com.google.android.gms:play-services-ads:9.0.0'
     androidTestCompile 'org.robolectric:robolectric:2.4'
     androidTestCompile 'junit:junit:4.10'
 }

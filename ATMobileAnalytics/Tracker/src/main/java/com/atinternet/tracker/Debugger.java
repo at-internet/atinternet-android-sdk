@@ -24,6 +24,8 @@ package com.atinternet.tracker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -42,9 +44,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,47 +54,49 @@ import java.util.Set;
 import static android.view.View.GONE;
 import static android.view.View.OnClickListener;
 import static android.view.View.VISIBLE;
-import static com.atinternet.tracker.Debugger.Move.left;
-import static com.atinternet.tracker.Debugger.Move.right;
 
 public class Debugger extends GestureDetector.SimpleOnGestureListener implements OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
 
-    enum Move {
-        right, left, none
-    }
-
-    private static final int MARGIN = 120;
-    private static final int DISTANCE_MIN = 70;
     private static int viewerVisibility = View.GONE;
+    private static int bubbleVisibility = View.VISIBLE;
+    private static final float ALPHA_BACKGROUND = .3f;
+    private static final float DELTA = 100;
 
     static int currentViewVisibleId = -1;
     private static int itemPosition = -1;
     private static ArrayList<Debugger.DebuggerEvent> debuggerEvents = new ArrayList<Debugger.DebuggerEvent>();
     private static ArrayList<Hit> offlineHits = new ArrayList<Hit>();
 
-    private static Move move = Move.none;
-
     private static Context context;
+    private static FrameLayout debuggerViewerLayout;
+    private static DebuggerEventListAdapter debuggerEventListAdapter;
+    private boolean hasMoved;
+
     static Tracker tracker;
 
+    private GestureDetector gestureDetector;
+    private DisplayMetrics metrics;
 
-    private final GestureDetector gestureDetector;
-    private final DisplayMetrics metrics;
-    private int initialX;
-    private final LayoutInflater inflater;
-    private FrameLayout debuggerViewerLayout;
+    private LayoutInflater inflater;
+
     private LinearLayout eventViewer;
     private LinearLayout offlineViewer;
     private LinearLayout hitDetailViewer;
-    private static RelativeLayout bubbleLayout;
     private RelativeLayout noEventsLayout;
     private RelativeLayout noOfflineHitsLayout;
     private ListView eventListView;
     private ListView offlineHitsListView;
-    private ImageView bubbleImage;
+    private static ImageView bubbleImage;
 
-    private static DebuggerEventListAdapter debuggerEventListAdapter;
-    private final DebuggerOfflineHitsAdapter debuggerOfflineHitsAdapter;
+    private DebuggerOfflineHitsAdapter debuggerOfflineHitsAdapter;
+
+    private WindowManager.LayoutParams bubbleImageLayoutParams;
+
+    private int initialX;
+    private int initialY;
+    private float initialTouchX;
+    private float initialTouchY;
+    private int ratio;
 
     /**
      * Get Context
@@ -123,12 +124,32 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         return debuggerEvents;
     }
 
+    /**
+     * @deprecated use {@link #create(Context, Tracker)} instead.
+     */
+    @Deprecated
     public static void show(Context context, Tracker tracker) {
         new Debugger(context, tracker);
     }
 
+    public static void create(Context context, Tracker tracker) {
+        new Debugger(context, tracker);
+    }
+
+    public static void remove() {
+        if (bubbleImage != null) {
+            ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).removeViewImmediate(bubbleImage);
+            bubbleImage = null;
+        }
+        if (debuggerViewerLayout != null) {
+            ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).removeViewImmediate(debuggerViewerLayout);
+            debuggerViewerLayout = null;
+        }
+    }
+
     public static void setViewerVisibility(boolean visible) {
-        setVisibleViewWithAnimation(bubbleLayout, visible);
+        bubbleVisibility = visible ? VISIBLE : GONE;
+        Tool.setVisibleViewWithAnimation(bubbleImage, visible);
     }
 
 
@@ -140,15 +161,20 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      */
     Debugger(Context ctx, Tracker tr) {
         context = ctx;
+        remove();
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ratio = 7;
+        } else {
+            ratio = 8;
+        }
         tracker = tr;
         inflater = LayoutInflater.from(context);
         metrics = new DisplayMetrics();
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
         gestureDetector = new GestureDetector(context, this);
 
-        ViewGroup userView = (ViewGroup) ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
         inflateViews(context, inflater);
-        addViews(userView);
+        addViews();
 
         debuggerEventListAdapter = new DebuggerEventListAdapter(context, debuggerEvents, noEventsLayout);
         debuggerOfflineHitsAdapter = new DebuggerOfflineHitsAdapter(context, offlineHits, noOfflineHitsLayout);
@@ -158,40 +184,44 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
+        bubbleImageLayoutParams.y = 0;
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
         toggleViewer();
         return true;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        final RelativeLayout.LayoutParams mParams = (RelativeLayout.LayoutParams) bubbleImage.getLayoutParams();
-        int x = (int) event.getRawX();
-
-        if (gestureDetector.onTouchEvent(event)) {
+        if (gestureDetector.onTouchEvent(event) || viewerVisibility == VISIBLE) {
             return true;
         } else {
             switch (event.getAction()) {
-                case MotionEvent.ACTION_MOVE:
-                    if (x < (metrics.widthPixels - MARGIN) && x > MARGIN && Math.abs(x - initialX) > DISTANCE_MIN) {
-                        if (x < (mParams.leftMargin + (bubbleImage.getWidth() / 2))) {
-                            move = left;
-                        } else if (x > (mParams.rightMargin + (bubbleImage.getWidth() / 2))) {
-                            move = right;
-                        }
-                        mParams.leftMargin = x - (bubbleImage.getWidth() / 2);
-                        bubbleImage.setLayoutParams(mParams);
-                    }
+                case MotionEvent.ACTION_DOWN:
+                    initialX = bubbleImageLayoutParams.x;
+                    initialY = bubbleImageLayoutParams.y;
+                    initialTouchX = event.getRawX();
+                    initialTouchY = event.getRawY();
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (move == left) {
-                        mParams.leftMargin = 0;
-                    } else if (move == right) {
-                        mParams.leftMargin = metrics.widthPixels - bubbleImage.getWidth();
+                    if (hasMoved) {
+                        if (event.getRawX() >= initialTouchX + DELTA) {
+                            bubbleImageLayoutParams.x = metrics.widthPixels - bubbleImage.getDrawable().getMinimumWidth();
+                        } else if (event.getRawX() <= initialTouchX - DELTA){
+                            bubbleImageLayoutParams.x = 0;
+                        }
+                        hasMoved = false;
                     }
-                    bubbleImage.setLayoutParams(mParams);
+                    bubbleImageLayoutParams.y = initialY
+                            + (int) (event.getRawY() - initialTouchY);
+                    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
                     break;
-                case MotionEvent.ACTION_DOWN:
-                    initialX = x;
+                case MotionEvent.ACTION_MOVE:
+                    hasMoved = true;
+                    bubbleImageLayoutParams.x = initialX
+                            + (int) (event.getRawX() - initialTouchX);
+                    bubbleImageLayoutParams.y = initialY
+                            + (int) (event.getRawY() - initialTouchY);
+                    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
                     break;
             }
             return true;
@@ -213,16 +243,16 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             offlineHitsListView.setVisibility(View.GONE);
         } else if (id == R.id.goToOfflineHitsImageView) {
             currentViewVisibleId = R.id.offlineViewer;
-            setVisibleViewWithAnimation(eventViewer, false);
-            setVisibleViewWithAnimation(offlineViewer, true);
+            Tool.setVisibleViewWithAnimation(eventViewer, false);
+            Tool.setVisibleViewWithAnimation(offlineViewer, true);
             debuggerOfflineHitsAdapter.notifyDataSetChanged();
             noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
             offlineHitsListView.setVisibility(!offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
         } else if (id == R.id.backToEventViewer) {
             currentViewVisibleId = R.id.eventViewer;
             debuggerEventListAdapter.notifyDataSetChanged();
-            setVisibleViewWithAnimation(offlineViewer, false);
-            setVisibleViewWithAnimation(eventViewer, true);
+            Tool.setVisibleViewWithAnimation(offlineViewer, false);
+            Tool.setVisibleViewWithAnimation(eventViewer, true);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             eventListView.setVisibility(!debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
         } else if (id == R.id.refreshOfflineHits) {
@@ -233,7 +263,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             itemPosition = -1;
             ViewGroup parametersListView = (ViewGroup) hitDetailViewer.findViewById(R.id.parametersListView);
             parametersListView.removeAllViews();
-            setVisibleViewWithAnimation(hitDetailViewer, false);
+            Tool.setVisibleViewWithAnimation(hitDetailViewer, false);
         }
     }
 
@@ -268,7 +298,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             createHitDetailView(parametersListView, offlineHits.get(position).getUrl());
         }
         if (animate) {
-            setVisibleViewWithAnimation(hitDetailViewer, true);
+            Tool.setVisibleViewWithAnimation(hitDetailViewer, true);
         } else {
             hitDetailViewer.setVisibility(VISIBLE);
         }
@@ -282,19 +312,18 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      */
     private void inflateViews(Context context, LayoutInflater inflater) {
         debuggerViewerLayout = (FrameLayout) inflater.inflate(R.layout.debugger_layout, null);
-        bubbleLayout = (RelativeLayout) inflater.inflate(R.layout.debugger_bubble_layout, null);
 
         eventViewer = (LinearLayout) debuggerViewerLayout.findViewById(R.id.eventViewer);
         offlineViewer = (LinearLayout) debuggerViewerLayout.findViewById(R.id.offlineViewer);
-        bubbleImage = (ImageView) bubbleLayout.findViewById(R.id.debugBubble);
         eventListView = (ListView) debuggerViewerLayout.findViewById(R.id.eventListView);
         offlineHitsListView = (ListView) debuggerViewerLayout.findViewById(R.id.offlineHitsListView);
         noEventsLayout = (RelativeLayout) debuggerViewerLayout.findViewById(R.id.noEvents);
         noOfflineHitsLayout = (RelativeLayout) debuggerViewerLayout.findViewById(R.id.noOfflineHits);
         hitDetailViewer = (LinearLayout) debuggerViewerLayout.findViewById(R.id.hitDetailViewer);
 
+        bubbleImage = new ImageView(context);
         bubbleImage.setImageDrawable(Tool.getResizedImage(R.drawable.atinternet_logo, context, (int) (94 * metrics.density), (int) (73 * metrics.density)));
-
+        bubbleImage.setVisibility(bubbleVisibility);
         bubbleImage.setOnTouchListener(this);
 
         debuggerViewerLayout.setOnClickListener(this);
@@ -311,26 +340,20 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     /**
      * Create debugger layout
-     *
-     * @param userView ViewGroup
      */
-    private void addViews(ViewGroup userView) {
-        bubbleLayout.setGravity(Gravity.BOTTOM);
-        RelativeLayout.LayoutParams mParams = (RelativeLayout.LayoutParams) bubbleImage.getLayoutParams();
-        if (move == left) {
-            mParams.leftMargin = 0;
-        } else if (move == right) {
-            mParams.leftMargin = metrics.widthPixels - bubbleImage.getDrawable().getMinimumWidth();
-        }
-        bubbleImage.setLayoutParams(mParams);
-        userView.addView(bubbleLayout);
+    private void addViews() {
+        bubbleImageLayoutParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        params.leftMargin = 10;
-        params.topMargin = 10;
-        params.rightMargin = 10;
-        params.bottomMargin = bubbleImage.getDrawable().getMinimumHeight() + 10;
-        debuggerViewerLayout.setLayoutParams(params);
+        bubbleImageLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        bubbleImageLayoutParams.x = 0;
+        bubbleImageLayoutParams.y = 0;
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).addView(bubbleImage, bubbleImageLayoutParams);
+
         if (currentViewVisibleId == -1) {
             currentViewVisibleId = R.id.eventViewer;
         }
@@ -339,33 +362,26 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             debuggerViewerLayout.setVisibility(VISIBLE);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
+            setAlphaBackground(true);
         } else if (viewerVisibility == GONE) {
             debuggerViewerLayout.setVisibility(GONE);
         }
-        userView.addView(debuggerViewerLayout);
+
+        WindowManager.LayoutParams debuggerViewerLayoutParams = new WindowManager.LayoutParams(
+                metrics.widthPixels - 10,
+                ratio * metrics.heightPixels / 10,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+        debuggerViewerLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        debuggerViewerLayoutParams.x = 10;
+        debuggerViewerLayoutParams.y = bubbleImage.getDrawable().getMinimumHeight();
+        debuggerViewerLayoutParams.windowAnimations = android.R.style.Animation_Translucent;
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).addView(debuggerViewerLayout, debuggerViewerLayoutParams);
 
         if (itemPosition != -1) {
             onUpdateAfterItemClick(itemPosition, false);
         }
-    }
-
-    /**
-     * Helper to create alpha animation
-     *
-     * @param view    View
-     * @param visible boolean
-     */
-    static void setVisibleViewWithAnimation(View view, boolean visible) {
-        AlphaAnimation animation;
-        if (visible) {
-            view.setVisibility(View.VISIBLE);
-            animation = new AlphaAnimation(0.f, 1.f);
-        } else {
-            view.setVisibility(View.GONE);
-            animation = new AlphaAnimation(1.f, 0.f);
-        }
-        animation.setDuration(400);
-        view.startAnimation(animation);
     }
 
     /**
@@ -374,54 +390,26 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private void toggleViewer() {
         if (viewerVisibility == GONE) {
             viewerVisibility = View.VISIBLE;
-            setVisibleViewWithAnimation(debuggerViewerLayout, true);
+            Tool.setVisibleViewWithAnimation(debuggerViewerLayout, true);
             debuggerEventListAdapter.notifyDataSetChanged();
             debuggerOfflineHitsAdapter.notifyDataSetChanged();
             noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
             offlineHitsListView.setVisibility(!offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             eventListView.setVisibility(!debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
+            setAlphaBackground(true);
         } else {
             viewerVisibility = GONE;
-            setVisibleViewWithAnimation(debuggerViewerLayout, false);
+            Tool.setVisibleViewWithAnimation(debuggerViewerLayout, false);
+            setAlphaBackground(false);
         }
     }
 
-    /**
-     * Get parameters
-     *
-     * @param hit String
-     * @return HashMap
-     */
-    private LinkedHashMap<String, String> getParameters(String hit) {
-        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-        try {
-            URL url = new URL(hit);
-            map.put("ssl", url.getProtocol().equals("http") ? "Off" : "On");
-            map.put("log", url.getHost());
-            String[] queryComponents = url.getQuery().split("&");
-            for (String queryComponent : queryComponents) {
-                String[] elem = queryComponent.split("=");
-                if (elem.length > 1) {
-                    elem[1] = Tool.percentDecode(elem[1]);
-                    if (Tool.parseJSON(elem[1]) instanceof JSONObject) {
-                        JSONObject json = (JSONObject) Tool.parseJSON(elem[1]);
-                        if (json != null && elem[0].equals(Hit.HitParam.JSON.stringValue())) {
-                            map.put(elem[0], json.toString(3));
-                        } else {
-                            map.put(elem[0], elem[1]);
-                        }
-                    } else {
-                        map.put(elem[0], elem[1]);
-                    }
-                } else {
-                    map.put(elem[0], "");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return map;
+    private void setAlphaBackground(boolean hasReduceAlpha) {
+        AlphaAnimation animation1 = hasReduceAlpha ? new AlphaAnimation(1.f, ALPHA_BACKGROUND) : new AlphaAnimation(ALPHA_BACKGROUND, 1.f);
+        animation1.setDuration(500);
+        animation1.setFillAfter(true);
+        ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content).startAnimation(animation1);
     }
 
     /**
@@ -432,7 +420,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      */
     private void createHitDetailView(ViewGroup parametersListView, String message) {
         ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.getString(R.string.hit_detail));
-        LinkedHashMap<String, String> parameters = getParameters(message);
+        LinkedHashMap<String, String> parameters = Tool.getParameters(message);
         Set<String> keySet = parameters.keySet();
         Boolean colorGrey = true;
         for (String key : keySet) {

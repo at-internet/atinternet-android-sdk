@@ -30,12 +30,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -43,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -402,6 +406,62 @@ class Tool {
         Bitmap b = BitmapFactory.decodeResource(context.getResources(), imageID);
         Bitmap bitmapResized = Bitmap.createScaledBitmap(b, width, height, false);
         return new BitmapDrawable(context.getResources(), bitmapResized);
+    }
+
+    /**
+     * Helper to create alpha animation
+     *
+     * @param view    View
+     * @param visible boolean
+     */
+    static void setVisibleViewWithAnimation(View view, boolean visible) {
+        AlphaAnimation animation;
+        if (visible) {
+            view.setVisibility(View.VISIBLE);
+            animation = new AlphaAnimation(0.f, 1.f);
+        } else {
+            view.setVisibility(View.GONE);
+            animation = new AlphaAnimation(1.f, 0.f);
+        }
+        animation.setDuration(400);
+        view.startAnimation(animation);
+    }
+
+    /**
+     * Get parameters
+     *
+     * @param hit String
+     * @return HashMap
+     */
+    static LinkedHashMap<String, String> getParameters(String hit) {
+        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        try {
+            URL url = new URL(hit);
+            map.put("ssl", url.getProtocol().equals("http") ? "Off" : "On");
+            map.put("log", url.getHost());
+            String[] queryComponents = url.getQuery().split("&");
+            for (String queryComponent : queryComponents) {
+                String[] elem = queryComponent.split("=");
+                if (elem.length > 1) {
+                    elem[1] = Tool.percentDecode(elem[1]);
+                    if (Tool.parseJSON(elem[1]) instanceof JSONObject) {
+                        JSONObject json = (JSONObject) Tool.parseJSON(elem[1]);
+                        if (json != null && elem[0].equals(Hit.HitParam.JSON.stringValue())) {
+                            map.put(elem[0], json.toString(3));
+                        } else {
+                            map.put(elem[0], elem[1]);
+                        }
+                    } else {
+                        map.put(elem[0], elem[1]);
+                    }
+                } else {
+                    map.put(elem[0], "");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 
     /**
