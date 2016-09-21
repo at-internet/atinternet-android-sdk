@@ -124,7 +124,7 @@ class Buffer {
         persistentParams.add(new Param("vtag", TechnicalContext.VTAG, Type.String, persistent));
         persistentParams.add(new Param("ptag", TechnicalContext.PTAG, Type.String, persistent));
         persistentParams.add(new Param("lng", TechnicalContext.getLanguage(), Type.String, persistent));
-        persistentParams.add(new Param("mfmd", deviceClosure, Type.String, persistent));
+        persistentParams.add(new Param("mfmd", deviceClosure, Type.String, persistentWithEncoding));
         persistentParams.add(new Param("os", osClosure, Type.String, persistent));
         persistentParams.add(new Param("apid", apidClosure, Type.String, persistent));
         persistentParams.add(new Param("apvr", apvrClosure, Type.String, persistentWithEncoding));
