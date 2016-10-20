@@ -28,10 +28,21 @@ public class Campaign extends ScreenInfo {
 
     private String campaignId;
 
+    /**
+     * Get the campaignId
+     *
+     * @return String
+     */
     public String getCampaignId() {
         return campaignId;
     }
 
+    /**
+     * Set a new campaignId
+     *
+     * @param campaignId String
+     * @return Campaign
+     */
     public Campaign setCampaignId(String campaignId) {
         this.campaignId = campaignId;
         return this;

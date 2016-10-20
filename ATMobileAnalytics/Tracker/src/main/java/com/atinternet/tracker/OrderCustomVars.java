@@ -26,6 +26,13 @@ import java.util.ArrayList;
 
 public class OrderCustomVars extends ArrayList<OrderCustomVar> {
 
+    /**
+     * Add a order custom var
+     *
+     * @param varId int
+     * @param value String
+     * @return OrderCustomVars
+     */
     public OrderCustomVars add(int varId, String value) {
         super.add(new OrderCustomVar(varId, value));
         return this;

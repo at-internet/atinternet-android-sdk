@@ -27,34 +27,56 @@ import java.util.ArrayList;
 public class Cart extends BusinessObject {
 
     private String cartId;
-
     private Products products;
-
     private ArrayList<Product> productsList;
 
+
+    ArrayList<Product> getProductsList() {
+        return productsList == null ? (productsList = new ArrayList<>()) : productsList;
+    }
+
+    /**
+     * Get cart products
+     *
+     * @return Products
+     */
     public Products Products() {
         return products == null ? (products = new Products(this)) : products;
     }
 
-    ArrayList<Product> getProductsList() {
-        return productsList;
-    }
-
+    /**
+     * Get the cart id
+     *
+     * @return String
+     */
     public String getCartId() {
         return cartId;
     }
 
+    /**
+     * Set a new cartId
+     *
+     * @param cartId String
+     * @return Cart
+     */
     public Cart setCartId(String cartId) {
         this.cartId = cartId;
         return this;
     }
 
+
     Cart(Tracker tracker) {
         super(tracker);
         cartId = null;
-        productsList = new ArrayList<Product>();
+        productsList = new ArrayList<>();
     }
 
+    /**
+     * Create a new cart
+     *
+     * @param cartId String
+     * @return Cart
+     */
     public Cart set(String cartId) {
         if (this.cartId != null && !this.cartId.equals(cartId) && products != null) {
             products.removeAll();
@@ -63,6 +85,11 @@ public class Cart extends BusinessObject {
         return setCartId(cartId);
     }
 
+    /**
+     * Remove the cart
+     *
+     * @return Cart
+     */
     public Cart unset() {
         cartId = null;
         if (products != null) {
@@ -75,10 +102,10 @@ public class Cart extends BusinessObject {
     @Override
     void setEvent() {
         if (cartId != null) {
-            tracker.setParam("idcart", cartId);
+            tracker.setParam(Hit.HitParam.CartId.stringValue(), cartId);
         }
 
-        if (products != null) {
+        if (products != null && productsList != null) {
             ParamOption encoding = new ParamOption().setEncode(true);
             int length = productsList.size();
             for (int i = 0; i < length; i++) {

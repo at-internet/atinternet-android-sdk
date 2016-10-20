@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Tracker</string>
     <string name="event_viewer">Event Viewer</string>
     <string name="offline_hits">Offline Hits</string>
     <string name="hit_detail">Hit Detail</string>

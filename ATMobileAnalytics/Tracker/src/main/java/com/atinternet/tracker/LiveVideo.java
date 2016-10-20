@@ -24,56 +24,104 @@ package com.atinternet.tracker;
 
 public class LiveVideo extends RichMedia {
 
+    /**
+     * Set a new name
+     *
+     * @param name String
+     * @return LiveAudio
+     */
     public LiveVideo setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Set a new level2
+     *
+     * @param level2 int
+     * @return LiveAudio
+     */
     public LiveVideo setLevel2(int level2) {
         this.level2 = level2;
 
         return this;
     }
 
+    /**
+     * Change boolean isBuffering value
+     *
+     * @param isBuffering boolean
+     * @return LiveVideo
+     */
     public LiveVideo setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
 
         return this;
     }
 
+    /**
+     * Change boolean isEmbedded value
+     *
+     * @param isEmbedded boolean
+     * @return LiveVideo
+     */
     public LiveVideo setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
         return this;
     }
 
-    LiveVideo setBroadcastMode(BroadcastMode broadcastMode) {
-        this.broadcastMode = broadcastMode;
-
-        return this;
-    }
-
+    /**
+     * Set a new first chapter
+     *
+     * @param chapter1 String
+     * @return LiveVideo
+     */
     public LiveVideo setChapter1(String chapter1) {
         this.chapter1 = chapter1;
         return this;
     }
 
+    /**
+     * Set a new second chapter
+     *
+     * @param chapter2 String
+     * @return LiveVideo
+     */
     public LiveVideo setChapter2(String chapter2) {
         this.chapter2 = chapter2;
         return this;
     }
 
+    /**
+     * Set a new third chapter
+     *
+     * @param chapter3 String
+     * @return LiveVideo
+     */
     public LiveVideo setChapter3(String chapter3) {
         this.chapter3 = chapter3;
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action RichMedia.Action
+     * @return LiveVideo
+     */
     public LiveVideo setAction(Action action) {
         this.action = action;
 
         return this;
     }
 
+    /**
+     * Set a new webdomain
+     *
+     * @param webDomain String
+     * @return LiveVideo
+     */
     public LiveVideo setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;

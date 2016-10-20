@@ -24,41 +24,14 @@ package com.atinternet.tracker;
 
 public class IdentifiedVisitor {
 
-    /**
-     * Visitor numeric key preferences
-     */
     static final String VISITOR_NUMERIC = "ATVisitorNumeric";
-
-    /**
-     * Visitor category key preferences
-     */
     static final String VISITOR_CATEGORY = "ATVisitorCategory";
-
-    /**
-     * Visitor text key preferences
-     */
     static final String VISITOR_TEXT = "ATVisitorText";
 
-    /**
-     * Tracker instance
-     */
     private final Tracker tracker;
-
-    /**
-     * Persistence configuration
-     */
     private final boolean persistIdentifiedVisitor;
-
-    /**
-     * Parameter option
-     */
     private final ParamOption option = new ParamOption();
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     IdentifiedVisitor(Tracker tracker) {
         this.tracker = tracker;
         persistIdentifiedVisitor = Boolean.parseBoolean(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR)));
@@ -68,10 +41,10 @@ public class IdentifiedVisitor {
     /**
      * Set Identified visitor ID (numeric) for all next hits
      *
-     * @param visitorId int
+     * @param visitorId long
      * @return Tracker
      */
-    public Tracker set(int visitorId) {
+    public Tracker set(long visitorId) {
         unset();
         save(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), VISITOR_NUMERIC, String.valueOf(visitorId));
 
@@ -81,11 +54,11 @@ public class IdentifiedVisitor {
     /**
      * Set Identified visitor ID (numeric) with category for all next hits
      *
-     * @param visitorId       int
+     * @param visitorId       long
      * @param visitorCategory int
      * @return Tracker
      */
-    public Tracker set(int visitorId, int visitorCategory) {
+    public Tracker set(long visitorId, int visitorCategory) {
         set(visitorId);
         save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, String.valueOf(visitorCategory));
 

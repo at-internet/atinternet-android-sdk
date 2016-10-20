@@ -26,18 +26,9 @@ import java.util.ArrayList;
 
 public class LiveAudios {
 
-    /**
-     * Audios list
-     */
-    final ArrayList<LiveAudio> list = new ArrayList<LiveAudio>();
+    final ArrayList<LiveAudio> list = new ArrayList<>();
+    private final MediaPlayer player;
 
-    MediaPlayer player;
-
-    /**
-     * Constructor
-     *
-     * @param player MediaPlayer
-     */
     LiveAudios(MediaPlayer player) {
         this.player = player;
     }
@@ -51,7 +42,6 @@ public class LiveAudios {
     public LiveAudio add(String name) {
         int index = -1;
         int length = list.size();
-        index = -1;
         LiveAudio liveAudio;
         for (int i = 0; i < length; i++) {
             if (list.get(i).getName().equals(name)) {
@@ -108,11 +98,15 @@ public class LiveAudios {
         return add(name, chapter1, chapter2).setChapter3(chapter3);
     }
 
+    /**
+     * Remove a live audio
+     *
+     * @param name String
+     */
     public void remove(String name) {
-        int length = -1;
+        int length = list.size();
         int index = -1;
-        length = list.size();
-        index = -1;
+
         for (int i = 0; i < length; i++) {
             if (list.get(i).getName().equals(name)) {
                 index = i;
@@ -127,6 +121,9 @@ public class LiveAudios {
         }
     }
 
+    /**
+     * Remove all live audios
+     */
     public void removeAll() {
         while (!list.isEmpty()) {
             remove(list.get(0).getName());

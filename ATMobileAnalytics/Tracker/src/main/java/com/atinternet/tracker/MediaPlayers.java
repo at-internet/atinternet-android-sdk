@@ -26,16 +26,11 @@ import java.util.TreeMap;
 
 public class MediaPlayers extends Helper {
 
-    TreeMap<Integer, MediaPlayer> players;
+    final TreeMap<Integer, MediaPlayer> players;
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     MediaPlayers(Tracker tracker) {
         super(tracker);
-        players = new TreeMap<Integer, MediaPlayer>();
+        players = new TreeMap<>();
     }
 
     /**
@@ -106,7 +101,7 @@ public class MediaPlayers extends Helper {
     }
 
     /**
-     * Remove all playerIds
+     * Remove all players
      */
     public void removeAll() {
         while (!players.isEmpty()) {

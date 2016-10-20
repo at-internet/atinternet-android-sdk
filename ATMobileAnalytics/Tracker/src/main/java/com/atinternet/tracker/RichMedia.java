@@ -29,8 +29,11 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class RichMedia extends BusinessObject {
 
-    protected static final int MAX_DURATION = 86400;
+    static final int MAX_DURATION = 86400;
 
+    /**
+     * Enum with different broadcast mode
+     */
     public enum BroadcastMode {
         Clip("clip"),
         Live("live");
@@ -46,6 +49,9 @@ public abstract class RichMedia extends BusinessObject {
         }
     }
 
+    /**
+     * Enum with different action type
+     */
     public enum Action {
         Play("play"),
         Pause("pause"),
@@ -64,96 +70,24 @@ public abstract class RichMedia extends BusinessObject {
         }
     }
 
-    /**
-     * PRIVATE VARIABLES
-     */
+    private final MediaPlayer mediaPlayer;
+    private final int refreshDuration;
+    String type;
+    BroadcastMode broadcastMode;
+    Action action;
+    boolean isBuffering;
+    boolean isEmbedded;
+    String name;
+    String chapter1;
+    String chapter2;
+    String chapter3;
+    int level2;
+    String webDomain;
 
-    /**
-     * Player instance
-     */
-    protected MediaPlayer mediaPlayer;
-
-    /**
-     * Media type
-     */
-    protected String type;
-
-    /**
-     * Broadcast mode
-     */
-    protected BroadcastMode broadcastMode;
-
-
-    /**
-     * PUBLIC VARIABLES
-     */
-
-    /**
-     * Action type
-     */
-    protected Action action;
-
-    /**
-     * Media is buffering
-     */
-    protected boolean isBuffering;
-
-    /**
-     * Media is embedded in app
-     */
-    protected boolean isEmbedded;
-
-    /**
-     * Media name
-     */
-    protected String name;
-
-    /**
-     * Media chapter1
-     */
-    protected String chapter1;
-
-    /**
-     * Media chapter2
-     */
-    protected String chapter2;
-
-    /**
-     * Media chapter3
-     */
-    protected String chapter3;
-
-    /**
-     * Level2
-     */
-    protected int level2;
-
-    /**
-     * Duration refresh
-     */
-    protected int refreshDuration;
-
-    /**
-     * WebDomain
-     */
-    protected String webDomain;
-
-    /**
-     * Scheduled executor to refresh
-     */
-    protected ScheduledThreadPoolExecutor executor;
-
-
-    public int getLevel2() {
-        return level2;
-    }
+    ScheduledThreadPoolExecutor executor;
 
     MediaPlayer getPlayer() {
         return mediaPlayer;
-    }
-
-    int getRefreshDuration() {
-        return refreshDuration;
     }
 
     Action getAction() {
@@ -164,34 +98,82 @@ public abstract class RichMedia extends BusinessObject {
         return broadcastMode;
     }
 
-    public boolean isBuffering() {
-        return isBuffering;
-    }
-
-    public boolean isEmbedded() {
-        return isEmbedded;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getChapter1() {
-        return chapter1;
-    }
-
-    public String getChapter2() {
-        return chapter2;
-    }
-
-    public String getChapter3() {
-        return chapter3;
+    int getRefreshDuration() {
+        return refreshDuration;
     }
 
     String getType() {
         return type;
     }
 
+    /**
+     * Get level 2
+     *
+     * @return int
+     */
+    public int getLevel2() {
+        return level2;
+    }
+
+    /**
+     * Get boolean isBuffering value
+     *
+     * @return boolean
+     */
+    public boolean isBuffering() {
+        return isBuffering;
+    }
+
+    /**
+     * Get boolean isEmbedded value
+     *
+     * @return boolean
+     */
+    public boolean isEmbedded() {
+        return isEmbedded;
+    }
+
+    /**
+     * Get name
+     *
+     * @return String
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Get first chapter
+     *
+     * @return String
+     */
+    public String getChapter1() {
+        return chapter1;
+    }
+
+    /**
+     * Get second chapter
+     *
+     * @return String
+     */
+    public String getChapter2() {
+        return chapter2;
+    }
+
+    /**
+     * Get third chapter
+     *
+     * @return String
+     */
+    public String getChapter3() {
+        return chapter3;
+    }
+
+    /**
+     * Get web domain
+     *
+     * @return String
+     */
     public String getWebDomain() {
         return webDomain;
     }
@@ -211,15 +193,15 @@ public abstract class RichMedia extends BusinessObject {
     void setEvent() {
         ParamOption encode = new ParamOption().setEncode(true);
 
-        tracker.setParam("type", type)
-                .setParam("p", buildMediaName(), encode)
+        tracker.setParam(Hit.HitParam.HitType.stringValue(), type)
+                .setParam(Hit.HitParam.Screen.stringValue(), buildMediaName(), encode)
                 .setParam("a", action.stringValue())
                 .setParam("m6", broadcastMode.stringValue())
                 .setParam("plyr", mediaPlayer.getPlayerId())
                 .setParam("m5", isEmbedded ? "ext" : "int");
 
         if (level2 > 0) {
-            tracker.setParam("s2", level2);
+            tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
 
         if (action == RichMedia.Action.Play) {
@@ -234,11 +216,11 @@ public abstract class RichMedia extends BusinessObject {
 
             if (!isEmbedded) {
                 if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
-                    tracker.setParam("prich", TechnicalContext.screenName, encode);
+                    tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), TechnicalContext.screenName, encode);
                 }
 
                 if (TechnicalContext.level2 > 0) {
-                    tracker.setParam("s2rich", TechnicalContext.level2);
+                    tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), TechnicalContext.level2);
                 }
             }
         }
@@ -306,11 +288,11 @@ public abstract class RichMedia extends BusinessObject {
         tracker.getDispatcher().dispatch(this);
     }
 
-    String buildMediaName() {
+    private String buildMediaName() {
         String mediaName = chapter1 == null ? "" : chapter1 + "::";
         mediaName = chapter2 == null ? mediaName : mediaName + chapter2 + "::";
         mediaName = chapter3 == null ? mediaName : mediaName + chapter3 + "::";
 
-        return mediaName += name;
+        return mediaName + name;
     }
 }

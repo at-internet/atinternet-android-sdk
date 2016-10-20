@@ -24,16 +24,8 @@ package com.atinternet.tracker;
 
 public class Screens extends Helper {
 
-    /**
-     * Class name format
-     */
     private static final String CLASS_NAME_FORMAT = "%1$s.%2$s";
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     Screens(Tracker tracker) {
         super(tracker);
     }
@@ -53,7 +45,7 @@ public class Screens extends Helper {
     /**
      * Add a screen
      *
-     * @param context Context
+     * @param context android.content.Context
      * @return Screen
      */
     public Screen add(android.content.Context context) {

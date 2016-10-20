@@ -38,8 +38,8 @@ class PluginParam {
      * @return HashMap
      */
     static HashMap<String, String> get(Tracker tracker) {
-        HashMap<String, String> dictionary = new HashMap<String, String>();
-        ArrayList<String> plugins = new ArrayList<String>(Arrays.asList(((String) tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS)).split(",")));
+        HashMap<String, String> dictionary = new HashMap<>();
+        ArrayList<String> plugins = new ArrayList<>(Arrays.asList(((String) tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS)).split(",")));
 
         if (plugins.contains("tvtracking")) {
             dictionary.put(Hit.HitParam.TVT.stringValue(), TVTrackingPlugin.class.getName());

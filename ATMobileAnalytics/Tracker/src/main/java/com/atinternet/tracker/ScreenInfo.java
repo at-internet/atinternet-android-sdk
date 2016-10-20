@@ -24,11 +24,6 @@ package com.atinternet.tracker;
 
 abstract class ScreenInfo extends BusinessObject {
 
-    /**
-     * Super constructor
-     *
-     * @param tracker Tracker
-     */
     ScreenInfo(Tracker tracker) {
         super(tracker);
     }

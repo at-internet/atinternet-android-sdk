@@ -34,16 +34,31 @@ public class DynamicScreen extends AbstractScreen {
 
     private Date update;
 
+    /**
+     * Get the id
+     *
+     * @return String
+     */
     public String getScreenId() {
         return screenId;
     }
 
+    /**
+     * Get the update date
+     *
+     * @return Date
+     */
     public Date getUpdate() {
         return update;
     }
 
+
     /**
-     * @deprecated use {@link #setScreenId(String)} instead.
+     * Set a new id
+     *
+     * @param screenId int
+     * @return DynamicScreen
+     * @deprecated Since 2.2.1, use {@link #setScreenId(String)} instead.
      */
     @Deprecated
     public DynamicScreen setScreenId(int screenId) {
@@ -51,59 +66,108 @@ public class DynamicScreen extends AbstractScreen {
         return this;
     }
 
+    /**
+     * Set a new id
+     *
+     * @param screenId String
+     * @return DynamicScreen
+     */
     public DynamicScreen setScreenId(String screenId) {
         this.screenId = screenId;
         return this;
     }
 
+    /**
+     * Set a new first chapter
+     *
+     * @param chapter1 String
+     * @return DynamicScreen
+     */
     public DynamicScreen setChapter1(String chapter1) {
         this.chapter1 = chapter1;
         return this;
     }
 
+    /**
+     * Set a new second chapter
+     *
+     * @param chapter2 String
+     * @return DynamicScreen
+     */
     public DynamicScreen setChapter2(String chapter2) {
         this.chapter2 = chapter2;
         return this;
     }
 
+    /**
+     * Set a new third chapter
+     *
+     * @param chapter3 String
+     * @return DynamicScreen
+     */
     public DynamicScreen setChapter3(String chapter3) {
         this.chapter3 = chapter3;
         return this;
     }
 
+    /**
+     * Set a new update date
+     *
+     * @param update Date
+     * @return DynamicScreen
+     */
     public DynamicScreen setUpdate(Date update) {
         this.update = update;
         return this;
     }
 
+    /**
+     * Set a new name
+     *
+     * @param name String
+     * @return DynamicScreen
+     */
     public DynamicScreen setName(String name) {
         this.name = name;
 
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action Action
+     * @return DynamiceScreen
+     */
     public DynamicScreen setAction(Action action) {
         this.action = action;
 
         return this;
     }
 
+    /**
+     * Set a new level 2
+     *
+     * @param level2 int
+     * @return DynamicScreen
+     */
     public DynamicScreen setLevel2(int level2) {
         this.level2 = level2;
 
         return this;
     }
 
+    /**
+     * Change boolean isBasketScreen value
+     *
+     * @param isBasketScreen boolean
+     * @return DynamicScreen
+     */
     public DynamicScreen setIsBasketScreen(boolean isBasketScreen) {
         this.isBasketScreen = isBasketScreen;
         return this;
     }
 
-    /**
-     * Super constructor
-     *
-     * @param tracker Tracker
-     */
     DynamicScreen(Tracker tracker) {
         super(tracker);
         screenId = null;
@@ -122,7 +186,7 @@ public class DynamicScreen extends AbstractScreen {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "screenId too long, replaced by empty value");
         }
 
-        tracker.setParam("pid", screenId);
+        tracker.setParam(Hit.HitParam.DynamicScreenId.stringValue(), screenId);
         String value = chapter1;
 
         if (value == null) {
@@ -137,9 +201,8 @@ public class DynamicScreen extends AbstractScreen {
             value += chapter3 == null ? "" : "::" + chapter3;
         }
 
-        tracker.setParam("pchap", value, new ParamOption().setEncode(true))
-                .setParam("pidt", new SimpleDateFormat(UPDATE_FORMAT, Locale.getDefault()).format(update));
-
-        tracker.Event().set("screen", action.stringValue(), name);
+        tracker.setParam(Hit.HitParam.DynamicScreenValue.stringValue(), value, new ParamOption().setEncode(true))
+                .setParam(Hit.HitParam.DynamicScreenDate.stringValue(), new SimpleDateFormat(UPDATE_FORMAT, Locale.getDefault()).format(update))
+                .Event().set("screen", action.stringValue(), name);
     }
 }

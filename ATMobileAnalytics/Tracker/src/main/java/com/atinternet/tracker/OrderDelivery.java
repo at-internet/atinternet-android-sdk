@@ -25,35 +25,65 @@ package com.atinternet.tracker;
 public class OrderDelivery {
 
     private final Order order;
-
     private double shippingFeesTaxIncluded;
-
     private double shippingFeesTaxFree;
-
     private String deliveryMethod;
 
+    /**
+     * Get shipping fees tax included value
+     *
+     * @return double
+     */
     public double getShippingFeesTaxIncluded() {
         return shippingFeesTaxIncluded;
     }
 
+    /**
+     * Get shipping fess tax free value
+     *
+     * @return double
+     */
     public double getShippingFeesTaxFree() {
         return shippingFeesTaxFree;
     }
 
+    /**
+     * Get delivery method
+     *
+     * @return String
+     */
     public String getDeliveryMethod() {
         return deliveryMethod;
     }
 
+    /**
+     * Set a new shipping fees tax included value
+     *
+     * @param shippingFeesTaxIncluded double
+     * @return OrderDelivery
+     */
     public OrderDelivery setShippingFeesTaxIncluded(double shippingFeesTaxIncluded) {
         this.shippingFeesTaxIncluded = shippingFeesTaxIncluded;
         return this;
     }
 
+    /**
+     * Set a new shipping fees tax free value
+     *
+     * @param shippingFeesTaxFree double
+     * @return OrderDeliery
+     */
     public OrderDelivery setShippingFeesTaxFree(double shippingFeesTaxFree) {
         this.shippingFeesTaxFree = shippingFeesTaxFree;
         return this;
     }
 
+    /**
+     * Set a new delivery method
+     *
+     * @param deliveryMethod String
+     * @return OrderDelivery
+     */
     public OrderDelivery setDeliveryMethod(String deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
         return this;

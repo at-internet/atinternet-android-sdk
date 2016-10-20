@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 public class Context {
 
+    /**
+     * Enum with different background mode
+     */
     public enum BackgroundMode {
         Normal, Task
     }

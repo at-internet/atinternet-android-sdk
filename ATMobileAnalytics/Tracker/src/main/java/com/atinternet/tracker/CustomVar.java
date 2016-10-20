@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 public class CustomVar extends ScreenInfo {
 
+    /**
+     * Enum with different CustomVarType
+     */
     public enum CustomVarType {
         App("x"),
         Screen("f");
@@ -39,29 +42,33 @@ public class CustomVar extends ScreenInfo {
         }
     }
 
-    /**
-     * Value
-     */
     private String value;
-
-    /**
-     * Action
-     */
     private CustomVarType customVarType;
-
-    /**
-     * Var id
-     */
     private int varId;
 
+    /**
+     * Get the customVar id
+     *
+     * @return int
+     */
     public int getVarId() {
         return varId;
     }
 
+    /**
+     * Get the customVar value
+     *
+     * @return String
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Get the customVar type
+     *
+     * @return CustomVar.CustomVarType
+     */
     public CustomVarType getCustomVarType() {
         return customVarType;
     }
@@ -83,17 +90,13 @@ public class CustomVar extends ScreenInfo {
         return this;
     }
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     CustomVar(Tracker tracker) {
         super(tracker);
         varId = -1;
         customVarType = CustomVarType.App;
         value = "";
     }
+
 
     @Override
     void setEvent() {

@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class Products extends Helper {
 
-    private Cart cart;
+    private final Cart cart;
 
     Products(Tracker tracker) {
         super(tracker);
@@ -157,8 +157,9 @@ public class Products extends Helper {
      * @param productId String
      */
     public void remove(String productId) {
-        int length = -1;
-        int index = -1;
+        int length;
+        int index;
+
         if (cart != null) {
             ArrayList<Product> products = cart.getProductsList();
             length = products.size();
@@ -208,7 +209,7 @@ public class Products extends Helper {
      * Send all products
      */
     public void sendViews() {
-        ArrayList<BusinessObject> views = new ArrayList<BusinessObject>();
+        ArrayList<BusinessObject> views = new ArrayList<>();
         LinkedHashMap<String, BusinessObject> trackerObjects = tracker.getBusinessObjects();
         Set<String> keys = trackerObjects.keySet();
 

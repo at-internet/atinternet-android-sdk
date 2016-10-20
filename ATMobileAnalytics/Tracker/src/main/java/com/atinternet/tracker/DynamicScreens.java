@@ -26,11 +26,6 @@ import java.util.Date;
 
 public class DynamicScreens extends Helper {
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     DynamicScreens(Tracker tracker) {
         super(tracker);
     }
@@ -42,8 +37,9 @@ public class DynamicScreens extends Helper {
      * @param name     String
      * @param update   Date
      * @return DynamicScreen
-     * @deprecated use {@link #add(String, String, Date)} instead.
+     * @deprecated Since 2.2.1, use {@link #add(String, String, Date)} instead.
      */
+    @Deprecated
     public DynamicScreen add(int screenId, String name, Date update) {
         DynamicScreen dynamicScreen = new DynamicScreen(tracker)
                 .setScreenId(screenId)
@@ -55,6 +51,14 @@ public class DynamicScreens extends Helper {
         return dynamicScreen;
     }
 
+    /**
+     * Add an dynamic label
+     *
+     * @param screenId String
+     * @param name     String
+     * @param update   Date
+     * @return DynamicScreen
+     */
     public DynamicScreen add(String screenId, String name, Date update) {
         DynamicScreen dynamicScreen = new DynamicScreen(tracker)
                 .setScreenId(screenId)
@@ -74,13 +78,22 @@ public class DynamicScreens extends Helper {
      * @param update   Date
      * @param chapter1 String
      * @return DynamicScreen
-     * @deprecated use {@link #add(String, String, Date, String)} instead.
+     * @deprecated Since 2.2.1, use {@link #add(String, String, Date, String)} instead.
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1) {
         return add(screenId, name, update).setChapter1(chapter1);
     }
 
+    /**
+     * Add an dynamic label
+     *
+     * @param screenId String
+     * @param name     String
+     * @param update   Date
+     * @param chapter1 String
+     * @return DynamicScreen
+     */
     public DynamicScreen add(String screenId, String name, Date update, String chapter1) {
         return add(screenId, name, update).setChapter1(chapter1);
     }
@@ -94,13 +107,23 @@ public class DynamicScreens extends Helper {
      * @param chapter1 String
      * @param chapter2 String
      * @return DynamicScreen
-     * @deprecated use {@link #add(String, String, Date, String, String)} instead.
+     * @deprecated Since 2.2.1, use {@link #add(String, String, Date, String, String)} instead.
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1, String chapter2) {
         return add(screenId, name, update, chapter1).setChapter2(chapter2);
     }
 
+    /**
+     * Add an dynamic label
+     *
+     * @param screenId String
+     * @param name     String
+     * @param update   Date
+     * @param chapter1 String
+     * @param chapter2 String
+     * @return DynamicScreen
+     */
     public DynamicScreen add(String screenId, String name, Date update, String chapter1, String chapter2) {
         return add(screenId, name, update, chapter1).setChapter2(chapter2);
     }
@@ -115,13 +138,24 @@ public class DynamicScreens extends Helper {
      * @param chapter2 String
      * @param chapter3 String
      * @return DynamicScreen
-     * @deprecated use {@link #add(String, String, Date, String, String, String)} instead.
+     * @deprecated Since 2.2.1, use {@link #add(String, String, Date, String, String, String)} instead.
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1, String chapter2, String chapter3) {
         return add(screenId, name, update, chapter1, chapter2).setChapter3(chapter3);
     }
 
+    /**
+     * Add an dynamic label
+     *
+     * @param screenId String
+     * @param name     String
+     * @param update   Date
+     * @param chapter1 String
+     * @param chapter2 String
+     * @param chapter3 String
+     * @return DynamicScreen
+     */
     public DynamicScreen add(String screenId, String name, Date update, String chapter1, String chapter2, String chapter3) {
         return add(screenId, name, update, chapter1, chapter2).setChapter3(chapter3);
     }

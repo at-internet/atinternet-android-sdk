@@ -99,8 +99,8 @@ class Builder implements Runnable {
     public Builder(Tracker tracker) {
         this.tracker = tracker;
         this.configuration = tracker.getConfiguration();
-        this.volatileParams = new ArrayList<Param>(tracker.getBuffer().getVolatileParams());
-        this.persistentParams = new ArrayList<Param>(tracker.getBuffer().getPersistentParams());
+        this.volatileParams = new ArrayList<>(tracker.getBuffer().getVolatileParams());
+        this.persistentParams = new ArrayList<>(tracker.getBuffer().getPersistentParams());
     }
 
     /**
@@ -155,22 +155,31 @@ class Builder implements Runnable {
      * Build the hit
      */
     Object[] build() {
-        ArrayList<String> prepareHitsList = new ArrayList<String>();
-        ArrayList<String> hitsList = new ArrayList<String>();
+        ArrayList<String> prepareHitsList = new ArrayList<>();
+        ArrayList<String> hitsList = new ArrayList<>();
         Integer countSplitHits = 1;
         int indexError = -1;
         String queryString = "";
-        String idClient = "";
         String configuration = buildConfiguration();
+        String idClient = tracker.getInternalUserId();
+        if (idClient == null) {
+            idClient = "";
+        }
 
         // Calcul pour connaitre la longueur maximum du hit
         String oltParameter = Tool.getTimeStamp().execute();
         int MAX_LENGTH_AVAILABLE = HIT_MAX_LENGTH - (configuration.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
+        MAX_LENGTH_AVAILABLE -= idClient.length();
 
-        LinkedHashMap<String, Object[]> dictionary = new LinkedHashMap<String, Object[]>();
+        LinkedHashMap<String, Object[]> dictionary;
         if (!TextUtils.isEmpty(configuration)) {
             dictionary = prepareQuery();
             Set<String> keySet = dictionary.keySet();
+
+            if (idClient.equals("") && dictionary.get(Hit.HitParam.UserId.stringValue()) != null) {
+                idClient = String.valueOf(dictionary.get(Hit.HitParam.UserId.stringValue())[1]);
+                MAX_LENGTH_AVAILABLE -= idClient.length();
+            }
 
             // Outerloop est un label de référence si jamais une boucle doit être interrompue
             outerloop:
@@ -179,11 +188,6 @@ class Builder implements Runnable {
                 Param p = (Param) dictionary.get(parameterKey)[0];
                 String value = String.valueOf(dictionary.get(parameterKey)[1]);
 
-                // Récupération de l'idclient pour éviter les redirections
-                if (parameterKey.equals(Hit.HitParam.UserId.stringValue())) {
-                    idClient = value;
-                    MAX_LENGTH_AVAILABLE -= idClient.length();
-                }
                 // Si la valeur du paramètre est trop grande
                 if (value.length() > MAX_LENGTH_AVAILABLE) {
 
@@ -288,6 +292,8 @@ class Builder implements Runnable {
                 }
                 Tool.executeCallback(tracker.getListener(), CallbackType.build, message, TrackerListener.HitStatus.Success);
             }
+        } else {
+            Tool.executeCallback(tracker.getListener(), CallbackType.build, "Empty configuration", TrackerListener.HitStatus.Failed);
         }
 
         return new Object[]{hitsList, oltParameter};
@@ -318,7 +324,7 @@ class Builder implements Runnable {
         boolean findFirst = false;
         boolean findLast = false;
         ArrayList<int[]> indexes;
-        ArrayList<Param> params = new ArrayList<Param>();
+        ArrayList<Param> params = new ArrayList<>();
 
         Param refstore = getRefOrRefstoreParam(Hit.HitParam.Refstore.stringValue(), completeBuffer);
         Param ref = getRefOrRefstoreParam(Hit.HitParam.Referrer.stringValue(), completeBuffer);
@@ -404,7 +410,7 @@ class Builder implements Runnable {
      * @return LinkedHashMap
      */
     private LinkedHashMap<String, Object[]> prepareQuery() {
-        LinkedHashMap<String, Object[]> formattedParameters = new LinkedHashMap<String, Object[]>();
+        LinkedHashMap<String, Object[]> formattedParameters = new LinkedHashMap<>();
 
         ArrayList<Param> completeBuffer = new ArrayList<Param>() {{
             addAll(persistentParams);
@@ -420,7 +426,7 @@ class Builder implements Runnable {
             HashMap<String, String> plugins = PluginParam.get(tracker);
             if (plugins.containsKey(key)) {
                 String pluginClass = plugins.get(key);
-                Plugin plugin = null;
+                Plugin plugin;
                 try {
                     plugin = (Plugin) Class.forName(pluginClass).newInstance();
                     plugin.execute(tracker);
@@ -437,6 +443,7 @@ class Builder implements Runnable {
                 } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
                     value = Tool.SHA_256(value);
                 }
+                tracker.setInternalUserId(value);
             }
 
             if (p.getType() == Param.Type.Closure && Tool.parseJSON(value) != null) {
@@ -471,7 +478,7 @@ class Builder implements Runnable {
                 }
 
                 if (duplicateParamIndex != -1) {
-                    List<Object[]> values = new ArrayList<Object[]>(formattedParameters.values());
+                    List<Object[]> values = new ArrayList<>(formattedParameters.values());
                     Param duplicateParam = (Param) values.get(duplicateParamIndex)[0];
                     String str = ((String) formattedParameters.get(duplicateParamKey)[1]).split("=")[0] + "=";
                     String val = ((String) formattedParameters.get(duplicateParamKey)[1]).split("=")[1];
@@ -494,7 +501,7 @@ class Builder implements Runnable {
                             }
                         } else if (json != null && json instanceof JSONArray) {
                             try {
-                                ArrayList<Object> array = new ArrayList<Object>();
+                                ArrayList<Object> array = new ArrayList<>();
                                 JSONArray jArray = (JSONArray) json;
                                 for (int i = 0; i < jArray.length(); i++) {
                                     array.add(jArray.get(i).toString());

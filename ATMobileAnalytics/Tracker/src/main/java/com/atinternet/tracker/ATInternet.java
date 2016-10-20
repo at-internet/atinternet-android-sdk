@@ -28,7 +28,9 @@ import java.util.HashMap;
 
 public class ATInternet extends Application {
 
-    private final HashMap<String, Tracker> trackers = new HashMap<String, Tracker>();
+    public static final int ALLOW_OVERLAY_INTENT_RESULT_CODE = 230; // Version number when this code appairs
+
+    private final HashMap<String, Tracker> trackers = new HashMap<>();
 
     /**
      * Get the default tracker

@@ -26,12 +26,15 @@ import android.content.*;
 
 public class ReferrerReceiver extends BroadcastReceiver {
 
-    /**
-     * Constant String
-     */
     private static final String REFERRER_INTENT_ACTION = "com.android.vending.INSTALL_REFERRER";
     private static final String REFERRER = "referrer";
 
+    /**
+     * Overriding onReceive
+     *
+     * @param context android.content.Context
+     * @param intent  Intent
+     */
     @Override
     public void onReceive(android.content.Context context, Intent intent) {
         if (intent != null) {

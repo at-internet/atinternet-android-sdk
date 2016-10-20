@@ -33,7 +33,7 @@ class TrackerActivityLifeCyle implements Application.ActivityLifecycleCallbacks 
     private static final int DELTA = 2;
 
     private long timeInBackground;
-    private Configuration configuration;
+    private final Configuration configuration;
     private String savedActivityName;
     private int savedActivityTaskId;
 

@@ -26,25 +26,25 @@ import java.text.DecimalFormat;
 
 public class Location extends ScreenInfo {
 
-    /**
-     * Decimal format
-     */
     private static final String DECIMAL_FORMAT = "#.00";
 
-    /**
-     * Latitude
-     */
     private double latitude;
-
-    /**
-     * Longitude
-     */
     private double longitude;
 
+    /**
+     * Get the latitude
+     *
+     * @return double
+     */
     public double getLatitude() {
         return latitude;
     }
 
+    /**
+     * Get the longitude
+     *
+     * @return double
+     */
     public double getLongitude() {
         return longitude;
     }

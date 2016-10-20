@@ -24,16 +24,8 @@ package com.atinternet.tracker;
 
 public class Gestures extends Helper {
 
-    /**
-     * Class name format
-     */
     private static final String CLASS_NAME_FORMAT = "%1$s.%2$s";
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     Gestures(Tracker tracker) {
         super(tracker);
     }
@@ -53,7 +45,7 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @param context Context
+     * @param context android.content.Context
      * @return Gesture
      */
     public Gesture add(android.content.Context context) {

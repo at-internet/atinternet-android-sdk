@@ -22,15 +22,21 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class CustomVars extends Helper {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
+    private AbstractScreen screen;
+
     CustomVars(Tracker tracker) {
         super(tracker);
+    }
+
+    CustomVars(AbstractScreen screen) {
+        super(screen.tracker);
+        this.screen = screen;
     }
 
     /**
@@ -38,7 +44,7 @@ public class CustomVars extends Helper {
      *
      * @param varId         int
      * @param value         String
-     * @param customVarType Action
+     * @param customVarType CustomVar.CustomVarType
      * @return CustomVar
      */
     public CustomVar add(int varId, String value, CustomVar.CustomVarType customVarType) {
@@ -47,7 +53,44 @@ public class CustomVars extends Helper {
                 .setValue(value)
                 .setCustomVarType(customVarType);
 
-        tracker.getBusinessObjects().put(customVar.getId(), customVar);
+        if (screen != null) {
+            screen.getCustomVarsMap().put(customVar.getId(), customVar);
+        } else {
+            tracker.getBusinessObjects().put(customVar.getId(), customVar);
+        }
+
         return customVar;
+    }
+
+    /**
+     * Remove a custom var
+     *
+     * @param customVarId String
+     */
+    public void remove(String customVarId) {
+        if (screen != null) {
+            screen.getCustomVarsMap().remove(customVarId);
+        } else {
+            tracker.getBusinessObjects().remove(customVarId);
+        }
+    }
+
+    /**
+     * Remove all CustomObject
+     */
+    public void removeAll() {
+        if (screen != null) {
+            screen.getCustomVarsMap().clear();
+        } else {
+            List<String> ids = new ArrayList<>();
+            for (Map.Entry<String, BusinessObject> entry : tracker.getBusinessObjects().entrySet()) {
+                if (entry.getValue() instanceof CustomVar) {
+                    ids.add(entry.getKey());
+                }
+            }
+            for (String id : ids) {
+                tracker.getBusinessObjects().remove(id);
+            }
+        }
     }
 }

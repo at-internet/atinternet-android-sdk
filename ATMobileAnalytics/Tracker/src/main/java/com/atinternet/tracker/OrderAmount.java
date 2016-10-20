@@ -25,35 +25,65 @@ package com.atinternet.tracker;
 public class OrderAmount {
 
     private final Order order;
-
     private double amountTaxFree;
-
     private double amountTaxIncluded;
-
     private double taxAmount;
 
+    /**
+     * Get amount tax free
+     *
+     * @return double
+     */
     public double getAmountTaxFree() {
         return amountTaxFree;
     }
 
+    /**
+     * Get amount tax included
+     *
+     * @return double
+     */
     public double getAmountTaxIncluded() {
         return amountTaxIncluded;
     }
 
+    /**
+     * Get tax amount
+     *
+     * @return double
+     */
     public double getTaxAmount() {
         return taxAmount;
     }
 
+    /**
+     * Set a new amount tax free
+     *
+     * @param amountTaxFree double
+     * @return OrderAmount
+     */
     public OrderAmount setAmountTaxFree(double amountTaxFree) {
         this.amountTaxFree = amountTaxFree;
         return this;
     }
 
+    /**
+     * Set a new amount tax included
+     *
+     * @param amountTaxIncluded double
+     * @return OrderAmount
+     */
     public OrderAmount setAmountTaxIncluded(double amountTaxIncluded) {
         this.amountTaxIncluded = amountTaxIncluded;
         return this;
     }
 
+    /**
+     * Set a new tax amount
+     *
+     * @param taxAmount double
+     * @return OrderAmount
+     */
     public OrderAmount setTaxAmount(double taxAmount) {
         this.taxAmount = taxAmount;
         return this;

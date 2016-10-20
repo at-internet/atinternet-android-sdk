@@ -27,20 +27,20 @@ abstract class Helper {
     /**
      * Tracker Instance
      */
-    protected Tracker tracker;
+    Tracker tracker;
 
     /**
      * Super constructor
      *
      * @param tracker Tracker
      */
-    protected Helper(Tracker tracker) {
+    Helper(Tracker tracker) {
         this.tracker = tracker;
     }
 
     /**
      * Empty constructor
      */
-    protected Helper() {
+    Helper() {
     }
 }

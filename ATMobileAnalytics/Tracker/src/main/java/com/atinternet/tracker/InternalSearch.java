@@ -25,43 +25,69 @@ package com.atinternet.tracker;
 public class InternalSearch extends BusinessObject {
 
     private String keyword;
-
     private int resultScreenNumber;
-
     private int resultPosition;
 
+    /**
+     * Get keyword
+     *
+     * @return String
+     */
     public String getKeyword() {
         return keyword;
     }
 
+    /**
+     * Get result screen number
+     *
+     * @return int
+     */
     public int getResultScreenNumber() {
         return resultScreenNumber;
     }
 
+    /**
+     * Get result position
+     *
+     * @return int
+     */
     public int getResultPosition() {
         return resultPosition;
     }
 
+    /**
+     * Set a new keyword
+     *
+     * @param keyword String
+     * @return InternalSearch
+     */
     public InternalSearch setKeyword(String keyword) {
         this.keyword = keyword;
         return this;
     }
 
+    /**
+     * Set a new result screen number
+     *
+     * @param resultScreenNumber int
+     * @return InternalSearch
+     */
     public InternalSearch setResultScreenNumber(int resultScreenNumber) {
         this.resultScreenNumber = resultScreenNumber;
         return this;
     }
 
+    /**
+     * Set a new result position
+     *
+     * @param resultPosition int
+     * @return InternalSearch
+     */
     public InternalSearch setResultPosition(int resultPosition) {
         this.resultPosition = resultPosition;
         return this;
     }
 
-    /**
-     * Super constructor
-     *
-     * @param tracker Tracker
-     */
     InternalSearch(Tracker tracker) {
         super(tracker);
         keyword = null;
@@ -71,11 +97,11 @@ public class InternalSearch extends BusinessObject {
 
     @Override
     void setEvent() {
-        tracker.setParam("mc", keyword == null ? "" : keyword.replaceAll("\\W", ""))
-                .setParam("np", resultScreenNumber);
+        tracker.setParam(Hit.HitParam.InternalSearchKeyword.stringValue(), keyword == null ? "" : keyword.replaceAll("\\W", ""))
+                .setParam(Hit.HitParam.InternalSearchResultScreenNumber.stringValue(), resultScreenNumber);
 
         if (resultPosition > -1) {
-            tracker.setParam("mcrg", resultPosition);
+            tracker.setParam(Hit.HitParam.InternalSearchResultPosition.stringValue(), resultPosition);
         }
     }
 }

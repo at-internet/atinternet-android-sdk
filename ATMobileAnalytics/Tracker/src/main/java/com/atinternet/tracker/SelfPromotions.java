@@ -28,11 +28,6 @@ import java.util.Set;
 
 public class SelfPromotions extends Helper {
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     SelfPromotions(Tracker tracker) {
         super(tracker);
     }
@@ -54,7 +49,7 @@ public class SelfPromotions extends Helper {
      * Send all impressions
      */
     public void sendImpressions() {
-        ArrayList<BusinessObject> impressions = new ArrayList<BusinessObject>();
+        ArrayList<BusinessObject> impressions = new ArrayList<>();
         LinkedHashMap<String, BusinessObject> trackerObjects = tracker.getBusinessObjects();
         Set<String> keys = trackerObjects.keySet();
 

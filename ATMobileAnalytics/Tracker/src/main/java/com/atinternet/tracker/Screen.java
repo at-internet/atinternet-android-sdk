@@ -24,49 +24,86 @@ package com.atinternet.tracker;
 
 public class Screen extends AbstractScreen {
 
+    /**
+     * Set a new name
+     *
+     * @param name String
+     * @return Screen
+     */
     public Screen setName(String name) {
         this.name = name;
 
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action AbstractScreen.Action
+     * @return Screen
+     */
     public Screen setAction(Action action) {
         this.action = action;
 
         return this;
     }
 
+    /**
+     * Set a new first chapter
+     *
+     * @param chapter1 String
+     * @return Screen
+     */
     public Screen setChapter1(String chapter1) {
         this.chapter1 = chapter1;
         return this;
     }
 
+    /**
+     * Set a new second chapter
+     *
+     * @param chapter2 String
+     * @return Screen
+     */
     public Screen setChapter2(String chapter2) {
         this.chapter2 = chapter2;
         return this;
     }
 
+    /**
+     * Set a new third chapter
+     *
+     * @param chapter3 String
+     * @return Screen
+     */
     public Screen setChapter3(String chapter3) {
         this.chapter3 = chapter3;
         return this;
     }
 
+    /**
+     * Set a new level 2
+     *
+     * @param level2 int
+     * @return Screen
+     */
     public Screen setLevel2(int level2) {
         this.level2 = level2;
 
         return this;
     }
 
+    /**
+     * Change boolean isBasketScreen value
+     *
+     * @param isBasketScreen boolean
+     * @return Screen
+     */
     public Screen setIsBasketScreen(boolean isBasketScreen) {
         this.isBasketScreen = isBasketScreen;
         return this;
     }
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     Screen(Tracker tracker) {
         super(tracker);
     }

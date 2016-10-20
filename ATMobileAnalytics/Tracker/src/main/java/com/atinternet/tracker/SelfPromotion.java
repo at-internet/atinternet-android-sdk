@@ -25,56 +25,104 @@ package com.atinternet.tracker;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class SelfPromotion extends OnAppAd {
-
     private static final String SELF_PROMOTION_FORMAT = "INT-%1$s-%2$s||%3$s";
     private static final String SCREEN = "screen";
     private static final String AD_TRACKING = "AT";
 
     private int adId;
-
     private String format;
-
     private String productId;
 
+    private LinkedHashMap<String, CustomObject> customObjectsMap;
+    private CustomObjects customObjects;
+
+    LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
+        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+    }
+
+    /**
+     * Get ad id
+     *
+     * @return int
+     */
     public int getAdId() {
         return adId;
     }
 
+    /**
+     * Get format
+     *
+     * @return String
+     */
     public String getFormat() {
         return format;
     }
 
+    /**
+     * Get product id
+     *
+     * @return String
+     */
     public String getProductId() {
         return productId;
     }
 
+    /**
+     * Set a new ad id
+     *
+     * @param adId int
+     * @return SelfPromotion
+     */
     public SelfPromotion setAdId(int adId) {
         this.adId = adId;
         return this;
     }
 
+    /**
+     * Set a new format
+     *
+     * @param format String
+     * @return SelfPromotion
+     */
     public SelfPromotion setFormat(String format) {
         this.format = format;
         return this;
     }
 
+    /**
+     * Set a new product id
+     *
+     * @param productId String
+     * @return SelfPromotion
+     */
     public SelfPromotion setProductId(String productId) {
         this.productId = productId;
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action OnAppAd.Action
+     * @return SelfPromotion
+     */
     public SelfPromotion setAction(Action action) {
         this.action = action;
         return this;
     }
 
     /**
-     * Constructor
+     * Get CustomObjects
      *
-     * @param tracker Tracker
+     * @return CustomObjects
      */
+    public CustomObjects CustomObjects() {
+        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+    }
+
     SelfPromotion(Tracker tracker) {
         super(tracker);
         adId = -1;
@@ -111,6 +159,12 @@ public class SelfPromotion extends OnAppAd {
 
             if (TechnicalContext.level2 > 0) {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), TechnicalContext.level2);
+            }
+        }
+
+        if (customObjectsMap != null) {
+            for (CustomObject co : customObjectsMap.values()) {
+                co.setEvent();
             }
         }
 

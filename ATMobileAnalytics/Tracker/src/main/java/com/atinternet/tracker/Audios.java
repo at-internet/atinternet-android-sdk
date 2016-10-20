@@ -26,18 +26,9 @@ import java.util.ArrayList;
 
 public class Audios {
 
-    /**
-     * Videos list
-     */
-    final ArrayList<Audio> list = new ArrayList<Audio>();
+    final ArrayList<Audio> list = new ArrayList<>();
+    private final MediaPlayer player;
 
-    MediaPlayer player;
-
-    /**
-     * Constructor
-     *
-     * @param player MediaPlayer
-     */
     Audios(MediaPlayer player) {
         this.player = player;
     }
@@ -52,7 +43,6 @@ public class Audios {
     public Audio add(String name, int duration) {
         int index = -1;
         int length = list.size();
-        index = -1;
         Audio audio;
         for (int i = 0; i < length; i++) {
             if (list.get(i).getName().equals(name)) {
@@ -75,7 +65,7 @@ public class Audios {
     }
 
     /**
-     * Create new video
+     * Create new audio
      *
      * @param name     String
      * @param chapter1 String
@@ -87,7 +77,7 @@ public class Audios {
     }
 
     /**
-     * Create new video
+     * Create new audio
      *
      * @param name     String
      * @param chapter1 String
@@ -100,7 +90,7 @@ public class Audios {
     }
 
     /**
-     * Create new video
+     * Create new audio
      *
      * @param name     String
      * @param chapter1 String
@@ -113,11 +103,15 @@ public class Audios {
         return add(name, chapter1, chapter2, duration).setChapter3(chapter3);
     }
 
+    /**
+     * Remove an audio
+     *
+     * @param name String
+     */
     public void remove(String name) {
-        int length = -1;
+        int length = list.size();
         int index = -1;
-        length = list.size();
-        index = -1;
+
         for (int i = 0; i < length; i++) {
             if (list.get(i).getName().equals(name)) {
                 index = i;
@@ -132,6 +126,9 @@ public class Audios {
         }
     }
 
+    /**
+     * Remove all audios
+     */
     public void removeAll() {
         while (!list.isEmpty()) {
             remove(list.get(0).getName());

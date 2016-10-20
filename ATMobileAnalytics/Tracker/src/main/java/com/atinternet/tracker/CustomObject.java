@@ -24,13 +24,17 @@ package com.atinternet.tracker;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class CustomObject extends BusinessObject {
 
-    /**
-     * Value
-     */
     private String value;
 
+    /**
+     * Get the customObject value
+     *
+     * @return String
+     */
     public String getValue() {
         return value;
     }
@@ -39,11 +43,16 @@ public class CustomObject extends BusinessObject {
         this.value = value;
         return this;
     }
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
+
+    CustomObject(String customObjectString) {
+        super();
+        value = customObjectString;
+    }
+
+    CustomObject(Map<String, Object> customObject) {
+        this(new JSONObject(customObject).toString());
+    }
+
     CustomObject(Tracker tracker) {
         super(tracker);
         value = new JSONObject().toString();

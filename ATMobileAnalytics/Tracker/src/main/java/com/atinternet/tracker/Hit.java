@@ -29,9 +29,14 @@ import java.util.Date;
 
 public class Hit {
 
+    /**
+     * Enum with different hit parameter keys
+     */
     public enum HitParam {
+        Aisle("aisl"),
         Screen("p"),
         Level2("s2"),
+        CustomTreeStructure("ptype"),
         JSON("stc"),
         UserId("idclient"),
         Action("action"),
@@ -53,7 +58,19 @@ public class Hit {
         GPSLongitude("gx"),
         TVT("tvt"),
         Source("xto"),
-        RemanentSource("xtor");
+        MediaDuration("m1"),
+        RemanentSource("xtor"),
+        Tp("tp"),
+        ProductList("pdtl"),
+        DynamicScreenId("pid"),
+        DynamicScreenValue("pchap"),
+        DynamicScreenDate("pidt"),
+        InternalSearchKeyword("mc"),
+        InternalSearchResultScreenNumber("np"),
+        InternalSearchResultPosition("mcrg"),
+        CartId("idcart"),
+        RichMediaLevel2("s2rich"),
+        RichMediaScreen("prich");
 
         private final String str;
 
@@ -66,28 +83,16 @@ public class Hit {
         }
     }
 
+    /**
+     * Enum with different hit types
+     */
     public enum HitType {
         Audio, Video, Animation, PodCast, RSS, Email, Publicite, Touch, AdTracking, ProduitImpression, Weborama, MvTesting, Screen
     }
 
-    /**
-     * Url
-     */
     private final String url;
-
-    /**
-     * Date of creation
-     */
     private Date date;
-
-    /**
-     * Number of retry that were made to dispatch the url
-     */
     private int retry;
-
-    /**
-     * Boolean is offline hit
-     */
     private boolean isOffline;
 
     /**
@@ -153,11 +158,6 @@ public class Hit {
         return isOffline;
     }
 
-    /**
-     * Get the hit type
-     *
-     * @return HitType
-     */
     static HitType getHitType(final ArrayList<Param> volatileParams, final ArrayList<Param> persistentParams) {
         ArrayList<Param> buffer = new ArrayList<Param>() {{
             addAll(volatileParams);

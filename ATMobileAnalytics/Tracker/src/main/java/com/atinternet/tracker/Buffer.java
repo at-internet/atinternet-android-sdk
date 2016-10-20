@@ -105,8 +105,8 @@ class Buffer {
      * Default constructor
      */
     public Buffer(Tracker tracker) {
-        persistentParams = new ArrayList<Param>();
-        volatileParams = new ArrayList<Param>();
+        persistentParams = new ArrayList<>();
+        volatileParams = new ArrayList<>();
         identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER));
 
         initConstantClosures();

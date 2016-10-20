@@ -26,18 +26,9 @@ import java.util.ArrayList;
 
 public class Videos {
 
-    /**
-     * Videos list
-     */
-    final ArrayList<Video> list = new ArrayList<Video>();
+    final ArrayList<Video> list = new ArrayList<>();
+    private final MediaPlayer player;
 
-    MediaPlayer player;
-
-    /**
-     * Constructor
-     *
-     * @param player MediaPlayer
-     */
     Videos(MediaPlayer player) {
         this.player = player;
     }
@@ -52,7 +43,6 @@ public class Videos {
     public Video add(String name, int duration) {
         int index = -1;
         int length = list.size();
-        index = -1;
         Video video;
         for (int i = 0; i < length; i++) {
             if (list.get(i).getName().equals(name)) {
@@ -113,11 +103,14 @@ public class Videos {
         return add(name, chapter1, chapter2, duration).setChapter3(chapter3);
     }
 
+    /**
+     * Remove a video
+     *
+     * @param name String
+     */
     public void remove(String name) {
-        int length = -1;
+        int length = list.size();
         int index = -1;
-        length = list.size();
-        index = -1;
         for (int i = 0; i < length; i++) {
             if (list.get(i).getName().equals(name)) {
                 index = i;
@@ -132,6 +125,9 @@ public class Videos {
         }
     }
 
+    /**
+     * Remove all videos
+     */
     public void removeAll() {
         while (!list.isEmpty()) {
             remove(list.get(0).getName());

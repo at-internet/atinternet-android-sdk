@@ -29,19 +29,8 @@ import org.json.JSONObject;
 
 public class TVTracking {
 
-    /**
-     * Tracker instance
-     */
     private final Tracker tracker;
-
-    /**
-     * URL
-     */
     private String campaignURL;
-
-    /**
-     * Visit Duration
-     */
     private int visitDuration;
 
     /**
@@ -60,49 +49,6 @@ public class TVTracking {
      */
     public int getVisitDuration() {
         return visitDuration;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
-    TVTracking(Tracker tracker) {
-        this.tracker = tracker;
-        visitDuration = 10;
-        campaignURL = "";
-
-        String url = (String) tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL);
-        if (!TextUtils.isEmpty(url)) {
-            campaignURL = url;
-        } else {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "TVTracking URL not set");
-        }
-
-        Integer visit = Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION)));
-        if (visit != 0) {
-            visitDuration = visit;
-        }
-
-        try {
-            String remanentCampaign = Tracker.getPreferences().getString(TrackerConfigurationKeys.REMANENT_CAMPAIGN_SAVED, null);
-            if (remanentCampaign != null) {
-                JSONObject remanentObject = new JSONObject(remanentCampaign);
-                int lifetime;
-                if (remanentObject.get("lifetime") instanceof String) {
-                    lifetime = Integer.parseInt((String) remanentObject.get("lifetime"));
-                } else {
-                    lifetime = (Integer) remanentObject.get("lifetime");
-                }
-                long savedLifetime = Tracker.getPreferences().getLong(TrackerConfigurationKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
-
-                if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), savedLifetime) >= lifetime) {
-                    Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REMANENT_CAMPAIGN_SAVED, null).apply();
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -148,5 +94,43 @@ public class TVTracking {
      */
     public void unset() {
         tracker.unsetParam(Hit.HitParam.TVT.stringValue());
+    }
+
+    TVTracking(Tracker tracker) {
+        this.tracker = tracker;
+        visitDuration = 10;
+        campaignURL = "";
+
+        String url = (String) tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL);
+        if (!TextUtils.isEmpty(url)) {
+            campaignURL = url;
+        } else {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "TVTracking URL not set");
+        }
+
+        Integer visit = Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION)));
+        if (visit != 0) {
+            visitDuration = visit;
+        }
+
+        try {
+            String remanentCampaign = Tracker.getPreferences().getString(TrackerConfigurationKeys.REMANENT_CAMPAIGN_SAVED, null);
+            if (remanentCampaign != null) {
+                JSONObject remanentObject = new JSONObject(remanentCampaign);
+                int lifetime;
+                if (remanentObject.get("lifetime") instanceof String) {
+                    lifetime = Integer.parseInt((String) remanentObject.get("lifetime"));
+                } else {
+                    lifetime = (Integer) remanentObject.get("lifetime");
+                }
+                long savedLifetime = Tracker.getPreferences().getLong(TrackerConfigurationKeys.REMANENT_CAMPAIGN_TIME_SAVED, 0);
+
+                if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), savedLifetime) >= lifetime) {
+                    Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REMANENT_CAMPAIGN_SAVED, null).apply();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -22,6 +22,10 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * @deprecated Since 2.3.0, Location is now only available as a screen object property.
+ */
+@Deprecated
 public class Locations extends Helper {
 
     /**

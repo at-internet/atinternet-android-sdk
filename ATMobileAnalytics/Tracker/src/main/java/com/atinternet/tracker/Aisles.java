@@ -22,13 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * @deprecated Since 2.3.0, Aisle is now only available as a screen object property.
+ */
+@Deprecated
 public class Aisles extends Helper {
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     Aisles(Tracker tracker) {
         super(tracker);
     }

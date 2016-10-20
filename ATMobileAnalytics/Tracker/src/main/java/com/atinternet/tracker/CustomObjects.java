@@ -24,17 +24,49 @@ package com.atinternet.tracker;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class CustomObjects extends Helper {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
+    private AbstractScreen screen;
+
+    private Gesture gesture;
+
+    private Publisher publisher;
+
+    private SelfPromotion selfPromotion;
+
+    private Product product;
+
     CustomObjects(Tracker tracker) {
         super(tracker);
+    }
+
+    CustomObjects(AbstractScreen screen) {
+        super(screen.tracker);
+        this.screen = screen;
+    }
+
+    CustomObjects(Gesture gesture) {
+        super(gesture.tracker);
+        this.gesture = gesture;
+    }
+
+    CustomObjects(Publisher publisher) {
+        super(publisher.tracker);
+        this.publisher = publisher;
+    }
+
+    CustomObjects(SelfPromotion selfPromotion) {
+        super(selfPromotion.tracker);
+        this.selfPromotion = selfPromotion;
+    }
+
+    CustomObjects(Product product) {
+        super(product.tracker);
+        this.product = product;
     }
 
     /**
@@ -45,7 +77,20 @@ public class CustomObjects extends Helper {
      */
     public CustomObject add(String customObject) {
         CustomObject obj = new CustomObject(tracker).setValue(customObject);
-        tracker.getBusinessObjects().put(obj.getId(), obj);
+
+        if (screen != null) {
+            screen.getCustomObjectsMap().put(obj.getId(), obj);
+        } else if (gesture != null) {
+            gesture.getCustomObjectsMap().put(obj.getId(), obj);
+        } else if (publisher != null) {
+            publisher.getCustomObjectsMap().put(obj.getId(), obj);
+        } else if (selfPromotion != null) {
+            selfPromotion.getCustomObjectsMap().put(obj.getId(), obj);
+        } else if (product != null) {
+            product.getCustomObjectsMap().put(obj.getId(), obj);
+        } else {
+            tracker.getBusinessObjects().put(obj.getId(), obj);
+        }
 
         return obj;
     }
@@ -57,9 +102,54 @@ public class CustomObjects extends Helper {
      * @return CustomObject
      */
     public CustomObject add(Map<String, Object> customObject) {
-        CustomObject obj = new CustomObject(tracker).setValue(new JSONObject(customObject).toString());
-        tracker.getBusinessObjects().put(obj.getId(), obj);
+        return add(new JSONObject(customObject).toString());
+    }
 
-        return obj;
+    /**
+     * Remove a CustomObject
+     *
+     * @param customObjectId String
+     */
+    public void remove(String customObjectId) {
+        if (screen != null) {
+            screen.getCustomObjectsMap().remove(customObjectId);
+        } else if (gesture != null) {
+            gesture.getCustomObjectsMap().remove(customObjectId);
+        } else if (publisher != null) {
+            publisher.getCustomObjectsMap().remove(customObjectId);
+        } else if (selfPromotion != null) {
+            selfPromotion.getCustomObjectsMap().remove(customObjectId);
+        } else if (product != null) {
+            product.getCustomObjectsMap().remove(customObjectId);
+        } else {
+            tracker.getBusinessObjects().remove(customObjectId);
+        }
+    }
+
+    /**
+     * Remove all CustomObjects
+     */
+    public void removeAll() {
+        if (screen != null) {
+            screen.getCustomObjectsMap().clear();
+        } else if (gesture != null) {
+            gesture.getCustomObjectsMap().clear();
+        } else if (publisher != null) {
+            publisher.getCustomObjectsMap().clear();
+        } else if (selfPromotion != null) {
+            selfPromotion.getCustomObjectsMap().clear();
+        } else if (product != null) {
+            product.getCustomObjectsMap().clear();
+        } else {
+            List<String> ids = new ArrayList<>();
+            for (Map.Entry<String, BusinessObject> entry : tracker.getBusinessObjects().entrySet()) {
+                if (entry.getValue() instanceof CustomObject) {
+                    ids.add(entry.getKey());
+                }
+            }
+            for (String id : ids) {
+                tracker.getBusinessObjects().remove(id);
+            }
+        }
     }
 }

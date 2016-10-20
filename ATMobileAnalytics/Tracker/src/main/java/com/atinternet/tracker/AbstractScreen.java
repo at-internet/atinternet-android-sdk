@@ -22,14 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-abstract class AbstractScreen extends BusinessObject {
+import java.util.LinkedHashMap;
 
-    public AbstractScreen(Tracker tracker) {
-        super(tracker);
-        action = Action.View;
-        level2 = -1;
-        name = "";
-    }
+public abstract class AbstractScreen extends BusinessObject {
 
     public enum Action {
         View("view");
@@ -45,67 +40,222 @@ abstract class AbstractScreen extends BusinessObject {
         }
     }
 
-    /**
-     * Screen name
-     */
-    protected String name;
+
+    String name;
+    String chapter1;
+    String chapter2;
+    String chapter3;
+    Action action;
+    boolean isBasketScreen;
+    int level2;
+
+    private LinkedHashMap<String, CustomObject> customObjectsMap;
+    private LinkedHashMap<String, CustomVar> customVarsMap;
+    private LinkedHashMap<String, SelfPromotionImpression> selfPromotionImpressionsMap;
+    private LinkedHashMap<String, PublisherImpression> publisherImpressionsMap;
+
+    private Location location;
+    private Aisle aisle;
+    private CustomTreeStructure customTreeStructure;
+    private InternalSearch internalSearch;
+    private Cart cart;
+    private Campaign campaign;
+    private Order order;
+    private CustomVars customVars;
+    private CustomObjects customObjects;
+    private PublisherImpressions publisherImpressions;
+    private SelfPromotionImpressions selfPromotionImpressions;
+
+    LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
+        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+    }
+
+    LinkedHashMap<String, CustomVar> getCustomVarsMap() {
+        return customVarsMap == null ? (customVarsMap = new LinkedHashMap<>()) : customVarsMap;
+    }
+
+    LinkedHashMap<String, SelfPromotionImpression> getSelfPromotionImpressionsMap() {
+        return selfPromotionImpressionsMap == null ? (selfPromotionImpressionsMap = new LinkedHashMap<>()) : selfPromotionImpressionsMap;
+    }
+
+    LinkedHashMap<String, PublisherImpression> getPublisherImpressionsMap() {
+        return publisherImpressionsMap == null ? (publisherImpressionsMap = new LinkedHashMap<>()) : publisherImpressionsMap;
+    }
 
     /**
-     * Chapter 1
+     * Get the name
+     *
+     * @return String
      */
-    protected String chapter1;
-
-    /**
-     * Chapter 2
-     */
-    protected String chapter2;
-
-    /**
-     * Chapter 3
-     */
-    protected String chapter3;
-
-    /**
-     * Action type
-     */
-    protected Action action;
-
-    /**
-     * Screen contains cart info
-     */
-    protected boolean isBasketScreen;
-
-    /**
-     * Level2
-     */
-    protected int level2;
-
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the action type
+     *
+     * @return AbstractScreen.Action
+     */
     public Action getAction() {
         return action;
     }
 
+    /**
+     * Get the level2
+     *
+     * @return int
+     */
     public int getLevel2() {
         return level2;
     }
 
+    /**
+     * Get the first chapter
+     *
+     * @return String
+     */
     public String getChapter1() {
         return chapter1;
     }
 
+    /**
+     * Get the second chapter
+     *
+     * @return String
+     */
     public String getChapter2() {
         return chapter2;
     }
 
+    /**
+     * Get the third chapter
+     *
+     * @return String
+     */
     public String getChapter3() {
         return chapter3;
     }
 
+    /**
+     * Get boolean isBasketScreen value
+     *
+     * @return boolean
+     */
     public boolean isBasketScreen() {
         return isBasketScreen;
+    }
+
+    /**
+     * Set a cart
+     *
+     * @param cart Cart
+     */
+    public void setCart(Cart cart) {
+        this.cart = cart;
+        isBasketScreen = this.cart != null;
+    }
+
+    /**
+     * Add location informations
+     *
+     * @param latitude  double
+     * @param longitude double
+     * @return Location
+     */
+    public Location Location(double latitude, double longitude) {
+        return location == null ? (location = new Location(tracker)
+                .setLatitude(latitude)
+                .setLongitude(longitude)) : location;
+    }
+
+    /**
+     * Add aisle informations
+     *
+     * @param level1 String
+     * @return Aisle
+     */
+    public Aisle Aisle(String level1) {
+        return aisle == null ? (aisle = new Aisle(tracker).setLevel1(level1)) : aisle;
+    }
+
+    /**
+     * Add a custom tree structure
+     *
+     * @param category1 int
+     * @return CustomTreeStructure
+     */
+    public CustomTreeStructure CustomTreeStructure(int category1) {
+        return customTreeStructure == null ? (customTreeStructure = new CustomTreeStructure(tracker).setCategory1(category1)) : customTreeStructure;
+    }
+
+    /**
+     * Add campaign informations
+     *
+     * @param campaignId String
+     * @return Campaign
+     */
+    public Campaign Campaign(String campaignId) {
+        return campaign == null ? (campaign = new Campaign(tracker).setCampaignId(campaignId)) : campaign;
+    }
+
+    /**
+     * Add an order
+     *
+     * @param orderId  String
+     * @param turnover double
+     * @return Order
+     */
+    public Order Order(String orderId, double turnover) {
+        return order == null ? (order = new Order(tracker).setOrderId(orderId).setTurnover(turnover)) : order;
+    }
+
+    /**
+     * Add internal search informations
+     *
+     * @param keywordLabel     String
+     * @param resultPageNumber int
+     * @return InternalSearch
+     */
+    public InternalSearch InternalSearch(String keywordLabel, int resultPageNumber) {
+        return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
+                .setKeyword(keywordLabel)
+                .setResultScreenNumber(resultPageNumber)) : internalSearch;
+    }
+
+    /**
+     * Get CustomVars
+     *
+     * @return CustomVars
+     */
+    public CustomVars CustomVars() {
+        return customVars == null ? (customVars = new CustomVars(this)) : customVars;
+    }
+
+    /**
+     * Get CustomObjects
+     *
+     * @return CustomObjects
+     */
+    public CustomObjects CustomObjects() {
+        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+    }
+
+    /**
+     * Get Publishers
+     *
+     * @return PublisherImpressions
+     */
+    public PublisherImpressions Publishers() {
+        return publisherImpressions == null ? (publisherImpressions = new PublisherImpressions(this)) : publisherImpressions;
+    }
+
+    /**
+     * Get SelfPromotions
+     *
+     * @return SelfPromotionImpressions
+     */
+    public SelfPromotionImpressions SelfPromotions() {
+        return selfPromotionImpressions == null ? (selfPromotionImpressions = new SelfPromotionImpressions(this)) : selfPromotionImpressions;
     }
 
     /**
@@ -116,6 +266,13 @@ abstract class AbstractScreen extends BusinessObject {
         tracker.getDispatcher().dispatch(this);
     }
 
+    AbstractScreen(Tracker tracker) {
+        super(tracker);
+        action = Action.View;
+        level2 = -1;
+        name = "";
+    }
+
     @Override
     void setEvent() {
         if (level2 > 0) {
@@ -123,7 +280,59 @@ abstract class AbstractScreen extends BusinessObject {
         }
 
         if (isBasketScreen) {
-            tracker.setParam("tp", "cart");
+            tracker.setParam(Hit.HitParam.Tp.stringValue(), "cart");
+        }
+
+        if (location != null) {
+            location.setEvent();
+        }
+
+        if (campaign != null) {
+            campaign.setEvent();
+        }
+
+        if (internalSearch != null) {
+            internalSearch.setEvent();
+        }
+
+        if (aisle != null) {
+            aisle.setEvent();
+        }
+
+        if (cart != null) {
+            cart.setEvent();
+        }
+
+        if (order != null) {
+            order.setEvent();
+        }
+
+        if (customTreeStructure != null) {
+            customTreeStructure.setEvent();
+        }
+
+        if (customObjectsMap != null) {
+            for (CustomObject co : customObjectsMap.values()) {
+                co.setEvent();
+            }
+        }
+
+        if (customVarsMap != null) {
+            for (CustomVar cv : customVarsMap.values()) {
+                cv.setEvent();
+            }
+        }
+
+        if (selfPromotionImpressionsMap != null) {
+            for (SelfPromotionImpression spi : selfPromotionImpressionsMap.values()) {
+                spi.setEvent();
+            }
+        }
+
+        if (publisherImpressionsMap != null) {
+            for (PublisherImpression pi : publisherImpressionsMap.values()) {
+                pi.setEvent();
+            }
         }
     }
 }

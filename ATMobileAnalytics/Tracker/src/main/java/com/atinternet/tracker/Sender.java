@@ -141,7 +141,7 @@ class Sender implements Runnable {
                     if (hit.isOffline()) {
                         storage.deleteHit(hit.getUrl());
                     }
-                    Tool.executeCallback(trackerListener, CallbackType.send, String.valueOf(statusCode), TrackerListener.HitStatus.Success);
+                    Tool.executeCallback(trackerListener, CallbackType.send, hit.getUrl(), TrackerListener.HitStatus.Success);
                     updateDebugger(hit.getUrl(), "sent48", true);
                 }
             } catch (final Exception e) {

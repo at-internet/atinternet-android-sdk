@@ -32,22 +32,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-/**
- * Hit configuration
- */
 public class Configuration extends LinkedHashMap<String, Object> {
 
-    /**
-     * Properties to get configuration from json file in archive
-     */
     private static final String ENCODING = "UTF-8";
     private static final String PHONE_CONFIGURATION = "phone";
     private static final String TABLET_CONFIGURATION = "tablet";
     private static final String JSON_FILE = "defaultConfiguration.json";
 
-    /**
-     * Configuration defined by UI
-     */
     Configuration(Context context) {
         JSONObject jsonObject = getDefaultConfiguration(Tool.isTablet(context));
         if (jsonObject != null) {
@@ -63,11 +54,6 @@ public class Configuration extends LinkedHashMap<String, Object> {
         }
     }
 
-    /**
-     * Override configuration
-     *
-     * @param configuration HashMap
-     */
     Configuration(HashMap<String, Object> configuration) {
         clear();
         JSONObject jsonObject = getDefaultConfiguration(false);
@@ -87,12 +73,6 @@ public class Configuration extends LinkedHashMap<String, Object> {
         }
     }
 
-    /**
-     * Get configuration defined in the UI
-     *
-     * @param isTablet boolean
-     * @return JSONObject
-     */
     private JSONObject getDefaultConfiguration(boolean isTablet) {
         JSONObject result = new JSONObject();
         String stringResult;
@@ -100,15 +80,16 @@ public class Configuration extends LinkedHashMap<String, Object> {
             InputStream inputStream = getClass().getResourceAsStream("/" + JSON_FILE);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            stringResult = new String(buffer, ENCODING);
-            JSONObject json = new JSONObject(stringResult);
-            if (isTablet) {
-                result = json.getJSONObject(TABLET_CONFIGURATION);
-            } else {
-                result = json.getJSONObject(PHONE_CONFIGURATION);
+            if (inputStream.read(buffer) != -1) {
+                stringResult = new String(buffer, ENCODING);
+                JSONObject json = new JSONObject(stringResult);
+                if (isTablet) {
+                    result = json.getJSONObject(TABLET_CONFIGURATION);
+                } else {
+                    result = json.getJSONObject(PHONE_CONFIGURATION);
+                }
             }
+            inputStream.close();
         } catch (Exception e) {
             try {
                 result.put("log", "")
@@ -137,6 +118,11 @@ public class Configuration extends LinkedHashMap<String, Object> {
         return result;
     }
 
+    /**
+     * Stringify configuration
+     *
+     * @return String
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder("Tracker configuration : \n");
         Iterator<Entry<String, Object>> iter = entrySet().iterator();

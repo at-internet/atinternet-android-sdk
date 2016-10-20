@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -65,7 +66,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.2.3";
+            return "2.3.0";
         }
     };
 
@@ -293,6 +294,7 @@ class TechnicalContext {
      *
      * @return Closure
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     static Closure getDiagonal() {
         return new Closure() {
             @Override
@@ -308,12 +310,12 @@ class TechnicalContext {
 
                 try {
                     // includes window decorations (statusbar bar/menu bar)
-                    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
                         heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
                     }
                     // includes window decorations (statusbar bar/menu bar)
-                    if (Build.VERSION.SDK_INT >= 17) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         Point realSize = new Point();
                         d.getRealSize(realSize);
 

@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 public abstract class OnAppAd extends BusinessObject {
 
+    /**
+     * Enum with different advertisement type
+     */
     public enum Action {
         View("ati"),
         Touch("atc");
@@ -39,18 +42,15 @@ public abstract class OnAppAd extends BusinessObject {
         }
     }
 
-    /**
-     * Action
-     */
-    protected Action action;
+    Action action;
 
+    /**
+     * Get action type
+     *
+     * @return OnAppAd.Action
+     */
     public Action getAction() {
         return action;
-    }
-
-    OnAppAd(Tracker tracker) {
-        super(tracker);
-        action = Action.View;
     }
 
     /**
@@ -67,5 +67,10 @@ public abstract class OnAppAd extends BusinessObject {
     public void sendTouch() {
         action = Action.Touch;
         tracker.getDispatcher().dispatch(this);
+    }
+
+    OnAppAd(Tracker tracker) {
+        super(tracker);
+        action = Action.View;
     }
 }

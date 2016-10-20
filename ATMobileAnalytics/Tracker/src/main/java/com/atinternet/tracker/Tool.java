@@ -23,6 +23,7 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -161,7 +162,7 @@ class Tool {
      */
     @SafeVarargs
     static ArrayList<int[]> findParameterPosition(String searchKey, ArrayList<Param>... parameters) {
-        ArrayList<int[]> indexes = new ArrayList<int[]>();
+        ArrayList<int[]> indexes = new ArrayList<>();
         int indexValue = 0;
         int idArray = 0;
 
@@ -204,12 +205,13 @@ class Tool {
 
 
     static OfflineMode convertStringToOfflineMode(String offlineMode) {
-        if (offlineMode.equals("always")) {
-            return OfflineMode.always;
-        } else if (offlineMode.equals("never")) {
-            return OfflineMode.never;
-        } else {
-            return OfflineMode.required;
+        switch (offlineMode) {
+            case "always":
+                return OfflineMode.always;
+            case "never":
+                return OfflineMode.never;
+            default:
+                return OfflineMode.required;
         }
     }
 
@@ -322,7 +324,7 @@ class Tool {
      * @return Map
      */
     static Map toMap(JSONObject jsonObject) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         Iterator<String> keysItr = jsonObject.keys();
         while (keysItr.hasNext()) {
@@ -374,7 +376,7 @@ class Tool {
         String baseString = "AT" + s;
         String result = "";
         try {
-            MessageDigest md = null;
+            MessageDigest md;
             md = MessageDigest.getInstance("SHA-256");
             md.update(baseString.getBytes());
 
@@ -434,7 +436,7 @@ class Tool {
      * @return HashMap
      */
     static LinkedHashMap<String, String> getParameters(String hit) {
-        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
         try {
             URL url = new URL(hit);
             map.put("ssl", url.getProtocol().equals("http") ? "Off" : "On");
@@ -473,6 +475,7 @@ class Tool {
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("deprecation")
+    @TargetApi(Build.VERSION_CODES.M)
     static int getColor(Context context, int colorId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return context.getResources().getColor(colorId, null);

@@ -29,7 +29,7 @@ abstract class BusinessObject {
     /**
      * Hit id
      */
-    protected final String id;
+    final String id;
 
     /**
      * Creation date
@@ -39,9 +39,9 @@ abstract class BusinessObject {
     /**
      * Tracker instance
      */
-    protected final Tracker tracker;
+    Tracker tracker;
 
-    String getId() {
+    public String getId() {
         return id;
     }
 
@@ -61,9 +61,18 @@ abstract class BusinessObject {
     /**
      * Super constructor
      */
-    BusinessObject(Tracker tracker) {
-        this.tracker = tracker;
+    BusinessObject() {
         id = UUID.randomUUID().toString();
         timestamp = System.nanoTime();
+    }
+
+    /**
+     * Super constructor
+     *
+     * @param tracker Tracker
+     */
+    BusinessObject(Tracker tracker) {
+        this();
+        this.tracker = tracker;
     }
 }

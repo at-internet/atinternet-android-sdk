@@ -22,18 +22,11 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+@Deprecated
 public class Campaigns {
 
-    /**
-     * Tracker instance
-     */
     private final Tracker tracker;
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     Campaigns(Tracker tracker) {
         this.tracker = tracker;
     }

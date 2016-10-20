@@ -31,54 +31,20 @@ public class ParamOption {
         none, first, last, before, after
     }
 
-    /**
-     * Relative position parameter
-     */
     private RelativePosition relativePosition;
-
-    /**
-     * Relative position parameter key
-     */
     private String relativeParameterKey;
-
-    /**
-     * Encoding parameter
-     */
     private boolean encode;
-
-    /**
-     * Separator for list
-     */
     private String separator;
-
-    /**
-     * Persistent or volatile
-     */
     private boolean persistent;
-
-    /**
-     * Option to append data into a same parameter
-     */
     private boolean append;
 
     /**
      * Get relative position
      *
-     * @return RelativePosition
+     * @return ParamOption.RelativePosition
      */
     public RelativePosition getRelativePosition() {
         return relativePosition;
-    }
-
-    /**
-     * Set a new relative position
-     *
-     * @param relativePosition RelativePosition
-     * @return ParamOption
-     */
-    public ParamOption setRelativePosition(RelativePosition relativePosition) {
-        this.relativePosition = relativePosition;
-        return this;
     }
 
     /**
@@ -88,6 +54,53 @@ public class ParamOption {
      */
     public String getRelativeParameterKey() {
         return relativeParameterKey;
+    }
+
+    /**
+     * Encoding parameter
+     *
+     * @return boolean
+     */
+    public boolean isEncode() {
+        return encode;
+    }
+
+    /**
+     * Get separator
+     *
+     * @return String
+     */
+    public String getSeparator() {
+        return separator;
+    }
+
+    /**
+     * Persistent or volatile
+     *
+     * @return boolean
+     */
+    public boolean isPersistent() {
+        return persistent;
+    }
+
+    /**
+     * Get append value
+     *
+     * @return boolean
+     */
+    public boolean isAppend() {
+        return append;
+    }
+
+    /**
+     * Set a new relative position
+     *
+     * @param relativePosition ParamOption.RelativePosition
+     * @return ParamOption
+     */
+    public ParamOption setRelativePosition(RelativePosition relativePosition) {
+        this.relativePosition = relativePosition;
+        return this;
     }
 
     /**
@@ -102,15 +115,6 @@ public class ParamOption {
     }
 
     /**
-     * Encoding parameter
-     *
-     * @return boolean
-     */
-    public boolean isEncode() {
-        return encode;
-    }
-
-    /**
      * Set encoding
      *
      * @param encode boolean
@@ -119,15 +123,6 @@ public class ParamOption {
     public ParamOption setEncode(boolean encode) {
         this.encode = encode;
         return this;
-    }
-
-    /**
-     * Get separator
-     *
-     * @return String
-     */
-    public String getSeparator() {
-        return separator;
     }
 
     /**
@@ -142,15 +137,6 @@ public class ParamOption {
     }
 
     /**
-     * Persistent or volatile
-     *
-     * @return boolean
-     */
-    public boolean isPersistent() {
-        return persistent;
-    }
-
-    /**
      * Set persistent value
      *
      * @param isPermanent boolean
@@ -159,15 +145,6 @@ public class ParamOption {
     public ParamOption setPersistent(boolean isPermanent) {
         this.persistent = isPermanent;
         return this;
-    }
-
-    /**
-     * Get append value
-     *
-     * @return boolean
-     */
-    public boolean isAppend() {
-        return append;
     }
 
     /**
@@ -182,7 +159,7 @@ public class ParamOption {
     }
 
     /**
-     * Init a parameter option
+     * Init ParamOption
      */
     public ParamOption() {
         relativePosition = RelativePosition.none;

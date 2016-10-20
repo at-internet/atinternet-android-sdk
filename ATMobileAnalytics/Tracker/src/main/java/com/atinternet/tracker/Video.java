@@ -26,60 +26,125 @@ public class Video extends RichMedia {
 
     private int duration;
 
+    /**
+     * Get duration
+     *
+     * @return int
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * Set a new duration
+     *
+     * @param duration int
+     * @return Video
+     */
     public Video setDuration(int duration) {
         this.duration = duration;
 
         return this;
     }
 
+    /**
+     * Set an new name
+     *
+     * @param name String
+     * @return Video
+     */
     public Video setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Set a new level 2
+     *
+     * @param level2 int
+     * @return Video
+     */
     public Video setLevel2(int level2) {
         this.level2 = level2;
 
         return this;
     }
 
+    /**
+     * Change boolean isBuffering value
+     *
+     * @param isBuffering boolean
+     * @return Video
+     */
     public Video setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
 
         return this;
     }
 
+    /**
+     * Change boolean isEmbedded value
+     *
+     * @param isEmbedded boolean
+     * @return Video
+     */
     public Video setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
         return this;
     }
 
+    /**
+     * Set a new first chapter
+     *
+     * @param chapter1 String
+     * @return Video
+     */
     public Video setChapter1(String chapter1) {
         this.chapter1 = chapter1;
         return this;
     }
 
+    /**
+     * Set a new second chapter
+     *
+     * @param chapter2 String
+     * @return Video
+     */
     public Video setChapter2(String chapter2) {
         this.chapter2 = chapter2;
         return this;
     }
 
+    /**
+     * Set a new third chapter
+     *
+     * @param chapter3 String
+     * @return Video
+     */
     public Video setChapter3(String chapter3) {
         this.chapter3 = chapter3;
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action RichMedia.Action
+     * @return Video
+     */
     public Video setAction(Action action) {
         this.action = action;
 
         return this;
     }
 
+    /**
+     * Set a new webdomain
+     *
+     * @param webDomain String
+     * @return Video
+     */
     public Video setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
@@ -98,6 +163,6 @@ public class Video extends RichMedia {
         if (duration > MAX_DURATION) {
             duration = MAX_DURATION;
         }
-        tracker.setParam("m1", duration);
+        tracker.setParam(Hit.HitParam.MediaDuration.stringValue(), duration);
     }
 }

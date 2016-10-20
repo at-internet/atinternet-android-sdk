@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -87,6 +88,11 @@ public class Tracker {
     private Buffer buffer;
 
     /**
+     * User Id member
+     */
+    private String internalUserId;
+
+    /**
      * Contains Tracker configuration
      */
     private final Configuration configuration;
@@ -99,7 +105,7 @@ public class Tracker {
     /**
      * Business Object
      */
-    private final LinkedHashMap<String, BusinessObject> businessObjects = new LinkedHashMap<String, BusinessObject>();
+    private final LinkedHashMap<String, BusinessObject> businessObjects = new LinkedHashMap<>();
 
     /**
      * Screen tracking
@@ -212,6 +218,11 @@ public class Tracker {
     private MediaPlayers mediaPlayers;
 
     /**
+     * Boolean to detect if activity lifecycle tracking is enabled
+     */
+    private static boolean isTrackerActivityLifeCycleEnabled = false;
+
+    /**
      * Get the current configuration
      *
      * @return LinkedHashMap
@@ -230,64 +241,7 @@ public class Tracker {
     }
 
     /**
-     * Get buffer
-     *
-     * @return Buffer
-     */
-    Buffer getBuffer() {
-        return buffer;
-    }
-
-    /**
-     * Get Storage instance
-     *
-     * @return Storage
-     */
-    static Storage getStorage() {
-        return storage;
-    }
-
-    /**
-     * Get Business Object
-     *
-     * @return LinkedHashMap
-     */
-    LinkedHashMap<String, BusinessObject> getBusinessObjects() {
-        return businessObjects;
-    }
-
-    /**
-     * Get the dispatcher
-     *
-     * @return Dispatcher
-     */
-    Dispatcher getDispatcher() {
-        return dispatcher;
-    }
-
-    /**
-     * Get the application context
-     *
-     * @return Context
-     */
-    static android.content.Context getAppContext() {
-        return appContext;
-    }
-
-    /**
-     * Get Preferences
-     */
-    static SharedPreferences getPreferences() {
-        return appContext.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
-    }
-
-    /**
-     * Boolean to detect if activity lifecycle tracking is enabled
-     */
-    static boolean isTrackerActivityLifeCycleEnabled = false;
-
-    /**
-     * Get user ID for webview
+     * Asynchronous method to get user ID for webview
      *
      * @param callback UserIdCallback
      */
@@ -307,6 +261,18 @@ public class Tracker {
                 }
             }
         });
+    }
+
+    /**
+     * Get user id (require one hit sent)
+     *
+     * @return String
+     */
+    public String getUserIdSync() {
+        if (internalUserId == null) {
+            Tool.executeCallback(listener, CallbackType.warning, "User id must be set");
+        }
+        return internalUserId;
     }
 
     /**
@@ -346,6 +312,15 @@ public class Tracker {
     }
 
     /**
+     * Get Context instance
+     *
+     * @return Context
+     */
+    public Context Context() {
+        return context == null ? (context = new Context(this)) : context;
+    }
+
+    /**
      * Get TVTracking instance
      *
      * @return TVTracking
@@ -361,15 +336,6 @@ public class Tracker {
      */
     public NuggAds NuggAds() {
         return nuggAds == null ? (nuggAds = new NuggAds(this)) : nuggAds;
-    }
-
-    /**
-     * Get Context instance
-     *
-     * @return Context
-     */
-    public Context Context() {
-        return context == null ? (context = new Context(this)) : context;
     }
 
     /**
@@ -409,84 +375,12 @@ public class Tracker {
     }
 
     /**
-     * Get GPS instance
-     *
-     * @return GPS
-     */
-    public Locations Locations() {
-        return locations == null ? (locations = new Locations(this)) : locations;
-    }
-
-    /**
-     * Get CustomVars instance
-     *
-     * @return CustomVars
-     */
-    public CustomVars CustomVars() {
-        return customVars == null ? (customVars = new CustomVars(this)) : customVars;
-    }
-
-    /**
-     * Get Orders instance
-     *
-     * @return Orders
-     */
-    public Orders Orders() {
-        return orders == null ? (orders = new Orders(this)) : orders;
-    }
-
-    /**
-     * Get Cart instance
-     *
-     * @return Cart
-     */
-    public Cart Cart() {
-        return cart == null ? (cart = new Cart(this)) : cart;
-    }
-
-    /**
-     * Get Aisles instance
-     *
-     * @return Aisles
-     */
-    public Aisles Aisles() {
-        return aisles == null ? (aisles = new Aisles(this)) : aisles;
-    }
-
-    /**
-     * Get Campaigns instance
-     *
-     * @return Campaigns
-     */
-    public Campaigns Campaigns() {
-        return campaigns == null ? (campaigns = new Campaigns(this)) : campaigns;
-    }
-
-    /**
-     * Get InternalSearches instance
-     *
-     * @return InternalSearches
-     */
-    public InternalSearches InternalSearches() {
-        return internalSearches == null ? (internalSearches = new InternalSearches(this)) : internalSearches;
-    }
-
-    /**
      * Get DynamicLabels instance
      *
      * @return DynamicScreens
      */
     public DynamicScreens DynamicScreens() {
         return dynamicScreens == null ? (dynamicScreens = new DynamicScreens(this)) : dynamicScreens;
-    }
-
-    /**
-     * Get CustomTreeStructures instance
-     *
-     * @return CustomTreeStructures
-     */
-    public CustomTreeStructures CustomTreeStructures() {
-        return customTreeStructures == null ? (customTreeStructures = new CustomTreeStructures(this)) : customTreeStructures;
     }
 
     /**
@@ -499,6 +393,15 @@ public class Tracker {
     }
 
     /**
+     * Get Cart instance
+     *
+     * @return Cart
+     */
+    public Cart Cart() {
+        return cart == null ? (cart = new Cart(this)) : cart;
+    }
+
+    /**
      * Get Players instance
      *
      * @return Players
@@ -507,6 +410,89 @@ public class Tracker {
         return mediaPlayers == null ? (mediaPlayers = new MediaPlayers(this)) : mediaPlayers;
     }
 
+    /**
+     * Get GPS instance
+     *
+     * @return GPS
+     * @deprecated Since 2.3.0, Location is now only available as a screen object property.
+     */
+    @Deprecated
+    public Locations Locations() {
+        return locations == null ? (locations = new Locations(this)) : locations;
+    }
+
+    /**
+     * Get CustomVars instance
+     *
+     * @return CustomVars
+     * @deprecated Since 2.3.0, CustomVars is now only available as a screen object property.
+     */
+    @Deprecated
+    public CustomVars CustomVars() {
+        return customVars == null ? (customVars = new CustomVars(this)) : customVars;
+    }
+
+    /**
+     * Get Aisles instance
+     *
+     * @return Aisles
+     * @deprecated Since 2.3.0, Aisles is now only available as a screen object property.
+     */
+    @Deprecated
+    public Aisles Aisles() {
+        return aisles == null ? (aisles = new Aisles(this)) : aisles;
+    }
+
+    /**
+     * Get Campaigns instance
+     *
+     * @return Campaigns
+     * @deprecated Since 2.3.0, Campaign is now only available as a screen object property.
+     */
+    @Deprecated
+    public Campaigns Campaigns() {
+        return campaigns == null ? (campaigns = new Campaigns(this)) : campaigns;
+    }
+
+    /**
+     * Get CustomTreeStructures instance
+     *
+     * @return CustomTreeStructures
+     * @deprecated Since 2.3.0, CustomTreeStructure is now only available as a screen object property.
+     */
+    @Deprecated
+    public CustomTreeStructures CustomTreeStructures() {
+        return customTreeStructures == null ? (customTreeStructures = new CustomTreeStructures(this)) : customTreeStructures;
+    }
+
+    /**
+     * Get InternalSearches instance
+     *
+     * @return InternalSearches
+     * @deprecated Since 2.3.0, InternalSearch is now only available as a screen or gesture object property.
+     */
+    @Deprecated
+    public InternalSearches InternalSearches() {
+        return internalSearches == null ? (internalSearches = new InternalSearches(this)) : internalSearches;
+    }
+
+    /**
+     * Get Orders instance
+     *
+     * @return Orders
+     * @deprecated Since 2.3.0, Order is now only available as a screen object property.
+     */
+    @Deprecated
+    public Orders Orders() {
+        return orders == null ? (orders = new Orders(this)) : orders;
+    }
+
+    /**
+     * Asynchronous method to set a new log
+     *
+     * @param log               String
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setLog(String log, SetConfigCallback setConfigCallback) {
         if (TextUtils.isEmpty(log)) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for log, default value retained");
@@ -515,6 +501,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new secured log
+     *
+     * @param securedLog        String
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setSecuredLog(String securedLog, SetConfigCallback setConfigCallback) {
         if (TextUtils.isEmpty(securedLog)) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for secured log, default value retained");
@@ -523,6 +515,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new domain
+     *
+     * @param domain            String
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setDomain(String domain, SetConfigCallback setConfigCallback) {
         if (TextUtils.isEmpty(domain)) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for domain, default value retained");
@@ -531,6 +529,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new siteId
+     *
+     * @param siteId            int
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setSiteId(int siteId, SetConfigCallback setConfigCallback) {
         if (siteId <= 0) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for site id, default value retained");
@@ -539,6 +543,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new offline mode
+     *
+     * @param offlineMode       OfflineMode
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setOfflineMode(OfflineMode offlineMode, SetConfigCallback setConfigCallback) {
         if (offlineMode == null) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for offline mode, default value retained");
@@ -547,10 +557,22 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to enable secure mode
+     *
+     * @param enabled           boolean
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setSecureModeEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
         setConfig(TrackerConfigurationKeys.SECURE, enabled, setConfigCallback);
     }
 
+    /**
+     * Asynchronous method to set a new identifier type
+     *
+     * @param identifierType    IdentifierType
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setIdentifierType(IdentifierType identifierType, SetConfigCallback setConfigCallback) {
         if (identifierType == null) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for identifier type, default value retained");
@@ -559,10 +581,22 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to enable hash user id
+     *
+     * @param enabled           boolean
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setHashUserIdEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
         setConfig(TrackerConfigurationKeys.HASH_USER_ID, enabled, setConfigCallback);
     }
 
+    /**
+     * Asynchronous method to set new plugins
+     *
+     * @param plugins           List
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setPlugins(List<PluginKey> plugins, SetConfigCallback setConfigCallback) {
         if (plugins == null) {
             setConfig(TrackerConfigurationKeys.PLUGINS, "", setConfigCallback);
@@ -581,6 +615,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set new plugins
+     *
+     * @param pixelPath         String
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setPixelPath(String pixelPath, SetConfigCallback setConfigCallback) {
         if (TextUtils.isEmpty(pixelPath)) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for pixel path, default value retained");
@@ -589,10 +629,22 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to enable persistent identified visitor
+     *
+     * @param enabled           boolean
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setPersistentIdentifiedVisitorEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
         setConfig(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR, enabled, setConfigCallback);
     }
 
+    /**
+     * Asynchronous method to set a new TVTracking url
+     *
+     * @param url               String
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setTvTrackingUrl(String url, SetConfigCallback setConfigCallback) {
         if (TextUtils.isEmpty(url)) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for tv tracking url, default value retained");
@@ -601,6 +653,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new TVTracking visit duration
+     *
+     * @param visitDuration     int
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setTvTrackingVisitDuration(int visitDuration, SetConfigCallback setConfigCallback) {
         if (visitDuration <= 0) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for tv tracking visit duration, default value retained");
@@ -609,6 +667,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new TVTracking spot validity time
+     *
+     * @param time              int
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setTvTrackingSpotValidityTime(int time, SetConfigCallback setConfigCallback) {
         if (time <= 0) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for tv tracking spot validity time, default value retained");
@@ -617,14 +681,32 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to enable crash detection
+     *
+     * @param enabled           boolean
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setCrashDetectionEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
         setConfig(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION, enabled, setConfigCallback);
     }
 
+    /**
+     * Asynchronous method to enable last persistence campaign
+     *
+     * @param enabled           boolean
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setCampaignLastPersistenceEnabled(boolean enabled, SetConfigCallback setConfigCallback) {
         setConfig(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE, enabled, setConfigCallback);
     }
 
+    /**
+     * Asynchronous method to set a new campaign lifetime
+     *
+     * @param lifetime          int
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setCampaignLifetime(int lifetime, SetConfigCallback setConfigCallback) {
         if (lifetime <= 0) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for campaign lifetime, default value retained");
@@ -633,6 +715,12 @@ public class Tracker {
         }
     }
 
+    /**
+     * Asynchronous method to set a new session background duration
+     *
+     * @param duration          int
+     * @param setConfigCallback SetConfigCallback
+     */
     public void setSessionBackgroundDuration(int duration, SetConfigCallback setConfigCallback) {
         if (duration <= 0) {
             Tool.executeCallback(listener, CallbackType.warning, "Bad value for session background duration, default value retained");
@@ -641,6 +729,11 @@ public class Tracker {
         }
     }
 
+    /**
+     * Create a default listener
+     *
+     * @return TrackerListener
+     */
     public TrackerListener createDefaultTrackerListener() {
         return new TrackerListener() {
             @Override
@@ -681,7 +774,7 @@ public class Tracker {
     }
 
     /**
-     * Set a new configuration
+     * Asynchronous method to set a new configuration
      *
      * @param conf              HashMap
      * @param override          boolean
@@ -702,16 +795,16 @@ public class Tracker {
                         Tool.executeCallback(listener, CallbackType.warning, "Cannot to overwrite " + key + " configuration");
                     }
                 }
+                refreshConfigurationDependencies();
                 if (setConfigCallback != null) {
                     setConfigCallback.setConfigEnd();
                 }
-                refreshConfigurationDependencies();
             }
         });
     }
 
     /**
-     * Change a configuration value for an existing key
+     * Asynchronous method to change a configuration value for an existing key
      *
      * @param key               String
      * @param value             Object
@@ -738,68 +831,27 @@ public class Tracker {
      * Set a new listener
      *
      * @param trackerListener TrackerListener
+     * @return Tracker
      */
-    public void setListener(TrackerListener trackerListener) {
+    public Tracker setListener(TrackerListener trackerListener) {
         this.listener = trackerListener;
         if (getPreferences().getBoolean(LifeCycle.FIRST_SESSION, false)) {
             listener.trackerNeedsFirstLaunchApproval("Tracker First Launch");
         }
+        return this;
     }
 
     /**
-     * Changes all the values concerned by configuration overriding
-     */
-    private void refreshConfigurationDependencies() {
-        String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
-        String offlineMode = String.valueOf(configuration.get(TrackerConfigurationKeys.OFFLINE_MODE));
-        boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
-
-        if (!TextUtils.isEmpty(identifierKey)) {
-            buffer.setIdentifierKey(identifierKey);
-        }
-        if (!TextUtils.isEmpty(offlineMode)) {
-            storage.setOfflineMode(Tool.convertStringToOfflineMode(offlineMode));
-        }
-
-        if (enableCrashDetectionHandler) {
-            if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
-            }
-        } else {
-            if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {
-                Thread.setDefaultUncaughtExceptionHandler(defaultCrashHandler);
-            }
-        }
-    }
-
-    /**
-     * Method to init tracker properties
+     * Set a default tracker listener
      *
-     * @param context Context
+     * @return Tracker
      */
-    private void initTracker(android.content.Context context) {
-        listener = null;
-        appContext = context.getApplicationContext();
-        defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
-        storage = new Storage(context);
-        storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE)));
-        buffer = new Buffer(this);
-        dispatcher = new Dispatcher(this);
-        if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
+    public Tracker setDefaultListener() {
+        this.listener = createDefaultTrackerListener();
+        if (getPreferences().getBoolean(LifeCycle.FIRST_SESSION, false)) {
+            listener.trackerNeedsFirstLaunchApproval("Tracker First Launch");
         }
-        getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
-
-        if (!isTrackerActivityLifeCycleEnabled) {
-            setTrackerActivityLifecycle();
-        }
-    }
-
-    private void setTrackerActivityLifecycle() {
-        isTrackerActivityLifeCycleEnabled = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            ((Application) appContext).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(configuration));
-        }
+        return this;
     }
 
     /**
@@ -850,151 +902,6 @@ public class Tracker {
      */
     public static boolean doNotTrackEnabled() {
         return TechnicalContext.doNotTrackEnabled(appContext);
-    }
-
-    /**
-     * Add a parameter in the hit querystring
-     *
-     * @param key   String
-     * @param value Closure
-     * @return Tracker
-     */
-    private Tracker setParam(String key, Closure value, Type type) {
-        // Check whether the parameter is not in read only mode
-        if (!Lists.getReadOnlyParams().contains(key)) {
-            Param p = new Param(key, value, type);
-            ArrayList<int[]> positions = Tool.findParameterPosition(key, buffer.getPersistentParams(), buffer.getVolatileParams());
-
-            // Check if parameter is already set
-            if (!positions.isEmpty()) {
-                // If found, change parameter value in appropriate buffer array
-                boolean isFirst = true;
-                for (int[] indexTab : positions) {
-                    int idArray = indexTab[0];
-                    int position = indexTab[1];
-                    if (isFirst) {
-                        if (idArray == 0) {
-                            buffer.getPersistentParams().set(position, p);
-                        } else {
-                            buffer.getVolatileParams().set(position, p);
-                        }
-                        isFirst = false;
-                    } else if (idArray == 0) {
-                        buffer.getPersistentParams().remove(position);
-                    } else {
-                        buffer.getVolatileParams().remove(position);
-                    }
-                }
-            } else {
-                // If not found, append parameter to volatile buffer
-                buffer.getVolatileParams().add(p);
-            }
-        } else {
-            Tool.executeCallback(listener, CallbackType.warning, String.format("Param %s is read only. Value will not be updated", key));
-        }
-
-        return this;
-    }
-
-    /**
-     * Add a parameter in the hit querystring
-     *
-     * @param key     String
-     * @param value   Closure
-     * @param options ParamOption
-     * @return Tracker
-     */
-    private Tracker setParam(String key, Closure value, Type type, ParamOption options) {
-        // Check whether the parameter is not in read only mode
-        if (!Lists.getReadOnlyParams().contains(key)) {
-            Param p = new Param(key, value, type, options);
-            ArrayList<int[]> positions = Tool.findParameterPosition(key, buffer.getPersistentParams(), buffer.getVolatileParams());
-
-            if (options.isAppend()) {
-                // Check if parameter is already set
-                for (int[] indexTab : positions) {
-                    int idArray = indexTab[0];
-                    int index = indexTab[1];
-                    // If new parameter is set to be persistent we move old parameters into the right buffer array
-                    if (options.isPersistent() && idArray == 1) {
-                        // If old parameter was in volatile buffer, we place it into the persistent buffer
-                        Param existingParam = buffer.getVolatileParams().remove(index);
-                        buffer.getPersistentParams().add(existingParam);
-                    } else if (idArray == 0) {
-                        Param existingParam = buffer.getPersistentParams().remove(index);
-                        buffer.getVolatileParams().add(existingParam);
-                    }
-                }
-                if (options.isPersistent()) {
-                    buffer.getPersistentParams().add(p);
-                } else {
-                    buffer.getVolatileParams().add(p);
-                }
-            } else {
-                // Check if parameter is already set
-                if (!positions.isEmpty()) {
-                    boolean isFirst = true;
-                    // If found, replace first parameter with new value and delete others in appropriate buffer array
-                    for (int[] indexTab : positions) {
-                        int idArray = indexTab[0];
-                        int index = indexTab[1];
-                        if (isFirst) {
-                            if (idArray == 0) {
-                                if (options.isPersistent()) {
-                                    buffer.getPersistentParams().set(index, p);
-                                } else {
-                                    buffer.getPersistentParams().remove(index);
-                                    buffer.getVolatileParams().add(p);
-                                }
-                            } else {
-                                if (options.isPersistent()) {
-                                    buffer.getVolatileParams().remove(index);
-                                    buffer.getPersistentParams().add(p);
-                                } else {
-                                    buffer.getVolatileParams().set(index, p);
-                                }
-                            }
-                            isFirst = false;
-                        } else if (idArray == 0) {
-                            buffer.getPersistentParams().remove(index);
-                        } else {
-                            buffer.getVolatileParams().remove(index);
-                        }
-                    }
-                } else if (options.isPersistent()) {
-                    buffer.getPersistentParams().add(p);
-                } else {
-                    buffer.getVolatileParams().add(p);
-                }
-            }
-        } else {
-            Tool.executeCallback(listener, CallbackType.warning, String.format("Param %s is read only. Value will not be updated", key));
-        }
-
-        return this;
-    }
-
-    /**
-     * Add a parameter in the hit querystring
-     *
-     * @param key   String
-     * @param value Closure
-     * @return Tracker
-     */
-    public Tracker setParam(String key, Closure value) {
-        return setParam(key, value, Type.Closure);
-    }
-
-    /**
-     * Add a parameter in the hit querystring
-     *
-     * @param key     String
-     * @param value   Closure
-     * @param options ParamOption
-     * @return Tracker
-     */
-    public Tracker setParam(String key, Closure value, ParamOption options) {
-        return setParam(key, value, Type.Closure, options);
     }
 
     /**
@@ -1190,28 +1097,6 @@ public class Tracker {
     }
 
     /**
-     * Convert a value type to closure
-     *
-     * @param key     String
-     * @param value   Object
-     * @param options ParamOption
-     * @return Tracker
-     */
-    private Tracker handleNotClosureStringParameterSetting(String key, final Object value, Type type, final ParamOption... options) {
-        Closure stringValue = new Closure() {
-            @Override
-            public String execute() {
-                return Tool.convertToString(value, options.length > 0 ? options[0].getSeparator() : ",");
-            }
-        };
-        if (options.length > 0) {
-            return setParam(key, stringValue, type, options[0]);
-        } else {
-            return setParam(key, stringValue, type);
-        }
-    }
-
-    /**
      * Remove a parameter from the hit querystring
      *
      * @param key String
@@ -1236,15 +1121,15 @@ public class Tracker {
      */
     public void dispatch() {
         if (businessObjects.size() > 0) {
-            ArrayList<BusinessObject> onAppAds = new ArrayList<BusinessObject>();
-            ArrayList<BusinessObject> customObjects = new ArrayList<BusinessObject>();
+            ArrayList<BusinessObject> onAppAds = new ArrayList<>();
+            ArrayList<BusinessObject> customObjects = new ArrayList<>();
             ArrayList<BusinessObject> objects = new ArrayList<BusinessObject>() {{
                 addAll(businessObjects.values());
             }};
-            ArrayList<BusinessObject> screenObjects = new ArrayList<BusinessObject>();
-            ArrayList<BusinessObject> salesTrackerObjects = new ArrayList<BusinessObject>();
-            ArrayList<BusinessObject> internalSearchObjects = new ArrayList<BusinessObject>();
-            ArrayList<BusinessObject> productsObjects = new ArrayList<BusinessObject>();
+            ArrayList<BusinessObject> screenObjects = new ArrayList<>();
+            ArrayList<BusinessObject> salesTrackerObjects = new ArrayList<>();
+            ArrayList<BusinessObject> internalSearchObjects = new ArrayList<>();
+            ArrayList<BusinessObject> productsObjects = new ArrayList<>();
 
             for (BusinessObject businessObject : objects) {
 
@@ -1283,7 +1168,7 @@ public class Tracker {
                     onAppAds.addAll(internalSearchObjects);
 
                     //Sales tracker
-                    ArrayList<BusinessObject> orders = new ArrayList<BusinessObject>();
+                    ArrayList<BusinessObject> orders = new ArrayList<>();
                     Cart cart = null;
 
                     for (BusinessObject obj : salesTrackerObjects) {
@@ -1339,7 +1224,217 @@ public class Tracker {
         }
     }
 
-    void dispatchObjects(ArrayList<BusinessObject> objects, ArrayList<BusinessObject> customObjects) {
+    Buffer getBuffer() {
+        return buffer;
+    }
+
+    static Storage getStorage() {
+        return storage;
+    }
+
+    LinkedHashMap<String, BusinessObject> getBusinessObjects() {
+        return businessObjects;
+    }
+
+    Dispatcher getDispatcher() {
+        return dispatcher;
+    }
+
+    static android.content.Context getAppContext() {
+        return appContext;
+    }
+
+    static SharedPreferences getPreferences() {
+        return appContext.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+    }
+
+    String getInternalUserId() {
+        return internalUserId;
+    }
+
+    void setInternalUserId(String internalUserId) {
+        this.internalUserId = internalUserId;
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void setTrackerActivityLifecycle() {
+        isTrackerActivityLifeCycleEnabled = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            ((Application) appContext).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(configuration));
+        }
+    }
+
+    private void initTracker(android.content.Context context) {
+        listener = null;
+        appContext = context.getApplicationContext();
+        defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
+        storage = new Storage(context);
+        storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE)));
+        buffer = new Buffer(this);
+        dispatcher = new Dispatcher(this);
+        if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+            Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
+        }
+        getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
+
+        if (!isTrackerActivityLifeCycleEnabled) {
+            setTrackerActivityLifecycle();
+        }
+    }
+
+    private Tracker setParam(String key, Closure value, Type type) {
+        // Check whether the parameter is not in read only mode
+        if (!Lists.getReadOnlyParams().contains(key)) {
+            Param p = new Param(key, value, type);
+            ArrayList<int[]> positions = Tool.findParameterPosition(key, buffer.getPersistentParams(), buffer.getVolatileParams());
+
+            // Check if parameter is already set
+            if (!positions.isEmpty()) {
+                // If found, change parameter value in appropriate buffer array
+                boolean isFirst = true;
+                for (int[] indexTab : positions) {
+                    int idArray = indexTab[0];
+                    int position = indexTab[1];
+                    if (isFirst) {
+                        if (idArray == 0) {
+                            buffer.getPersistentParams().set(position, p);
+                        } else {
+                            buffer.getVolatileParams().set(position, p);
+                        }
+                        isFirst = false;
+                    } else if (idArray == 0) {
+                        buffer.getPersistentParams().remove(position);
+                    } else {
+                        buffer.getVolatileParams().remove(position);
+                    }
+                }
+            } else {
+                // If not found, append parameter to volatile buffer
+                buffer.getVolatileParams().add(p);
+            }
+        } else {
+            Tool.executeCallback(listener, CallbackType.warning, String.format("Param %s is read only. Value will not be updated", key));
+        }
+
+        return this;
+    }
+
+    private Tracker setParam(String key, Closure value, Type type, ParamOption options) {
+        // Check whether the parameter is not in read only mode
+        if (!Lists.getReadOnlyParams().contains(key)) {
+            Param p = new Param(key, value, type, options);
+            ArrayList<int[]> positions = Tool.findParameterPosition(key, buffer.getPersistentParams(), buffer.getVolatileParams());
+
+            if (options.isAppend()) {
+                // Check if parameter is already set
+                for (int[] indexTab : positions) {
+                    int idArray = indexTab[0];
+                    int index = indexTab[1];
+                    // If new parameter is set to be persistent we move old parameters into the right buffer array
+                    if (options.isPersistent() && idArray == 1) {
+                        // If old parameter was in volatile buffer, we place it into the persistent buffer
+                        Param existingParam = buffer.getVolatileParams().remove(index);
+                        buffer.getPersistentParams().add(existingParam);
+                    } else if (idArray == 0) {
+                        Param existingParam = buffer.getPersistentParams().remove(index);
+                        buffer.getVolatileParams().add(existingParam);
+                    }
+                }
+                if (options.isPersistent()) {
+                    buffer.getPersistentParams().add(p);
+                } else {
+                    buffer.getVolatileParams().add(p);
+                }
+            } else {
+                // Check if parameter is already set
+                if (!positions.isEmpty()) {
+                    boolean isFirst = true;
+                    // If found, replace first parameter with new value and delete others in appropriate buffer array
+                    for (int[] indexTab : positions) {
+                        int idArray = indexTab[0];
+                        int index = indexTab[1];
+                        if (isFirst) {
+                            if (idArray == 0) {
+                                if (options.isPersistent()) {
+                                    buffer.getPersistentParams().set(index, p);
+                                } else {
+                                    buffer.getPersistentParams().remove(index);
+                                    buffer.getVolatileParams().add(p);
+                                }
+                            } else {
+                                if (options.isPersistent()) {
+                                    buffer.getVolatileParams().remove(index);
+                                    buffer.getPersistentParams().add(p);
+                                } else {
+                                    buffer.getVolatileParams().set(index, p);
+                                }
+                            }
+                            isFirst = false;
+                        } else if (idArray == 0) {
+                            buffer.getPersistentParams().remove(index);
+                        } else {
+                            buffer.getVolatileParams().remove(index);
+                        }
+                    }
+                } else if (options.isPersistent()) {
+                    buffer.getPersistentParams().add(p);
+                } else {
+                    buffer.getVolatileParams().add(p);
+                }
+            }
+        } else {
+            Tool.executeCallback(listener, CallbackType.warning, String.format("Param %s is read only. Value will not be updated", key));
+        }
+
+        return this;
+    }
+
+    Tracker setParam(String key, Closure value) {
+        return setParam(key, value, Type.Closure);
+    }
+
+    Tracker setParam(String key, Closure value, ParamOption options) {
+        return setParam(key, value, Type.Closure, options);
+    }
+
+    private void refreshConfigurationDependencies() {
+        String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
+        String offlineMode = String.valueOf(configuration.get(TrackerConfigurationKeys.OFFLINE_MODE));
+        boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
+
+        if (!TextUtils.isEmpty(identifierKey)) {
+            buffer.setIdentifierKey(identifierKey);
+        }
+        if (!TextUtils.isEmpty(offlineMode)) {
+            storage.setOfflineMode(Tool.convertStringToOfflineMode(offlineMode));
+        }
+
+        if (enableCrashDetectionHandler) {
+            if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
+            }
+        } else {
+            if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {
+                Thread.setDefaultUncaughtExceptionHandler(defaultCrashHandler);
+            }
+        }
+    }
+
+    private Tracker handleNotClosureStringParameterSetting(String key, final Object value, Type type, final ParamOption... options) {
+        Closure stringValue = new Closure() {
+            @Override
+            public String execute() {
+                return Tool.convertToString(value, options.length > 0 ? options[0].getSeparator() : ",");
+            }
+        };
+        if (options.length > 0) {
+            return setParam(key, stringValue, type, options[0]);
+        } else {
+            return setParam(key, stringValue, type);
+        }
+    }
+
+    private void dispatchObjects(ArrayList<BusinessObject> objects, ArrayList<BusinessObject> customObjects) {
         if (!objects.isEmpty()) {
             objects.addAll(customObjects);
             dispatcher.dispatch((BusinessObject[]) objects.toArray(new BusinessObject[objects.size()]));

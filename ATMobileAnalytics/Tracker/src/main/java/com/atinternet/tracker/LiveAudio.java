@@ -24,56 +24,104 @@ package com.atinternet.tracker;
 
 public class LiveAudio extends RichMedia {
 
+    /**
+     * Set a new name
+     *
+     * @param name String
+     * @return LiveAudio
+     */
     public LiveAudio setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Set a new level2
+     *
+     * @param level2 int
+     * @return LiveAudio
+     */
     public LiveAudio setLevel2(int level2) {
         this.level2 = level2;
 
         return this;
     }
 
+    /**
+     * Change boolean isBuffering value
+     *
+     * @param isBuffering boolean
+     * @return LiveAudio
+     */
     public LiveAudio setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
 
         return this;
     }
 
+    /**
+     * Change boolean isEmbedded value
+     *
+     * @param isEmbedded boolean
+     * @return LiveAudio
+     */
     public LiveAudio setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
         return this;
     }
 
-    LiveAudio setBroadcastMode(BroadcastMode broadcastMode) {
-        this.broadcastMode = broadcastMode;
-
-        return this;
-    }
-
+    /**
+     * Set a new first chapter
+     *
+     * @param chapter1 String
+     * @return LiveAudio
+     */
     public LiveAudio setChapter1(String chapter1) {
         this.chapter1 = chapter1;
         return this;
     }
 
+    /**
+     * Set a new second chapter
+     *
+     * @param chapter2 String
+     * @return LiveAudio
+     */
     public LiveAudio setChapter2(String chapter2) {
         this.chapter2 = chapter2;
         return this;
     }
 
+    /**
+     * Set a new third chapter
+     *
+     * @param chapter3 String
+     * @return LiveAudio
+     */
     public LiveAudio setChapter3(String chapter3) {
         this.chapter3 = chapter3;
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action RichMedia.Action
+     * @return LiveAudio
+     */
     public LiveAudio setAction(Action action) {
         this.action = action;
 
         return this;
     }
 
+    /**
+     * Set a new webdomain
+     *
+     * @param webDomain String
+     * @return LiveAudio
+     */
     public LiveAudio setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;

@@ -27,21 +27,9 @@ import java.util.Date;
 
 public class Offline {
 
-    /**
-     * Storage instance
-     */
     private final Storage storage;
-
-    /**
-     * TrackerListener instance
-     */
     private final TrackerListener listener;
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     Offline(Tracker tracker) {
         storage = Tracker.getStorage();
         listener = tracker.getListener();

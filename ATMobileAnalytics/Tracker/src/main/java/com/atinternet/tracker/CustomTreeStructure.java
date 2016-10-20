@@ -26,44 +26,71 @@ public class CustomTreeStructure extends ScreenInfo {
 
     private static final String CUSTOM_TREE_FORMAT = "%1$s-%2$s-%3$s";
 
+
     private int category1;
-
     private int category2;
-
     private int category3;
 
+    /**
+     * Get the first category
+     *
+     * @return int
+     */
     public int getCategory1() {
         return category1;
     }
 
+    /**
+     * Get the second category
+     *
+     * @return int
+     */
     public int getCategory2() {
         return category2;
     }
 
+    /**
+     * Get the third category
+     *
+     * @return int
+     */
     public int getCategory3() {
         return category3;
     }
 
+    /**
+     * Set a new first category
+     *
+     * @param category1 int
+     * @return CustomTreeStructure
+     */
     public CustomTreeStructure setCategory1(int category1) {
         this.category1 = category1;
         return this;
     }
 
+    /**
+     * Set a new second category
+     *
+     * @param category2 int
+     * @return CustomTreeStructure
+     */
     public CustomTreeStructure setCategory2(int category2) {
         this.category2 = category2;
         return this;
     }
 
+    /**
+     * Set a new third category
+     *
+     * @param category3 int
+     * @return CustomTreeStructure
+     */
     public CustomTreeStructure setCategory3(int category3) {
         this.category3 = category3;
         return this;
     }
 
-    /**
-     * Super constructor
-     *
-     * @param tracker Tracker
-     */
     CustomTreeStructure(Tracker tracker) {
         super(tracker);
         category1 = 0;
@@ -73,6 +100,6 @@ public class CustomTreeStructure extends ScreenInfo {
 
     @Override
     void setEvent() {
-        tracker.setParam("ptype", String.format(CUSTOM_TREE_FORMAT, category1, category2, category3));
+        tracker.setParam(Hit.HitParam.CustomTreeStructure.stringValue(), String.format(CUSTOM_TREE_FORMAT, category1, category2, category3));
     }
 }

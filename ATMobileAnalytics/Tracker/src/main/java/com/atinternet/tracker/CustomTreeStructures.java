@@ -22,13 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * @deprecated Since 2.3.0, CustomTreeStructure is now only available as a screen object property.
+ */
+@Deprecated
 public class CustomTreeStructures extends Helper {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     CustomTreeStructures(Tracker tracker) {
         super(tracker);
     }

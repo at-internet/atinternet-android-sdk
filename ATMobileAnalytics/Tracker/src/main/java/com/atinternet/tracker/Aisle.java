@@ -32,63 +32,131 @@ public class Aisle extends ScreenInfo {
     private String level6;
 
 
+    /**
+     * Get the aisle first level
+     *
+     * @return String
+     */
     public String getLevel1() {
         return level1;
     }
 
+    /**
+     * Get the aisle second level
+     *
+     * @return String
+     */
     public String getLevel2() {
         return level2;
     }
 
+    /**
+     * Get the aisle third level
+     *
+     * @return String
+     */
     public String getLevel3() {
         return level3;
     }
 
+    /**
+     * Get the aisle fourth level
+     *
+     * @return String
+     */
     public String getLevel4() {
         return level4;
     }
 
+    /**
+     * Get the aisle fifth level
+     *
+     * @return String
+     */
     public String getLevel5() {
         return level5;
     }
 
+    /**
+     * Get the aisle sixth level
+     *
+     * @return String
+     */
     public String getLevel6() {
         return level6;
     }
 
+    /**
+     * Set a new first level
+     *
+     * @param level1 String
+     * @return Aisle
+     */
     public Aisle setLevel1(String level1) {
         this.level1 = level1;
         return this;
     }
 
+    /**
+     * Set a new second level
+     *
+     * @param level2 String
+     * @return Aisle
+     */
     public Aisle setLevel2(String level2) {
         this.level2 = level2;
         return this;
     }
 
+    /**
+     * Set a new third level
+     *
+     * @param level3 String
+     * @return Aisle
+     */
     public Aisle setLevel3(String level3) {
         this.level3 = level3;
         return this;
     }
 
+    /**
+     * Set a new fourth level
+     *
+     * @param level4 String
+     * @return Aisle
+     */
     public Aisle setLevel4(String level4) {
         this.level4 = level4;
         return this;
     }
 
+    /**
+     * Set a new fifth level
+     *
+     * @param level5 String
+     * @return Aisle
+     */
     public Aisle setLevel5(String level5) {
         this.level5 = level5;
         return this;
     }
 
+    /**
+     * Set a new sixth level
+     *
+     * @param level6 String
+     * @return Aisle
+     */
     public Aisle setLevel6(String level6) {
         this.level6 = level6;
         return this;
     }
 
+
     Aisle(Tracker tracker) {
         super(tracker);
     }
+
 
     @Override
     void setEvent() {
@@ -123,6 +191,6 @@ public class Aisle extends ScreenInfo {
             value += level6 == null ? "" : "::" + level6;
         }
 
-        tracker.setParam("aisl", value, new ParamOption().setEncode(true));
+        tracker.setParam(Hit.HitParam.Aisle.stringValue(), value, new ParamOption().setEncode(true));
     }
 }

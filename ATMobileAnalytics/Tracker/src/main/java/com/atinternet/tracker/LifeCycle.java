@@ -62,12 +62,12 @@ class LifeCycle {
     /**
      * Key representing first session date after update
      */
-    static final String FIRST_SESSION_DATE_AFTER_UPDATE = "FirstLaunchDateAfterUpdate";
+    private static final String FIRST_SESSION_DATE_AFTER_UPDATE = "FirstLaunchDateAfterUpdate";
 
     /**
      * Key representing last session date
      */
-    static final String LAST_SESSION_DATE = "LastLaunchDate";
+    private static final String LAST_SESSION_DATE = "LastLaunchDate";
 
     /**
      * Key representing the app session count
@@ -97,7 +97,7 @@ class LifeCycle {
     /**
      * String pattern to get fld and uld
      */
-    static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String DATE_FORMAT = "yyyyMMdd";
 
     /**
      * Check whether lifecycle has already been initialized
@@ -238,7 +238,7 @@ class LifeCycle {
             @Override
             public String execute() {
                 try {
-                    LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+                    LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
                     // fs
                     map.put("fs", preferences.getBoolean(FIRST_SESSION, false) ? 1 : 0);

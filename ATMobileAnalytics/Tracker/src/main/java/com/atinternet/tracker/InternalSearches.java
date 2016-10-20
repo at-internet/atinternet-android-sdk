@@ -22,13 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * @deprecated Since 2.3.0, InternalSearch is now only available as a screen or gesture object property.
+ */
+@Deprecated
 public class InternalSearches extends Helper {
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     InternalSearches(Tracker tracker) {
         super(tracker);
     }

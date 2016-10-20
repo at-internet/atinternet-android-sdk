@@ -130,7 +130,7 @@ class TVTrackingPlugin extends Plugin {
         JSONObject resultJson = new JSONObject();
 
         JSONObject tvtrackingObject = new JSONObject();
-        JSONObject infoObject = new JSONObject();
+        JSONObject infoObject;
         String infoSaved = Tracker.getPreferences().getString(TrackerConfigurationKeys.INFO_CAMPAIGN_SAVED, null);
 
         // if tvt send data
@@ -233,7 +233,7 @@ class TVTrackingPlugin extends Plugin {
             }
 
             String partnerTime = (String) response.get(TIME);
-            SimpleDateFormat sdf = null;
+            SimpleDateFormat sdf;
             Date date = null;
 
             // UTC
@@ -258,7 +258,7 @@ class TVTrackingPlugin extends Plugin {
      * @return boolean
      */
     private boolean sessionIsExpired() {
-        long lastHitSentTime = tracker.getPreferences().getLong(TrackerConfigurationKeys.LAST_TVT_EXECUTE_TIME, 0);
+        long lastHitSentTime = Tracker.getPreferences().getLong(TrackerConfigurationKeys.LAST_TVT_EXECUTE_TIME, 0);
         return Tool.getSecondsBetweenTimes(System.currentTimeMillis(), lastHitSentTime) >= tracker.TVTracking().getVisitDuration() * 60;
     }
 

@@ -25,94 +25,171 @@ package com.atinternet.tracker;
 public class Order extends BusinessObject {
 
     private String orderId;
-
     private double turnover;
-
     private int status;
-
     private OrderDiscount orderDiscount;
-
     private OrderAmount orderAmount;
-
     private OrderDelivery orderDelivery;
-
     private int paymentMethod;
-
     private boolean newCustomer;
-
     private OrderCustomVars customVariables;
-
     private boolean confirmationRequired;
 
+    OrderCustomVars getCustomVariables() {
+        return customVariables;
+    }
+
+    /**
+     * Get discount object
+     *
+     * @return OrderDiscount
+     */
     public OrderDiscount Discount() {
         return orderDiscount == null ? (orderDiscount = new OrderDiscount(this)) : orderDiscount;
     }
 
+    /**
+     * Get amount object
+     *
+     * @return OrderAmount
+     */
     public OrderAmount Amount() {
         return orderAmount == null ? (orderAmount = new OrderAmount(this)) : orderAmount;
     }
 
+    /**
+     * Get delivery object
+     *
+     * @return OrderDelivery
+     */
     public OrderDelivery Delivery() {
         return orderDelivery == null ? (orderDelivery = new OrderDelivery(this)) : orderDelivery;
     }
 
+    /**
+     * Get CustomVars
+     *
+     * @return OrderCustomVars
+     */
+    public OrderCustomVars CustomVars() {
+        return customVariables = (customVariables == null) ? new OrderCustomVars() : customVariables;
+    }
+
+    /**
+     * Get order id
+     *
+     * @return String
+     */
     public String getOrderId() {
         return orderId;
     }
 
+    /**
+     * Get turnover
+     *
+     * @return double
+     */
     public double getTurnover() {
         return turnover;
     }
 
+    /**
+     * Get status
+     *
+     * @return int
+     */
     public int getStatus() {
         return status;
     }
 
+    /**
+     * Get boolean newCustomer value
+     *
+     * @return boolean
+     */
     public boolean isNewCustomer() {
         return newCustomer;
     }
 
+    /**
+     * Get payment method
+     *
+     * @return int
+     */
     public int getPaymentMethod() {
         return paymentMethod;
     }
 
-    public OrderCustomVars getCustomVariables() {
-        return customVariables;
-    }
-
+    /**
+     * Get boolean confirmationRequired value
+     *
+     * @return boolean
+     */
     public boolean isConfirmationRequired() {
         return confirmationRequired;
     }
 
+    /**
+     * Set a new order id
+     *
+     * @param orderId String
+     * @return Order
+     */
     public Order setOrderId(String orderId) {
         this.orderId = orderId;
         return this;
     }
 
+    /**
+     * Set a new turnover
+     *
+     * @param turnover double
+     * @return Order
+     */
     public Order setTurnover(double turnover) {
         this.turnover = turnover;
         return this;
     }
 
+    /**
+     * Set a new status
+     *
+     * @param status int
+     * @return Order
+     */
     public Order setStatus(int status) {
         this.status = status;
         return this;
     }
 
+    /**
+     * Change boolean newCustomer value
+     *
+     * @param newCustomer boolean
+     * @return Order
+     */
     public Order setNewCustomer(boolean newCustomer) {
         this.newCustomer = newCustomer;
         return this;
     }
 
+    /**
+     * Set a new payment method
+     *
+     * @param paymentMethod int
+     * @return Order
+     */
     public Order setPaymentMethod(int paymentMethod) {
         this.paymentMethod = paymentMethod;
         return this;
     }
 
-    public OrderCustomVars CustomVars() {
-        return customVariables = (customVariables == null) ? new OrderCustomVars() : customVariables;
-    }
-
+    /**
+     * Change boolean confirmationRequired value
+     *
+     * @param confirmationRequired boolean
+     * @return Order
+     */
     public Order setConfirmationRequired(boolean confirmationRequired) {
         this.confirmationRequired = confirmationRequired;
         return this;
@@ -208,7 +285,7 @@ public class Order extends BusinessObject {
 
         // Confirmation requise
         if (confirmationRequired) {
-            tracker.setParam("tp", "pre1");
+            tracker.setParam(Hit.HitParam.Tp.stringValue(), "pre1");
         }
     }
 }

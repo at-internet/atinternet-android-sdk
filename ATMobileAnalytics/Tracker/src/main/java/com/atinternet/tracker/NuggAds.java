@@ -26,11 +26,6 @@ import org.json.JSONObject;
 
 public class NuggAds extends Helper {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     NuggAds(Tracker tracker) {
         super(tracker);
     }

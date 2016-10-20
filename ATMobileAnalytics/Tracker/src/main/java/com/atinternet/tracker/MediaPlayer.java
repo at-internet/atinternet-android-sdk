@@ -24,30 +24,45 @@ package com.atinternet.tracker;
 
 public class MediaPlayer {
 
-    private Tracker tracker;
-
+    private final Tracker tracker;
     private int playerId;
-
     private Videos videos;
-
     private Audios audios;
-
     private LiveVideos liveVideos;
-
     private LiveAudios liveAudios;
 
+    /**
+     * Get Videos
+     *
+     * @return Videos
+     */
     public Videos Videos() {
         return videos == null ? (videos = new Videos(this)) : videos;
     }
 
+    /**
+     * Get Audios
+     *
+     * @return Audios
+     */
     public Audios Audios() {
         return audios == null ? (audios = new Audios(this)) : audios;
     }
 
+    /**
+     * Get LiveVideos
+     *
+     * @return LiveVideos
+     */
     public LiveVideos LiveVideos() {
         return liveVideos == null ? (liveVideos = new LiveVideos(this)) : liveVideos;
     }
 
+    /**
+     * Get LiveAudios
+     *
+     * @return LiveAudios
+     */
     public LiveAudios LiveAudios() {
         return liveAudios == null ? (liveAudios = new LiveAudios(this)) : liveAudios;
     }
@@ -56,10 +71,21 @@ public class MediaPlayer {
         return tracker;
     }
 
+    /**
+     * Get the player id
+     *
+     * @return int
+     */
     public int getPlayerId() {
         return playerId;
     }
 
+    /**
+     * Set a new player id
+     *
+     * @param playerId int
+     * @return MediaPlayer
+     */
     public MediaPlayer setPlayerId(int playerId) {
         this.playerId = playerId;
         return this;

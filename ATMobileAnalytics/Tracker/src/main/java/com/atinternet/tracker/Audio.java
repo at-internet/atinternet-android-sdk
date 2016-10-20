@@ -26,60 +26,125 @@ public class Audio extends RichMedia {
 
     private int duration;
 
+    /**
+     * Get the duration
+     *
+     * @return int
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * Set a new duration
+     *
+     * @param duration int
+     * @return Audio
+     */
     public Audio setDuration(int duration) {
         this.duration = duration;
 
         return this;
     }
 
+    /**
+     * Set a new name
+     *
+     * @param name String
+     * @return Audio
+     */
     public Audio setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Set a level 2
+     *
+     * @param level2 int
+     * @return Audio
+     */
     public Audio setLevel2(int level2) {
         this.level2 = level2;
 
         return this;
     }
 
+    /**
+     * Change boolean isBuffering value
+     *
+     * @param isBuffering boolean
+     * @return Audio
+     */
     public Audio setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
 
         return this;
     }
 
+    /**
+     * Change boolean isEmbedded value
+     *
+     * @param isEmbedded boolean
+     * @return Audio
+     */
     public Audio setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
         return this;
     }
 
+    /**
+     * Set a new first chapter
+     *
+     * @param chapter1 String
+     * @return Audio
+     */
     public Audio setChapter1(String chapter1) {
         this.chapter1 = chapter1;
         return this;
     }
 
+    /**
+     * Set a new second chapter
+     *
+     * @param chapter2 String
+     * @return Audio
+     */
     public Audio setChapter2(String chapter2) {
         this.chapter2 = chapter2;
         return this;
     }
 
+    /**
+     * Set a new third chapter
+     *
+     * @param chapter3 String
+     * @return Audio
+     */
     public Audio setChapter3(String chapter3) {
         this.chapter3 = chapter3;
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action RichMedia.Action
+     * @return Audio
+     */
     public Audio setAction(Action action) {
         this.action = action;
 
         return this;
     }
 
+    /**
+     * Set a new webdomain
+     *
+     * @param webDomain String
+     * @return Audio
+     */
     public Audio setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
@@ -99,6 +164,6 @@ public class Audio extends RichMedia {
             duration = MAX_DURATION;
         }
 
-        tracker.setParam("m1", duration);
+        tracker.setParam(Hit.HitParam.MediaDuration.stringValue(), duration);
     }
 }

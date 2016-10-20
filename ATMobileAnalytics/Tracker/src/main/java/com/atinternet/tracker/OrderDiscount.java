@@ -25,35 +25,65 @@ package com.atinternet.tracker;
 public class OrderDiscount {
 
     private final Order order;
-
     private double discountTaxIncluded;
-
     private double discountTaxFree;
-
     private String promotionalCode;
 
+    /**
+     * Get promotional code
+     *
+     * @return String
+     */
     public String getPromotionalCode() {
         return promotionalCode;
     }
 
+    /**
+     * Get discount tax included value
+     *
+     * @return double
+     */
     public double getDiscountTaxIncluded() {
         return discountTaxIncluded;
     }
 
+    /**
+     * Get discount tax free value
+     *
+     * @return double
+     */
     public double getDiscountTaxFree() {
         return discountTaxFree;
     }
 
+    /**
+     * Set a new promotional code
+     *
+     * @param promotionalCode String
+     * @return OrderDiscount
+     */
     public OrderDiscount setPromotionalCode(String promotionalCode) {
         this.promotionalCode = promotionalCode;
         return this;
     }
 
+    /**
+     * Set a new discount tax included value
+     *
+     * @param discountTaxIncluded double
+     * @return OrderDiscount
+     */
     public OrderDiscount setDiscountTaxIncluded(double discountTaxIncluded) {
         this.discountTaxIncluded = discountTaxIncluded;
         return this;
     }
 
+    /**
+     * Set a new discount tax free value
+     *
+     * @param discountTaxFree double
+     * @return OrderDiscount
+     */
     public OrderDiscount setDiscountTaxFree(double discountTaxFree) {
         this.discountTaxFree = discountTaxFree;
         return this;

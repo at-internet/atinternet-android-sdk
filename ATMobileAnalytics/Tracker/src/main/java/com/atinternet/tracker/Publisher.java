@@ -25,135 +25,209 @@ package com.atinternet.tracker;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class Publisher extends OnAppAd {
-
     private static final String PUBLISHER_FORMAT = "PUB-%1$s-%2$s-%3$s-%4$s-%5$s-%6$s-%7$s-%8$s";
     private static final String SCREEN = "screen";
     private static final String AD_TRACKING = "AT";
 
-    /**
-     * CampaignId
-     */
     private String campaignId;
-
-    /**
-     * Creation
-     */
     private String creation;
-
-    /**
-     * Variant
-     */
     private String variant;
-
-    /**
-     * Format
-     */
     private String format;
-
-    /**
-     * General Placement
-     */
     private String generalPlacement;
-
-    /**
-     * Detailed Placement
-     */
     private String detailedPlacement;
-
-    /**
-     * AdvertiserId
-     */
     private String advertiserId;
-
-    /**
-     * Url
-     */
     private String url;
 
+    private LinkedHashMap<String, CustomObject> customObjectsMap;
+    private CustomObjects customObjects;
+
+    LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
+        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+    }
+
+    /**
+     * Get campaign id
+     *
+     * @return String
+     */
     public String getCampaignId() {
         return campaignId;
     }
 
+    /**
+     * Get creation
+     *
+     * @return String
+     */
     public String getCreation() {
         return creation;
     }
 
+    /**
+     * Get variant
+     *
+     * @return String
+     */
     public String getVariant() {
         return variant;
     }
 
+    /**
+     * Get format
+     *
+     * @return String
+     */
     public String getFormat() {
         return format;
     }
 
+    /**
+     * Get general placement
+     *
+     * @return String
+     */
     public String getGeneralPlacement() {
         return generalPlacement;
     }
 
+    /**
+     * Get detailed placement
+     *
+     * @return String
+     */
     public String getDetailedPlacement() {
         return detailedPlacement;
     }
 
+    /**
+     * Get advertiser id
+     *
+     * @return String
+     */
     public String getAdvertiserId() {
         return advertiserId;
     }
 
+    /**
+     * Get url
+     *
+     * @return String
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Set a new campaign id
+     *
+     * @param campaignId String
+     * @return Publisher
+     */
     public Publisher setCampaignId(String campaignId) {
         this.campaignId = campaignId;
         return this;
     }
 
+    /**
+     * Set a new creation
+     *
+     * @param creation String
+     * @return Publisher
+     */
     public Publisher setCreation(String creation) {
         this.creation = creation;
         return this;
     }
 
+    /**
+     * Set variant
+     *
+     * @param variant String
+     * @return Pubisher
+     */
     public Publisher setVariant(String variant) {
         this.variant = variant;
         return this;
     }
 
+    /**
+     * Set format
+     *
+     * @param format String
+     * @return Publisher
+     */
     public Publisher setFormat(String format) {
         this.format = format;
         return this;
     }
 
+    /**
+     * Set a new general placement
+     *
+     * @param generalPlacement String
+     * @return Publisher
+     */
     public Publisher setGeneralPlacement(String generalPlacement) {
         this.generalPlacement = generalPlacement;
         return this;
     }
 
+    /**
+     * Set a new detailed placement
+     *
+     * @param detailedPlacement String
+     * @return Publisher
+     */
     public Publisher setDetailedPlacement(String detailedPlacement) {
         this.detailedPlacement = detailedPlacement;
         return this;
     }
 
+    /**
+     * Set a new advertiser id
+     *
+     * @param advertiserId String
+     * @return Publisher
+     */
     public Publisher setAdvertiserId(String advertiserId) {
         this.advertiserId = advertiserId;
         return this;
     }
 
+    /**
+     * Set a new url
+     *
+     * @param url String
+     * @return Publisher
+     */
     public Publisher setUrl(String url) {
         this.url = url;
         return this;
     }
 
+    /**
+     * Set a new action
+     *
+     * @param action OnAppAd.Action
+     * @return Publisher
+     */
     public Publisher setAction(Action action) {
         this.action = action;
         return this;
     }
 
     /**
-     * Constructor
+     * Get CustomObjects
      *
-     * @param tracker Tracker
+     * @return CustomObjects
      */
+    public CustomObjects CustomObjects() {
+        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+    }
+
     Publisher(Tracker tracker) {
         super(tracker);
         campaignId = "";
@@ -195,6 +269,12 @@ public class Publisher extends OnAppAd {
 
             if (TechnicalContext.level2 > 0) {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), TechnicalContext.level2);
+            }
+        }
+
+        if (customObjectsMap != null) {
+            for (CustomObject co : customObjectsMap.values()) {
+                co.setEvent();
             }
         }
 
