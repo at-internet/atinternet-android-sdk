@@ -48,6 +48,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,8 +72,8 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private static final ArrayList<Debugger.DebuggerEvent> debuggerEvents = new ArrayList<>();
     private static final ArrayList<Hit> offlineHits = new ArrayList<>();
 
-    private static Context context;
-    private static DebuggerEventListAdapter debuggerEventListAdapter;
+    private static WeakReference<android.content.Context> context;
+    private static WeakReference<DebuggerEventListAdapter> debuggerEventListAdapter;
     private FrameLayout debuggerViewerLayout;
     private boolean hasMoved;
 
@@ -101,7 +102,10 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private final int ratio;
 
     static Context getContext() {
-        return context;
+        if (context != null) {
+            return context.get();
+        }
+        return null;
     }
 
     /**
@@ -141,11 +145,11 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      */
     public void remove() {
         if (bubbleImage != null) {
-            ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).removeViewImmediate(bubbleImage);
+            ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).removeViewImmediate(bubbleImage);
             bubbleImage = null;
         }
         if (debuggerViewerLayout != null) {
-            ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).removeViewImmediate(debuggerViewerLayout);
+            ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).removeViewImmediate(debuggerViewerLayout);
             debuggerViewerLayout = null;
         }
     }
@@ -161,7 +165,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     }
 
     static DebuggerEventListAdapter getDebuggerEventListAdapter() {
-        return debuggerEventListAdapter;
+        return debuggerEventListAdapter.get();
     }
 
     static ArrayList<Debugger.DebuggerEvent> getDebuggerEvents() {
@@ -169,9 +173,9 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     }
 
     private Debugger(Context ctx, Tracker tr) {
-        context = ctx;
+        context = new WeakReference<>(ctx);
         remove();
-        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (context.get().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             ratio = 7;
         } else {
             ratio = 8;
@@ -179,22 +183,22 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         tracker = tr;
         metrics = new DisplayMetrics();
 
-        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
-        gestureDetector = new GestureDetector(context, this);
+        ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
+        gestureDetector = new GestureDetector(context.get(), this);
 
-        inflateViews(context);
+        inflateViews(context.get());
         addViews();
 
-        debuggerEventListAdapter = new DebuggerEventListAdapter(context, noEventsLayout);
-        debuggerOfflineHitsAdapter = new DebuggerOfflineHitsAdapter(context, tracker, noOfflineHitsLayout);
-        eventListView.setAdapter(debuggerEventListAdapter);
+        debuggerEventListAdapter = new WeakReference<>(new DebuggerEventListAdapter(context.get(), noEventsLayout));
+        debuggerOfflineHitsAdapter = new DebuggerOfflineHitsAdapter(context.get(), tracker, noOfflineHitsLayout);
+        eventListView.setAdapter(debuggerEventListAdapter.get());
         offlineHitsListView.setAdapter(debuggerOfflineHitsAdapter);
     }
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
         bubbleImageLayoutParams.y = 0;
-        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
+        ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
         toggleViewer();
         return true;
     }
@@ -222,7 +226,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                     }
                     bubbleImageLayoutParams.y = initialY
                             + (int) (event.getRawY() - initialTouchY);
-                    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
+                    ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     hasMoved = true;
@@ -230,7 +234,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                             + (int) (event.getRawX() - initialTouchX);
                     bubbleImageLayoutParams.y = initialY
                             + (int) (event.getRawY() - initialTouchY);
-                    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
+                    ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage, bubbleImageLayoutParams);
                     break;
             }
             return true;
@@ -242,7 +246,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         int id = v.getId();
         if (id == R.id.deleteEventsImageView) {
             debuggerEvents.clear();
-            debuggerEventListAdapter.notifyDataSetChanged();
+            debuggerEventListAdapter.get().notifyDataSetChanged();
             noEventsLayout.setVisibility(View.VISIBLE);
             eventListView.setVisibility(View.GONE);
         } else if (id == R.id.deleteOfflineHits) {
@@ -259,7 +263,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             offlineHitsListView.setVisibility(!offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
         } else if (id == R.id.backToEventViewer) {
             currentViewVisibleId = R.id.eventViewer;
-            debuggerEventListAdapter.notifyDataSetChanged();
+            debuggerEventListAdapter.get().notifyDataSetChanged();
             Tool.setVisibleViewWithAnimation(offlineViewer, false);
             Tool.setVisibleViewWithAnimation(eventViewer, true);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
@@ -295,15 +299,15 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             if (event.isHit()) {
                 createHitDetailView(parametersListView, event.getMessage());
             } else {
-                ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.getString(R.string.event_detail));
-                TextView eventDetail = new TextView(context);
-                eventDetail.setTextColor(Tool.getColor(context, android.R.color.black));
+                ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.get().getString(R.string.event_detail));
+                TextView eventDetail = new TextView(context.get());
+                eventDetail.setTextColor(Tool.getColor(context.get(), android.R.color.black));
                 eventDetail.setPadding(10, 10, 10, 10);
                 eventDetail.setText(event.getMessage());
                 parametersListView.addView(eventDetail);
             }
         } else {
-            ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.getString(R.string.hit_detail));
+            ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.get().getString(R.string.hit_detail));
             createHitDetailView(parametersListView, offlineHits.get(position).getUrl());
         }
         if (animate) {
@@ -361,7 +365,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         bubbleImageLayoutParams.gravity = Gravity.TOP | Gravity.START;
         bubbleImageLayoutParams.x = 0;
         bubbleImageLayoutParams.y = 0;
-        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).addView(bubbleImage, bubbleImageLayoutParams);
+        ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).addView(bubbleImage, bubbleImageLayoutParams);
 
         if (currentViewVisibleId == -1) {
             currentViewVisibleId = R.id.eventViewer;
@@ -386,7 +390,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         debuggerViewerLayoutParams.x = 10;
         debuggerViewerLayoutParams.y = bubbleImage.getDrawable().getMinimumHeight();
         debuggerViewerLayoutParams.windowAnimations = android.R.style.Animation_Translucent;
-        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).addView(debuggerViewerLayout, debuggerViewerLayoutParams);
+        ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).addView(debuggerViewerLayout, debuggerViewerLayoutParams);
 
         if (itemPosition != -1) {
             onUpdateAfterItemClick(itemPosition, false);
@@ -400,7 +404,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         if (viewerVisibility == GONE) {
             viewerVisibility = View.VISIBLE;
             Tool.setVisibleViewWithAnimation(debuggerViewerLayout, true);
-            debuggerEventListAdapter.notifyDataSetChanged();
+            debuggerEventListAdapter.get().notifyDataSetChanged();
             debuggerOfflineHitsAdapter.notifyDataSetChanged();
             noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
             offlineHitsListView.setVisibility(!offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
@@ -418,7 +422,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         AlphaAnimation animation1 = hasReduceAlpha ? new AlphaAnimation(1.f, ALPHA_BACKGROUND) : new AlphaAnimation(ALPHA_BACKGROUND, 1.f);
         animation1.setDuration(500);
         animation1.setFillAfter(true);
-        ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content).startAnimation(animation1);
+        ((Activity) context.get()).getWindow().getDecorView().findViewById(android.R.id.content).startAnimation(animation1);
     }
 
     /**
@@ -428,15 +432,15 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * @param message            String
      */
     private void createHitDetailView(ViewGroup parametersListView, String message) {
-        ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.getString(R.string.hit_detail));
+        ((TextView) hitDetailViewer.findViewById(R.id.headerDetailView)).setText(context.get().getString(R.string.hit_detail));
         LinkedHashMap<String, String> parameters = Tool.getParameters(message);
         Set<String> keySet = parameters.keySet();
         Boolean colorGrey = true;
         for (String key : keySet) {
             String value = parameters.get(key);
-            LinearLayout hitDetail = (LinearLayout) View.inflate(context, R.layout.parameter_holder, null);
+            LinearLayout hitDetail = (LinearLayout) View.inflate(context.get(), R.layout.parameter_holder, null);
             if (colorGrey) {
-                hitDetail.setBackgroundColor(Tool.getColor(context, R.color.at_darker_grey));
+                hitDetail.setBackgroundColor(Tool.getColor(context.get(), R.color.at_darker_grey));
             }
             ((TextView) hitDetail.findViewById(R.id.keyView)).setText(key);
             ((TextView) hitDetail.findViewById(R.id.valueView)).setText(value);

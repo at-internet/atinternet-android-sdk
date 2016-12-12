@@ -24,6 +24,7 @@ package com.atinternet.tracker;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
@@ -37,6 +38,7 @@ import android.view.WindowManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import static android.os.Build.BRAND;
 import static android.os.Build.MODEL;
@@ -60,13 +62,16 @@ class TechnicalContext {
     // Constant android id key
     private static final String ANDROID_ID_KEY = "androidId";
 
+    // Constant uuid key
+    private static final String UUID_KEY = "UUID";
+
     /**
      * Get the tag version
      */
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.3.1";
+            return "2.3.2";
         }
     };
 
@@ -365,10 +370,19 @@ class TechnicalContext {
             @Override
             public String execute() {
                 final android.content.Context context = Tracker.getAppContext();
-                if (context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false)) {
+                SharedPreferences preferences = context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
+
+                if (preferences.getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false)) {
                     return "opt-out";
                 } else if (identifier.equals(ANDROID_ID_KEY)) {
                     return getString(context.getContentResolver(), ANDROID_ID);
+                } else if (identifier.equals(UUID_KEY)) {
+                    String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
+                    if (uuid == null) {
+                        uuid = UUID.randomUUID().toString();
+                        preferences.edit().putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid).apply();
+                    }
+                    return uuid;
                 } else {
                     try {
                         com.google.android.gms.ads.identifier.AdvertisingIdClient.Info adInfo = null;
@@ -380,7 +394,7 @@ class TechnicalContext {
                         if (adInfo != null && !adInfo.isLimitAdTrackingEnabled()) {
                             return adInfo.getId();
                         } else {
-                            return "";
+                            return "opt-out";
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

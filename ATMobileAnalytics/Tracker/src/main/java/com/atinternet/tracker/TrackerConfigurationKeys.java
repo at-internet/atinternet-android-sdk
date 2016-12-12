@@ -66,6 +66,9 @@ public class TrackerConfigurationKeys {
     //Global key representing info tvtracking campaign
     static final String INFO_CAMPAIGN_SAVED = "ATInfoCampaignSaved";
 
+    //Global key representing idclient from uuid
+    static final String IDCLIENT_UUID = "ATIdclientUUID";
+
     /*****************
      * Configuration
      ****************/

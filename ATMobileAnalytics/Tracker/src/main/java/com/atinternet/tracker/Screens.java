@@ -24,8 +24,6 @@ package com.atinternet.tracker;
 
 public class Screens extends Helper {
 
-    private static final String CLASS_NAME_FORMAT = "%1$s.%2$s";
-
     Screens(Tracker tracker) {
         super(tracker);
     }
@@ -50,7 +48,7 @@ public class Screens extends Helper {
      */
     public Screen add(android.content.Context context) {
         Screen screen = new Screen(tracker)
-                .setName(String.format(CLASS_NAME_FORMAT, context.getPackageName(), context.getClass().getSimpleName()));
+                .setName(context.getClass().getCanonicalName());
         tracker.getBusinessObjects().put(screen.getId(), screen);
 
         return screen;

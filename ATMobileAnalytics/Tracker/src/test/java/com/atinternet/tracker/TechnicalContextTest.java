@@ -111,6 +111,12 @@ public final class TechnicalContextTest extends AbstractTestClass {
     }
 
     @Test
+    public void getUUIDTest() {
+        String uuid = TechnicalContext.getUserId("UUID").execute();
+        assertTrue(uuid.equals(TechnicalContext.getUserId("UUID").execute()));
+    }
+
+    @Test
     public void doNotTrackEnabledTest() {
         assertFalse(TechnicalContext.doNotTrackEnabled(RuntimeEnvironment.application));
     }

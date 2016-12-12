@@ -51,6 +51,8 @@ import static org.junit.Assert.assertFalse;
 @RunWith(RobolectricTestRunner.class)
 public class TrackerTest extends AbstractTestClass {
 
+    private static final int DURATION_SLEEP = 600;
+
 
     private Buffer buffer;
     private Storage storage;
@@ -127,7 +129,7 @@ public class TrackerTest extends AbstractTestClass {
         assertEquals("test", tracker.getUserIdSync());
 
         tracker.setHashUserIdEnabled(true, null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("8652e6fddc89d1392129e8f5ade37e4288406503e5b73bad51619d6e4f3ce50c", tracker.getUserIdSync());
 
@@ -184,7 +186,7 @@ public class TrackerTest extends AbstractTestClass {
     public void setConfigTest() throws Exception {
         assertFalse(tracker.getConfiguration().containsKey("key"));
         tracker.setConfig("key", "value", null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertTrue(tracker.getConfiguration().containsKey("key"));
         assertEquals(tracker.getConfiguration().get("key"), "value");
     }
@@ -192,48 +194,48 @@ public class TrackerTest extends AbstractTestClass {
     @Test
     public void setLogTest() throws Exception {
         Random r = new Random();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
         boolean rBoolean = r.nextBoolean();
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logp");
         tracker.setLog("logtest" + id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest" + id);
     }
 
     @Test
     public void setSecuredLogTest() throws Exception {
         Random r = new Random();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
         boolean rBoolean = r.nextBoolean();
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logs");
         tracker.setSecuredLog("logstest" + id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest" + id);
     }
 
     @Test
     public void setDomainTest() throws Exception {
         Random r = new Random();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
         boolean rBoolean = r.nextBoolean();
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "xiti.com");
         tracker.setDomain("domain" + id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain" + id);
     }
 
     @Test
     public void setSiteIdTest() throws Exception {
         Random r = new Random();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
         boolean rBoolean = r.nextBoolean();
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 552987);
         tracker.setSiteId(id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), id);
     }
 
@@ -244,7 +246,7 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "required");
         tracker.setOfflineMode(OfflineMode.always, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
     }
 
@@ -277,7 +279,7 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
         tracker.setSecureModeEnabled(rBoolean, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), rBoolean);
     }
 
@@ -288,8 +290,11 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "androidId");
         tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
+        tracker.setIdentifierType(Tracker.IdentifierType.UUID, rBoolean ? callback : null);
+        Thread.sleep(DURATION_SLEEP);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "UUID");
     }
 
     @Test
@@ -299,7 +304,7 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), false);
         tracker.setHashUserIdEnabled(rBoolean, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), rBoolean);
     }
 
@@ -307,10 +312,10 @@ public class TrackerTest extends AbstractTestClass {
     public void setPixelPathTest() throws Exception {
         Random r = new Random();
         boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/hit.xiti");
         tracker.setPixelPath("/test.xiti" + id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti" + id);
     }
 
@@ -321,44 +326,8 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), true);
         tracker.setPersistentIdentifiedVisitorEnabled(rBoolean, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), rBoolean);
-    }
-
-    @Test
-    public void setTVTUrlTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
-
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL), "");
-        tracker.setTvTrackingUrl(id + "test.com", rBoolean ? callback : null);
-        Thread.sleep(500);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL), id + "test.com");
-    }
-
-    @Test
-    public void setTVTVisitDurationTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
-
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION), 10);
-        tracker.setTvTrackingVisitDuration(id, rBoolean ? callback : null);
-        Thread.sleep(500);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION), id);
-    }
-
-    @Test
-    public void setTVTSpotValidityTimeTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
-
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME), 5);
-        tracker.setTvTrackingSpotValidityTime(id, rBoolean ? callback : null);
-        Thread.sleep(500);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME), id);
     }
 
     @Test
@@ -368,7 +337,7 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), true);
         tracker.setCrashDetectionEnabled(rBoolean, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), rBoolean);
     }
 
@@ -379,7 +348,7 @@ public class TrackerTest extends AbstractTestClass {
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), false);
         tracker.setCampaignLastPersistenceEnabled(rBoolean, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), rBoolean);
     }
 
@@ -387,11 +356,11 @@ public class TrackerTest extends AbstractTestClass {
     public void setCampaigLifetimeTest() throws Exception {
         Random r = new Random();
         boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 30);
         tracker.setCampaignLifetime(id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), id);
     }
 
@@ -399,11 +368,11 @@ public class TrackerTest extends AbstractTestClass {
     public void setSessionBackgroundDurationTest() throws Exception {
         Random r = new Random();
         boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
+        int id = r.nextInt(DURATION_SLEEP);
 
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
         tracker.setSessionBackgroundDuration(id, rBoolean ? callback : null);
-        Thread.sleep(500);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), id);
     }
 
@@ -596,7 +565,7 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void setParamDoubleTest() {
-        double number = new Random().nextInt(500);
+        double number = new Random().nextInt(DURATION_SLEEP);
         tracker = tracker.setParam(key, number);
         assertEquals(String.valueOf(number), buffer.getVolatileParams().get(0).getValue().execute());
     }

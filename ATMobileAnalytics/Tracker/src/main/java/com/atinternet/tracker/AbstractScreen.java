@@ -213,13 +213,13 @@ public abstract class AbstractScreen extends BusinessObject {
      * Add internal search informations
      *
      * @param keywordLabel     String
-     * @param resultPageNumber int
+     * @param resultScreenNumber int
      * @return InternalSearch
      */
-    public InternalSearch InternalSearch(String keywordLabel, int resultPageNumber) {
+    public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber) {
         return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
                 .setKeyword(keywordLabel)
-                .setResultScreenNumber(resultPageNumber)) : internalSearch;
+                .setResultScreenNumber(resultScreenNumber)) : internalSearch;
     }
 
     /**

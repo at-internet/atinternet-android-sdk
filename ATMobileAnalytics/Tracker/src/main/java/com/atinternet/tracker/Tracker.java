@@ -29,6 +29,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -52,7 +53,7 @@ public class Tracker {
      * Enum for different identifier
      */
     public enum IdentifierType {
-        androidId, advertisingId
+        androidId, advertisingId, UUID
     }
 
     /**
@@ -65,7 +66,7 @@ public class Tracker {
     /**
      * Context
      */
-    private static android.content.Context appContext;
+    private static WeakReference<android.content.Context> appContext;
 
     /**
      * Crash Default Handler
@@ -95,7 +96,7 @@ public class Tracker {
     /**
      * Contains Tracker configuration
      */
-    private final Configuration configuration;
+    private Configuration configuration;
 
     /**
      * Storage offline hits
@@ -860,10 +861,11 @@ public class Tracker {
      * @param context Context
      */
     public Tracker(android.content.Context context) {
-        configuration = new Configuration(context);
-        initTracker(context);
+        appContext = new WeakReference<>(context);
+        configuration = new Configuration(appContext.get());
+        initTracker();
         if (!LifeCycle.isInitialized) {
-            LifeCycle.initLifeCycle(context);
+            LifeCycle.initLifeCycle(appContext.get());
         }
     }
 
@@ -874,10 +876,11 @@ public class Tracker {
      * @param configuration HashMap
      */
     public Tracker(android.content.Context context, final HashMap<String, Object> configuration) {
+        appContext = new WeakReference<>(context);
         this.configuration = new Configuration(configuration);
-        initTracker(context);
+        initTracker();
         if (!LifeCycle.isInitialized) {
-            LifeCycle.initLifeCycle(context);
+            LifeCycle.initLifeCycle(appContext.get());
         }
     }
 
@@ -890,7 +893,7 @@ public class Tracker {
         TrackerQueue.getInstance().put(new Runnable() {
             @Override
             public void run() {
-                TechnicalContext.doNotTrack(appContext, enabled);
+                TechnicalContext.doNotTrack(appContext.get(), enabled);
             }
         });
     }
@@ -901,7 +904,7 @@ public class Tracker {
      * @return boolean
      */
     public static boolean doNotTrackEnabled() {
-        return TechnicalContext.doNotTrackEnabled(appContext);
+        return TechnicalContext.doNotTrackEnabled(appContext.get());
     }
 
     /**
@@ -1241,11 +1244,11 @@ public class Tracker {
     }
 
     static android.content.Context getAppContext() {
-        return appContext;
+        return appContext.get();
     }
 
     static SharedPreferences getPreferences() {
-        return appContext.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        return appContext.get().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
     String getInternalUserId() {
@@ -1260,25 +1263,28 @@ public class Tracker {
     private void setTrackerActivityLifecycle() {
         isTrackerActivityLifeCycleEnabled = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            ((Application) appContext).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(configuration));
+            ((Application) appContext.get()).registerActivityLifecycleCallbacks(new TrackerActivityLifeCyle(configuration));
         }
     }
 
-    private void initTracker(android.content.Context context) {
-        listener = null;
-        appContext = context.getApplicationContext();
-        defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
-        storage = new Storage(context);
-        storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE)));
-        buffer = new Buffer(this);
-        dispatcher = new Dispatcher(this);
-        if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-            Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
-        }
-        getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
+    private void initTracker() {
+        try {
+            listener = null;
+            defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
+            storage = new Storage(appContext.get());
+            storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE)));
+            buffer = new Buffer(this);
+            dispatcher = new Dispatcher(this);
+            if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get(), defaultCrashHandler));
+            }
+            getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
 
-        if (!isTrackerActivityLifeCycleEnabled) {
-            setTrackerActivityLifecycle();
+            if (!isTrackerActivityLifeCycleEnabled) {
+                setTrackerActivityLifecycle();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1411,7 +1417,7 @@ public class Tracker {
 
         if (enableCrashDetectionHandler) {
             if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext, defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get(), defaultCrashHandler));
             }
         } else {
             if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {

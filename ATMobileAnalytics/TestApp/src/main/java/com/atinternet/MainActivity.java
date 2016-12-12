@@ -67,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
             put(TrackerConfigurationKeys.LOG_SSL, "logs");
             put(TrackerConfigurationKeys.SITE, 552987);
         }});
+        tracker.setDefaultListener();
+
+        findViewById(R.id.sendHit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tracker.Screens().add(MainActivity.this).sendView();
+                tracker2.Screens().add(MainActivity.this).sendView();
+            }
+        });
+
 
         Debugger.create(this, tracker);*/
     }

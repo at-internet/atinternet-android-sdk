@@ -24,8 +24,6 @@ package com.atinternet.tracker;
 
 public class Gestures extends Helper {
 
-    private static final String CLASS_NAME_FORMAT = "%1$s.%2$s";
-
     Gestures(Tracker tracker) {
         super(tracker);
     }
@@ -50,7 +48,7 @@ public class Gestures extends Helper {
      */
     public Gesture add(android.content.Context context) {
         Gesture gesture = new Gesture(tracker)
-                .setName(String.format(CLASS_NAME_FORMAT, context.getPackageName(), context.getClass().getSimpleName()));
+                .setName(context.getClass().getCanonicalName());
         tracker.getBusinessObjects().put(gesture.getId(), gesture);
 
         return gesture;
