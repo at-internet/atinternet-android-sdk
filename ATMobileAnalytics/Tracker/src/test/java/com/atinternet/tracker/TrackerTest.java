@@ -51,7 +51,7 @@ import static org.junit.Assert.assertFalse;
 @RunWith(RobolectricTestRunner.class)
 public class TrackerTest extends AbstractTestClass {
 
-    private static final int DURATION_SLEEP = 600;
+    private static final int DURATION_SLEEP = 400;
 
 
     private Buffer buffer;
@@ -259,16 +259,16 @@ public class TrackerTest extends AbstractTestClass {
         tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
             add(Tracker.PluginKey.tvtracking);
         }}, rBoolean ? callback : null);
-        Thread.sleep(400);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString());
         tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
             add(Tracker.PluginKey.tvtracking);
             add(Tracker.PluginKey.nuggad);
         }}, rBoolean ? callback : null);
-        Thread.sleep(400);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString() + "," + Tracker.PluginKey.nuggad.toString());
         tracker.setPlugins(null, rBoolean ? callback : null);
-        Thread.sleep(400);
+        Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
     }
 

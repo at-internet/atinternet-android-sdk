@@ -47,11 +47,6 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
     private final ScheduledExecutorService scheduledExecutorService;
 
     /**
-     * Runnable to execute all tasks in queue
-     */
-    private final Runnable executeTaskRunnable;
-
-    /**
      * Set enabled fill queue from database
      *
      * @param enabled boolean
@@ -74,18 +69,19 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
      */
     private TrackerQueue() {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        executeTaskRunnable = new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    while (!isEmpty()) {
-                        scheduledExecutorService.execute(take());
+                    Runnable runnable;
+                    while ((runnable = take()) != null) {
+                        scheduledExecutorService.execute(runnable);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        };
+        }).start();
     }
 
     /**
@@ -94,10 +90,7 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
      * @return BuilderQueue
      */
     static TrackerQueue getInstance() {
-        if (instance == null) {
-            instance = new TrackerQueue();
-        }
-        return instance;
+        return instance == null ? (instance = new TrackerQueue()) : instance;
     }
 
     /**
@@ -114,6 +107,5 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        executeTaskRunnable.run();
     }
 }
