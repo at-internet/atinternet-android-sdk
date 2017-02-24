@@ -204,7 +204,9 @@ public abstract class AbstractScreen extends BusinessObject {
      * @param orderId  String
      * @param turnover double
      * @return Order
+     * @deprecated Since 2.3.4, bug was revealed when this method is used. Use Orders tracker property instead.
      */
+    @Deprecated
     public Order Order(String orderId, double turnover) {
         return order == null ? (order = new Order(tracker).setOrderId(orderId).setTurnover(turnover)) : order;
     }

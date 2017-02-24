@@ -49,7 +49,7 @@ public class InternalSearchTest extends AbstractTestClass {
     @Test
     public void initTest() {
         assertNull(internalSearch.getKeyword());
-        assertEquals(-1, internalSearch.getResultScreenNumber());
+        assertEquals(1, internalSearch.getResultScreenNumber());
         assertEquals(-1, internalSearch.getResultPosition());
     }
 

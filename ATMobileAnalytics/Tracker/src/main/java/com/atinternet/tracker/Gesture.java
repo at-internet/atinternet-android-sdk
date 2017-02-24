@@ -70,11 +70,28 @@ public class Gesture extends BusinessObject {
      * @param keywordLabel       String
      * @param resultScreenNumber int
      * @return InternalSearch
+     * @deprecated Since 2.3.4, use {@link #InternalSearch(String, int, int)} instead.
      */
+    @Deprecated
     public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber) {
         return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
                 .setKeyword(keywordLabel)
                 .setResultScreenNumber(resultScreenNumber)) : internalSearch;
+    }
+
+    /**
+     * Add an InternalSearch
+     *
+     * @param keywordLabel       String
+     * @param resultScreenNumber int
+     * @param resultPosition     int
+     * @return InternalSearch
+     */
+    public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber, int resultPosition) {
+        return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
+                .setKeyword(keywordLabel)
+                .setResultScreenNumber(resultScreenNumber)
+                .setResultPosition(resultPosition)) : internalSearch;
     }
 
     /**

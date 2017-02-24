@@ -22,10 +22,6 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-/**
- * @deprecated Since 2.3.0, Order is now only available as a screen or gesture object property.
- */
-@Deprecated
 public class Orders extends Helper {
 
     /**

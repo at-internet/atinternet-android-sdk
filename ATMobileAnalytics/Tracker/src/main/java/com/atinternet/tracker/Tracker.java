@@ -481,9 +481,7 @@ public class Tracker {
      * Get Orders instance
      *
      * @return Orders
-     * @deprecated Since 2.3.0, Order is now only available as a screen object property.
      */
-    @Deprecated
     public Orders Orders() {
         return orders == null ? (orders = new Orders(this)) : orders;
     }

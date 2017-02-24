@@ -91,7 +91,7 @@ public class InternalSearch extends BusinessObject {
     InternalSearch(Tracker tracker) {
         super(tracker);
         keyword = null;
-        resultScreenNumber = -1;
+        resultScreenNumber = 1;
         resultPosition = -1;
     }
 

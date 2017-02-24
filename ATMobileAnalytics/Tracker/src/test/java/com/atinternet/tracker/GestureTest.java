@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class GestureTest extends AbstractTestClass {
 
@@ -73,7 +73,7 @@ public class GestureTest extends AbstractTestClass {
     }
 
     @Test
-    public void InternalSearchTest() {
+    public void InternalSearchDeprecatedTest() {
         int id = new Random().nextInt(500);
         InternalSearch internalSearch = gesture.InternalSearch("test" + id, id);
         Assert.assertNotNull(internalSearch);
@@ -83,6 +83,20 @@ public class GestureTest extends AbstractTestClass {
 
         Assert.assertEquals(internalSearch.getKeyword(), "test" + id);
         Assert.assertEquals(internalSearch.getResultScreenNumber(), id);
+    }
+
+    @Test
+    public void InternalSearchTest() {
+        int id = new Random().nextInt(500);
+        InternalSearch internalSearch = gesture.InternalSearch("test" + id, id, id);
+        Assert.assertNotNull(internalSearch);
+        Assert.assertEquals(gesture.InternalSearch("", 0, 0), internalSearch);
+
+        internalSearch = gesture.InternalSearch("", 0, 0);
+
+        Assert.assertEquals(internalSearch.getKeyword(), "test" + id);
+        Assert.assertEquals(internalSearch.getResultScreenNumber(), id);
+        Assert.assertEquals(internalSearch.getResultPosition(), id);
     }
 
     @Test
