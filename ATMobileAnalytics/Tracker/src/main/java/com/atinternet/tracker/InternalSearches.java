@@ -23,6 +23,8 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 /**
+ * Wrapper class to manage InternalSearch instances
+ *
  * @deprecated Since 2.3.0, InternalSearch is now only available as a screen or gesture object property.
  */
 @Deprecated
@@ -35,9 +37,9 @@ public class InternalSearches extends Helper {
     /**
      * Add an internal search
      *
-     * @param keywordLabel     String
-     * @param resultPageNumber int
-     * @return InternalSearch
+     * @param keywordLabel     internal search keyword
+     * @param resultPageNumber internal search result screen number
+     * @return InternalSearch instance
      */
     public InternalSearch add(String keywordLabel, int resultPageNumber) {
         InternalSearch search = new InternalSearch(tracker)
@@ -52,10 +54,10 @@ public class InternalSearches extends Helper {
     /**
      * Add an internal search
      *
-     * @param keywordLabel     String
-     * @param resultPageNumber int
-     * @param resultPosition   int
-     * @return InternalSearch
+     * @param keywordLabel     internal search keyword
+     * @param resultPageNumber internal search result screen number
+     * @param resultPosition   internal search result position
+     * @return InternalSearch instance
      */
     public InternalSearch add(String keywordLabel, int resultPageNumber, int resultPosition) {
         return add(keywordLabel, resultPageNumber)

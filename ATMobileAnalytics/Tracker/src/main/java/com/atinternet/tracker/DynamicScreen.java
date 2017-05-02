@@ -26,27 +26,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Wrapper class for dynamic screen tracking
+ */
 public class DynamicScreen extends AbstractScreen {
 
     private static final String UPDATE_FORMAT = "yyyyMMddHHmm";
-
     private String screenId;
-
     private Date update;
 
     /**
-     * Get the id
+     * Get the dynamic screen identifier
      *
-     * @return String
+     * @return the screen identifier
      */
     public String getScreenId() {
         return screenId;
     }
 
     /**
-     * Get the update date
+     * Get the dynamic screen update date
      *
-     * @return Date
+     * @return the screen update date
      */
     public Date getUpdate() {
         return update;
@@ -54,10 +55,10 @@ public class DynamicScreen extends AbstractScreen {
 
 
     /**
-     * Set a new id
+     * Set a new screen id
      *
-     * @param screenId int
-     * @return DynamicScreen
+     * @param screenId screen identifier
+     * @return the DynamicScreen instance
      * @deprecated Since 2.2.1, use {@link #setScreenId(String)} instead.
      */
     @Deprecated
@@ -67,10 +68,10 @@ public class DynamicScreen extends AbstractScreen {
     }
 
     /**
-     * Set a new id
+     * Set a new screen id
      *
-     * @param screenId String
-     * @return DynamicScreen
+     * @param screenId screen identifier
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setScreenId(String screenId) {
         this.screenId = screenId;
@@ -80,8 +81,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new first chapter
      *
-     * @param chapter1 String
-     * @return DynamicScreen
+     * @param chapter1 /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setChapter1(String chapter1) {
         this.chapter1 = chapter1;
@@ -91,8 +92,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new second chapter
      *
-     * @param chapter2 String
-     * @return DynamicScreen
+     * @param chapter2 /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setChapter2(String chapter2) {
         this.chapter2 = chapter2;
@@ -102,8 +103,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new third chapter
      *
-     * @param chapter3 String
-     * @return DynamicScreen
+     * @param chapter3 /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setChapter3(String chapter3) {
         this.chapter3 = chapter3;
@@ -113,8 +114,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new update date
      *
-     * @param update Date
-     * @return DynamicScreen
+     * @param update update date
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setUpdate(Date update) {
         this.update = update;
@@ -124,8 +125,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new name
      *
-     * @param name String
-     * @return DynamicScreen
+     * @param name /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setName(String name) {
         this.name = name;
@@ -136,8 +137,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new action
      *
-     * @param action Action
-     * @return DynamiceScreen
+     * @param action /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setAction(Action action) {
         this.action = action;
@@ -148,8 +149,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Set a new level 2
      *
-     * @param level2 int
-     * @return DynamicScreen
+     * @param level2 /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setLevel2(int level2) {
         this.level2 = level2;
@@ -160,8 +161,8 @@ public class DynamicScreen extends AbstractScreen {
     /**
      * Change boolean isBasketScreen value
      *
-     * @param isBasketScreen boolean
-     * @return DynamicScreen
+     * @param isBasketScreen /
+     * @return the DynamicScreen instance
      */
     public DynamicScreen setIsBasketScreen(boolean isBasketScreen) {
         this.isBasketScreen = isBasketScreen;

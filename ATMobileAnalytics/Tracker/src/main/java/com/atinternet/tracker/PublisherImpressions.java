@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage PublisherImpression instances
+ */
 public class PublisherImpressions extends Helper {
 
     private final AbstractScreen screen;
@@ -32,10 +35,10 @@ public class PublisherImpressions extends Helper {
     }
 
     /**
-     * Add a pub
+     * Add a publisher impression advertising
      *
-     * @param campaignId String
-     * @return PublisherImpression
+     * @param campaignId campaign identifier
+     * @return the PublisherImpression instance
      */
     public PublisherImpression add(String campaignId) {
         PublisherImpression pub = new PublisherImpression(tracker);

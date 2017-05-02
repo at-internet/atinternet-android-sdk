@@ -34,6 +34,7 @@ public abstract class AbstractTestClass {
     final String pattern = "dd-MM-yyyy";
     String today;
     Tracker tracker;
+    Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
@@ -58,6 +59,9 @@ public abstract class AbstractTestClass {
             put("sessionBackgroundDuration", 60);
         }};
         tracker = new Tracker(RuntimeEnvironment.application, conf);
+        buffer = tracker.getBuffer();
+        buffer.getPersistentParams().clear();
+        buffer.getVolatileParams().clear();
     }
 
     // Méthode rendant accessible un attribut privé

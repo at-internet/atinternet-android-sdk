@@ -24,9 +24,11 @@ package com.atinternet.tracker;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+/**
+ * Wrapper class for advertising self promotion tracking
+ */
 public class SelfPromotion extends OnAppAd {
     private static final String SELF_PROMOTION_FORMAT = "INT-%1$s-%2$s||%3$s";
     private static final String SCREEN = "screen";
@@ -43,38 +45,43 @@ public class SelfPromotion extends OnAppAd {
         return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
     }
 
+    SelfPromotion(Tracker tracker) {
+        super(tracker);
+        adId = -1;
+    }
+
     /**
-     * Get ad id
+     * Get advertising identifier
      *
-     * @return int
+     * @return the advertising identifier
      */
     public int getAdId() {
         return adId;
     }
 
     /**
-     * Get format
+     * Get advertising format
      *
-     * @return String
+     * @return the advertising format
      */
     public String getFormat() {
         return format;
     }
 
     /**
-     * Get product id
+     * Get advertising product identifier
      *
-     * @return String
+     * @return the advertising product identifier
      */
     public String getProductId() {
         return productId;
     }
 
     /**
-     * Set a new ad id
+     * Set a new advertising identifier
      *
-     * @param adId int
-     * @return SelfPromotion
+     * @param adId advertising identifier
+     * @return the SelfPromotion instance
      */
     public SelfPromotion setAdId(int adId) {
         this.adId = adId;
@@ -82,10 +89,10 @@ public class SelfPromotion extends OnAppAd {
     }
 
     /**
-     * Set a new format
+     * Set a new advertising format
      *
-     * @param format String
-     * @return SelfPromotion
+     * @param format advertising format
+     * @return the SelfPromotion instance
      */
     public SelfPromotion setFormat(String format) {
         this.format = format;
@@ -93,10 +100,10 @@ public class SelfPromotion extends OnAppAd {
     }
 
     /**
-     * Set a new product id
+     * Set a new advertising product identifier
      *
-     * @param productId String
-     * @return SelfPromotion
+     * @param productId advertising product identifier
+     * @return the SelfPromotion instance
      */
     public SelfPromotion setProductId(String productId) {
         this.productId = productId;
@@ -106,8 +113,8 @@ public class SelfPromotion extends OnAppAd {
     /**
      * Set a new action
      *
-     * @param action OnAppAd.Action
-     * @return SelfPromotion
+     * @param action /
+     * @return the SelfPromotion instance
      */
     public SelfPromotion setAction(Action action) {
         this.action = action;
@@ -115,17 +122,12 @@ public class SelfPromotion extends OnAppAd {
     }
 
     /**
-     * Get CustomObjects
+     * Get a wrapper for CustomObject management
      *
-     * @return CustomObjects
+     * @return the CustomObjects instance
      */
     public CustomObjects CustomObjects() {
         return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
-    }
-
-    SelfPromotion(Tracker tracker) {
-        super(tracker);
-        adId = -1;
     }
 
     @Override
@@ -136,18 +138,14 @@ public class SelfPromotion extends OnAppAd {
                 productId != null ? productId : "");
 
         Buffer buffer = tracker.getBuffer();
-        ArrayList<int[]> indexes = Tool.findParameterPosition(Hit.HitParam.HitType.stringValue(), buffer.getVolatileParams(), buffer.getPersistentParams());
-        String currentType = "";
 
-        for (int[] index : indexes) {
-            int arrayID = index[0];
-            int itemPosition = index[1];
-            if (arrayID == 0) {
-                currentType = buffer.getVolatileParams().get(itemPosition).getValue().execute();
-            } else {
-                currentType = buffer.getPersistentParams().get(itemPosition).getValue().execute();
-            }
+        String currentType = "";
+        if (buffer.getVolatileParams().containsKey(Hit.HitParam.HitType.stringValue())) {
+            currentType = buffer.getVolatileParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
+        } else if (buffer.getPersistentParams().containsKey(Hit.HitParam.HitType.stringValue())) {
+            currentType = buffer.getPersistentParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
         }
+
         if (!currentType.equals(SCREEN) && !currentType.equals(AD_TRACKING)) {
             tracker.setParam(Hit.HitParam.HitType.stringValue(), AD_TRACKING);
         }

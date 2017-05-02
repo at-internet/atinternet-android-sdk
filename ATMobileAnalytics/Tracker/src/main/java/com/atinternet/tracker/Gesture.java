@@ -26,16 +26,34 @@ import android.text.TextUtils;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Wrapper class for gesture tracking
+ */
 public class Gesture extends BusinessObject {
 
     /**
      * Enum with different type of gesture
      */
     public enum Action {
+        /**
+         * Simple gesture
+         */
         Touch("A"),
+        /**
+         * Navigation gesture
+         */
         Navigate("N"),
+        /**
+         * Download action
+         */
         Download("T"),
+        /**
+         * Exit action
+         */
         Exit("S"),
+        /**
+         * Internal search action
+         */
         InternalSearch("IS");
 
         private final String str;
@@ -64,8 +82,15 @@ public class Gesture extends BusinessObject {
         return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
     }
 
+    Gesture(Tracker tracker) {
+        super(tracker);
+        action = Action.Touch;
+        level2 = -1;
+        name = "";
+    }
+
     /**
-     * Add an InternalSearch
+     * Attach an InternalSearch to gesture
      *
      * @param keywordLabel       String
      * @param resultScreenNumber int
@@ -80,12 +105,12 @@ public class Gesture extends BusinessObject {
     }
 
     /**
-     * Add an InternalSearch
+     * Attach internal search information to gesture
      *
-     * @param keywordLabel       String
-     * @param resultScreenNumber int
-     * @param resultPosition     int
-     * @return InternalSearch
+     * @param keywordLabel       keyword has been searched
+     * @param resultScreenNumber screen result number
+     * @param resultPosition     screen result position gesture
+     * @return the InternalSearch instance
      */
     public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber, int resultPosition) {
         return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
@@ -97,25 +122,25 @@ public class Gesture extends BusinessObject {
     /**
      * Get CustomObjects
      *
-     * @return CustomObjects
+     * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
         return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
     }
 
     /**
-     * Get the name
+     * Get the gesture name
      *
-     * @return String
+     * @return the gesture name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Get the first chapter1
+     * Get the first chapter
      *
-     * @return String
+     * @return the first chapter1
      */
     public String getChapter1() {
         return chapter1;
@@ -124,7 +149,7 @@ public class Gesture extends BusinessObject {
     /**
      * Get the second chapter
      *
-     * @return String
+     * @return the second chapter
      */
     public String getChapter2() {
         return chapter2;
@@ -133,7 +158,7 @@ public class Gesture extends BusinessObject {
     /**
      * Get the third chapter
      *
-     * @return String
+     * @return the third chapter
      */
     public String getChapter3() {
         return chapter3;
@@ -142,7 +167,7 @@ public class Gesture extends BusinessObject {
     /**
      * Get the action type
      *
-     * @return String
+     * @return the action type
      */
     public Action getAction() {
         return action;
@@ -151,17 +176,17 @@ public class Gesture extends BusinessObject {
     /**
      * Get the level 2
      *
-     * @return int
+     * @return the level 2
      */
     public int getLevel2() {
         return level2;
     }
 
     /**
-     * Set a new name
+     * Set a new gesture name
      *
-     * @param name String
-     * @return Gesture
+     * @param name /
+     * @return Gesture instance
      */
     public Gesture setName(String name) {
         this.name = name;
@@ -172,8 +197,8 @@ public class Gesture extends BusinessObject {
     /**
      * Set a new first chapter
      *
-     * @param chapter1 String
-     * @return Gesture
+     * @param chapter1 /
+     * @return Gesture instance
      */
     public Gesture setChapter1(String chapter1) {
         this.chapter1 = chapter1;
@@ -184,8 +209,8 @@ public class Gesture extends BusinessObject {
     /**
      * Set a new second chapter
      *
-     * @param chapter2 String
-     * @return Gesture
+     * @param chapter2 /
+     * @return Gesture instance
      */
     public Gesture setChapter2(String chapter2) {
         this.chapter2 = chapter2;
@@ -196,8 +221,8 @@ public class Gesture extends BusinessObject {
     /**
      * Set a new third chapter
      *
-     * @param chapter3 String
-     * @return Gesture
+     * @param chapter3 /
+     * @return Gesture instance
      */
     public Gesture setChapter3(String chapter3) {
         this.chapter3 = chapter3;
@@ -208,8 +233,8 @@ public class Gesture extends BusinessObject {
     /**
      * Set a new action
      *
-     * @param action Gesture.Action
-     * @return Gesture
+     * @param action /
+     * @return Gesture instance
      */
     public Gesture setAction(Action action) {
         this.action = action;
@@ -220,8 +245,8 @@ public class Gesture extends BusinessObject {
     /**
      * Set a new level2
      *
-     * @param level2 int
-     * @return Gesture
+     * @param level2 /
+     * @return Gesture instance
      */
     public Gesture setLevel2(int level2) {
         this.level2 = level2;
@@ -230,7 +255,7 @@ public class Gesture extends BusinessObject {
     }
 
     /**
-     * Send a gesture navigation hit
+     * Send a gesture navigation event
      */
     public void sendNavigation() {
         action = Action.Navigate;
@@ -238,7 +263,7 @@ public class Gesture extends BusinessObject {
     }
 
     /**
-     * Send a gesture exit hit
+     * Send a gesture exit event
      */
     public void sendExit() {
         action = Action.Exit;
@@ -246,7 +271,7 @@ public class Gesture extends BusinessObject {
     }
 
     /**
-     * Send a gesture download hit
+     * Send a gesture download event
      */
     public void sendDownload() {
         action = Action.Download;
@@ -255,7 +280,7 @@ public class Gesture extends BusinessObject {
     }
 
     /**
-     * Send a gesture action hit
+     * Send a gesture action event
      */
     public void sendTouch() {
         action = Action.Touch;
@@ -263,18 +288,11 @@ public class Gesture extends BusinessObject {
     }
 
     /**
-     * Send a gesture search hit
+     * Send a gesture search event
      */
     public void sendSearch() {
         action = Action.InternalSearch;
         tracker.getDispatcher().dispatch(this);
-    }
-
-    Gesture(Tracker tracker) {
-        super(tracker);
-        action = Action.Touch;
-        level2 = -1;
-        name = "";
     }
 
 

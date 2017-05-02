@@ -31,19 +31,16 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ContextTest extends AbstractTestClass {
 
     private Context context;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         context = new Context(tracker);
-        buffer = tracker.getBuffer();
-        buffer.getPersistentParams().clear();
     }
 
     @Test
@@ -56,9 +53,11 @@ public class ContextTest extends AbstractTestClass {
     public void setBackgroundModeTest() {
         context.setBackgroundMode(Context.BackgroundMode.Task);
 
+        assertEquals(0, buffer.getVolatileParams().size());
         assertEquals(1, buffer.getPersistentParams().size());
-        assertEquals("bg", buffer.getPersistentParams().get(0).getKey());
-        assertEquals("task", buffer.getPersistentParams().get(0).getValue().execute());
+
+        assertEquals(1, buffer.getPersistentParams().get("bg").getValues().size());
+        assertEquals("task", buffer.getPersistentParams().get("bg").getValues().get(0).execute());
     }
 
     @Test
@@ -67,15 +66,18 @@ public class ContextTest extends AbstractTestClass {
         context.setBackgroundMode(Context.BackgroundMode.Normal);
 
         assertEquals(0, buffer.getPersistentParams().size());
+        assertEquals(0, buffer.getVolatileParams().size());
     }
 
     @Test
     public void setLevel2Test() {
         context.setLevel2(4);
 
+        assertEquals(0, buffer.getVolatileParams().size());
         assertEquals(1, buffer.getPersistentParams().size());
-        assertEquals("s2", buffer.getPersistentParams().get(0).getKey());
-        assertEquals("4", buffer.getPersistentParams().get(0).getValue().execute());
+
+        assertEquals(1, buffer.getPersistentParams().get("s2").getValues().size());
+        assertEquals("4", buffer.getPersistentParams().get("s2").getValues().get(0).execute());
     }
 
     @Test
@@ -84,5 +86,6 @@ public class ContextTest extends AbstractTestClass {
         context.setLevel2(0);
 
         assertEquals(0, buffer.getPersistentParams().size());
+        assertEquals(0, buffer.getVolatileParams().size());
     }
 }

@@ -28,11 +28,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ScreensTest extends AbstractTestClass {
 
@@ -46,36 +44,19 @@ public class ScreensTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        Screen screen = screens.add();
+        screens.add();
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("", ((Screen) tracker.getBusinessObjects().get(screen.getId())).getName());
     }
 
     @Test
     public void addWithLevel2Test() {
-        Screen screen = screens.add("name").setLevel2(3);
+        screens.add("name").setLevel2(3);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("name", ((Screen) tracker.getBusinessObjects().get(screen.getId())).getName());
-        assertEquals(3, ((Screen) tracker.getBusinessObjects().get(screen.getId())).getLevel2());
     }
 
     @Test
     public void addWithChaptersTest() {
-        Random r = new Random();
-        String[] vals = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-        Screen screen = screens.add(vals[i++], vals[i++], vals[i++], vals[i]);
-        i = 0;
-
+        screens.add("name", "chap1", "chap2", "chap2");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(vals[i++], ((Screen) tracker.getBusinessObjects().get(screen.getId())).getName());
-        assertEquals(vals[i++], ((Screen) tracker.getBusinessObjects().get(screen.getId())).getChapter1());
-        assertEquals(vals[i++], ((Screen) tracker.getBusinessObjects().get(screen.getId())).getChapter2());
-        assertEquals(vals[i], ((Screen) tracker.getBusinessObjects().get(screen.getId())).getChapter3());
     }
 }

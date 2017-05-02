@@ -28,8 +28,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
 @Config(sdk =21)
@@ -46,9 +44,7 @@ public class SelfPromotionsTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        int id = new Random().nextInt(500);
-        SelfPromotion self = selfPromotions.add(id);
+        selfPromotions.add(2);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(id, ((SelfPromotion) tracker.getBusinessObjects().get(self.getId())).getAdId());
     }
 }

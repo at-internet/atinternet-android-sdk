@@ -22,13 +22,11 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage Order instances
+ */
 public class Orders extends Helper {
 
-    /**
-     * Default constructor
-     *
-     * @param tracker Tracker
-     */
     Orders(Tracker tracker) {
         super(tracker);
     }
@@ -36,9 +34,9 @@ public class Orders extends Helper {
     /**
      * Add an order
      *
-     * @param orderId  String
-     * @param turnover int
-     * @return Order
+     * @param orderId  order identifier
+     * @param turnover order turnover
+     * @return a new Order instance
      */
     public Order add(String orderId, double turnover) {
         Order order = new Order(tracker)
@@ -52,9 +50,9 @@ public class Orders extends Helper {
     /**
      * Add an order
      *
-     * @param orderId  String
-     * @param turnover int
-     * @param status   int
+     * @param orderId  order identifier
+     * @param turnover order turnover
+     * @param status   order status (1: "Pending", 2: "Cancelled", 3: "Approved", 4: "Return")
      * @return Order
      */
     public Order add(String orderId, double turnover, int status) {

@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage Gesture instances
+ */
 public class Gestures extends Helper {
 
     Gestures(Tracker tracker) {
@@ -31,7 +34,7 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @return Gesture
+     * @return a new Gesture instance
      */
     public Gesture add() {
         Gesture gesture = new Gesture(tracker);
@@ -43,7 +46,7 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @param context android.content.Context
+     * @param context current Activity context
      * @return Gesture
      */
     public Gesture add(android.content.Context context) {
@@ -57,8 +60,8 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @param name String
-     * @return Gesture
+     * @param name gesture name
+     * @return a new Gesture instance
      */
     public Gesture add(String name) {
         Gesture gesture = new Gesture(tracker)
@@ -71,9 +74,9 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @param name     String
-     * @param chapter1 String
-     * @return Gesture
+     * @param name     gesture name
+     * @param chapter1 gesture first chapter
+     * @return a new Gesture instance
      */
     public Gesture add(String name, String chapter1) {
         Gesture gesture = new Gesture(tracker);
@@ -86,10 +89,10 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @return Gesture
+     * @param name     gesture name
+     * @param chapter1 gesture first chapter
+     * @param chapter2 gesture second chapter
+     * @return a new Gesture instance
      */
     public Gesture add(String name, String chapter1, String chapter2) {
         Gesture gesture = new Gesture(tracker)
@@ -102,11 +105,11 @@ public class Gestures extends Helper {
     /**
      * Add a gesture
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @return Gesture
+     * @param name     gesture name
+     * @param chapter1 gesture first chapter
+     * @param chapter2 gesture second chapter
+     * @param chapter3 gesture third chapter
+     * @return a new Gesture instance
      */
     public Gesture add(String name, String chapter1, String chapter2, String chapter3) {
         Gesture gesture = new Gesture(tracker)

@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper class to LiveAudio instances
+ */
 public class LiveAudios {
 
     final ArrayList<LiveAudio> list = new ArrayList<>();
@@ -34,10 +37,10 @@ public class LiveAudios {
     }
 
     /**
-     * Create new audio
+     * Create new LiveAudio
      *
-     * @param name String
-     * @return LiveAudio
+     * @param name live audio name
+     * @return LiveAudio instance
      */
     public LiveAudio add(String name) {
         int index = -1;
@@ -65,9 +68,9 @@ public class LiveAudios {
     /**
      * Create new LiveAudio
      *
-     * @param name     String
-     * @param chapter1 String
-     * @return LiveAudio
+     * @param name     live audio name
+     * @param chapter1 live audio first chapter
+     * @return LiveAudio instance
      */
     public LiveAudio add(String name, String chapter1) {
         return add(name).setChapter1(chapter1);
@@ -76,10 +79,10 @@ public class LiveAudios {
     /**
      * Create new LiveAudio
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @return LiveAudio
+     * @param name     live audio name
+     * @param chapter1 live audio first chapter
+     * @param chapter2 live audio second chapter
+     * @return LiveAudio instance
      */
     public LiveAudio add(String name, String chapter1, String chapter2) {
         return add(name, chapter1).setChapter2(chapter2);
@@ -88,11 +91,11 @@ public class LiveAudios {
     /**
      * Create new LiveAudio
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @return LiveAudio
+     * @param name     live audio name
+     * @param chapter1 live audio first chapter
+     * @param chapter2 live audio second chapter
+     * @param chapter3 live audio third chapter
+     * @return LiveAudio instance
      */
     public LiveAudio add(String name, String chapter1, String chapter2, String chapter3) {
         return add(name, chapter1, chapter2).setChapter3(chapter3);
@@ -101,7 +104,7 @@ public class LiveAudios {
     /**
      * Remove a live audio
      *
-     * @param name String
+     * @param name live audio name
      */
     public void remove(String name) {
         int length = list.size();

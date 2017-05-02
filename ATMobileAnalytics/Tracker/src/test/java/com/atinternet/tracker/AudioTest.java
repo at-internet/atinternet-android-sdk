@@ -31,16 +31,13 @@ import org.robolectric.annotation.Config;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class AudioTest extends AbstractTestClass {
 
     private Audio audio;
-    private Buffer buffer;
     private MediaPlayer player;
 
     @Before
@@ -48,40 +45,11 @@ public class AudioTest extends AbstractTestClass {
         super.setUp();
         player = new MediaPlayer(tracker);
         audio = new Audio(player);
-        buffer = tracker.getBuffer();
-    }
-
-    @Test
-    public void initTest() {
-        assertEquals(-1, audio.getLevel2());
-        assertEquals(0, audio.getDuration());
-        assertNull(audio.getWebDomain());
-        assertEquals("", audio.getName());
-        assertEquals("audio", audio.getType());
-        assertNull(audio.getAction());
-        assertEquals(RichMedia.BroadcastMode.Clip, audio.getBroadcastMode());
-        assertFalse(audio.isBuffering());
-        assertFalse(audio.isEmbedded());
     }
 
     @Test
     public void multiInstancesTest() {
         assertNotSame(audio, new Audio(player));
-    }
-
-    @Test
-    public void setTest() {
-        Random r = new Random();
-        boolean rboolean = r.nextBoolean();
-        String val = String.valueOf(r.nextInt(500));
-
-        assertEquals("name", audio.setName("name").getName());
-        assertEquals(3, audio.setDuration(3).getDuration());
-        assertEquals(RichMedia.Action.Stop, audio.setAction(RichMedia.Action.Stop).getAction());
-        assertEquals(rboolean, audio.setBuffering(rboolean).isBuffering());
-        assertEquals(rboolean, audio.setEmbedded(rboolean).isEmbedded());
-        assertEquals(val, audio.setWebDomain(val).getWebDomain());
-        assertEquals(3, audio.setLevel2(3).getLevel2());
     }
 
     @Test
@@ -93,31 +61,30 @@ public class AudioTest extends AbstractTestClass {
                 .setChapter1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
-        int i = 0;
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("audio", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("audio", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("play", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("play", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("clip", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("clip", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("4", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("4", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
 
-        assertEquals("m1", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("56", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m1").getValues().size());
+        assertEquals("56", buffer.getVolatileParams().get("m1").getValues().get(0).execute());
     }
 
     @Test
@@ -129,31 +96,30 @@ public class AudioTest extends AbstractTestClass {
                 .setChapter1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
-        int i = 0;
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("audio", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("audio", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("refresh", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("refresh", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("clip", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("clip", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("4", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("4", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
 
-        assertEquals("m1", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("56", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m1").getValues().size());
+        assertEquals("56", buffer.getVolatileParams().get("m1").getValues().get(0).execute());
     }
 
     @Test
@@ -165,31 +131,30 @@ public class AudioTest extends AbstractTestClass {
                 .setChapter1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
-        int i = 0;
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("audio", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("audio", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("pause", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("pause", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("clip", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("clip", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("4", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("4", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
 
-        assertEquals("m1", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("56", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m1").getValues().size());
+        assertEquals("56", buffer.getVolatileParams().get("m1").getValues().get(0).execute());
     }
 
     @Test
@@ -201,30 +166,29 @@ public class AudioTest extends AbstractTestClass {
                 .setChapter1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
-        int i = 0;
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("audio", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("audio", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("stop", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("stop", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("clip", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("clip", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("4", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("4", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
 
-        assertEquals("m1", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("56", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m1").getValues().size());
+        assertEquals("56", buffer.getVolatileParams().get("m1").getValues().get(0).execute());
     }
 }

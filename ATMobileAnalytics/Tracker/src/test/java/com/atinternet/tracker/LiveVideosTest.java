@@ -35,7 +35,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class LiveVideosTest extends AbstractTestClass {
 
@@ -57,46 +57,24 @@ public class LiveVideosTest extends AbstractTestClass {
     public void addOneTest() {
         liveVideos.add("name");
         assertEquals(1, liveVideos.list.size());
-        assertEquals("name", liveVideos.list.get(0).getName());
     }
 
     @Test
     public void addTwoTest() {
         liveVideos.add("name", "chapter1");
         assertEquals(1, liveVideos.list.size());
-        assertEquals("name", liveVideos.list.get(0).getName());
-        assertEquals("chapter1", liveVideos.list.get(0).getChapter1());
     }
 
     @Test
     public void addThreeTest() {
         liveVideos.add("name", "chapter1", "chapter2");
         assertEquals(1, liveVideos.list.size());
-        assertEquals("name", liveVideos.list.get(0).getName());
-        assertEquals("chapter1", liveVideos.list.get(0).getChapter1());
-        assertEquals("chapter2", liveVideos.list.get(0).getChapter2());
     }
 
     @Test
     public void addFourTest() {
-        Random r = new Random();
-        String[] levels = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-        LiveVideo lv = liveVideos.add(levels[i++], levels[i++], levels[i++], levels[i]);
-
-        assertNotNull(lv.getId());
-        i = 0;
-
+        liveVideos.add("name", "chapter1", "chapter2", "chapter3");
         assertEquals(1, liveVideos.list.size());
-        assertEquals(levels[i++], liveVideos.list.get(0).getName());
-        assertEquals(levels[i++], liveVideos.list.get(0).getChapter1());
-        assertEquals(levels[i++], liveVideos.list.get(0).getChapter2());
-        assertEquals(levels[i], liveVideos.list.get(0).getChapter3());
     }
 
     @Test

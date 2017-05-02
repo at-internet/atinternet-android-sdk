@@ -35,12 +35,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class LiveVideoTest extends AbstractTestClass {
 
     private LiveVideo liveVideo;
-    private Buffer buffer;
     private MediaPlayer player;
 
     @Before
@@ -48,7 +47,6 @@ public class LiveVideoTest extends AbstractTestClass {
         super.setUp();
         player = new MediaPlayer(tracker);
         liveVideo = new LiveVideo(player);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -69,144 +67,132 @@ public class LiveVideoTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(500);
-        
-        assertEquals("name", liveVideo.setName("name").getName());
-        assertEquals("test" + id, liveVideo.setWebDomain("test" + id).getWebDomain());
-        assertEquals(RichMedia.Action.Stop, liveVideo.setAction(RichMedia.Action.Stop).getAction());
-        assertEquals(rBoolean, liveVideo.setBuffering(rBoolean).isBuffering());
-        assertEquals(rBoolean, liveVideo.setEmbedded(rBoolean).isEmbedded());
-        assertEquals(3, liveVideo.setLevel2(3).getLevel2());
-    }
-
-    @Test
     public void setEventPlayTest() {
         liveVideo.setAction(RichMedia.Action.Play)
                 .setName("name")
-                .setLevel2(5)
+                .setLevel2(9)
                 .setChapter1("chapter1")
                 .setEvent();
+
         assertEquals(7, buffer.getVolatileParams().size());
-        int i = 0;
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("video", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("video", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("play", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("play", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("live", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("live", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("5", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("9", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
     }
 
     @Test
     public void setEventRefreshTest() {
         liveVideo.setAction(RichMedia.Action.Refresh)
                 .setName("name")
-                .setLevel2(5)
+                .setLevel2(9)
                 .setChapter1("chapter1")
                 .setEvent();
+
         assertEquals(7, buffer.getVolatileParams().size());
-        int i = 0;
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("video", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("video", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("refresh", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("refresh", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("live", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("live", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("5", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("9", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
     }
 
     @Test
     public void setEventPauseTest() {
         liveVideo.setAction(RichMedia.Action.Pause)
                 .setName("name")
-                .setLevel2(5)
+                .setLevel2(9)
                 .setChapter1("chapter1")
                 .setEvent();
         assertEquals(7, buffer.getVolatileParams().size());
-        int i = 0;
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("video", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("video", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("pause", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("pause", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("live", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("live", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("5", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("9", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
     }
 
     @Test
     public void setEventStopTest() {
         liveVideo.setAction(RichMedia.Action.Stop)
                 .setName("name")
-                .setLevel2(5)
+                .setLevel2(9)
                 .setChapter1("chapter1")
                 .setEvent();
         assertEquals(7, buffer.getVolatileParams().size());
-        int i = 0;
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("video", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("video", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::name", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("a", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("stop", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("stop", buffer.getVolatileParams().get("a").getValues().get(0).execute());
 
-        assertEquals("m6", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("live", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("live", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
 
-        assertEquals("plyr", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("1", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
 
-        assertEquals("m5", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("int", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
 
-        assertEquals("s2", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("5", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("9", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
     }
 }

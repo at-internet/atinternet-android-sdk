@@ -34,9 +34,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
-public final class TechnicalContextTest extends AbstractTestClass {
+public class TechnicalContextTest extends AbstractTestClass {
 
     @Test
     public void getConnectionTest() {

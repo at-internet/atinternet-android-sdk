@@ -22,16 +22,26 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for internal search tracking
+ */
 public class InternalSearch extends BusinessObject {
 
     private String keyword;
     private int resultScreenNumber;
     private int resultPosition;
 
+    InternalSearch(Tracker tracker) {
+        super(tracker);
+        keyword = null;
+        resultScreenNumber = 1;
+        resultPosition = -1;
+    }
+
     /**
      * Get keyword
      *
-     * @return String
+     * @return the keyword
      */
     public String getKeyword() {
         return keyword;
@@ -40,7 +50,7 @@ public class InternalSearch extends BusinessObject {
     /**
      * Get result screen number
      *
-     * @return int
+     * @return the result screen number
      */
     public int getResultScreenNumber() {
         return resultScreenNumber;
@@ -49,7 +59,7 @@ public class InternalSearch extends BusinessObject {
     /**
      * Get result position
      *
-     * @return int
+     * @return the result position
      */
     public int getResultPosition() {
         return resultPosition;
@@ -58,8 +68,8 @@ public class InternalSearch extends BusinessObject {
     /**
      * Set a new keyword
      *
-     * @param keyword String
-     * @return InternalSearch
+     * @param keyword /
+     * @return InternalSearch instance
      */
     public InternalSearch setKeyword(String keyword) {
         this.keyword = keyword;
@@ -69,8 +79,8 @@ public class InternalSearch extends BusinessObject {
     /**
      * Set a new result screen number
      *
-     * @param resultScreenNumber int
-     * @return InternalSearch
+     * @param resultScreenNumber /
+     * @return InternalSearch instance
      */
     public InternalSearch setResultScreenNumber(int resultScreenNumber) {
         this.resultScreenNumber = resultScreenNumber;
@@ -80,19 +90,12 @@ public class InternalSearch extends BusinessObject {
     /**
      * Set a new result position
      *
-     * @param resultPosition int
-     * @return InternalSearch
+     * @param resultPosition /
+     * @return InternalSearch instance
      */
     public InternalSearch setResultPosition(int resultPosition) {
         this.resultPosition = resultPosition;
         return this;
-    }
-
-    InternalSearch(Tracker tracker) {
-        super(tracker);
-        keyword = null;
-        resultScreenNumber = 1;
-        resultPosition = -1;
     }
 
     @Override

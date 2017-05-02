@@ -22,72 +22,15 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage specific order amount feature
+ */
 public class OrderAmount {
 
     private final Order order;
     private double amountTaxFree;
     private double amountTaxIncluded;
     private double taxAmount;
-
-    /**
-     * Get amount tax free
-     *
-     * @return double
-     */
-    public double getAmountTaxFree() {
-        return amountTaxFree;
-    }
-
-    /**
-     * Get amount tax included
-     *
-     * @return double
-     */
-    public double getAmountTaxIncluded() {
-        return amountTaxIncluded;
-    }
-
-    /**
-     * Get tax amount
-     *
-     * @return double
-     */
-    public double getTaxAmount() {
-        return taxAmount;
-    }
-
-    /**
-     * Set a new amount tax free
-     *
-     * @param amountTaxFree double
-     * @return OrderAmount
-     */
-    public OrderAmount setAmountTaxFree(double amountTaxFree) {
-        this.amountTaxFree = amountTaxFree;
-        return this;
-    }
-
-    /**
-     * Set a new amount tax included
-     *
-     * @param amountTaxIncluded double
-     * @return OrderAmount
-     */
-    public OrderAmount setAmountTaxIncluded(double amountTaxIncluded) {
-        this.amountTaxIncluded = amountTaxIncluded;
-        return this;
-    }
-
-    /**
-     * Set a new tax amount
-     *
-     * @param taxAmount double
-     * @return OrderAmount
-     */
-    public OrderAmount setTaxAmount(double taxAmount) {
-        this.taxAmount = taxAmount;
-        return this;
-    }
 
     OrderAmount(Order order) {
         this.order = order;
@@ -97,12 +40,72 @@ public class OrderAmount {
     }
 
     /**
-     * Helper to set all properties
+     * Get amount tax free
      *
-     * @param amountTaxFree     double
-     * @param amountTaxIncluded double
-     * @param taxAmount         double
-     * @return Order
+     * @return the amount tax free
+     */
+    public double getAmountTaxFree() {
+        return amountTaxFree;
+    }
+
+    /**
+     * Get amount tax included
+     *
+     * @return the amount tax included
+     */
+    public double getAmountTaxIncluded() {
+        return amountTaxIncluded;
+    }
+
+    /**
+     * Get tax amount
+     *
+     * @return the tax amount
+     */
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    /**
+     * Set a new amount tax free
+     *
+     * @param amountTaxFree /
+     * @return OrderAmount instance
+     */
+    public OrderAmount setAmountTaxFree(double amountTaxFree) {
+        this.amountTaxFree = amountTaxFree;
+        return this;
+    }
+
+    /**
+     * Set a new amount tax included
+     *
+     * @param amountTaxIncluded /
+     * @return OrderAmount instance
+     */
+    public OrderAmount setAmountTaxIncluded(double amountTaxIncluded) {
+        this.amountTaxIncluded = amountTaxIncluded;
+        return this;
+    }
+
+    /**
+     * Set a new tax amount
+     *
+     * @param taxAmount /
+     * @return OrderAmount instance
+     */
+    public OrderAmount setTaxAmount(double taxAmount) {
+        this.taxAmount = taxAmount;
+        return this;
+    }
+
+    /**
+     * Attach amount object to order
+     *
+     * @param amountTaxFree     order amount tax free
+     * @param amountTaxIncluded order amount tax included
+     * @param taxAmount         order amount tax
+     * @return Order instance
      */
     public Order set(double amountTaxFree, double amountTaxIncluded, double taxAmount) {
         setAmountTaxFree(amountTaxFree)

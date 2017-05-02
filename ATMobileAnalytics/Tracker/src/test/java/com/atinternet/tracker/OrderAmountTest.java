@@ -48,17 +48,4 @@ public class OrderAmountTest extends AbstractTestClass {
         assertEquals(-1, orderAmount.getAmountTaxIncluded(), 0);
         assertEquals(-1, orderAmount.getTaxAmount(), 0);
     }
-
-    @Test
-    public void setTest() {
-        orderAmount.set(123, 456, 789);
-        assertEquals(123, orderAmount.getAmountTaxFree(), 0);
-        assertEquals(456, orderAmount.getAmountTaxIncluded(), 0);
-        assertEquals(789, orderAmount.getTaxAmount(), 0);
-
-        orderAmount = orderAmount.setAmountTaxFree(123).setAmountTaxIncluded(456).setTaxAmount(789);
-        assertEquals(123, orderAmount.getAmountTaxFree(), 0);
-        assertEquals(456, orderAmount.getAmountTaxIncluded(), 0);
-        assertEquals(789, orderAmount.getTaxAmount(), 0);
-    }
 }

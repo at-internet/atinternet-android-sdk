@@ -22,64 +22,74 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Send different events during hit building
+ */
 public interface TrackerListener {
 
     /**
-     * Enum for Tracker callbacks
+     * Status enum
      */
     enum HitStatus {
-        Failed, Success
+        /**
+         * Failed status
+         */
+        Failed,
+        /**
+         * Success status
+         */
+        Success
     }
 
     /**
-     * First launched approbation callback
+     * Notify when tracker needs first launched approval
      *
-     * @param message String
+     * @param message String: approval message for confidentiality
      */
     void trackerNeedsFirstLaunchApproval(String message);
 
     /**
-     * End hit construction callback
+     * Notify when hit has been built
      *
-     * @param status  HitStatus
-     * @param message String
+     * @param status  HitStatus: status of hit building
+     * @param message String: query string or error message
      */
     void buildDidEnd(HitStatus status, String message);
 
     /**
-     * End sending hit callback
+     * Notify when hit has been sent
      *
-     * @param status  HitStatus
-     * @param message String
+     * @param status  HitStatus: status of hit sending
+     * @param message String: query string or http response message
      */
     void sendDidEnd(HitStatus status, String message);
 
     /**
-     * Call partner callback
+     * Notify when a partner has been called
      *
-     * @param response String
+     * @param response String: the partner response
      */
     void didCallPartner(String response);
 
     /**
-     * Warning callback
+     * Notify when a warning has been detected
      *
-     * @param message String
+     * @param message String: the warning message
      */
     void warningDidOccur(String message);
 
 
     /**
-     * Save did end callback
+     * Notify when hit has been saved in device local storage
      *
-     * @param message String
+     * @param message String: the saved hit
      */
     void saveDidEnd(String message);
 
     /**
-     * Error callback
+     * Notify when a critical error has been detected
      *
-     * @param message String
+     * @param message String: the error message
      */
     void errorDidOccur(String message);
 }

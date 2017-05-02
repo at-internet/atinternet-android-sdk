@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Wrapper class to manage CustomVar instances
+ */
 public class CustomVars extends Helper {
 
     private AbstractScreen screen;
@@ -40,12 +43,12 @@ public class CustomVars extends Helper {
     }
 
     /**
-     * Add a custom var
+     * Add a custom variable
      *
-     * @param varId         int
-     * @param value         String
-     * @param customVarType CustomVar.CustomVarType
-     * @return CustomVar
+     * @param varId         custom variable identifier
+     * @param value         custom variable value
+     * @param customVarType custom variable type
+     * @return a new CustomVar instance
      */
     public CustomVar add(int varId, String value, CustomVar.CustomVarType customVarType) {
         CustomVar customVar = new CustomVar(tracker)
@@ -76,7 +79,7 @@ public class CustomVars extends Helper {
     }
 
     /**
-     * Remove all CustomObject
+     * Remove all CustomVars
      */
     public void removeAll() {
         if (screen != null) {

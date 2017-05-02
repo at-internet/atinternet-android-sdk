@@ -28,11 +28,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class GesturesTest extends AbstractTestClass {
 
@@ -46,35 +44,19 @@ public class GesturesTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        Gesture gesture = gestures.add();
+        gestures.add();
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("", ((Gesture) tracker.getBusinessObjects().get(gesture.getId())).getName());
     }
 
     @Test
     public void addWithLevel2Test() {
-        Random r = new Random();
-        String gestureName = String.valueOf(r.nextInt(500));
-        int level2 = r.nextInt(500);
-
-        Gesture gesture = gestures.add(gestureName).setLevel2(level2);
+        gestures.add("name").setLevel2(2);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(gestureName, ((Gesture) tracker.getBusinessObjects().get(gesture.getId())).getName());
-        assertEquals(level2, ((Gesture) tracker.getBusinessObjects().get(gesture.getId())).getLevel2());
     }
 
     @Test
     public void addWithChaptersTest() {
-        Random r = new Random();
-        String[] levels = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-        Gesture gesture = gestures.add(levels[i++], levels[i++], levels[i++], levels[i]);
+        gestures.add("name", "chap1", "chap2", "chap3");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(levels[1] + "::" + levels[2] + "::" + levels[3] + "::" + levels[0], ((Gesture) tracker.getBusinessObjects().get(gesture.getId())).getName());
     }
 }

@@ -30,24 +30,19 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ProductTest extends AbstractTestClass {
 
     private Product product;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         product = new Product(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -69,73 +64,54 @@ public class ProductTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        Random r = new Random();
-        String[] vals = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-
-        assertEquals("pid" + vals[i], product.setProductId("pid" + vals[i++]).getProductId());
-        assertEquals(vals[i], product.setCategory1(vals[i++]).getCategory1());
-        assertEquals(vals[i], product.setCategory2(vals[i++]).getCategory2());
-        assertEquals(vals[i], product.setCategory3(vals[i++]).getCategory3());
-        assertEquals(vals[i], product.setCategory4(vals[i++]).getCategory4());
-        assertEquals(vals[i], product.setCategory5(vals[i++]).getCategory5());
-        assertEquals(vals[i], product.setCategory6(vals[i]).getCategory6());
-        assertEquals(Product.Action.View, product.setAction(Product.Action.View).getAction());
-        assertNull(product.setAction(null).getAction());
-
-        int[] others = {
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500)
-        };
-        i = 0;
-        assertEquals(others[i], product.setQuantity(others[i++]).getQuantity());
-        assertEquals(others[i], product.setUnitPriceTaxIncluded(others[i++]).getUnitPriceTaxIncluded(), 0);
-        assertEquals(others[i], product.setUnitPriceTaxFree(others[i++]).getUnitPriceTaxFree(), 0);
-        assertEquals(others[i], product.setDiscountTaxIncluded(others[i++]).getDiscountTaxIncluded(), 0);
-        assertEquals(others[i], product.setDiscountTaxFree(others[i++]).getDiscountTaxFree(), 0);
-        assertEquals(String.valueOf(others[i]), product.setPromotionalCode(String.valueOf(others[i])).getPromotionalCode());
-
-    }
-
-    @Test
     public void setEventTest() {
         product.setProductId("pdtID").setCategory4("cat4").setEvent();
-        assertEquals(2, buffer.getVolatileParams().size());
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("pdt", buffer.getVolatileParams().get(0).getValue().execute());
 
-        assertEquals("pdtl", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("cat4::pdtID", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("pdt", buffer.getVolatileParams().get("type").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("pdtl").getValues().size());
+        assertEquals("cat4::pdtID", buffer.getVolatileParams().get("pdtl").getValues().get(0).execute());
     }
 
     @Test
     public void setEventWithCOTest() {
         product.setProductId("pdtID").CustomObjects().add("{}");
         product.setEvent();
+
         assertEquals(3, buffer.getVolatileParams().size());
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("pdt", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("stc", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("{}", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("pdt", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("pdtl", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("pdtID", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
 
+        assertEquals(1, buffer.getVolatileParams().get("pdtl").getValues().size());
+        assertEquals("pdtID", buffer.getVolatileParams().get("pdtl").getValues().get(0).execute());
+
+    }
+
+    @Test
+    public void multiplesValuesTest() {
+        new Product(tracker).setProductId("pdtID").setEvent();
+        new Product(tracker).setProductId("pdtID1").setEvent();
+        new Product(tracker).setProductId("pdtID3").setEvent();
+
+        assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("pdt", buffer.getVolatileParams().get("type").getValues().get(0).execute());
+
+        assertEquals(3, buffer.getVolatileParams().get("pdtl").getValues().size());
+        assertEquals("pdtID", buffer.getVolatileParams().get("pdtl").getValues().get(0).execute());
+        assertEquals("pdtID1", buffer.getVolatileParams().get("pdtl").getValues().get(1).execute());
+        assertEquals("pdtID3", buffer.getVolatileParams().get("pdtl").getValues().get(2).execute());
 
     }
 }

@@ -22,72 +22,15 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage specific order delivery feature
+ */
 public class OrderDelivery {
 
     private final Order order;
     private double shippingFeesTaxIncluded;
     private double shippingFeesTaxFree;
     private String deliveryMethod;
-
-    /**
-     * Get shipping fees tax included value
-     *
-     * @return double
-     */
-    public double getShippingFeesTaxIncluded() {
-        return shippingFeesTaxIncluded;
-    }
-
-    /**
-     * Get shipping fess tax free value
-     *
-     * @return double
-     */
-    public double getShippingFeesTaxFree() {
-        return shippingFeesTaxFree;
-    }
-
-    /**
-     * Get delivery method
-     *
-     * @return String
-     */
-    public String getDeliveryMethod() {
-        return deliveryMethod;
-    }
-
-    /**
-     * Set a new shipping fees tax included value
-     *
-     * @param shippingFeesTaxIncluded double
-     * @return OrderDelivery
-     */
-    public OrderDelivery setShippingFeesTaxIncluded(double shippingFeesTaxIncluded) {
-        this.shippingFeesTaxIncluded = shippingFeesTaxIncluded;
-        return this;
-    }
-
-    /**
-     * Set a new shipping fees tax free value
-     *
-     * @param shippingFeesTaxFree double
-     * @return OrderDeliery
-     */
-    public OrderDelivery setShippingFeesTaxFree(double shippingFeesTaxFree) {
-        this.shippingFeesTaxFree = shippingFeesTaxFree;
-        return this;
-    }
-
-    /**
-     * Set a new delivery method
-     *
-     * @param deliveryMethod String
-     * @return OrderDelivery
-     */
-    public OrderDelivery setDeliveryMethod(String deliveryMethod) {
-        this.deliveryMethod = deliveryMethod;
-        return this;
-    }
 
     OrderDelivery(Order order) {
         this.order = order;
@@ -97,12 +40,72 @@ public class OrderDelivery {
     }
 
     /**
-     * Helper to set all properties
+     * Get shipping fees tax included value
      *
-     * @param shippingFeesTaxFree     int
-     * @param shippingFeesTaxIncluded double
-     * @param deliveryMethod          String
-     * @return Order
+     * @return the shipping fees tax included value
+     */
+    public double getShippingFeesTaxIncluded() {
+        return shippingFeesTaxIncluded;
+    }
+
+    /**
+     * Get shipping fess tax free value
+     *
+     * @return the shipping fess tax free value
+     */
+    public double getShippingFeesTaxFree() {
+        return shippingFeesTaxFree;
+    }
+
+    /**
+     * Get delivery method
+     *
+     * @return the delivery method
+     */
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    /**
+     * Set a new shipping fees tax included value
+     *
+     * @param shippingFeesTaxIncluded /
+     * @return OrderDelivery instance
+     */
+    public OrderDelivery setShippingFeesTaxIncluded(double shippingFeesTaxIncluded) {
+        this.shippingFeesTaxIncluded = shippingFeesTaxIncluded;
+        return this;
+    }
+
+    /**
+     * Set a new shipping fees tax free value
+     *
+     * @param shippingFeesTaxFree /
+     * @return OrderDelivery instance
+     */
+    public OrderDelivery setShippingFeesTaxFree(double shippingFeesTaxFree) {
+        this.shippingFeesTaxFree = shippingFeesTaxFree;
+        return this;
+    }
+
+    /**
+     * Set a new delivery method
+     *
+     * @param deliveryMethod /
+     * @return OrderDelivery instance
+     */
+    public OrderDelivery setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+        return this;
+    }
+
+    /**
+     * Attach delivery to order
+     *
+     * @param shippingFeesTaxFree     order delivery shipping fees tax free
+     * @param shippingFeesTaxIncluded order delivery shipping fees tax included
+     * @param deliveryMethod          order delivery method
+     * @return Order instance
      */
     public Order set(double shippingFeesTaxFree, double shippingFeesTaxIncluded, String deliveryMethod) {
         setShippingFeesTaxFree(shippingFeesTaxFree)

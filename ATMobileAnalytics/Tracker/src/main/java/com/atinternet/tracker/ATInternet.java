@@ -22,49 +22,98 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import android.app.Application;
-
 import java.util.HashMap;
 
-public class ATInternet extends Application {
+/**
+ * Use this class to manage tracker instances
+ */
+public class ATInternet {
 
+    /**
+     * Overlay permission Activity result code
+     */
     public static final int ALLOW_OVERLAY_INTENT_RESULT_CODE = 230; // Version number when this code appairs
+
+    private static ATInternet instance = new ATInternet();
+
+    private ATInternet() {
+    }
+
+    /**
+     * Get ATInternet singleton
+     *
+     * @return the ATInternet singleton object
+     */
+    public static ATInternet getInstance() {
+        return instance;
+    }
 
     private final HashMap<String, Tracker> trackers = new HashMap<>();
 
     /**
-     * Get the default tracker
+     * Get a tracker with "defaultTracker" name
      *
-     * @return Tracker
+     * @return Tracker instance
      */
     public Tracker getDefaultTracker() {
         return getTracker("defaultTracker");
     }
 
     /**
-     * Get a tracker with name
+     * Get a tracker with default configuration
      *
-     * @param trackerName String
-     * @return Tracker
+     * @param trackerName tracker identifier
+     * @return a new Tracker or existing instance
      */
     public Tracker getTracker(String trackerName) {
         if (!trackers.containsKey(trackerName)) {
-            Tracker tracker = new Tracker(this);
+            Tracker tracker = new Tracker();
             trackers.put(trackerName, tracker);
         }
         return trackers.get(trackerName);
     }
 
     /**
-     * Get a tracker with name and a set the configuration
+     * Get a tracker with default configuration
      *
-     * @param trackerName   String
-     * @param configuration HashMap
-     * @return Tracker
+     * @param context     current activity context
+     * @param trackerName tracker identifier
+     * @return a new Tracker or existing instance
+     */
+    public Tracker getTracker(android.content.Context context, String trackerName) {
+        if (!trackers.containsKey(trackerName)) {
+            Tracker tracker = new Tracker(context);
+            trackers.put(trackerName, tracker);
+        }
+        return trackers.get(trackerName);
+    }
+
+    /**
+     * Get a tracker with custom configuration
+     *
+     * @param trackerName   tracker identifier
+     * @param configuration custom configuration (see TrackerConfigurationKeys)
+     * @return a new Tracker or existing instance
      */
     public Tracker getTracker(String trackerName, HashMap<String, Object> configuration) {
         if (!trackers.containsKey(trackerName)) {
-            Tracker tracker = new Tracker(this, configuration);
+            Tracker tracker = new Tracker(configuration);
+            trackers.put(trackerName, tracker);
+        }
+        return trackers.get(trackerName);
+    }
+
+    /**
+     * Get a tracker with custom configuration
+     *
+     * @param context       current activity context
+     * @param trackerName   tracker identifier
+     * @param configuration custom configuration (see TrackerConfigurationKeys)
+     * @return a new Tracker or existing instance
+     */
+    public Tracker getTracker(android.content.Context context, String trackerName, HashMap<String, Object> configuration) {
+        if (!trackers.containsKey(trackerName)) {
+            Tracker tracker = new Tracker(context, configuration);
             trackers.put(trackerName, tracker);
         }
         return trackers.get(trackerName);

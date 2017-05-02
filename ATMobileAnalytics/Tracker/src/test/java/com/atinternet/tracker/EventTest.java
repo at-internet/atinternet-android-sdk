@@ -30,50 +30,54 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class EventTest extends AbstractTestClass {
 
     private Event event;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         event = new Event(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
     public void setOneTest() {
         tracker = event.set("cat", "action", "page");
+
         assertEquals(4, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("cat", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("cat", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("action", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("action", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("page", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("page", buffer.getVolatileParams().get("p").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
     public void setTwoTest() {
         event.set("cat", "action", "page", "obj");
         assertEquals(4, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("cat", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("cat", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("action", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("action", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("page", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("page", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(3).getKey());
-        assertEquals("obj", buffer.getVolatileParams().get(3).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("obj", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 }

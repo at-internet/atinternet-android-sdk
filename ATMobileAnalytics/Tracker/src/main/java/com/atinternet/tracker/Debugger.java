@@ -41,7 +41,6 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -60,6 +59,9 @@ import static android.view.View.GONE;
 import static android.view.View.OnClickListener;
 import static android.view.View.VISIBLE;
 
+/**
+ * Class to manage Debugger feature
+ */
 public class Debugger extends GestureDetector.SimpleOnGestureListener implements OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
 
     private static int viewerVisibility = View.GONE;
@@ -67,6 +69,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private static final float ALPHA_BACKGROUND = .3f;
     private static final float DELTA = 100;
 
+    static boolean isActive;
     static int currentViewVisibleId = -1;
     private static int itemPosition = -1;
     private static final ArrayList<Debugger.DebuggerEvent> debuggerEvents = new ArrayList<>();
@@ -74,7 +77,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     private static WeakReference<android.content.Context> context;
     private static WeakReference<DebuggerEventListAdapter> debuggerEventListAdapter;
-    private static WeakReference<FrameLayout> debuggerViewerLayout;
+    private static WeakReference<ATFrameLayout> debuggerViewerLayout;
     private boolean hasMoved;
 
     private final Tracker tracker;
@@ -89,7 +92,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private RelativeLayout noOfflineHitsLayout;
     private ListView eventListView;
     private ListView offlineHitsListView;
-    private static WeakReference<ImageView> bubbleImage;
+    private static WeakReference<ATImageView> bubbleImage;
 
     private final DebuggerOfflineHitsAdapter debuggerOfflineHitsAdapter;
 
@@ -111,8 +114,8 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     /**
      * Show the debugger
      *
-     * @param context Context
-     * @param tracker Tracker
+     * @param context current Activity context
+     * @param tracker tracker instance
      * @deprecated Since 2.2.2, use {@link #create(Context, Tracker)} instead.
      */
     @Deprecated
@@ -123,8 +126,8 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     /**
      * Show the debugger
      *
-     * @param context Context
-     * @param tracker Tracker
+     * @param context current Activity context
+     * @param tracker tracker instance
      */
     public static void create(Context context, Tracker tracker) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -157,11 +160,17 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     /**
      * Change debugger visibility
      *
-     * @param visible boolean
+     * @param visible true if debugger should be visible
      */
     public static void setViewerVisibility(boolean visible) {
         bubbleVisibility = visible ? VISIBLE : GONE;
-        Tool.setVisibleViewWithAnimation(bubbleImage.get(), visible);
+        bubbleImage.get().setVisibility(bubbleVisibility);
+    }
+
+    static void setDebuggerViewerLayout(boolean visible) {
+        viewerVisibility = visible ? VISIBLE : GONE;
+        debuggerViewerLayout.get().setVisibility(viewerVisibility);
+        setAlphaBackground(visible, false);
     }
 
     static DebuggerEventListAdapter getDebuggerEventListAdapter() {
@@ -173,6 +182,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     }
 
     private Debugger(Context ctx, Tracker tr) {
+        isActive = true;
         context = new WeakReference<>(ctx);
         remove();
         if (context.get().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -286,12 +296,6 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         onUpdateAfterItemClick(position, true);
     }
 
-    /**
-     * Callback call after onItemClick
-     *
-     * @param position int
-     * @param animate  boolean
-     */
     private void onUpdateAfterItemClick(int position, boolean animate) {
         ViewGroup parametersListView = (ViewGroup) hitDetailViewer.findViewById(R.id.parametersListView);
         if (currentViewVisibleId == R.id.eventViewer) {
@@ -317,13 +321,8 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         }
     }
 
-    /**
-     * Inflate views
-     *
-     * @param context Context
-     */
     private void inflateViews(Context context) {
-        debuggerViewerLayout = new WeakReference<>((FrameLayout) View.inflate(context, R.layout.debugger_layout, null));
+        debuggerViewerLayout = new WeakReference<>((ATFrameLayout) View.inflate(context, R.layout.debugger_layout, null));
 
         eventViewer = (LinearLayout) debuggerViewerLayout.get().findViewById(R.id.eventViewer);
         offlineViewer = (LinearLayout) debuggerViewerLayout.get().findViewById(R.id.offlineViewer);
@@ -333,7 +332,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         noOfflineHitsLayout = (RelativeLayout) debuggerViewerLayout.get().findViewById(R.id.noOfflineHits);
         hitDetailViewer = (LinearLayout) debuggerViewerLayout.get().findViewById(R.id.hitDetailViewer);
 
-        bubbleImage = new WeakReference<>(new ImageView(context));
+        bubbleImage = new WeakReference<>(new ATImageView(context));
         bubbleImage.get().setImageDrawable(Tool.getResizedImage(R.drawable.atinternet_logo, context, (int) (94 * metrics.density), (int) (73 * metrics.density)));
         bubbleImage.get().setVisibility(bubbleVisibility);
         bubbleImage.get().setOnTouchListener(this);
@@ -350,9 +349,6 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         offlineHitsListView.setOnItemClickListener(this);
     }
 
-    /**
-     * Create debugger layout
-     */
     private void addViews() {
         bubbleImageLayoutParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -374,7 +370,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             debuggerViewerLayout.get().setVisibility(VISIBLE);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
-            setAlphaBackground(true);
+            setAlphaBackground(true, true);
         } else if (viewerVisibility == GONE) {
             debuggerViewerLayout.get().setVisibility(GONE);
         }
@@ -409,17 +405,17 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             offlineHitsListView.setVisibility(!offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             eventListView.setVisibility(!debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
-            setAlphaBackground(true);
+            setAlphaBackground(true, true);
         } else {
             viewerVisibility = GONE;
             Tool.setVisibleViewWithAnimation(debuggerViewerLayout.get(), false);
-            setAlphaBackground(false);
+            setAlphaBackground(false, true);
         }
     }
 
-    private void setAlphaBackground(boolean hasReduceAlpha) {
+    private static void setAlphaBackground(boolean hasReduceAlpha, boolean withAnim) {
         AlphaAnimation animation1 = hasReduceAlpha ? new AlphaAnimation(1.f, ALPHA_BACKGROUND) : new AlphaAnimation(ALPHA_BACKGROUND, 1.f);
-        animation1.setDuration(500);
+        animation1.setDuration(withAnim ? 500 : 0);
         animation1.setFillAfter(true);
         ((Activity) context.get()).getWindow().getDecorView().findViewById(android.R.id.content).startAnimation(animation1);
     }

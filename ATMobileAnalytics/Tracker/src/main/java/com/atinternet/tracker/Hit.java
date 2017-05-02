@@ -24,52 +24,169 @@ package com.atinternet.tracker;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
+/**
+ * Class to provide hit information
+ */
 public class Hit {
 
     /**
      * Enum with different hit parameter keys
      */
     public enum HitParam {
+        /**
+         * Aisle parameter key
+         */
         Aisle("aisl"),
+        /**
+         * Screen parameter key
+         */
         Screen("p"),
+        /**
+         * Level 2 parameter key
+         */
         Level2("s2"),
+        /**
+         * Custom tree structure parameter key
+         */
         CustomTreeStructure("ptype"),
+        /**
+         * Custom object parameter key
+         */
         JSON("stc"),
+        /**
+         * User Id parameter key
+         */
         UserId("idclient"),
+        /**
+         * Action parameter key
+         */
         Action("action"),
+        /**
+         * Store referrer parameter key
+         */
         Refstore("refstore"),
+        /**
+         * Referrer parameter key
+         */
         Referrer("ref"),
+        /**
+         * Hit type parameter key
+         */
         HitType("type"),
+        /**
+         * Touch gesture parameter key
+         */
         Touch("click"),
+        /**
+         * Touched screen parameter key
+         */
         TouchScreen("pclick"),
+        /**
+         * Advertising screen parameter key
+         */
         OnAppAdTouchScreen("patc"),
+        /**
+         * Touched screen level 2 parameter key
+         */
         TouchLevel2("s2click"),
+        /**
+         * Touched advertising level 2 parameter key
+         */
         OnAppAdTouchLevel2("s2atc"),
+        /**
+         * Numeric visitor identifier parameter key
+         */
         VisitorIdentifierNumeric("an"),
+        /**
+         * Textual visitor identifier parameter key
+         */
         VisitorIdentifierText("at"),
+        /**
+         * Identified visitor category parameter key
+         */
         VisitorCategory("ac"),
+        /**
+         * Background mode parameter key
+         */
         BackgroundMode("bg"),
+        /**
+         * Touched advertising parameter key
+         */
         OnAppAdsTouch("atc"),
+        /**
+         * Advertising impression parameter key
+         */
         OnAppAdsImpression("ati"),
+        /**
+         * Location latitude parameter key
+         */
         GPSLatitude("gy"),
+        /**
+         * Location longitude parameter key
+         */
         GPSLongitude("gx"),
+        /**
+         * Enable TVTracking parameter key
+         */
         TVT("tvt"),
+        /**
+         * New marketing campaign parameter key
+         */
         Source("xto"),
+        /**
+         * RichMedia duration parameter key
+         */
         MediaDuration("m1"),
+        /**
+         * Remanent marketing campaign parameter key
+         */
         RemanentSource("xtor"),
+        /**
+         * Tp parameter key
+         */
         Tp("tp"),
+        /**
+         * Product list parameter key
+         */
         ProductList("pdtl"),
+        /**
+         * Dynamic screen identifier parameter key
+         */
         DynamicScreenId("pid"),
+        /**
+         * Dynamic screen value parameter key
+         */
         DynamicScreenValue("pchap"),
+        /**
+         * Dynamic screen date parameter key
+         */
         DynamicScreenDate("pidt"),
+        /**
+         * Internal search keyword parameter key
+         */
         InternalSearchKeyword("mc"),
+        /**
+         * Internal search result screen number parameter key
+         */
         InternalSearchResultScreenNumber("np"),
+        /**
+         * Internal search result position parameter key
+         */
         InternalSearchResultPosition("mcrg"),
+        /**
+         * Cart identifier parameter key
+         */
         CartId("idcart"),
+        /**
+         * RichMedia level 2 parameter key
+         */
         RichMediaLevel2("s2rich"),
+        /**
+         * RichMedia screen parameter key
+         */
         RichMediaScreen("prich");
 
         private final String str;
@@ -98,7 +215,7 @@ public class Hit {
     /**
      * Default constructor
      *
-     * @param url String
+     * @param url the complete hit
      */
     public Hit(String url) {
         this.url = url;
@@ -110,10 +227,10 @@ public class Hit {
     /**
      * Constructor with parameters
      *
-     * @param url       String
-     * @param date      Date
-     * @param retry     int
-     * @param isOffline boolean
+     * @param url       the complete hit
+     * @param date      hit building date
+     * @param retry     sending retry count
+     * @param isOffline true if hit come from storage
      */
     public Hit(String url, Date date, int retry, boolean isOffline) {
         this(url);
@@ -123,68 +240,68 @@ public class Hit {
     }
 
     /**
-     * Get the url
+     * Get the hit
      *
-     * @return String
+     * @return the hit
      */
     public String getUrl() {
         return url;
     }
 
     /**
-     * Get the date of the hit
+     * Get the hit date
      *
-     * @return Date
+     * @return the hit date
      */
     public Date getDate() {
         return date;
     }
 
     /**
-     * Get the retry number
+     * Get the sending retry count
      *
-     * @return int
+     * @return the retry count
      */
     public int getRetry() {
         return retry;
     }
 
     /**
-     * Get the offline property
+     * Get the "isOffline" property value
      *
-     * @return boolean
+     * @return true if hit come from storage
      */
     public boolean isOffline() {
         return isOffline;
     }
 
-    static HitType getHitType(final ArrayList<Param> volatileParams, final ArrayList<Param> persistentParams) {
-        ArrayList<Param> buffer = new ArrayList<Param>() {{
-            addAll(volatileParams);
-            addAll(persistentParams);
+    static HitType getHitType(final LinkedHashMap<String, Param> volatileParams, final LinkedHashMap<String, Param> persistentParams) {
+        LinkedHashMap<String, Param> buffer = new LinkedHashMap<String, Param>() {{
+            putAll(volatileParams);
+            putAll(persistentParams);
         }};
 
         HitType type = HitType.Screen;
 
-        for (Param p : buffer) {
-            if (p.getKey().equals("clic") || p.getKey().equals("click") || (p.getKey().equals("type") && Lists.getProcessedTypes().containsKey(p.getValue().execute()))) {
-                if (p.getKey().equals("type")) {
-                    type = Lists.getProcessedTypes().get(p.getValue().execute());
-                    break;
-                }
+        if (buffer.containsKey("clic") || buffer.containsKey("click")) {
+            type = HitType.Touch;
+        }
 
-                if (p.getKey().equals("clic") || p.getKey().equals("click")) {
-                    type = HitType.Touch;
-                }
+        Param typeParam;
+        if ((typeParam = buffer.get("type")) != null) {
+            HitType typeVal;
+            if ((typeVal = Lists.getProcessedTypes().get(typeParam.getValues().get(0).execute())) != null) {
+                type = typeVal;
             }
         }
+
         return type;
     }
 
     /**
-     * Get the type for offline type
+     * Get the hit type
      *
-     * @return HitType
+     * @return the hit type
      */
     public HitType getHitType() {
         HitType type = HitType.Screen;

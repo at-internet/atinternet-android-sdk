@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Wrapper class to manage CustomObject instances
+ */
 public class CustomObjects extends Helper {
 
     private AbstractScreen screen;
@@ -72,8 +75,8 @@ public class CustomObjects extends Helper {
     /**
      * Add a CustomObject
      *
-     * @param customObject String
-     * @return CustomObject
+     * @param customObject json string value
+     * @return a CustomObject instance
      */
     public CustomObject add(String customObject) {
         CustomObject obj = new CustomObject(tracker).setValue(customObject);
@@ -98,8 +101,8 @@ public class CustomObjects extends Helper {
     /**
      * Add a CustomObject
      *
-     * @param customObject Map
-     * @return CustomObject
+     * @param customObject map with custom data
+     * @return a CustomObject instance
      */
     public CustomObject add(Map<String, Object> customObject) {
         return add(new JSONObject(customObject).toString());
@@ -108,7 +111,7 @@ public class CustomObjects extends Helper {
     /**
      * Remove a CustomObject
      *
-     * @param customObjectId String
+     * @param customObjectId business object identifier
      */
     public void remove(String customObjectId) {
         if (screen != null) {

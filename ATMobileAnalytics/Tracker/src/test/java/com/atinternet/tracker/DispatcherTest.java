@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class DispatcherTest extends AbstractTestClass {
 
@@ -70,13 +70,13 @@ public class DispatcherTest extends AbstractTestClass {
         Tracker.getPreferences().edit().putString(IdentifiedVisitor.VISITOR_TEXT, "test").apply();
         dispatcher.setIdentifiedVisitorInfos();
         Assert.assertEquals(3, buffer.getVolatileParams().size());
-        Assert.assertEquals("an", buffer.getVolatileParams().get(0).getKey());
-        Assert.assertEquals("1", buffer.getVolatileParams().get(0).getValue().execute());
+        Assert.assertEquals("an", buffer.getVolatileParams().get("an").getKey());
+        Assert.assertEquals("1", buffer.getVolatileParams().get("an").getValues().get(0).execute());
 
-        Assert.assertEquals("at", buffer.getVolatileParams().get(1).getKey());
-        Assert.assertEquals("test", buffer.getVolatileParams().get(1).getValue().execute());
+        Assert.assertEquals("at", buffer.getVolatileParams().get("at").getKey());
+        Assert.assertEquals("test", buffer.getVolatileParams().get("at").getValues().get(0).execute());
 
-        Assert.assertEquals("ac", buffer.getVolatileParams().get(2).getKey());
-        Assert.assertEquals("3", buffer.getVolatileParams().get(2).getValue().execute());
+        Assert.assertEquals("ac", buffer.getVolatileParams().get("ac").getKey());
+        Assert.assertEquals("3", buffer.getVolatileParams().get("ac").getValues().get(0).execute());
     }
 }

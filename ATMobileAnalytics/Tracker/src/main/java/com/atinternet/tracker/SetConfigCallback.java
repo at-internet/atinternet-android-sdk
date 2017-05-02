@@ -22,9 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * SetConfigCallback should be implemented when setConfig method in async mode called
+ */
 public interface SetConfigCallback {
     /**
-     * Callback called when set config is finished
+     * Called when config has been set
      */
     void setConfigEnd();
 }

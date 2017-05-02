@@ -28,10 +28,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @Config(sdk =21)
@@ -51,28 +48,5 @@ public class OrderDiscountTest extends AbstractTestClass {
         assertNull(orderDiscount.getPromotionalCode());
         assertEquals(-1, orderDiscount.getDiscountTaxFree(), 0);
         assertEquals(-1, orderDiscount.getDiscountTaxIncluded(), 0);
-    }
-
-    @Test
-    public void setTest() {
-        Random r = new Random();
-        int[] vals = {
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500)
-        };
-        int i = 0;
-        Order o = orderDiscount.set(vals[i++], vals[i++], String.valueOf(vals[i]));
-        assertNotNull(o.getId());
-        i = 0;
-
-        assertEquals(vals[i++], orderDiscount.getDiscountTaxFree(), 0);
-        assertEquals(vals[i++], orderDiscount.getDiscountTaxIncluded(), 0);
-        assertEquals(String.valueOf(vals[i]), orderDiscount.getPromotionalCode());
-
-        orderDiscount = orderDiscount.setDiscountTaxFree(1).setDiscountTaxIncluded(1).setPromotionalCode("p");
-        assertEquals(1, orderDiscount.getDiscountTaxFree(), 0);
-        assertEquals(1, orderDiscount.getDiscountTaxIncluded(), 0);
-        assertEquals("p", orderDiscount.getPromotionalCode());
     }
 }

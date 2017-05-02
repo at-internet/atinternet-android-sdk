@@ -24,17 +24,40 @@ package com.atinternet.tracker;
 
 import java.util.ArrayList;
 
+/**
+ * Adds custom variables to an order
+ */
 public class OrderCustomVars extends ArrayList<OrderCustomVar> {
 
     /**
      * Add a order custom var
      *
-     * @param varId int
-     * @param value String
-     * @return OrderCustomVars
+     * @param varId int: identifier
+     * @param value String: value
+     * @return OrderCustomVars: the same instance
      */
     public OrderCustomVars add(int varId, String value) {
         super.add(new OrderCustomVar(varId, value));
         return this;
+    }
+}
+
+class OrderCustomVar {
+
+    private final int varId;
+
+    private final String value;
+
+    int getVarId() {
+        return varId;
+    }
+
+    String getValue() {
+        return value;
+    }
+
+    OrderCustomVar(int varId, String value) {
+        this.varId = varId;
+        this.value = value;
     }
 }

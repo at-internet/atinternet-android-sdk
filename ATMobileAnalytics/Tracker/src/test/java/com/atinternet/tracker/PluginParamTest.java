@@ -28,20 +28,21 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class PluginParamTest extends AbstractTestClass {
 
     @Test
     public void getPluginsDictionaryTest() {
-        Configuration configuration = tracker.getConfiguration();
-        configuration.put("plugins", "tvtracking");
-        tracker = new Tracker(RuntimeEnvironment.application, configuration);
+        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
+            add(Tracker.PluginKey.tvtracking);
+        }}, null, true);
 
         HashMap<String, String> plugins = PluginParam.get(tracker);
         assertEquals(1, plugins.size());

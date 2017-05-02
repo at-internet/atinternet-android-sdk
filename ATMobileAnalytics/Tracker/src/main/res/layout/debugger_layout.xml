@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_margin="10dp"
-    android:visibility="gone"
-    android:background="@drawable/layout_background"
+<com.atinternet.tracker.ATFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:background="@drawable/layout_background"
+    android:visibility="gone">
 
     <include layout="@layout/event_viewer_layout" />
 
     <include layout="@layout/offline_hits_viewer_layout" />
 
     <include layout="@layout/hit_detail_viewer_layout" />
-</FrameLayout>
+</com.atinternet.tracker.ATFrameLayout>

@@ -2,3 +2,8 @@
 ATMobileAnalytics/TestApp/src/main/assets/
 ATMobileAnalytics/TestApp/TestApp.iml
 ATMobileAnalytics/Tracker/Tracker.iml
+ATMobileAnalytics/.gradle
+ATMobileAnalytics/local.properties
+ATMobileAnalytics/.DS_Store
+ATMobileAnalytics/build
+ATMobileAnalytics/.idea/

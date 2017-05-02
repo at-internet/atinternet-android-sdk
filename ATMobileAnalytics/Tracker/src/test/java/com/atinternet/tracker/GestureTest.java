@@ -22,8 +22,6 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +29,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -42,15 +39,11 @@ import static org.junit.Assert.assertNotSame;
 public class GestureTest extends AbstractTestClass {
 
     private Gesture gesture;
-    private Buffer buffer;
-    private int i = 0;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         gesture = new Gesture(tracker);
-        buffer = tracker.getBuffer();
-        i = 0;
     }
 
     @Test
@@ -68,63 +61,44 @@ public class GestureTest extends AbstractTestClass {
     @Test
     public void CustomObjectsTest() {
         CustomObjects customObjects = gesture.CustomObjects();
-        Assert.assertNotNull(gesture.CustomObjects());
-        Assert.assertEquals(gesture.CustomObjects(), customObjects);
+        assertNotNull(gesture.CustomObjects());
+        assertEquals(gesture.CustomObjects(), customObjects);
     }
 
     @Test
     public void InternalSearchDeprecatedTest() {
-        int id = new Random().nextInt(500);
-        InternalSearch internalSearch = gesture.InternalSearch("test" + id, id);
-        Assert.assertNotNull(internalSearch);
-        Assert.assertEquals(gesture.InternalSearch("", 0), internalSearch);
-
-        internalSearch = gesture.InternalSearch("", 0);
-
-        Assert.assertEquals(internalSearch.getKeyword(), "test" + id);
-        Assert.assertEquals(internalSearch.getResultScreenNumber(), id);
+        InternalSearch internalSearch = gesture.InternalSearch("test", 1);
+        assertNotNull(internalSearch);
+        assertEquals(gesture.InternalSearch("", 0), internalSearch);
     }
 
     @Test
     public void InternalSearchTest() {
-        int id = new Random().nextInt(500);
-        InternalSearch internalSearch = gesture.InternalSearch("test" + id, id, id);
-        Assert.assertNotNull(internalSearch);
-        Assert.assertEquals(gesture.InternalSearch("", 0, 0), internalSearch);
-
-        internalSearch = gesture.InternalSearch("", 0, 0);
-
-        Assert.assertEquals(internalSearch.getKeyword(), "test" + id);
-        Assert.assertEquals(internalSearch.getResultScreenNumber(), id);
-        Assert.assertEquals(internalSearch.getResultPosition(), id);
-    }
-
-    @Test
-    public void setTest() {
-        assertEquals("toto", gesture.setName("toto").getName());
-        assertEquals(Gesture.Action.Download, gesture.setAction(Gesture.Action.Download).getAction());
-        assertEquals(123, gesture.setLevel2(123).getLevel2());
+        InternalSearch internalSearch = gesture.InternalSearch("test", 1, 2);
+        assertNotNull(internalSearch);
+        assertEquals(gesture.InternalSearch("", 0, 0), internalSearch);
     }
 
     @Test
     public void setEventTest() {
         gesture.setName("gesture").setAction(Gesture.Action.Exit).setChapter2("chapter2").setEvent();
         assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("click", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("S", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("click").getValues().size());
+        assertEquals("S", buffer.getVolatileParams().get("click").getValues().get(0).execute());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("click", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("click", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("S", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("S", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter2::gesture", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter2::gesture", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("{}", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
@@ -132,55 +106,48 @@ public class GestureTest extends AbstractTestClass {
         gesture.setChapter1("chapter1").setChapter3("chapter3").setEvent();
 
         assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("click", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("A", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("click").getValues().size());
+        assertEquals("A", buffer.getVolatileParams().get("click").getValues().get(0).execute());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("click", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("click", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("A", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("A", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("{}", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
     public void setEventCompleteTest() {
-        Random r = new Random();
-        String[] vals = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-        gesture.setName(vals[i++])
-                .setChapter1(vals[i++])
-                .setChapter2(vals[i++])
-                .setChapter3(vals[i]).setEvent();
+        gesture.setName("name")
+                .setChapter1("chap1")
+                .setChapter2("chap2")
+                .setChapter3("chap3").setEvent();
 
         assertEquals(5, buffer.getVolatileParams().size());
-        i = 0;
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("click", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("A", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("click").getValues().size());
+        assertEquals("A", buffer.getVolatileParams().get("click").getValues().get(0).execute());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("click", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("click", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("A", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("A", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals(vals[1] + "::" + vals[2] + "::" + vals[3] + "::" + vals[0], buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chap1::chap2::chap3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("{}", buffer.getVolatileParams().get(i).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
@@ -190,57 +157,93 @@ public class GestureTest extends AbstractTestClass {
         }});
         gesture.setEvent();
 
-        assertEquals(6, buffer.getVolatileParams().size());
+        assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("stc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("{\"key\":\"value\"}", buffer.getVolatileParams().get(i++).getValue().execute());
 
-        assertEquals("click", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("A", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("click").getValues().size());
+        assertEquals("A", buffer.getVolatileParams().get("click").getValues().get(0).execute());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("click", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("click", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("A", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("A", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("{}", buffer.getVolatileParams().get(i++).getValue().execute());
+
+        assertEquals(2, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{\"key\":\"value\"}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(1).execute());
+
+    }
+
+    @Test
+    public void setEventWithInternalDeprecatedSearch() {
+        gesture.setChapter1("chapter1").setChapter3("chapter3");
+        gesture.InternalSearch("searchLabel", 3);
+
+        gesture.setEvent();
+
+        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("mc").getValues().size());
+        assertEquals("searchLabel", buffer.getVolatileParams().get("mc").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("np").getValues().size());
+        assertEquals("3", buffer.getVolatileParams().get("np").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("click").getValues().size());
+        assertEquals("IS", buffer.getVolatileParams().get("click").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("click", buffer.getVolatileParams().get("type").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("IS", buffer.getVolatileParams().get("action").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get("p").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
     public void setEventWithInternalSearch() {
         gesture.setChapter1("chapter1").setChapter3("chapter3");
-        InternalSearch is = gesture.InternalSearch("searchLabel", 3);
-
-        assertNotNull(is.getId());
-
+        gesture.InternalSearch("searchLabel", 3, 4);
         gesture.setEvent();
 
-        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(8, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("mc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("searchLabel", buffer.getVolatileParams().get(i++).getValue().execute());
 
-        assertEquals("np", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("3", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mc").getValues().size());
+        assertEquals("searchLabel", buffer.getVolatileParams().get("mc").getValues().get(0).execute());
 
-        assertEquals("click", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("IS", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("np").getValues().size());
+        assertEquals("3", buffer.getVolatileParams().get("np").getValues().get(0).execute());
 
-        assertEquals("type", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("click", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mcrg").getValues().size());
+        assertEquals("4", buffer.getVolatileParams().get("mcrg").getValues().get(0).execute());
 
-        assertEquals("action", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("IS", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("click").getValues().size());
+        assertEquals("IS", buffer.getVolatileParams().get("click").getValues().get(0).execute());
 
-        assertEquals("p", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("click", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(i).getKey());
-        assertEquals("{}", buffer.getVolatileParams().get(i++).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
+        assertEquals("IS", buffer.getVolatileParams().get("action").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get("p").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 }

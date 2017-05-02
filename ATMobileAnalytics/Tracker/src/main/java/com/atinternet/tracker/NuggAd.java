@@ -28,6 +28,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Wrapper class to enable NuggAd partner usage
+ */
 public class NuggAd extends BusinessObject {
 
     private JSONObject nuggAdData;

@@ -31,18 +31,16 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CustomTreeStructureTest extends AbstractTestClass {
 
     private CustomTreeStructure customTreeStructure;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         customTreeStructure = new CustomTreeStructure(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -58,17 +56,14 @@ public class CustomTreeStructureTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        assertEquals(3, customTreeStructure.setCategory1(3).getCategory1());
-        assertEquals(3, customTreeStructure.setCategory2(3).getCategory2());
-        assertEquals(3, customTreeStructure.setCategory3(3).getCategory3());
-    }
-
-    @Test
     public void setEventTest() {
-        customTreeStructure.setCategory1(4).setCategory3(4).setEvent();
+        customTreeStructure.setCategory1(4)
+                .setCategory3(4)
+                .setEvent();
         assertEquals(1, buffer.getVolatileParams().size());
-        assertEquals("ptype", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("4-0-4", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("ptype").getValues().size());
+        assertEquals("4-0-4", buffer.getVolatileParams().get("ptype").getValues().get(0).execute());
     }
 }

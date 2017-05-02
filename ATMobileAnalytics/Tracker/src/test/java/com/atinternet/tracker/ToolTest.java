@@ -29,18 +29,18 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import static com.atinternet.tracker.Tracker.OfflineMode.always;
 import static com.atinternet.tracker.Tracker.OfflineMode.never;
 import static com.atinternet.tracker.Tracker.OfflineMode.required;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ToolTest extends AbstractTestClass {
 
@@ -64,9 +64,9 @@ public class ToolTest extends AbstractTestClass {
 
     @Test
     public void parseJSONTest() {
-        assertNull(Tool.parseJSON("test"));
-        assertNotNull(Tool.parseJSON("{\"test\": [1,2,3]}"));
-        assertNotNull(Tool.parseJSON("[1,2,3]"));
+        assertFalse(Tool.isJSONObject("test"));
+        assertTrue(Tool.isJSONObject("{\"test\": [1,2,3]}"));
+        assertTrue(Tool.isJSONArray("[1,2,3]"));
     }
 
     @Test
@@ -99,25 +99,14 @@ public class ToolTest extends AbstractTestClass {
             public String execute() {
                 return "test";
             }
-        }, Param.Type.Closure);
-        final Param p1 = new Param("test", new Closure() {
+        });
+        p.getValues().add(new Closure() {
             @Override
             public String execute() {
                 return "value";
             }
-        }, Param.Type.Closure);
-        final Param p2 = new Param("test", new Closure() {
-            @Override
-            public String execute() {
-                return "set";
-            }
-        }, Param.Type.Closure);
-        ArrayList<Param> list = new ArrayList<Param>() {{
-            add(p);
-            add(p1);
-            add(p2);
-        }};
+        });
 
-        assertEquals("test,value,set", Tool.appendParameterValues("test", list, new ArrayList<Param>()));
+        assertEquals("test,value", Tool.appendParameterValues(p));
     }
 }

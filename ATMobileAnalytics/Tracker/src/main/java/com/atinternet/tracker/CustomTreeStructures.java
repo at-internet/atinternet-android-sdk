@@ -23,6 +23,8 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 /**
+ * Wrapper class to manage CustomTreeStructure instances
+ *
  * @deprecated Since 2.3.0, CustomTreeStructure is now only available as a screen object property.
  */
 @Deprecated
@@ -35,8 +37,8 @@ public class CustomTreeStructures extends Helper {
     /**
      * Add a custom tree structure
      *
-     * @param category1 int
-     * @return CustomTreeStructure
+     * @param category1 first custom tree structure category
+     * @return a CustomTreeStructure instance
      */
     public CustomTreeStructure add(int category1) {
         CustomTreeStructure customTreeStructure = new CustomTreeStructure(tracker).setCategory1(category1);
@@ -48,9 +50,9 @@ public class CustomTreeStructures extends Helper {
     /**
      * Add a custom tree structure
      *
-     * @param category1 int
-     * @param category2 int
-     * @return CustomTreeStructure
+     * @param category1 first custom tree structure category
+     * @param category2 second custom tree structure category
+     * @return a CustomTreeStructure instance
      */
     public CustomTreeStructure add(int category1, int category2) {
         return add(category1).setCategory2(category2);
@@ -59,10 +61,10 @@ public class CustomTreeStructures extends Helper {
     /**
      * Add a custom tree structure
      *
-     * @param category1 int
-     * @param category2 int
-     * @param category3 int
-     * @return CustomTreeStructure
+     * @param category1 first custom tree structure category
+     * @param category2 second custom tree structure category
+     * @param category3 third custom tree structure category
+     * @return a CustomTreeStructure instance
      */
     public CustomTreeStructure add(int category1, int category2, int category3) {
         return add(category1, category2).setCategory3(category3);

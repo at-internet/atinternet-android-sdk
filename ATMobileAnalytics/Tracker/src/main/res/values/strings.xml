@@ -8,4 +8,20 @@
     <string name="no_offline_hits">No stored hits</string>
     <string name="empty" />
 
+    <string name="disconnected">Disconnected</string>
+    <string name="connecting">Connecting &#8230;</string>
+    <string name="connected">Connected</string>
+    <string name="initial_time">00 : 00 : 00</string>
+    <string name="pairing_request_title">Pairing request</string>
+    <string name="pairing_request_message">Do you want to start live tagging session ?</string>
+    <string name="pairing_refuse_button">Refuse</string>
+    <string name="ok">OK</string>
+
+    <string name="pairing_canceled_title">Disconnection</string>
+    <string name="pairing_canceled_message">Pairing request has been canceled</string>
+    <string name="pairing_stopped_title">Live session ended</string>
+    <string name="pairing_stopped_message">UI has disconnected</string>
+    <string name="pairing_refused_title">Information</string>
+    <string name="pairing_refused_message">UI has refused the pairing request</string>
+
 </resources>

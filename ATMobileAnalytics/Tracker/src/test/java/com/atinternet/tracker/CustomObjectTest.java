@@ -22,7 +22,6 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -30,27 +29,22 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CustomObjectTest extends AbstractTestClass {
 
-    private CustomObject customObject;
-    private Buffer buffer;
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        customObject = new CustomObject(tracker);
-        buffer = tracker.getBuffer();
-    }
-
     @Test
     public void setEventTest() {
-        customObject.setValue("{\"obj\":{\"key\":\"value\"}}").setEvent();
+        new CustomObject(tracker).setValue("{\"obj\":{\"key\":\"value\"}}").setEvent();
+        new CustomObject(tracker).setValue("{\"key\":\"value\"}").setEvent();
+        new CustomObject(tracker).setValue("{\"key1\":\"value1\"}").setEvent();
 
         assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("stc", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("{\"obj\":{\"key\":\"value\"}}", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(3, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{\"obj\":{\"key\":\"value\"}}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
+        assertEquals("{\"key\":\"value\"}", buffer.getVolatileParams().get("stc").getValues().get(1).execute());
+        assertEquals("{\"key1\":\"value1\"}", buffer.getVolatileParams().get("stc").getValues().get(2).execute());
     }
 }

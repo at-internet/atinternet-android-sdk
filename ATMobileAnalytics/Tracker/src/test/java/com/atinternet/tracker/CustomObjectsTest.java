@@ -32,23 +32,79 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CustomObjectsTest extends AbstractTestClass {
 
-    private CustomObjects customObjects;
+    @Test
+    public void addAndRemoveInTrackerTest() throws JSONException {
+        CustomObjects customObjects = new CustomObjects(tracker);
+        CustomObject co = customObjects.add(new JSONObject().put("key", "value").toString());
+        assertEquals(1, tracker.getBusinessObjects().size());
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        customObjects = new CustomObjects(tracker);
+        customObjects.remove(co.getId());
+        assertEquals(0, tracker.getBusinessObjects().size());
     }
 
     @Test
-    public void addTest() throws JSONException {
-        CustomObject obj = customObjects.add(new JSONObject().put("key", "value").toString());
-        assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("{\"key\":\"value\"}", ((CustomObject) tracker.getBusinessObjects().get(obj.getId())).getValue());
+    public void addAndRemoveInScreenTest() throws JSONException {
+        Screen screen = new Screen(tracker);
+        CustomObjects customObjects = new CustomObjects(screen);
+        CustomObject co = customObjects.add(new JSONObject().put("key", "value").toString());
+        assertEquals(0, tracker.getBusinessObjects().size());
+        assertEquals(1, screen.getCustomObjectsMap().size());
+
+        customObjects.remove(co.getId());
+        assertEquals(0, screen.getCustomObjectsMap().size());
     }
 
+    @Test
+    public void addAndRemoveInGestureTest() throws JSONException {
+        Gesture g = new Gesture(tracker);
+        CustomObjects customObjects = new CustomObjects(g);
+        CustomObject co = customObjects.add(new JSONObject().put("key", "value").toString());
+        assertEquals(0, tracker.getBusinessObjects().size());
+        assertEquals(1, g.getCustomObjectsMap().size());
+
+        customObjects.remove(co.getId());
+        assertEquals(0, g.getCustomObjectsMap().size());
+
+    }
+
+    @Test
+    public void addAndRemoveInPublisherTest() throws JSONException {
+        Publisher p = new Publisher(tracker);
+        CustomObjects customObjects = new CustomObjects(p);
+        CustomObject co = customObjects.add(new JSONObject().put("key", "value").toString());
+        assertEquals(0, tracker.getBusinessObjects().size());
+        assertEquals(1, p.getCustomObjectsMap().size());
+
+        customObjects.remove(co.getId());
+        assertEquals(0, p.getCustomObjectsMap().size());
+    }
+
+    @Test
+    public void addAndRemoveInSelfPromotionTest() throws JSONException {
+        SelfPromotion sp = new SelfPromotion(tracker);
+        CustomObjects customObjects = new CustomObjects(sp);
+        CustomObject co = customObjects.add(new JSONObject().put("key", "value").toString());
+        assertEquals(0, tracker.getBusinessObjects().size());
+        assertEquals(1, sp.getCustomObjectsMap().size());
+
+        customObjects.remove(co.getId());
+        assertEquals(0, sp.getCustomObjectsMap().size());
+    }
+
+    @Test
+    public void addAndRemoveInProductTest() throws JSONException {
+        Product p = new Product(tracker);
+        CustomObjects customObjects = new CustomObjects(p);
+        CustomObject co = customObjects.add(new JSONObject().put("key", "value").toString());
+        assertEquals(0, tracker.getBusinessObjects().size());
+        assertEquals(1, p.getCustomObjectsMap().size());
+
+        customObjects.remove(co.getId());
+        assertEquals(0, p.getCustomObjectsMap().size());
+
+    }
 }

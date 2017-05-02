@@ -27,6 +27,9 @@ import android.text.TextUtils;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Abstract class to manage rich media tracking
+ */
 public abstract class RichMedia extends BusinessObject {
 
     static final int MAX_DURATION = 86400;
@@ -50,7 +53,7 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     /**
-     * Enum with different action type
+     * Enum with different action types
      */
     public enum Action {
         Play("play"),
@@ -106,78 +109,6 @@ public abstract class RichMedia extends BusinessObject {
         return type;
     }
 
-    /**
-     * Get level 2
-     *
-     * @return int
-     */
-    public int getLevel2() {
-        return level2;
-    }
-
-    /**
-     * Get boolean isBuffering value
-     *
-     * @return boolean
-     */
-    public boolean isBuffering() {
-        return isBuffering;
-    }
-
-    /**
-     * Get boolean isEmbedded value
-     *
-     * @return boolean
-     */
-    public boolean isEmbedded() {
-        return isEmbedded;
-    }
-
-    /**
-     * Get name
-     *
-     * @return String
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get first chapter
-     *
-     * @return String
-     */
-    public String getChapter1() {
-        return chapter1;
-    }
-
-    /**
-     * Get second chapter
-     *
-     * @return String
-     */
-    public String getChapter2() {
-        return chapter2;
-    }
-
-    /**
-     * Get third chapter
-     *
-     * @return String
-     */
-    public String getChapter3() {
-        return chapter3;
-    }
-
-    /**
-     * Get web domain
-     *
-     * @return String
-     */
-    public String getWebDomain() {
-        return webDomain;
-    }
-
     RichMedia(MediaPlayer player) {
         super(player.getTracker());
         mediaPlayer = player;
@@ -187,6 +118,78 @@ public abstract class RichMedia extends BusinessObject {
         isEmbedded = false;
         isBuffering = false;
         webDomain = null;
+    }
+
+    /**
+     * Get level 2
+     *
+     * @return the level 2
+     */
+    public int getLevel2() {
+        return level2;
+    }
+
+    /**
+     * Get boolean "isBuffering" value
+     *
+     * @return true if the media is buffering
+     */
+    public boolean isBuffering() {
+        return isBuffering;
+    }
+
+    /**
+     * Get boolean "isEmbedded" value
+     *
+     * @return true if the media is embedded in app
+     */
+    public boolean isEmbedded() {
+        return isEmbedded;
+    }
+
+    /**
+     * Get media name
+     *
+     * @return the media name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Get first chapter
+     *
+     * @return the first chapter
+     */
+    public String getChapter1() {
+        return chapter1;
+    }
+
+    /**
+     * Get second chapter
+     *
+     * @return the second chapter
+     */
+    public String getChapter2() {
+        return chapter2;
+    }
+
+    /**
+     * Get third chapter
+     *
+     * @return the third chapter
+     */
+    public String getChapter3() {
+        return chapter3;
+    }
+
+    /**
+     * Get web domain
+     *
+     * @return the web domain
+     */
+    public String getWebDomain() {
+        return webDomain;
     }
 
     @Override
@@ -227,18 +230,19 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     /**
-     * Send play
+     * Send a play action tracking. Refresh is enabled with default duration
      */
     public void sendPlay() {
         sendPlay(5);
     }
 
     /**
-     * Send play with a refresh duration
+     * Send play with a custom refresh duration
      *
-     * @param refreshDuration int
+     * @param refreshDuration refresh duration in second, must be higher than 5
      */
     public void sendPlay(int refreshDuration) {
+        final RichMedia self = this;
         if (refreshDuration != 0) {
             if (refreshDuration < 5) {
                 refreshDuration = 5;
@@ -249,7 +253,7 @@ public abstract class RichMedia extends BusinessObject {
                     @Override
                     public void run() {
                         action = RichMedia.Action.Refresh;
-                        tracker.getDispatcher().dispatch(RichMedia.this);
+                        tracker.getDispatcher().dispatch(self);
                     }
                 }, refreshDuration, refreshDuration, TimeUnit.SECONDS);
             }
@@ -259,7 +263,7 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     /**
-     * Send pause
+     * Send a pause action tracking
      */
     public void sendPause() {
         action = RichMedia.Action.Pause;
@@ -270,7 +274,7 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     /**
-     * Send stop
+     * Send a stop action tracking
      */
     public void sendStop() {
         action = RichMedia.Action.Stop;
@@ -281,7 +285,7 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     /**
-     * Send move
+     * Send a move action tracking
      */
     public void sendMove() {
         action = RichMedia.Action.Move;

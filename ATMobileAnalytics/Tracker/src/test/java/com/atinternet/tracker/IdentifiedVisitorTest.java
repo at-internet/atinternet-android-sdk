@@ -26,87 +26,81 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-
-import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class IdentifiedVisitorTest extends AbstractTestClass {
 
     private IdentifiedVisitor identifiedVisitor;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        Configuration configuration = tracker.getConfiguration();
-        configuration.put(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR, false);
-        tracker = new Tracker(RuntimeEnvironment.application, configuration);
-        identifiedVisitor = new IdentifiedVisitor(tracker);
-        buffer = tracker.getBuffer();
+        tracker.setPersistentIdentifiedVisitorEnabled(false, null, true);
         buffer.getPersistentParams().clear();
+        identifiedVisitor = new IdentifiedVisitor(tracker);
     }
 
     @Test
     public void setOneTest() {
-        int id = new Random().nextInt(500);
-        tracker = identifiedVisitor.set(id);
+        identifiedVisitor.set(1);
         assertEquals(1, buffer.getPersistentParams().size());
-        assertEquals("an", buffer.getPersistentParams().get(0).getKey());
-        assertEquals(String.valueOf(id), buffer.getPersistentParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getVolatileParams().size());
+
+        assertEquals(1, buffer.getPersistentParams().get("an").getValues().size());
+        assertEquals(String.valueOf(1), buffer.getPersistentParams().get("an").getValues().get(0).execute());
     }
 
     @Test
     public void setTwoTest() {
-        int id = new Random().nextInt(500);
-        int cat = new Random().nextInt(500);
-        tracker = identifiedVisitor.set(id, cat);
+        identifiedVisitor.set(1, 1);
         assertEquals(2, buffer.getPersistentParams().size());
-        assertEquals("an", buffer.getPersistentParams().get(0).getKey());
-        assertEquals(String.valueOf(id), buffer.getPersistentParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getVolatileParams().size());
 
-        assertEquals("ac", buffer.getPersistentParams().get(1).getKey());
-        assertEquals(String.valueOf(cat), buffer.getPersistentParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getPersistentParams().get("an").getValues().size());
+        assertEquals(String.valueOf(1), buffer.getPersistentParams().get("an").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getPersistentParams().get("ac").getValues().size());
+        assertEquals(String.valueOf(1), buffer.getPersistentParams().get("ac").getValues().get(0).execute());
     }
 
     @Test
     public void setThreeTest() {
-        int id = new Random().nextInt(500);
-        tracker = identifiedVisitor.set("visitor" + id);
+        identifiedVisitor.set("visitor");
         assertEquals(1, buffer.getPersistentParams().size());
-        assertEquals("at", buffer.getPersistentParams().get(0).getKey());
-        assertEquals("visitor" + id, buffer.getPersistentParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getVolatileParams().size());
+
+        assertEquals(1, buffer.getPersistentParams().get("at").getValues().size());
+        assertEquals("visitor", buffer.getPersistentParams().get("at").getValues().get(0).execute());
 
     }
 
     @Test
     public void setFourTest() {
-        int id = new Random().nextInt(500);
-        int cat = new Random().nextInt(500);
-        tracker = identifiedVisitor.set("visitor" + id, cat);
-        assertEquals(2, buffer.getPersistentParams().size());
-        assertEquals("at", buffer.getPersistentParams().get(0).getKey());
-        assertEquals("visitor" + id, buffer.getPersistentParams().get(0).getValue().execute());
+        identifiedVisitor.set("visitor", 1);
 
-        assertEquals("ac", buffer.getPersistentParams().get(1).getKey());
-        assertEquals(String.valueOf(cat), buffer.getPersistentParams().get(1).getValue().execute());
+        assertEquals(2, buffer.getPersistentParams().size());
+        assertEquals(0, buffer.getVolatileParams().size());
+
+        assertEquals(1, buffer.getPersistentParams().get("at").getValues().size());
+        assertEquals("visitor", buffer.getPersistentParams().get("at").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getPersistentParams().get("ac").getValues().size());
+        assertEquals(String.valueOf(1), buffer.getPersistentParams().get("ac").getValues().get(0).execute());
     }
 
     @Test
     public void unsetTest() {
-        tracker = identifiedVisitor.set("visitor", 2);
-        assertEquals(2, buffer.getPersistentParams().size());
-        assertEquals("at", buffer.getPersistentParams().get(0).getKey());
-        assertEquals("visitor", buffer.getPersistentParams().get(0).getValue().execute());
+        identifiedVisitor.set("visitor", 1);
 
-        assertEquals("ac", buffer.getPersistentParams().get(1).getKey());
-        assertEquals("2", buffer.getPersistentParams().get(1).getValue().execute());
+        assertEquals(2, buffer.getPersistentParams().size());
+        assertEquals(0, buffer.getVolatileParams().size());
 
         identifiedVisitor.unset();
         assertEquals(0, buffer.getPersistentParams().size());
+        assertEquals(0, buffer.getVolatileParams().size());
     }
 }

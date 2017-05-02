@@ -22,27 +22,32 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * SelfPromotion subclass to manage self promotion impression only
+ */
 public class SelfPromotionImpression extends SelfPromotion {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
-    public SelfPromotionImpression(Tracker tracker) {
+    SelfPromotionImpression(Tracker tracker) {
         super(tracker);
         action = Action.View;
     }
+
+    /**
+     * Force action to view
+     *
+     * @param action /
+     * @return SelfPromotion instance
+     */
+    @Override
+    public SelfPromotion setAction(Action action) {
+        return super.setAction(Action.View);
+    }
+
 
     @Override
     public void sendImpression() {
         // Do Nothing
         Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "This method is overrided to do nothing");
-    }
-
-    @Override
-    public SelfPromotion setAction(Action action) {
-        return super.setAction(Action.View);
     }
 
     @Override

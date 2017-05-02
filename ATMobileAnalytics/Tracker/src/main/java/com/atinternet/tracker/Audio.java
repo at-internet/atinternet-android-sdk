@@ -22,14 +22,23 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for audio media tracking
+ */
 public class Audio extends RichMedia {
 
     private int duration;
 
+    Audio(MediaPlayer player) {
+        super(player);
+        broadcastMode = BroadcastMode.Clip;
+        type = "audio";
+    }
+
     /**
      * Get the duration
      *
-     * @return int
+     * @return the duration
      */
     public int getDuration() {
         return duration;
@@ -38,8 +47,8 @@ public class Audio extends RichMedia {
     /**
      * Set a new duration
      *
-     * @param duration int
-     * @return Audio
+     * @param duration /
+     * @return the Audio instance
      */
     public Audio setDuration(int duration) {
         this.duration = duration;
@@ -50,8 +59,8 @@ public class Audio extends RichMedia {
     /**
      * Set a new name
      *
-     * @param name String
-     * @return Audio
+     * @param name /
+     * @return the Audio instance
      */
     public Audio setName(String name) {
         this.name = name;
@@ -61,8 +70,8 @@ public class Audio extends RichMedia {
     /**
      * Set a level 2
      *
-     * @param level2 int
-     * @return Audio
+     * @param level2 /
+     * @return the Audio instance
      */
     public Audio setLevel2(int level2) {
         this.level2 = level2;
@@ -71,10 +80,10 @@ public class Audio extends RichMedia {
     }
 
     /**
-     * Change boolean isBuffering value
+     * Change boolean "isBuffering" value
      *
-     * @param isBuffering boolean
-     * @return Audio
+     * @param isBuffering /
+     * @return the Audio instance
      */
     public Audio setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
@@ -83,10 +92,10 @@ public class Audio extends RichMedia {
     }
 
     /**
-     * Change boolean isEmbedded value
+     * Change boolean "isEmbedded" value
      *
-     * @param isEmbedded boolean
-     * @return Audio
+     * @param isEmbedded /
+     * @return the Audio instance
      */
     public Audio setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
@@ -97,8 +106,8 @@ public class Audio extends RichMedia {
     /**
      * Set a new first chapter
      *
-     * @param chapter1 String
-     * @return Audio
+     * @param chapter1 /
+     * @return the Audio instance
      */
     public Audio setChapter1(String chapter1) {
         this.chapter1 = chapter1;
@@ -108,8 +117,8 @@ public class Audio extends RichMedia {
     /**
      * Set a new second chapter
      *
-     * @param chapter2 String
-     * @return Audio
+     * @param chapter2 /
+     * @return the Audio instance
      */
     public Audio setChapter2(String chapter2) {
         this.chapter2 = chapter2;
@@ -119,8 +128,8 @@ public class Audio extends RichMedia {
     /**
      * Set a new third chapter
      *
-     * @param chapter3 String
-     * @return Audio
+     * @param chapter3 /
+     * @return the Audio instance
      */
     public Audio setChapter3(String chapter3) {
         this.chapter3 = chapter3;
@@ -130,8 +139,8 @@ public class Audio extends RichMedia {
     /**
      * Set a new action
      *
-     * @param action RichMedia.Action
-     * @return Audio
+     * @param action /
+     * @return the Audio instance
      */
     public Audio setAction(Action action) {
         this.action = action;
@@ -140,20 +149,14 @@ public class Audio extends RichMedia {
     }
 
     /**
-     * Set a new webdomain
+     * Set a new web domain
      *
-     * @param webDomain String
-     * @return Audio
+     * @param webDomain /
+     * @return the Audio instance
      */
     public Audio setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
-    }
-
-    Audio(MediaPlayer player) {
-        super(player);
-        broadcastMode = BroadcastMode.Clip;
-        type = "audio";
     }
 
     @Override

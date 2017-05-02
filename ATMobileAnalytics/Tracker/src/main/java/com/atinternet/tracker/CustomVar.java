@@ -22,13 +22,22 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to inject custom variables
+ */
 public class CustomVar extends ScreenInfo {
 
     /**
      * Enum with different CustomVarType
      */
     public enum CustomVarType {
+        /**
+         * App custom var
+         */
         App("x"),
+        /**
+         * Screen custom var
+         */
         Screen("f");
 
         private final String str;
@@ -45,33 +54,6 @@ public class CustomVar extends ScreenInfo {
     private String value;
     private CustomVarType customVarType;
     private int varId;
-
-    /**
-     * Get the customVar id
-     *
-     * @return int
-     */
-    public int getVarId() {
-        return varId;
-    }
-
-    /**
-     * Get the customVar value
-     *
-     * @return String
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Get the customVar type
-     *
-     * @return CustomVar.CustomVarType
-     */
-    public CustomVarType getCustomVarType() {
-        return customVarType;
-    }
 
     CustomVar setVarId(int varId) {
         this.varId = varId;
@@ -97,6 +79,32 @@ public class CustomVar extends ScreenInfo {
         value = "";
     }
 
+    /**
+     * Get the custom variable identifier
+     *
+     * @return the custom variable identifier
+     */
+    public int getVarId() {
+        return varId;
+    }
+
+    /**
+     * Get the custom variable value
+     *
+     * @return the custom variable value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * Get the custom variable type
+     *
+     * @return the custom variable type
+     */
+    public CustomVarType getCustomVarType() {
+        return customVarType;
+    }
 
     @Override
     void setEvent() {

@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+/**
+ * Wrapper class to manage SelfPromotion instances
+ */
 public class SelfPromotions extends Helper {
 
     SelfPromotions(Tracker tracker) {
@@ -33,10 +36,10 @@ public class SelfPromotions extends Helper {
     }
 
     /**
-     * Add a pub
+     * Add a self promotion advertising
      *
-     * @param adId int
-     * @return SelfPromotion
+     * @param adId advertising identifier
+     * @return the SelfPromotion instance
      */
     public SelfPromotion add(int adId) {
         SelfPromotion self = new SelfPromotion(tracker).setAdId(adId);

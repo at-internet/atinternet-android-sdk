@@ -24,21 +24,24 @@ package com.atinternet.tracker;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper class to manage Audio instances
+ */
 public class Audios {
 
-    final ArrayList<Audio> list = new ArrayList<>();
     private final MediaPlayer player;
+    final ArrayList<Audio> list = new ArrayList<>();
 
     Audios(MediaPlayer player) {
         this.player = player;
     }
 
     /**
-     * Create new audio
+     * Add a new audio
      *
-     * @param name     String
-     * @param duration int
-     * @return Audio
+     * @param name     audio name
+     * @param duration audio duration
+     * @return the Audio instance
      */
     public Audio add(String name, int duration) {
         int index = -1;
@@ -65,39 +68,39 @@ public class Audios {
     }
 
     /**
-     * Create new audio
+     * Add a new audio
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param duration int
-     * @return Audio
+     * @param name     audio name
+     * @param chapter1 audio first chapter
+     * @param duration audio duration
+     * @return the Audio instance
      */
     public Audio add(String name, String chapter1, int duration) {
         return add(name, duration).setChapter1(chapter1);
     }
 
     /**
-     * Create new audio
+     * Add a new audio
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param duration int
-     * @return Audio
+     * @param name     audio name
+     * @param chapter1 audio first chapter
+     * @param chapter2 audio second chapter
+     * @param duration audio duration
+     * @return the Audio instance
      */
     public Audio add(String name, String chapter1, String chapter2, int duration) {
         return add(name, chapter1, duration).setChapter2(chapter2);
     }
 
     /**
-     * Create new audio
+     * Add a new audio
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @param duration int
-     * @return Audio
+     * @param name     audio name
+     * @param chapter1 audio first chapter
+     * @param chapter2 audio second chapter
+     * @param chapter3 audio third chapter
+     * @param duration audio duration
+     * @return the Audio instance
      */
     public Audio add(String name, String chapter1, String chapter2, String chapter3, int duration) {
         return add(name, chapter1, chapter2, duration).setChapter3(chapter3);
@@ -106,7 +109,7 @@ public class Audios {
     /**
      * Remove an audio
      *
-     * @param name String
+     * @param name audio identified by name
      */
     public void remove(String name) {
         int length = list.size();

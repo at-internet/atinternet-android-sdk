@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for identified visitor tracking
+ */
 public class IdentifiedVisitor {
 
     static final String VISITOR_NUMERIC = "ATVisitorNumeric";
@@ -39,10 +42,10 @@ public class IdentifiedVisitor {
     }
 
     /**
-     * Set Identified visitor ID (numeric) for all next hits
+     * Set Identified visitor for the current session
      *
-     * @param visitorId long
-     * @return Tracker
+     * @param visitorId numeric identifier
+     * @return Tracker instance
      */
     public Tracker set(long visitorId) {
         unset();
@@ -52,11 +55,11 @@ public class IdentifiedVisitor {
     }
 
     /**
-     * Set Identified visitor ID (numeric) with category for all next hits
+     * Set Identified visitor for the current session
      *
-     * @param visitorId       long
-     * @param visitorCategory int
-     * @return Tracker
+     * @param visitorId       numeric identifier
+     * @param visitorCategory visitor category
+     * @return Tracker instance
      */
     public Tracker set(long visitorId, int visitorCategory) {
         set(visitorId);
@@ -66,10 +69,10 @@ public class IdentifiedVisitor {
     }
 
     /**
-     * Set Identified visitor ID (text) for all next hits
+     * Set Identified visitor for the current session
      *
-     * @param visitorId String
-     * @return Tracker
+     * @param visitorId textual identifier
+     * @return Tracker instance
      */
     public Tracker set(String visitorId) {
         unset();
@@ -79,11 +82,11 @@ public class IdentifiedVisitor {
     }
 
     /**
-     * Set Identified visitor ID (text) with category for all next hits
+     * Set Identified visitor for the current session
      *
-     * @param visitorId       String
-     * @param visitorCategory int
-     * @return Tracker
+     * @param visitorId       textual identifier
+     * @param visitorCategory visitor category
+     * @return Tracker instance
      */
     public Tracker set(String visitorId, int visitorCategory) {
         set(visitorId);
@@ -93,7 +96,7 @@ public class IdentifiedVisitor {
     }
 
     /**
-     * Unset identified visitor ID. Identified visitor ID (numeric and text) and category parameters won't appear in next hits
+     * Unset identified visitor data. Identified visitor parameters won't appear in next hits
      */
     public void unset() {
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue());
@@ -104,13 +107,6 @@ public class IdentifiedVisitor {
                 .putString(VISITOR_TEXT, null).apply();
     }
 
-    /**
-     * Save helper to manage identified visitor
-     *
-     * @param key            String
-     * @param preferencesKey String
-     * @param value          String
-     */
     private void save(String key, String preferencesKey, String value) {
         if (persistIdentifiedVisitor) {
             Tracker.getPreferences().edit().putString(preferencesKey, value).apply();

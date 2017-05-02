@@ -30,24 +30,28 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CustomVarsTest extends AbstractTestClass {
 
-    private CustomVars customVars;
+    @Test
+    public void addAndRemoveInTrackerTest() {
+        CustomVars customVars = new CustomVars(tracker);
+        CustomVar cv = customVars.add(4, "test", CustomVar.CustomVarType.App);
+        assertEquals(1, tracker.getBusinessObjects().size());
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        customVars = new CustomVars(tracker);
+        customVars.remove(cv.getId());
+        assertEquals(0, tracker.getBusinessObjects().size());
     }
 
     @Test
-    public void addTest() {
-        CustomVar var = customVars.add(4, "test", CustomVar.CustomVarType.App);
-        assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(4, ((CustomVar) tracker.getBusinessObjects().get(var.getId())).getVarId());
-        assertEquals("test", ((CustomVar) tracker.getBusinessObjects().get(var.getId())).getValue());
-    }
+    public void addAndRemoveInScreenTest() {
+        Screen s = new Screen(tracker);
+        CustomVars customVars = new CustomVars(s);
+        CustomVar cv = customVars.add(4, "test", CustomVar.CustomVarType.App);
+        assertEquals(1, s.getCustomVarsMap().size());
 
+        customVars.remove(cv.getId());
+        assertEquals(0, s.getCustomVarsMap().size());
+    }
 }

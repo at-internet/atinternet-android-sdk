@@ -3,4 +3,9 @@
     <color name="at_blue">#072750</color>
     <color name="at_grey">#D3D7DC</color>
     <color name="at_darker_grey">#D6D6D6</color>
+    <color name="at_toolbar_background">#072237</color>
+
+    <color name="at_popup_text">#072237</color>
+    <color name="at_popup_button_text">#0CACF8</color>
+    <color name="at_popup_background">#FAFAFA</color>
 </resources>

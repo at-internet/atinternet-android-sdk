@@ -60,25 +60,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        launchIntegration();
-        /*tracker = ((ATInternet) getApplication()).getTracker("IntegrationTracker", new HashMap<String, Object>() {{
+        /*tracker = ATInternet.getInstance().getTracker("IntegrationTracker", new HashMap<String, Object>() {{
             put(TrackerConfigurationKeys.LOG, "logp");
             put(TrackerConfigurationKeys.LOG_SSL, "logs");
             put(TrackerConfigurationKeys.SITE, 552987);
-        }});
-        tracker.setDefaultListener();
+        }});*/
 
-        findViewById(R.id.sendHit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tracker.Screens().add(MainActivity.this).sendView();
-                tracker2.Screens().add(MainActivity.this).sendView();
-            }
-        });
-
-
-        Debugger.create(this, tracker);*/
+        launchIntegration();
     }
 
     @Override
@@ -95,13 +83,12 @@ public class MainActivity extends AppCompatActivity {
     private void launchIntegration() {
         try {
             expectedResultsMap = getExpectedResults();
-            tracker = ((ATInternet) getApplication()).getTracker("IntegrationTracker", new HashMap<String, Object>() {{
+            tracker = ATInternet.getInstance().getTracker("IntegrationTracker", new HashMap<String, Object>() {{
                 put(TrackerConfigurationKeys.LOG, config.getString(LOG));
                 put(TrackerConfigurationKeys.LOG_SSL, config.getString(LOG_SSL));
                 put(TrackerConfigurationKeys.SITE, config.getString(SITE));
             }});
-            tracker.setParam("idclient", "Custom-ClientID");
-
+            tracker.setUserId("Custom-ClientID");
 
             tracker.setListener(new TrackerListener() {
                 @Override

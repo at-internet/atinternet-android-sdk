@@ -22,19 +22,28 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for custom tree structure tracking
+ */
 public class CustomTreeStructure extends ScreenInfo {
 
     private static final String CUSTOM_TREE_FORMAT = "%1$s-%2$s-%3$s";
-
 
     private int category1;
     private int category2;
     private int category3;
 
+    CustomTreeStructure(Tracker tracker) {
+        super(tracker);
+        category1 = 0;
+        category2 = 0;
+        category3 = 0;
+    }
+
     /**
      * Get the first category
      *
-     * @return int
+     * @return the first category
      */
     public int getCategory1() {
         return category1;
@@ -43,7 +52,7 @@ public class CustomTreeStructure extends ScreenInfo {
     /**
      * Get the second category
      *
-     * @return int
+     * @return the second category
      */
     public int getCategory2() {
         return category2;
@@ -52,7 +61,7 @@ public class CustomTreeStructure extends ScreenInfo {
     /**
      * Get the third category
      *
-     * @return int
+     * @return the third category
      */
     public int getCategory3() {
         return category3;
@@ -61,8 +70,8 @@ public class CustomTreeStructure extends ScreenInfo {
     /**
      * Set a new first category
      *
-     * @param category1 int
-     * @return CustomTreeStructure
+     * @param category1 /
+     * @return the CustomTreeStructure instance
      */
     public CustomTreeStructure setCategory1(int category1) {
         this.category1 = category1;
@@ -72,8 +81,8 @@ public class CustomTreeStructure extends ScreenInfo {
     /**
      * Set a new second category
      *
-     * @param category2 int
-     * @return CustomTreeStructure
+     * @param category2 /
+     * @return the CustomTreeStructure instance
      */
     public CustomTreeStructure setCategory2(int category2) {
         this.category2 = category2;
@@ -83,19 +92,12 @@ public class CustomTreeStructure extends ScreenInfo {
     /**
      * Set a new third category
      *
-     * @param category3 int
-     * @return CustomTreeStructure
+     * @param category3 /
+     * @return the CustomTreeStructure instance
      */
     public CustomTreeStructure setCategory3(int category3) {
         this.category3 = category3;
         return this;
-    }
-
-    CustomTreeStructure(Tracker tracker) {
-        super(tracker);
-        category1 = 0;
-        category2 = 0;
-        category3 = 0;
     }
 
     @Override

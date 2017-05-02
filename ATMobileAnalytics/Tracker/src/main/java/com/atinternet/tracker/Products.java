@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+/**
+ * Wrapper class to manage Product instances
+ */
 public class Products extends Helper {
 
     private final Cart cart;
@@ -40,10 +43,10 @@ public class Products extends Helper {
     }
 
     /**
-     * Add a product
+     * Attach the product to tracking
      *
-     * @param product Product
-     * @return Product
+     * @param product Product instance
+     * @return Product instance
      */
     public Product add(Product product) {
         if (cart != null) {
@@ -57,8 +60,8 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @return Product
+     * @param productId product identifier
+     * @return Product instance
      */
     public Product add(String productId) {
         Product product = new Product(cart != null ? cart.getTracker() : tracker).setProductId(productId);
@@ -73,9 +76,9 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @param category1 String
-     * @return Product
+     * @param productId product identifier
+     * @param category1 product first category
+     * @return Product instance
      */
     public Product add(String productId, String category1) {
         return add(productId).setCategory1(category1);
@@ -84,10 +87,10 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @param category1 String
-     * @param category2 String
-     * @return Product
+     * @param productId product identifier
+     * @param category1 product first category
+     * @param category2 product second category
+     * @return Product instance
      */
     public Product add(String productId, String category1, String category2) {
         return add(productId, category1).setCategory2(category2);
@@ -96,11 +99,11 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @param category1 String
-     * @param category2 String
-     * @param category3 String
-     * @return Product
+     * @param productId product identifier
+     * @param category1 product first category
+     * @param category2 product second category
+     * @param category3 product third category
+     * @return Product instance
      */
     public Product add(String productId, String category1, String category2, String category3) {
         return add(productId, category1, category2).setCategory3(category3);
@@ -109,12 +112,12 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @param category1 String
-     * @param category2 String
-     * @param category3 String
-     * @param category4 String
-     * @return Product
+     * @param productId product identifier
+     * @param category1 product first category
+     * @param category2 product second category
+     * @param category3 product third category
+     * @param category4 product fourth category
+     * @return Product instance
      */
     public Product add(String productId, String category1, String category2, String category3, String category4) {
         return add(productId, category1, category2, category3).setCategory4(category4);
@@ -123,13 +126,13 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @param category1 String
-     * @param category2 String
-     * @param category3 String
-     * @param category4 String
-     * @param category5 String
-     * @return Product
+     * @param productId product identifier
+     * @param category1 product first category
+     * @param category2 product second category
+     * @param category3 product third category
+     * @param category4 product fourth category
+     * @param category5 product fifth category
+     * @return Product instance
      */
     public Product add(String productId, String category1, String category2, String category3, String category4, String category5) {
         return add(productId, category1, category2, category3, category4).setCategory5(category5);
@@ -138,14 +141,14 @@ public class Products extends Helper {
     /**
      * Add a product
      *
-     * @param productId String
-     * @param category1 String
-     * @param category2 String
-     * @param category3 String
-     * @param category4 String
-     * @param category5 String
-     * @param category6 String
-     * @return Product
+     * @param productId product identifier
+     * @param category1 product first category
+     * @param category2 product second category
+     * @param category3 product third category
+     * @param category4 product fourth category
+     * @param category5 product fifth category
+     * @param category6 product sixth category
+     * @return Product instance
      */
     public Product add(String productId, String category1, String category2, String category3, String category4, String category5, String category6) {
         return add(productId, category1, category2, category3, category4, category5).setCategory6(category6);
@@ -154,7 +157,7 @@ public class Products extends Helper {
     /**
      * Remove a product
      *
-     * @param productId String
+     * @param productId product identifier
      */
     public void remove(String productId) {
         int length;
@@ -206,7 +209,7 @@ public class Products extends Helper {
     }
 
     /**
-     * Send all products
+     * Send all viewed products
      */
     public void sendViews() {
         ArrayList<BusinessObject> views = new ArrayList<>();

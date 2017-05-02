@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper class to manage Video instances
+ */
 public class Videos {
 
     final ArrayList<Video> list = new ArrayList<>();
@@ -34,11 +37,11 @@ public class Videos {
     }
 
     /**
-     * Create new video
+     * Add a new video
      *
-     * @param name     String
-     * @param duration int
-     * @return Video
+     * @param name     video name
+     * @param duration video duration
+     * @return Video instance
      */
     public Video add(String name, int duration) {
         int index = -1;
@@ -65,39 +68,39 @@ public class Videos {
     }
 
     /**
-     * Create new video
+     * Add a new video
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param duration int
-     * @return Video
+     * @param name     video name
+     * @param chapter1 video first chapter
+     * @param duration video duration
+     * @return Video instance
      */
     public Video add(String name, String chapter1, int duration) {
         return add(name, duration).setChapter1(chapter1);
     }
 
     /**
-     * Create new video
+     * Add a new video
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param duration int
-     * @return Video
+     * @param name     video name
+     * @param chapter1 video first chapter
+     * @param chapter2 video second chapter
+     * @param duration video duration
+     * @return Video instance
      */
     public Video add(String name, String chapter1, String chapter2, int duration) {
         return add(name, chapter1, duration).setChapter2(chapter2);
     }
 
     /**
-     * Create new video
+     * Add a new video
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @param duration int
-     * @return Video
+     * @param name     video name
+     * @param chapter1 video first chapter
+     * @param chapter2 video second chapter
+     * @param chapter3 video third chapter
+     * @param duration video duration
+     * @return Video instance
      */
     public Video add(String name, String chapter1, String chapter2, String chapter3, int duration) {
         return add(name, chapter1, chapter2, duration).setChapter3(chapter3);
@@ -106,7 +109,7 @@ public class Videos {
     /**
      * Remove a video
      *
-     * @param name String
+     * @param name video identified by name
      */
     public void remove(String name) {
         int length = list.size();

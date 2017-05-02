@@ -33,18 +33,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CampaignTest extends AbstractTestClass {
 
     private Campaign campaign;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         campaign = new Campaign(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -58,20 +56,17 @@ public class CampaignTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        assertEquals("campaign", campaign.setCampaignId("campaign").getCampaignId());
-    }
-
-    @Test
     public void setEventWithoutRemanenceTest() {
         assertNull(Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
-        campaign.setCampaignId("campaign").setEvent();
+        campaign.setCampaignId("campaign")
+                .setEvent();
+
         assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("xto", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("campaign", buffer.getVolatileParams().get(0).getValue().execute());
-
+        assertEquals(1, buffer.getVolatileParams().get("xto").getValues().size());
+        assertEquals("campaign", buffer.getVolatileParams().get("xto").getValues().get(0).execute());
         assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
     }
@@ -87,14 +82,16 @@ public class CampaignTest extends AbstractTestClass {
         Tracker.getPreferences().edit().putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis()).apply();
         assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
-        campaign.setCampaignId("test").setEvent();
+        campaign.setCampaignId("test")
+                .setEvent();
         assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("xto", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("test", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("xto").getValues().size());
+        assertEquals("test", buffer.getVolatileParams().get("xto").getValues().get(0).execute());
 
-        assertEquals("xtor", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("campaign", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("xtor").getValues().size());
+        assertEquals("campaign", buffer.getVolatileParams().get("xtor").getValues().get(0).execute());
 
         assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 

@@ -28,26 +28,26 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class NuggAdTest extends AbstractTestClass {
 
     private NuggAd nuggAd;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        Configuration configuration = tracker.getConfiguration();
-        configuration.put("plugins", "nuggad");
-        tracker = new Tracker(RuntimeEnvironment.application, configuration);
+        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
+            add(Tracker.PluginKey.nuggad);
+        }}, null, true);
+        buffer.getPersistentParams().clear();
         nuggAd = new NuggAd(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -56,20 +56,15 @@ public class NuggAdTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("nuggad", new JSONObject().put("key", "value"));
-        assertEquals(jsonObject, nuggAd.setNuggAdData(jsonObject).getNuggAdData());
-    }
-
-    @Test
     public void setEventTest() throws JSONException {
         JSONObject jsonObject = new JSONObject().put("key", "value");
         nuggAd.setNuggAdData(jsonObject).setEvent();
 
         assertEquals(1, buffer.getVolatileParams().size());
-        assertEquals("stc", buffer.getVolatileParams().get(0).getKey());
-        assertEquals(new JSONObject().put("nuggad", jsonObject).toString(), buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals(new JSONObject().put("nuggad", jsonObject).toString(), buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
 }

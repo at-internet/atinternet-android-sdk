@@ -22,7 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-@Deprecated
+/**
+ * Wrapper class to manage Campaign instances
+ */
 public class Campaigns {
 
     private final Tracker tracker;
@@ -34,8 +36,8 @@ public class Campaigns {
     /**
      * Add a campaign
      *
-     * @param campaignId String
-     * @return Campaign
+     * @param campaignId campaign identifier
+     * @return a Campaign instance
      */
     public Campaign add(String campaignId) {
         Campaign campaign = new Campaign(tracker)

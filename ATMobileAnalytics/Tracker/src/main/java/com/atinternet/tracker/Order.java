@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage SalesTracker order feature
+ */
 public class Order extends BusinessObject {
 
     private String orderId;
@@ -39,101 +42,111 @@ public class Order extends BusinessObject {
         return customVariables;
     }
 
+    Order(Tracker tracker) {
+        super(tracker);
+        orderId = "";
+        turnover = -1.0;
+        status = -1;
+        paymentMethod = -1;
+        newCustomer = false;
+        confirmationRequired = false;
+    }
+
     /**
-     * Get discount object
+     * Get order discount object
      *
-     * @return OrderDiscount
+     * @return OrderDiscount instance
      */
     public OrderDiscount Discount() {
         return orderDiscount == null ? (orderDiscount = new OrderDiscount(this)) : orderDiscount;
     }
 
     /**
-     * Get amount object
+     * Get order amount object
      *
-     * @return OrderAmount
+     * @return OrderAmount instance
      */
     public OrderAmount Amount() {
         return orderAmount == null ? (orderAmount = new OrderAmount(this)) : orderAmount;
     }
 
     /**
-     * Get delivery object
+     * Get order delivery object
      *
-     * @return OrderDelivery
+     * @return OrderDelivery instance
      */
     public OrderDelivery Delivery() {
         return orderDelivery == null ? (orderDelivery = new OrderDelivery(this)) : orderDelivery;
     }
 
     /**
-     * Get CustomVars
+     * Get order custom variables
      *
-     * @return OrderCustomVars
+     * @return OrderCustomVars instance
      */
     public OrderCustomVars CustomVars() {
         return customVariables = (customVariables == null) ? new OrderCustomVars() : customVariables;
     }
 
     /**
-     * Get order id
+     * Get order identifier
      *
-     * @return String
+     * @return the order identifier
      */
     public String getOrderId() {
         return orderId;
     }
 
     /**
-     * Get turnover
+     * Get order turnover
      *
-     * @return double
+     * @return the order turnover
      */
     public double getTurnover() {
         return turnover;
     }
 
     /**
-     * Get status
+     * Get order status
      *
-     * @return int
+     * @return the order status
      */
     public int getStatus() {
         return status;
     }
 
     /**
-     * Get boolean newCustomer value
+     * Get boolean "newCustomer" value
      *
-     * @return boolean
+     * @return true if it's a new customer
      */
     public boolean isNewCustomer() {
         return newCustomer;
     }
 
     /**
-     * Get payment method
+     * Get order payment method
      *
-     * @return int
+     * @return the order payment method
      */
     public int getPaymentMethod() {
         return paymentMethod;
     }
 
     /**
-     * Get boolean confirmationRequired value
+     * Get boolean "confirmationRequired" value
      *
-     * @return boolean
+     * @return true if confirmation is required
      */
     public boolean isConfirmationRequired() {
         return confirmationRequired;
     }
 
     /**
-     * Set a new order id
+     * Set a new order identifier
      *
-     * @param orderId String
-     * @return Order
+     * @param orderId order identifier
+     * @return Order instance
      */
     public Order setOrderId(String orderId) {
         this.orderId = orderId;
@@ -143,8 +156,8 @@ public class Order extends BusinessObject {
     /**
      * Set a new turnover
      *
-     * @param turnover double
-     * @return Order
+     * @param turnover /
+     * @return Order instance
      */
     public Order setTurnover(double turnover) {
         this.turnover = turnover;
@@ -154,8 +167,8 @@ public class Order extends BusinessObject {
     /**
      * Set a new status
      *
-     * @param status int
-     * @return Order
+     * @param status /
+     * @return Order instance
      */
     public Order setStatus(int status) {
         this.status = status;
@@ -163,10 +176,10 @@ public class Order extends BusinessObject {
     }
 
     /**
-     * Change boolean newCustomer value
+     * Change boolean "newCustomer" value
      *
-     * @param newCustomer boolean
-     * @return Order
+     * @param newCustomer /
+     * @return Order instance
      */
     public Order setNewCustomer(boolean newCustomer) {
         this.newCustomer = newCustomer;
@@ -176,8 +189,8 @@ public class Order extends BusinessObject {
     /**
      * Set a new payment method
      *
-     * @param paymentMethod int
-     * @return Order
+     * @param paymentMethod /
+     * @return Order instance
      */
     public Order setPaymentMethod(int paymentMethod) {
         this.paymentMethod = paymentMethod;
@@ -185,24 +198,14 @@ public class Order extends BusinessObject {
     }
 
     /**
-     * Change boolean confirmationRequired value
+     * Change boolean "confirmationRequired" value
      *
-     * @param confirmationRequired boolean
-     * @return Order
+     * @param confirmationRequired /
+     * @return Order instance
      */
     public Order setConfirmationRequired(boolean confirmationRequired) {
         this.confirmationRequired = confirmationRequired;
         return this;
-    }
-
-    Order(Tracker tracker) {
-        super(tracker);
-        orderId = "";
-        turnover = -1.0;
-        status = -1;
-        paymentMethod = -1;
-        newCustomer = false;
-        confirmationRequired = false;
     }
 
     @Override

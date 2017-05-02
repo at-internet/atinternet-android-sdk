@@ -28,11 +28,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class AislesTest extends AbstractTestClass {
 
@@ -46,26 +44,7 @@ public class AislesTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        Random r = new Random();
-        String[] levels = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-
-        Aisle aisle = aisles.add(levels[i++], levels[i++], levels[i++], levels[i++], levels[i++], levels[i]);
+        aisles.add("level1");
         assertEquals(1, tracker.getBusinessObjects().size());
-        i = 0;
-
-        assertEquals(levels[i++], ((Aisle) tracker.getBusinessObjects().get(aisle.getId())).getLevel1());
-        assertEquals(levels[i++], ((Aisle) tracker.getBusinessObjects().get(aisle.getId())).getLevel2());
-        assertEquals(levels[i++], ((Aisle) tracker.getBusinessObjects().get(aisle.getId())).getLevel3());
-        assertEquals(levels[i++], ((Aisle) tracker.getBusinessObjects().get(aisle.getId())).getLevel4());
-        assertEquals(levels[i++], ((Aisle) tracker.getBusinessObjects().get(aisle.getId())).getLevel5());
-        assertEquals(levels[i], ((Aisle) tracker.getBusinessObjects().get(aisle.getId())).getLevel6());
     }
 }

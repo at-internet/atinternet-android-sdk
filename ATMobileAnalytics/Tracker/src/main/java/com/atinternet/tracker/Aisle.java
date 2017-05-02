@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for visited aisle tracking
+ */
 public class Aisle extends ScreenInfo {
 
     private String level1;
@@ -32,10 +35,14 @@ public class Aisle extends ScreenInfo {
     private String level6;
 
 
+    Aisle(Tracker tracker) {
+        super(tracker);
+    }
+
     /**
      * Get the aisle first level
      *
-     * @return String
+     * @return the aisle first level
      */
     public String getLevel1() {
         return level1;
@@ -44,7 +51,7 @@ public class Aisle extends ScreenInfo {
     /**
      * Get the aisle second level
      *
-     * @return String
+     * @return the aisle second level
      */
     public String getLevel2() {
         return level2;
@@ -53,7 +60,7 @@ public class Aisle extends ScreenInfo {
     /**
      * Get the aisle third level
      *
-     * @return String
+     * @return the aisle third level
      */
     public String getLevel3() {
         return level3;
@@ -62,7 +69,7 @@ public class Aisle extends ScreenInfo {
     /**
      * Get the aisle fourth level
      *
-     * @return String
+     * @return the aisle fourth level
      */
     public String getLevel4() {
         return level4;
@@ -71,7 +78,7 @@ public class Aisle extends ScreenInfo {
     /**
      * Get the aisle fifth level
      *
-     * @return String
+     * @return the aisle fifth level
      */
     public String getLevel5() {
         return level5;
@@ -80,7 +87,7 @@ public class Aisle extends ScreenInfo {
     /**
      * Get the aisle sixth level
      *
-     * @return String
+     * @return the aisle sixth level
      */
     public String getLevel6() {
         return level6;
@@ -89,8 +96,8 @@ public class Aisle extends ScreenInfo {
     /**
      * Set a new first level
      *
-     * @param level1 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @return the Aisle instance
      */
     public Aisle setLevel1(String level1) {
         this.level1 = level1;
@@ -100,8 +107,8 @@ public class Aisle extends ScreenInfo {
     /**
      * Set a new second level
      *
-     * @param level2 String
-     * @return Aisle
+     * @param level2 aisle second level
+     * @return the Aisle instance
      */
     public Aisle setLevel2(String level2) {
         this.level2 = level2;
@@ -111,8 +118,8 @@ public class Aisle extends ScreenInfo {
     /**
      * Set a new third level
      *
-     * @param level3 String
-     * @return Aisle
+     * @param level3 aisle third level
+     * @return the Aisle instance
      */
     public Aisle setLevel3(String level3) {
         this.level3 = level3;
@@ -122,8 +129,8 @@ public class Aisle extends ScreenInfo {
     /**
      * Set a new fourth level
      *
-     * @param level4 String
-     * @return Aisle
+     * @param level4 aisle fourth level
+     * @return the Aisle instance
      */
     public Aisle setLevel4(String level4) {
         this.level4 = level4;
@@ -133,28 +140,24 @@ public class Aisle extends ScreenInfo {
     /**
      * Set a new fifth level
      *
-     * @param level5 String
-     * @return Aisle
+     * @param level5 aisle fifth level
+     * @return the Aisle instance
      */
     public Aisle setLevel5(String level5) {
         this.level5 = level5;
         return this;
     }
 
+
     /**
      * Set a new sixth level
      *
-     * @param level6 String
-     * @return Aisle
+     * @param level6 aisle sixth level
+     * @return the Aisle instance
      */
     public Aisle setLevel6(String level6) {
         this.level6 = level6;
         return this;
-    }
-
-
-    Aisle(Tracker tracker) {
-        super(tracker);
     }
 
 

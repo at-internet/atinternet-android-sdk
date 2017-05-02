@@ -46,12 +46,7 @@ public class LocationsTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        Random r = new Random();
-        double lat = r.nextInt(500);
-        double lon = r.nextInt(500);
-        Location location = locations.add(lat, lon);
+        locations.add(1, 1);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(lat, ((Location) tracker.getBusinessObjects().get(location.getId())).getLatitude(), 0);
-        assertEquals(lon, ((Location) tracker.getBusinessObjects().get(location.getId())).getLongitude(), 0);
     }
 }

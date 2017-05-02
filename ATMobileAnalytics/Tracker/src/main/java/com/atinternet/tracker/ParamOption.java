@@ -22,13 +22,35 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Class to customize parameter options
+ */
 public class ParamOption {
 
     /**
      * Enum for relative position
      */
     public enum RelativePosition {
-        none, first, last, before, after
+        /**
+         * Undefined
+         */
+        none,
+        /**
+         * First parameter
+         */
+        first,
+        /**
+         * Last parameter (/!\ Cannot override the referrer parameter position, it must be the last if it's defined)
+         */
+        last,
+        /**
+         * Before an other parameter (use {@link #setRelativeParameterKey(String)} with that)
+         */
+        before,
+        /**
+         * After an other parameter (use {@link #setRelativeParameterKey(String)} with that)
+         */
+        after
     }
 
     private RelativePosition relativePosition;
@@ -39,54 +61,54 @@ public class ParamOption {
     private boolean append;
 
     /**
-     * Get relative position
+     * Get relative position parameter
      *
-     * @return ParamOption.RelativePosition
+     * @return the relative position
      */
     public RelativePosition getRelativePosition() {
         return relativePosition;
     }
 
     /**
-     * Get relative position parameter key
+     * Get parameter key attached with relative position
      *
-     * @return String
+     * @return the parameter key
      */
     public String getRelativeParameterKey() {
         return relativeParameterKey;
     }
 
     /**
-     * Encoding parameter
+     * Get boolean "encode" value
      *
-     * @return boolean
+     * @return true if the parameter must be url encoded
      */
     public boolean isEncode() {
         return encode;
     }
 
     /**
-     * Get separator
+     * Get separator for a parameter with multiple values
      *
-     * @return String
+     * @return values separator
      */
     public String getSeparator() {
         return separator;
     }
 
     /**
-     * Persistent or volatile
+     * Get boolean "persistent" value
      *
-     * @return boolean
+     * @return true if the parameter must be present in all hits during session
      */
     public boolean isPersistent() {
         return persistent;
     }
 
     /**
-     * Get append value
+     * Get boolean "append" value
      *
-     * @return boolean
+     * @return true if parameter should have multiple values
      */
     public boolean isAppend() {
         return append;
@@ -95,8 +117,8 @@ public class ParamOption {
     /**
      * Set a new relative position
      *
-     * @param relativePosition ParamOption.RelativePosition
-     * @return ParamOption
+     * @param relativePosition /
+     * @return ParamOption instance
      */
     public ParamOption setRelativePosition(RelativePosition relativePosition) {
         this.relativePosition = relativePosition;
@@ -106,8 +128,8 @@ public class ParamOption {
     /**
      * Set a new relative position parameter key
      *
-     * @param relativeParameterKey String
-     * @return ParamOption
+     * @param relativeParameterKey /
+     * @return ParamOption instance
      */
     public ParamOption setRelativeParameterKey(String relativeParameterKey) {
         this.relativeParameterKey = relativeParameterKey;
@@ -115,10 +137,10 @@ public class ParamOption {
     }
 
     /**
-     * Set encoding
+     * Set a new boolean "encode" value
      *
-     * @param encode boolean
-     * @return ParamOption
+     * @param encode /
+     * @return ParamOption instance
      */
     public ParamOption setEncode(boolean encode) {
         this.encode = encode;
@@ -128,8 +150,8 @@ public class ParamOption {
     /**
      * Set a new separator
      *
-     * @param separator String
-     * @return ParamOption
+     * @param separator /
+     * @return ParamOption instance
      */
     public ParamOption setSeparator(String separator) {
         this.separator = separator;
@@ -137,10 +159,10 @@ public class ParamOption {
     }
 
     /**
-     * Set persistent value
+     * Set a new boolean "persistent" value
      *
-     * @param isPermanent boolean
-     * @return ParamOption
+     * @param isPermanent /
+     * @return ParamOption instance
      */
     public ParamOption setPersistent(boolean isPermanent) {
         this.persistent = isPermanent;
@@ -148,10 +170,10 @@ public class ParamOption {
     }
 
     /**
-     * Set append value
+     * Set a new boolean "append" value
      *
-     * @param append boolean
-     * @return ParamOption
+     * @param append /
+     * @return ParamOption instance
      */
     public ParamOption setAppend(boolean append) {
         this.append = append;
@@ -159,7 +181,7 @@ public class ParamOption {
     }
 
     /**
-     * Init ParamOption
+     * Default constructor
      */
     public ParamOption() {
         relativePosition = RelativePosition.none;

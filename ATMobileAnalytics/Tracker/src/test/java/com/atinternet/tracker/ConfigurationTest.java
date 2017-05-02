@@ -33,7 +33,7 @@ import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ConfigurationTest extends AbstractTestClass {
 
@@ -70,15 +70,16 @@ public class ConfigurationTest extends AbstractTestClass {
     @Test
     public void configurationWithDictionaryTest() {
 
-        LinkedHashMap<String, Object> dictionary = new LinkedHashMap<>();
-        dictionary.put("log", "logtest");
-        dictionary.put("logSSL", "");
-        dictionary.put("site", "123456");
-        dictionary.put("domain", "test.com");
-        dictionary.put("pixelPath", "/test.xiti");
-        dictionary.put("secure", false);
-        dictionary.put("hashUserId", true);
-        dictionary.put("identifier", "androidId");
+        LinkedHashMap<String, Object> dictionary = new LinkedHashMap<String, Object>() {{
+            put("log", "logtest");
+            put("logSSL", "");
+            put("site", "123456");
+            put("domain", "test.com");
+            put("pixelPath", "/test.xiti");
+            put("secure", false);
+            put("hashUserId", true);
+            put("identifier", "androidId");
+        }};
 
         defaultConfiguration = new Configuration(dictionary);
 

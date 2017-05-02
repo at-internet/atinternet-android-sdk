@@ -30,23 +30,19 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class SelfPromotionTest extends AbstractTestClass {
 
     private SelfPromotion selfPromotion;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         selfPromotion = new SelfPromotion(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -65,25 +61,17 @@ public class SelfPromotionTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        int id = new Random().nextInt(500);
-        assertEquals(23, selfPromotion.setAdId(23).getAdId());
-        assertEquals("test" + id, selfPromotion.setFormat("test" + id).getFormat());
-        assertEquals("truc", selfPromotion.setProductId("truc").getProductId());
-        assertEquals(SelfPromotion.Action.Touch, selfPromotion.setAction(SelfPromotion.Action.Touch).getAction());
-    }
-
-    @Test
     public void setEventImpressionTest() {
         selfPromotion.setAdId(98).setEvent();
 
         assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("AT", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("ati", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("INT-98-||", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("ati").getValues().size());
+        assertEquals("INT-98-||", buffer.getVolatileParams().get("ati").getValues().get(0).execute());
     }
 
     @Test
@@ -92,15 +80,16 @@ public class SelfPromotionTest extends AbstractTestClass {
         selfPromotion.setEvent();
 
         assertEquals(3, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("AT", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("{\"test\":\"value\"}", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{\"test\":\"value\"}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
 
-        assertEquals("ati", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("INT-4-||", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("ati").getValues().size());
+        assertEquals("INT-4-||", buffer.getVolatileParams().get("ati").getValues().get(0).execute());
     }
 
     @Test
@@ -108,11 +97,30 @@ public class SelfPromotionTest extends AbstractTestClass {
         selfPromotion.setAdId(98).setProductId("pdt").setAction(OnAppAd.Action.Touch).setEvent();
 
         assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("AT", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("atc", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("INT-98-||pdt", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("atc").getValues().size());
+        assertEquals("INT-98-||pdt", buffer.getVolatileParams().get("atc").getValues().get(0).execute());
+    }
+
+    @Test
+    public void multipleValuesTest() {
+        new SelfPromotion(tracker).setAdId(98).setProductId("pdt").setAction(OnAppAd.Action.Touch).setEvent();
+        new SelfPromotion(tracker).setAdId(99).setProductId("pdt").setAction(OnAppAd.Action.Touch).setEvent();
+        new SelfPromotion(tracker).setAdId(100).setProductId("pdt").setAction(OnAppAd.Action.Touch).setEvent();
+
+        assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
+
+        assertEquals(3, buffer.getVolatileParams().get("atc").getValues().size());
+        assertEquals("INT-98-||pdt", buffer.getVolatileParams().get("atc").getValues().get(0).execute());
+        assertEquals("INT-99-||pdt", buffer.getVolatileParams().get("atc").getValues().get(1).execute());
+        assertEquals("INT-100-||pdt", buffer.getVolatileParams().get("atc").getValues().get(2).execute());
     }
 }

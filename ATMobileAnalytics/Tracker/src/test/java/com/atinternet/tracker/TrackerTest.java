@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.app.Application;
 import android.text.format.DateFormat;
 
 import org.junit.Before;
@@ -33,7 +34,6 @@ import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Random;
 
 import static com.atinternet.tracker.Tracker.OfflineMode;
@@ -42,19 +42,17 @@ import static com.atinternet.tracker.Tracker.getAppContext;
 import static com.atinternet.tracker.Tracker.getStorage;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 @Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
+@SuppressWarnings("unchecked")
 public class TrackerTest extends AbstractTestClass {
 
-    private static final int DURATION_SLEEP = 400;
+    private static final int DURATION_SLEEP = 600;
 
-
-    private Buffer buffer;
     private Storage storage;
     private final String key = "KEY";
     private SetConfigCallback callback;
@@ -64,9 +62,6 @@ public class TrackerTest extends AbstractTestClass {
         super.setUp();
         today = String.valueOf(DateFormat.format(pattern, System.currentTimeMillis()));
         storage = getStorage();
-        buffer = tracker.getBuffer();
-        buffer.getPersistentParams().clear();
-        buffer.getVolatileParams().clear();
         callback = new SetConfigCallback() {
             @Override
             public void setConfigEnd() {
@@ -76,48 +71,28 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void initTrackerTest() {
-        HashMap<String, Object> conf = new HashMap<String, Object>() {{
-            put("storage", "always");
-            put("storageduration", 2);
-            put("enableCrashDetection", true);
-        }};
-        Tracker t = new Tracker(RuntimeEnvironment.application, conf);
-        assertNotNull(tracker);
-        assertNotSame(tracker, t);
+    public void Constructor() {
+        Tracker.appContext = null;
+        new Tracker();
+        assertTrue(Tracker.appContext.get() instanceof Application);
+
+        Tracker.appContext = null;
+        new Tracker(RuntimeEnvironment.application);
+        assertTrue(Tracker.appContext.get() instanceof Application);
+
+        Tracker.appContext = null;
+        new Tracker(new HashMap<String, Object>());
+        assertTrue(Tracker.appContext.get() instanceof Application);
+
+        Tracker.appContext = null;
+        new Tracker(RuntimeEnvironment.application, new HashMap<String, Object>());
+        assertTrue(Tracker.appContext.get() instanceof Application);
     }
 
-    @Test
-    public void getConfigurationTest() {
-        assertEquals(18, tracker.getConfiguration().size());
-        assertTrue(tracker.getConfiguration().containsKey("log"));
-        assertTrue(tracker.getConfiguration().containsKey("logSSL"));
-        assertTrue(tracker.getConfiguration().containsKey("site"));
-        assertTrue(tracker.getConfiguration().containsKey("domain"));
-        assertTrue(tracker.getConfiguration().containsKey("pixelPath"));
-        assertTrue(tracker.getConfiguration().containsKey("storage"));
-        assertTrue(tracker.getConfiguration().containsKey("plugins"));
-        assertTrue(tracker.getConfiguration().containsKey("identifier"));
-        assertTrue(tracker.getConfiguration().containsKey("secure"));
-        assertTrue(tracker.getConfiguration().containsKey("hashUserId"));
-        assertTrue(tracker.getConfiguration().containsKey("persistIdentifiedVisitor"));
-        assertTrue(tracker.getConfiguration().containsKey("tvtURL"));
-        assertTrue(tracker.getConfiguration().containsKey("tvtVisitDuration"));
-        assertTrue(tracker.getConfiguration().containsKey("enableCrashDetection"));
-        assertTrue(tracker.getConfiguration().containsKey("campaignLastPersistence"));
-        assertTrue(tracker.getConfiguration().containsKey("campaignLifetime"));
-        assertTrue(tracker.getConfiguration().containsKey("tvtSpotValidityTime"));
-        assertTrue(tracker.getConfiguration().containsKey("sessionBackgroundDuration"));
-    }
 
     @Test
     public void getContextTest() {
         assertEquals(RuntimeEnvironment.application, getAppContext());
-    }
-
-    @Test
-    public void getListenerTest() {
-        assertNull(tracker.getListener());
     }
 
     @Test
@@ -128,8 +103,7 @@ public class TrackerTest extends AbstractTestClass {
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("test", tracker.getUserIdSync());
 
-        tracker.setHashUserIdEnabled(true, null);
-        Thread.sleep(DURATION_SLEEP);
+        tracker.setHashUserIdEnabled(true, null, true);
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("8652e6fddc89d1392129e8f5ade37e4288406503e5b73bad51619d6e4f3ce50c", tracker.getUserIdSync());
 
@@ -140,52 +114,9 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void setListenerTest() {
-        TrackerListener listener = new TrackerListener() {
-            @Override
-            public void trackerNeedsFirstLaunchApproval(String message) {
-
-            }
-
-            @Override
-            public void buildDidEnd(HitStatus status, String message) {
-
-            }
-
-            @Override
-            public void sendDidEnd(HitStatus status, String message) {
-
-            }
-
-            @Override
-            public void didCallPartner(String response) {
-
-            }
-
-            @Override
-            public void warningDidOccur(String message) {
-
-            }
-
-            @Override
-            public void saveDidEnd(String message) {
-
-            }
-
-            @Override
-            public void errorDidOccur(String message) {
-
-            }
-        };
-        tracker.setListener(listener);
-        assertNotNull(tracker.getListener());
-        assertEquals(listener, tracker.getListener());
-    }
-
-    @Test
     public void setConfigTest() throws Exception {
         assertFalse(tracker.getConfiguration().containsKey("key"));
-        tracker.setConfig("key", "value", null);
+        tracker.setConfig("key", "value", callback);
         Thread.sleep(DURATION_SLEEP);
         assertTrue(tracker.getConfiguration().containsKey("key"));
         assertEquals(tracker.getConfiguration().get("key"), "value");
@@ -193,50 +124,34 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void setLogTest() throws Exception {
-        Random r = new Random();
-        int id = r.nextInt(DURATION_SLEEP);
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logp");
-        tracker.setLog("logtest" + id, rBoolean ? callback : null);
+        tracker.setLog("logtest", callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest" + id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest");
     }
 
     @Test
     public void setSecuredLogTest() throws Exception {
-        Random r = new Random();
-        int id = r.nextInt(DURATION_SLEEP);
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logs");
-        tracker.setSecuredLog("logstest" + id, rBoolean ? callback : null);
+        tracker.setSecuredLog("logstest", callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest" + id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest");
     }
 
     @Test
     public void setDomainTest() throws Exception {
-        Random r = new Random();
-        int id = r.nextInt(DURATION_SLEEP);
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "xiti.com");
-        tracker.setDomain("domain" + id, rBoolean ? callback : null);
+        tracker.setDomain("domain", callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain" + id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain");
     }
 
     @Test
     public void setSiteIdTest() throws Exception {
-        Random r = new Random();
-        int id = r.nextInt(DURATION_SLEEP);
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 552987);
-        tracker.setSiteId(id, rBoolean ? callback : null);
+        tracker.setSiteId(1, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 1);
     }
 
     @Test
@@ -251,129 +166,242 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void setPlugins() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
+    public void setPluginsTest() throws Exception {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
         tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
             add(Tracker.PluginKey.tvtracking);
-        }}, rBoolean ? callback : null);
+        }}, callback);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString());
         tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
             add(Tracker.PluginKey.tvtracking);
             add(Tracker.PluginKey.nuggad);
-        }}, rBoolean ? callback : null);
+        }}, callback);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString() + "," + Tracker.PluginKey.nuggad.toString());
-        tracker.setPlugins(null, rBoolean ? callback : null);
+        tracker.setPlugins(null, callback);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
     }
 
     @Test
     public void setSecureTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
-        tracker.setSecureModeEnabled(rBoolean, rBoolean ? callback : null);
+        tracker.setSecureModeEnabled(true, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), rBoolean);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), true);
     }
 
     @Test
     public void setIdentifierTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "androidId");
-        tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, rBoolean ? callback : null);
+        tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, callback);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
-        tracker.setIdentifierType(Tracker.IdentifierType.UUID, rBoolean ? callback : null);
+        tracker.setIdentifierType(Tracker.IdentifierType.UUID, callback);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "UUID");
     }
 
     @Test
     public void setHashUserIdModeTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), false);
-        tracker.setHashUserIdEnabled(rBoolean, rBoolean ? callback : null);
+        tracker.setHashUserIdEnabled(true, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), rBoolean);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), true);
     }
 
     @Test
     public void setPixelPathTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/hit.xiti");
-        tracker.setPixelPath("/test.xiti" + id, rBoolean ? callback : null);
+        tracker.setPixelPath("/test.xiti", callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti" + id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti");
     }
 
     @Test
     public void setPersistIdentifiedVisitorTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), true);
-        tracker.setPersistentIdentifiedVisitorEnabled(rBoolean, rBoolean ? callback : null);
+        tracker.setPersistentIdentifiedVisitorEnabled(false, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), rBoolean);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), false);
     }
 
     @Test
     public void setCrashDetectionTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), true);
-        tracker.setCrashDetectionEnabled(rBoolean, rBoolean ? callback : null);
+        tracker.setCrashDetectionEnabled(false, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), rBoolean);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), false);
     }
 
     @Test
     public void setCampaignLastPersistenceTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), false);
-        tracker.setCampaignLastPersistenceEnabled(rBoolean, rBoolean ? callback : null);
+        tracker.setCampaignLastPersistenceEnabled(true, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), rBoolean);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), true);
     }
 
     @Test
     public void setCampaigLifetimeTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(DURATION_SLEEP);
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 30);
-        tracker.setCampaignLifetime(id, rBoolean ? callback : null);
+        tracker.setCampaignLifetime(3, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 3);
     }
 
     @Test
     public void setSessionBackgroundDurationTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-        int id = r.nextInt(DURATION_SLEEP);
-
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
-        tracker.setSessionBackgroundDuration(id, rBoolean ? callback : null);
+        tracker.setSessionBackgroundDuration(2, callback);
         Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), id);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 2);
+    }
+
+    @Test
+    public void setConfigSyncTest() throws Exception {
+        assertFalse(tracker.getConfiguration().containsKey("key"));
+        tracker.setConfig("key", "value", null, true);
+        assertTrue(tracker.getConfiguration().containsKey("key"));
+        assertEquals(tracker.getConfiguration().get("key"), "value");
+    }
+
+    @Test
+    public void setLogSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logp");
+        tracker.setLog("logtest", null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest");
+    }
+
+    @Test
+    public void setSecuredLogSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logs");
+        tracker.setSecuredLog("logstest", null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest");
+    }
+
+    @Test
+    public void setDomainSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "xiti.com");
+        tracker.setDomain("domain", null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain");
+    }
+
+    @Test
+    public void setSiteIdSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 552987);
+        tracker.setSiteId(2, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 2);
+    }
+
+    @Test
+    public void setOfflineModeSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "required");
+        tracker.setOfflineMode(OfflineMode.always, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
+    }
+
+    @Test
+    public void setPluginsSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
+        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
+            add(Tracker.PluginKey.tvtracking);
+        }}, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString());
+        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
+            add(Tracker.PluginKey.tvtracking);
+            add(Tracker.PluginKey.nuggad);
+        }}, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.tvtracking.toString() + "," + Tracker.PluginKey.nuggad.toString());
+        tracker.setPlugins(null, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
+    }
+
+    @Test
+    public void setSecureSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
+        tracker.setSecureModeEnabled(true, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), true);
+    }
+
+    @Test
+    public void setIdentifierSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "androidId");
+        tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
+        tracker.setIdentifierType(Tracker.IdentifierType.UUID, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "UUID");
+    }
+
+    @Test
+    public void setHashUserIdModeSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), false);
+        tracker.setHashUserIdEnabled(true, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), true);
+    }
+
+    @Test
+    public void setPixelPathSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/hit.xiti");
+        tracker.setPixelPath("/test.xiti", null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti");
+    }
+
+    @Test
+    public void setPersistIdentifiedVisitorSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), true);
+        tracker.setPersistentIdentifiedVisitorEnabled(false, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), false);
+    }
+
+    @Test
+    public void setCrashDetectionSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), true);
+        tracker.setCrashDetectionEnabled(false, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), false);
+    }
+
+    @Test
+    public void setCampaignLastPersistenceSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), false);
+        tracker.setCampaignLastPersistenceEnabled(true, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), true);
+    }
+
+    @Test
+    public void setCampaigLifetimeSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 30);
+        tracker.setCampaignLifetime(2, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 2);
+    }
+
+    @Test
+    public void setSessionBackgroundDurationSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
+        tracker.setSessionBackgroundDuration(2, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 2);
+    }
+
+    @Test
+    public void setTvTrackingUrlSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL), "");
+        tracker.setTvTrackingUrl("test", null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_URL), "test");
+    }
+
+    @Test
+    public void setTvTrackingVisitDurationSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION), 10);
+        tracker.setTvTrackingVisitDuration(2, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_VISIT_DURATION), 2);
+    }
+
+    @Test
+    public void setTvTrackingSpotValidityTimeSyncTest() throws Exception {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME), 5);
+        tracker.setTvTrackingSpotValidityTime(2, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.TVTRACKING_SPOT_VALIDITY_TIME), 2);
     }
 
     @Test
@@ -545,35 +573,57 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void setParamIntTest() {
-        tracker = tracker.setParam(key, 1);
-        assertEquals("1", buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, 1);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
     public void setParamBooleanTest() {
-        boolean rBoolean = new Random().nextBoolean();
-        tracker = tracker.setParam(key, rBoolean);
-        assertEquals(String.valueOf(rBoolean), buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, true);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("true", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
     public void setParamFloatTest() {
-        float number = new Random().nextFloat();
-        tracker = tracker.setParam(key, number);
-        assertEquals(String.valueOf(number), buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, 1.f);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals(String.valueOf(1.f), buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
     public void setParamDoubleTest() {
-        double number = new Random().nextInt(DURATION_SLEEP);
-        tracker = tracker.setParam(key, number);
-        assertEquals(String.valueOf(number), buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, 1.5);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("1.5", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
     public void setParamStringTest() {
-        tracker = tracker.setParam(key, "StringValue");
-        assertEquals("StringValue", buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, "StringValue");
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("StringValue", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
@@ -583,15 +633,25 @@ public class TrackerTest extends AbstractTestClass {
             add(2);
             add(3);
         }};
-        tracker = tracker.setParam(key, array);
-        assertEquals("1,2,3", buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, array);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("1,2,3", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
     public void setParamTabTest() {
         Float[] tab = new Float[]{1.f, 2.f};
-        tracker = tracker.setParam(key, tab);
-        assertEquals("1.0,2.0", buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, tab);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("1.0,2.0", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
@@ -600,8 +660,13 @@ public class TrackerTest extends AbstractTestClass {
             put("boolean1", true);
             put("boolean2", false);
         }};
-        tracker = tracker.setParam(key, map);
-        assertEquals("{\"boolean2\":false,\"boolean1\":true}", buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, map);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("{\"boolean2\":false,\"boolean1\":true}", buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
@@ -612,116 +677,49 @@ public class TrackerTest extends AbstractTestClass {
                 return String.valueOf(DateFormat.format(pattern, System.currentTimeMillis()));
             }
         };
-        tracker = tracker.setParam(key, closure);
-        assertEquals(today, buffer.getVolatileParams().get(0).getValue().execute());
+        tracker.setParam(key, closure);
+
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals(today, buffer.getVolatileParams().get(key).getValues().get(0).execute());
     }
 
     @Test
-    public void setParamIntWithOptions() {
-        ParamOption options = new ParamOption().setPersistent(true);
+    public void setParamWithOptions() {
+        ParamOption options = new ParamOption().setPersistent(true).setAppend(true);
+        tracker.setParam(key, 1, options);
 
-        tracker = tracker.setParam(key, 1, options);
         assertEquals(0, buffer.getVolatileParams().size());
-        assertEquals("1", buffer.getPersistentParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getPersistentParams().get(key).getValues().size());
+        assertEquals(true, buffer.getPersistentParams().get(key).getOptions().isAppend());
+        assertEquals("1", buffer.getPersistentParams().get(key).getValues().get(0).execute());
 
     }
 
     @Test
-    public void setParamBooleanWithOptions() {
-        ParamOption options = new ParamOption().setPersistent(true);
-        boolean rBoolean = new Random().nextBoolean();
+    public void setParamComplex() {
+        ParamOption options = new ParamOption().setPersistent(true).setAppend(true);
+        tracker.setParam(key, 1)
+                .setParam(key, "test");
+        tracker.setParam(key, 1, options)
+                .setParam(key, 67, options);
 
-        tracker = tracker.setParam(key, rBoolean, options);
-        assertEquals(0, buffer.getVolatileParams().size());
-        assertTrue(buffer.getPersistentParams().get(0).getOptions().isPersistent());
-        assertEquals(String.valueOf(rBoolean), buffer.getPersistentParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().size());
+        assertEquals(1, buffer.getPersistentParams().size());
 
-    }
+        assertEquals(3, buffer.getVolatileParams().get(key).getValues().size());
+        assertEquals("test", buffer.getVolatileParams().get(key).getValues().get(0).execute());
+        assertEquals("1", buffer.getVolatileParams().get(key).getValues().get(1).execute());
+        assertEquals("67", buffer.getVolatileParams().get(key).getValues().get(2).execute());
 
-    @Test
-    public void setParamFloatWithOptions() {
-        ParamOption options = new ParamOption().setRelativePosition(ParamOption.RelativePosition.first);
-        tracker = tracker.setParam(key, new Random().nextFloat(), options);
-        assertEquals(0, buffer.getPersistentParams().size());
-        assertEquals(ParamOption.RelativePosition.first, buffer.getVolatileParams().get(0).getOptions().getRelativePosition());
-    }
-
-    @Test
-    public void setParamDoubleWithOptions() {
-        ParamOption options = new ParamOption().setRelativePosition(ParamOption.RelativePosition.last);
-
-        tracker = tracker.setParam(key, 1.0, options);
-        assertEquals(0, buffer.getPersistentParams().size());
-        assertEquals(ParamOption.RelativePosition.last, buffer.getVolatileParams().get(0).getOptions().getRelativePosition());
-    }
-
-    @Test
-    public void setParamStringWithOptions() {
-        ParamOption options = new ParamOption()
-                .setEncode(true)
-                .setPersistent(true);
-
-        tracker = tracker.setParam(key, " encoding ", options);
-        assertEquals(0, buffer.getVolatileParams().size());
-        assertTrue(buffer.getPersistentParams().get(0).getOptions().isEncode() && buffer.getPersistentParams().get(0).getOptions().isPersistent());
-    }
-
-    @Test
-    public void setParamArrayWithOptionsTest() {
-        ParamOption options = new ParamOption().setSeparator("_");
-        ArrayList<Integer> array = new ArrayList<Integer>() {{
-            add(1);
-            add(2);
-            add(3);
-        }};
-
-        tracker = tracker.setParam(key, array, options);
-        assertEquals(0, buffer.getPersistentParams().size());
-        assertEquals("_", buffer.getVolatileParams().get(0).getOptions().getSeparator());
-    }
-
-    @Test
-    public void setParamTabWithOptionsTest() {
-        Float[] tab = new Float[]{1.f, 2.f};
-
-        ParamOption options = new ParamOption()
-                .setSeparator("///");
-        tracker = tracker.setParam(key, tab, options);
-        assertEquals(0, buffer.getPersistentParams().size());
-        assertEquals("///", buffer.getVolatileParams().get(0).getOptions().getSeparator());
-    }
-
-    @Test
-    public void setParamMapWithOptionsTest() {
-        LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>() {{
-            put("boolean1", true);
-            put("boolean2", false);
-        }};
-
-        ParamOption options = new ParamOption()
-                .setRelativePosition(ParamOption.RelativePosition.before)
-                .setRelativeParameterKey("REFKEY");
-        tracker = tracker.setParam(key, map, options);
-
-        ParamOption paramOptions = buffer.getVolatileParams().get(0).getOptions();
-        assertTrue(paramOptions.getRelativePosition() == ParamOption.RelativePosition.before);
-        assertEquals("REFKEY", paramOptions.getRelativeParameterKey());
-    }
-
-    @Test
-    public void setParamClosureWithOptionsTest() {
-        ParamOption options = new ParamOption().setEncode(true);
-        final int count = 2;
-        Closure closure = new Closure() {
-            @Override
-            public String execute() {
-                return String.valueOf(count * 2);
-            }
-        };
-
-        tracker = tracker.setParam(key, closure, options);
-        assertTrue(buffer.getVolatileParams().get(0).getOptions().isEncode());
-        assertEquals("4", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(2, buffer.getPersistentParams().get(key).getValues().size());
+        assertEquals(true, buffer.getPersistentParams().get(key).getOptions().isAppend());
+        assertEquals("1", buffer.getPersistentParams().get(key).getValues().get(0).execute());
+        assertEquals("67", buffer.getPersistentParams().get(key).getValues().get(1).execute());
     }
 
     @Test

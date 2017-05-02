@@ -4,8 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
-
+    buildToolsVersion "25.0.3"
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 25
@@ -30,7 +29,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.3.4"
+version = "2.3.5"
 
 install {
     repositories.mavenInstaller {
@@ -49,7 +48,6 @@ install {
                     connection gitUrl
                     developerConnection gitUrl
                     url siteUrl
-
                 }
             }
         }
@@ -61,7 +59,6 @@ bintray {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
-
     configurations = ['archives']
     pkg {
         repo = "maven"
@@ -72,26 +69,12 @@ bintray {
         publish = true
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.google.android.gms:play-services-ads:10.2.0'
-    testCompile 'org.robolectric:robolectric:3.1.2'
-    testCompile 'junit:junit:4.10'
+    provided 'com.google.android.gms:play-services-ads:10.2.4'
+    testCompile 'org.robolectric:robolectric:3.3.2'
+    testCompile 'junit:junit:4.12'
 }
-
-task clearJar(type: Delete) {
-    delete 'build/outputs/jar/Tracker.jar'
-}
-
-task makeJar(type: Copy) {
-    from('build/intermediates/bundles/release/')
-    into('build/outputs/jar')
-    include('classes.jar')
-    rename ('classes.jar', 'Tracker.jar')
-}
-
-makeJar.dependsOn(clearJar, build)
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -99,15 +82,84 @@ task sourcesJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
+    delete 'technicalDoc/' + version
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = new File(projectDir, "technicalDoc/" + version)
+
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+    options.header = "ATInternet Android SDK API " + version
+    options.stylesheetFile = new File(projectDir, "docs-res/style.css");
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+
 artifacts {
     archives javadocJar
     archives sourcesJar
 }
+
+task createAlphaDelivery {
+    doLast {
+        def destination = 'delivery/' + version + 'a/'
+        copy {
+            from 'build/outputs/aar/'
+            into destination
+            include('Tracker-release.aar')
+            rename('Tracker-release.aar', 'Tracker.aar')
+        }
+        copy {
+            from 'build/intermediates/bundles/default/'
+            into destination
+            include('classes.jar')
+            rename('classes.jar', 'Tracker.jar')
+        }
+        copy {
+            from '.'
+            include '*.manifest.json'
+            into destination
+        }
+    }
+}
+
+task createProdDelivery {
+    doLast {
+        def destination = 'delivery/' + version + '/'
+        copy {
+            from 'build/outputs/aar/'
+            into destination
+            include('Tracker-release.aar')
+            rename('Tracker-release.aar', 'Tracker.aar')
+        }
+        copy {
+            from 'build/intermediates/bundles/default/'
+            into destination
+            include('classes.jar')
+            rename('classes.jar', 'Tracker.jar')
+        }
+        copy {
+            from '.'
+            include '*.manifest.json'
+            into destination
+        }
+        task(createZipFromJar, type: Zip) {
+            from destination
+            include 'Tracker.jar'
+            archiveName 'ATInternet_Android_SDK_' + version + '.zip'
+            destinationDir projectDir
+        }.execute()
+    }
+}
+
+task clearDelivery(type: Delete) {
+    delete 'delivery/'
+    delete 'technicalDoc/'
+    delete 'ATInternet_Android_SDK_' + version + '.zip'
+
+}
+
+createAlphaDelivery.dependsOn(clearDelivery, build)
+createProdDelivery.dependsOn(clearDelivery, build, javadoc)

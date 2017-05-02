@@ -28,11 +28,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class InternalSearchesTest extends AbstractTestClass {
 
@@ -48,26 +46,11 @@ public class InternalSearchesTest extends AbstractTestClass {
     public void addTest() {
         InternalSearch internalSearch = internalSearches.add("search", 8);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("search", ((InternalSearch) tracker.getBusinessObjects().get(internalSearch.getId())).getKeyword());
-        assertEquals(8, ((InternalSearch) tracker.getBusinessObjects().get(internalSearch.getId())).getResultScreenNumber());
     }
 
     @Test
     public void addTouchTest() {
-        Random r = new Random();
-        int[] vals = {
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500)
-        };
-        int i = 0;
-
-        InternalSearch internalSearch = internalSearches.add("search" + vals[i++], vals[i++], vals[i]);
-        i = 0;
-
+        internalSearches.add("search", 1, 1);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("search" + vals[i++], ((InternalSearch) tracker.getBusinessObjects().get(internalSearch.getId())).getKeyword());
-        assertEquals(vals[i++], ((InternalSearch) tracker.getBusinessObjects().get(internalSearch.getId())).getResultScreenNumber());
-        assertEquals(vals[i], ((InternalSearch) tracker.getBusinessObjects().get(internalSearch.getId())).getResultPosition());
     }
 }

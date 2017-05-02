@@ -32,7 +32,7 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CustomTreeStructuresTest extends AbstractTestClass {
 
@@ -46,37 +46,19 @@ public class CustomTreeStructuresTest extends AbstractTestClass {
 
     @Test
     public void addOneTest() {
-        CustomTreeStructure customTreeStructure = customTreeStructures.add(3);
+        customTreeStructures.add(3);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(3, ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory1());
-        assertEquals(0, ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory2());
-        assertEquals(0, ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory3());
     }
 
     @Test
     public void addTwoTest() {
-        CustomTreeStructure customTreeStructure = customTreeStructures.add(3, 2);
+        customTreeStructures.add(3, 2);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(3, ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory1());
-        assertEquals(2, ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory2());
-        assertEquals(0, ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory3());
     }
 
     @Test
     public void addThreeTest() {
-        Random r = new Random();
-        int[] levels = {
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500)
-        };
-        int i = 0;
-        CustomTreeStructure customTreeStructure = customTreeStructures.add(levels[i++], levels[i++], levels[i]);
-        i = 0;
-
+        customTreeStructures.add(1, 1, 1);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(levels[i++], ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory1());
-        assertEquals(levels[i++], ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory2());
-        assertEquals(levels[i], ((CustomTreeStructure) tracker.getBusinessObjects().get(customTreeStructure.getId())).getCategory3());
     }
 }

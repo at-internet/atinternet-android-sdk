@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper class to manage your cart
+ */
 public class Cart extends BusinessObject {
 
     private String cartId;
@@ -35,36 +38,6 @@ public class Cart extends BusinessObject {
         return productsList == null ? (productsList = new ArrayList<>()) : productsList;
     }
 
-    /**
-     * Get cart products
-     *
-     * @return Products
-     */
-    public Products Products() {
-        return products == null ? (products = new Products(this)) : products;
-    }
-
-    /**
-     * Get the cart id
-     *
-     * @return String
-     */
-    public String getCartId() {
-        return cartId;
-    }
-
-    /**
-     * Set a new cartId
-     *
-     * @param cartId String
-     * @return Cart
-     */
-    public Cart setCartId(String cartId) {
-        this.cartId = cartId;
-        return this;
-    }
-
-
     Cart(Tracker tracker) {
         super(tracker);
         cartId = null;
@@ -72,10 +45,40 @@ public class Cart extends BusinessObject {
     }
 
     /**
-     * Create a new cart
+     * Get cart products
      *
-     * @param cartId String
-     * @return Cart
+     * @return the Products instance
+     */
+    public Products Products() {
+        return products == null ? (products = new Products(this)) : products;
+    }
+
+    /**
+     * Get the cart identifier
+     *
+     * @return the cart identifier
+     */
+    public String getCartId() {
+        return cartId;
+    }
+
+
+    /**
+     * Set a new cart identifier
+     *
+     * @param cartId cart identifier
+     * @return the Cart instance
+     */
+    public Cart setCartId(String cartId) {
+        this.cartId = cartId;
+        return this;
+    }
+
+    /**
+     * Set a cart
+     *
+     * @param cartId cart identifier
+     * @return the Cart instance
      */
     public Cart set(String cartId) {
         if (this.cartId != null && !this.cartId.equals(cartId) && products != null) {
@@ -86,9 +89,9 @@ public class Cart extends BusinessObject {
     }
 
     /**
-     * Remove the cart
+     * Unset the cart
      *
-     * @return Cart
+     * @return the unset Cart instance
      */
     public Cart unset() {
         cartId = null;

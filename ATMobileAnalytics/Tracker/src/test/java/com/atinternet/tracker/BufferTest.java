@@ -28,29 +28,25 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
-public final class BufferTest extends AbstractTestClass {
+public class BufferTest extends AbstractTestClass {
 
-    private Buffer buffer;
     private Param param;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        buffer = new Buffer(tracker);
         param = new Param("key", new Closure() {
             @Override
             public String execute() {
                 return "value";
             }
-        }, Param.Type.String);
+        });
     }
 
     @Test
@@ -61,55 +57,28 @@ public final class BufferTest extends AbstractTestClass {
 
     @Test
     public void addPersistentParameterTest() {
-        buffer.getPersistentParams().add(param);
-        assertEquals(16, buffer.getPersistentParams().size());
+        buffer.getPersistentParams().put(param.getKey(), param);
+        assertEquals(1, buffer.getPersistentParams().size());
     }
 
     @Test
     public void addVolatileParameterTest() {
-        buffer.getVolatileParams().add(param);
+        buffer.getVolatileParams().put(param.getKey(), param);
         assertEquals(1, buffer.getVolatileParams().size());
-    }
-
-    @Test
-    public void getPersistentParameterTest() {
-        buffer.getPersistentParams().add(param);
-        ArrayList<int[]> indexes = Tool.findParameterPosition(param.getKey(), buffer.getPersistentParams());
-        int position = indexes.get(indexes.size() - 1)[1];
-        Param p = buffer.getPersistentParams().get(position);
-
-        assertEquals(param.getKey(), p.getKey());
-        assertEquals(param.getValue(), p.getValue());
-    }
-
-    @Test
-    public void getVolatileParameterTest() {
-        buffer.getVolatileParams().add(param);
-        ArrayList<int[]> indexes = Tool.findParameterPosition(param.getKey(), buffer.getVolatileParams());
-        int position = indexes.get(indexes.size() - 1)[1];
-        Param p = buffer.getVolatileParams().get(position);
-
-        assertEquals(param.getKey(), p.getKey());
-        assertEquals(param.getValue(), p.getValue());
     }
 
     @Test
     public void setIdentifierKey() {
         buffer.setIdentifierKey("androidId");
-        for (Param p : buffer.getPersistentParams()) {
-            if (p.getKey().equals("idclient")) {
-                assertEquals(TechnicalContext.getUserId("androidId").execute(), p.getValue().execute());
-            }
-        }
+        assertEquals(TechnicalContext.getUserId("androidId").execute(), buffer.getPersistentParams().get("idclient").getValues().get(0).execute());
     }
 
     @Test
     public void addContextVariablesTest() throws Exception {
-        buffer.getPersistentParams().clear();
         executePrivateMethod(buffer, "addContextVariables", new Object[]{tracker});
         assertEquals(15, buffer.getPersistentParams().size());
-        assertEquals(TechnicalContext.VTAG.execute(), buffer.getPersistentParams().get(0).getValue().execute());
-        assertEquals("Android", buffer.getPersistentParams().get(1).getValue().execute());
+        assertEquals(TechnicalContext.VTAG.execute(), buffer.getPersistentParams().get("vtag").getValues().get(0).execute());
+        assertEquals("Android", buffer.getPersistentParams().get("ptag").getValues().get(0).execute());
     }
 
     @Test

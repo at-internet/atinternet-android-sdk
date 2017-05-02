@@ -25,6 +25,9 @@ package com.atinternet.tracker;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Wrapper class to manage offline hits stored
+ */
 public class Offline {
 
     private final Storage storage;
@@ -36,61 +39,61 @@ public class Offline {
     }
 
     /**
-     * Get offline hits
+     * Get stored hits
      *
-     * @return ArrayList
+     * @return stored hits list
      */
     public ArrayList<Hit> get() {
         return storage.getOfflineHits();
     }
 
     /**
-     * Get the count of offline hits
+     * Get the count of stored hits
      *
-     * @return int
+     * @return the count of stored hits
      */
     public int count() {
         return storage.getCountOfflineHits();
     }
 
     /**
-     * Remove all offline hits
+     * Remove all stored hits
      */
     public void delete() {
         storage.removeAllOfflineHits();
     }
 
     /**
-     * Get the first offline hit
+     * Get the first stored hit
      *
-     * @return OfflineHit
+     * @return the oldest stored hit instance
      */
     public Hit oldest() {
         return storage.getOldestOfflineHit();
     }
 
     /**
-     * Get the last offline hit
+     * Get the last stored hit
      *
-     * @return OfflineHit
+     * @return the latest stored hit instance
      */
     public Hit latest() {
         return storage.getLatestOfflineHit();
     }
 
     /**
-     * Remove offline hits older than days count parameter
+     * Remove stored hits older than days count parameter
      *
-     * @param daysCount int
+     * @param daysCount /
      */
     public void delete(int daysCount) {
         storage.removeOldOfflineHits(daysCount);
     }
 
     /**
-     * Remove offline hits older than a date
+     * Remove stored hits older than a date
      *
-     * @param date Date
+     * @param date /
      */
     public void delete(Date date) {
         int daysCount = Tool.getDaysBetweenTimes(System.currentTimeMillis(), date.getTime());
@@ -98,7 +101,7 @@ public class Offline {
     }
 
     /**
-     * Send all hits from database
+     * Send all hits stored
      */
     public void dispatch() {
         Sender.sendOfflineHits(listener, storage, true, true);

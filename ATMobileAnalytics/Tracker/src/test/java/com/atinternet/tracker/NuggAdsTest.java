@@ -31,7 +31,7 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class NuggAdsTest extends AbstractTestClass {
 
@@ -45,8 +45,7 @@ public class NuggAdsTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        NuggAd nuggAd = nuggAds.add(new JSONObject());
+        nuggAds.add(new JSONObject());
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("{}", ((NuggAd) tracker.getBusinessObjects().get(nuggAd.getId())).getNuggAdData().toString());
     }
 }

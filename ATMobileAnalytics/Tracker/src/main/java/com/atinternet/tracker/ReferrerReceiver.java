@@ -24,16 +24,19 @@ package com.atinternet.tracker;
 
 import android.content.*;
 
+/**
+ * Broadcast Receiver to catch store referrer
+ */
 public class ReferrerReceiver extends BroadcastReceiver {
 
     private static final String REFERRER_INTENT_ACTION = "com.android.vending.INSTALL_REFERRER";
     private static final String REFERRER = "referrer";
 
     /**
-     * Overriding onReceive
+     * Called by Android
      *
-     * @param context android.content.Context
-     * @param intent  Intent
+     * @param context current context
+     * @param intent  calling intent
      */
     @Override
     public void onReceive(android.content.Context context, Intent intent) {

@@ -34,18 +34,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class OrderTest extends AbstractTestClass {
 
     private Order order;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         order = new Order(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -86,34 +84,29 @@ public class OrderTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        assertEquals("orderID", order.setOrderId("orderID").getOrderId());
-        assertEquals(123.321, order.setTurnover(123.321).getTurnover(),0);
-        assertEquals(123, order.setStatus(123).getStatus());
-    }
-
-    @Test
     public void setEventTest() {
         order.Amount().set(34.6, 6.7, 8).CustomVars().add(4, "test");
         order.setEvent();
+
         assertEquals(6, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("cmd", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("cmd").getValues().size());
+        assertEquals("", buffer.getVolatileParams().get("cmd").getValues().get(0).execute());
 
-        assertEquals("newcus", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("0", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("newcus").getValues().size());
+        assertEquals("0", buffer.getVolatileParams().get("newcus").getValues().get(0).execute());
 
-        assertEquals("mtht", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("34.6", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mtht").getValues().size());
+        assertEquals("34.6", buffer.getVolatileParams().get("mtht").getValues().get(0).execute());
 
-        assertEquals("mtttc", buffer.getVolatileParams().get(3).getKey());
-        assertEquals("6.7", buffer.getVolatileParams().get(3).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mtttc").getValues().size());
+        assertEquals("6.7", buffer.getVolatileParams().get("mtttc").getValues().get(0).execute());
 
-        assertEquals("tax", buffer.getVolatileParams().get(4).getKey());
-        assertEquals("8.0", buffer.getVolatileParams().get(4).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("tax").getValues().size());
+        assertEquals("8.0", buffer.getVolatileParams().get("tax").getValues().get(0).execute());
 
-        assertEquals("o4", buffer.getVolatileParams().get(5).getKey());
-        assertEquals("test", buffer.getVolatileParams().get(5).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("o4").getValues().size());
+        assertEquals("test", buffer.getVolatileParams().get("o4").getValues().get(0).execute());
     }
 }

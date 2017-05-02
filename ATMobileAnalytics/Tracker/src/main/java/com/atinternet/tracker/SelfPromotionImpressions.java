@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage SelfPromotionImpression instances
+ */
 public class SelfPromotionImpressions extends Helper {
 
     private final AbstractScreen screen;
@@ -32,10 +35,10 @@ public class SelfPromotionImpressions extends Helper {
     }
 
     /**
-     * Add a pub
+     * Add a self promotion impression advertising
      *
-     * @param adId int
-     * @return SelfPromotionImpression
+     * @param adId advertising identifier
+     * @return the SelfPromotionImpression instance
      */
     public SelfPromotionImpression add(int adId) {
         SelfPromotionImpression self = new SelfPromotionImpression(tracker);

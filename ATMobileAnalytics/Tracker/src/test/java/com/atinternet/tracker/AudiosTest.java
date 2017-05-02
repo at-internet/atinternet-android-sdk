@@ -27,11 +27,6 @@ public class AudiosTest extends AbstractTestClass {
     }
 
     @Test
-    public void initTest() {
-        assertTrue(true);
-    }
-
-    @Test
     public void addOneTest() {
         audios.add("name", 80);
         assertEquals(1, audios.list.size());

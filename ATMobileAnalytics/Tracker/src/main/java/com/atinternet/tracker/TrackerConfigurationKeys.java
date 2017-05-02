@@ -22,13 +22,10 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Tracker Configuration Keys constants
+ */
 public class TrackerConfigurationKeys {
-
-    /**
-     * *******************
-     * /* Shared Preferences
-     * ********************
-     */
 
     // Key representing the namespace used for preferences
     static final String PREFERENCES = "ATPreferencesKey";
@@ -69,9 +66,6 @@ public class TrackerConfigurationKeys {
     //Global key representing idclient from uuid
     static final String IDCLIENT_UUID = "ATIdclientUUID";
 
-    /*****************
-     * Configuration
-     ****************/
     /**
      * Constant for storage offline mode configuration key
      */
@@ -83,7 +77,7 @@ public class TrackerConfigurationKeys {
     public static final String IDENTIFIER = "identifier";
 
     /**
-     * Constant for hashuserid configuration
+     * Constant for hash use rid configuration
      */
     public static final String HASH_USER_ID = "hashUserId";
 

@@ -24,33 +24,36 @@ package com.atinternet.tracker;
 
 import android.content.SharedPreferences;
 
+/**
+ * Wrapper class for marketing campaign tracking
+ */
 public class Campaign extends ScreenInfo {
 
     private String campaignId;
 
+    Campaign(Tracker tracker) {
+        super(tracker);
+        campaignId = null;
+    }
+
     /**
-     * Get the campaignId
+     * Get the campaign identifier
      *
-     * @return String
+     * @return the campaign identifier
      */
     public String getCampaignId() {
         return campaignId;
     }
 
     /**
-     * Set a new campaignId
+     * Set a new campaign identifier
      *
-     * @param campaignId String
-     * @return Campaign
+     * @param campaignId campaign identifier
+     * @return the Campaign instance
      */
     public Campaign setCampaignId(String campaignId) {
         this.campaignId = campaignId;
         return this;
-    }
-
-    Campaign(Tracker tracker) {
-        super(tracker);
-        campaignId = null;
     }
 
     @Override

@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.TreeMap;
 
+/**
+ * Wrapper class to manage MediaPlayer instances
+ */
 public class MediaPlayers extends Helper {
 
     final TreeMap<Integer, MediaPlayer> players;
@@ -36,7 +39,7 @@ public class MediaPlayers extends Helper {
     /**
      * Add a player
      *
-     * @return Player
+     * @return a new MediaPlayer instance
      */
     public MediaPlayer add() {
         int id = 0;
@@ -49,8 +52,8 @@ public class MediaPlayers extends Helper {
     /**
      * Add a player
      *
-     * @param playerId int
-     * @return Player
+     * @param playerId player identifier
+     * @return a new MediaPlayer instance
      */
     public MediaPlayer add(int playerId) {
         if (players.get(playerId) == null) {
@@ -66,9 +69,9 @@ public class MediaPlayers extends Helper {
     }
 
     /**
-     * Remove a playerId
+     * Remove a MediaPlayer with all media attached
      *
-     * @param playerId int
+     * @param playerId player identifier
      */
     public void remove(int playerId) {
         MediaPlayer player = players.remove(playerId);

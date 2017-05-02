@@ -27,74 +27,14 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Wrapper class to enable TVTracking partner usage
+ */
 public class TVTracking {
 
     private final Tracker tracker;
     private String campaignURL;
     private int visitDuration;
-
-    /**
-     * Get the Campaign URL
-     *
-     * @return String
-     */
-    public String getCampaignURL() {
-        return campaignURL;
-    }
-
-    /**
-     * Get visit duration
-     *
-     * @return int
-     */
-    public int getVisitDuration() {
-        return visitDuration;
-    }
-
-    /**
-     * Set TVTracking data
-     *
-     * @return Tracker
-     */
-    public Tracker set() {
-        if (PluginParam.get(tracker).containsKey(Hit.HitParam.TVT.stringValue())) {
-            ParamOption options = new ParamOption().setPersistent(true).setEncode(true);
-            tracker.setParam(Hit.HitParam.TVT.stringValue(), true, options);
-        } else {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "TVTracking not enabled");
-        }
-        return tracker;
-    }
-
-    /**
-     * Set TVTracking data
-     *
-     * @param campaignURL String
-     * @return Tracker
-     */
-    public Tracker set(String campaignURL) {
-        this.campaignURL = campaignURL;
-        return set();
-    }
-
-    /**
-     * Set TVTracking data
-     *
-     * @param campaignURL   String
-     * @param visitDuration int
-     * @return Tracker
-     */
-    public Tracker set(String campaignURL, int visitDuration) {
-        this.visitDuration = visitDuration;
-        return set(campaignURL);
-    }
-
-    /**
-     * Remove tvt parameter
-     */
-    public void unset() {
-        tracker.unsetParam(Hit.HitParam.TVT.stringValue());
-    }
 
     TVTracking(Tracker tracker) {
         this.tracker = tracker;
@@ -132,5 +72,68 @@ public class TVTracking {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Get the campaign url
+     *
+     * @return the TVTracking campaign url
+     */
+    public String getCampaignURL() {
+        return campaignURL;
+    }
+
+    /**
+     * Get visit duration
+     *
+     * @return the TVTracking visit duration
+     */
+    public int getVisitDuration() {
+        return visitDuration;
+    }
+
+    /**
+     * Attach TVTracking to tagging
+     *
+     * @return Tracker instance
+     */
+    public Tracker set() {
+        if (PluginParam.get(tracker).containsKey(Hit.HitParam.TVT.stringValue())) {
+            ParamOption options = new ParamOption().setPersistent(true).setEncode(true);
+            tracker.setParam(Hit.HitParam.TVT.stringValue(), true, options);
+        } else {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "TVTracking not enabled");
+        }
+        return tracker;
+    }
+
+    /**
+     * Attach TVTracking to tagging
+     *
+     * @param campaignURL campaign url
+     * @return Tracker instance
+     */
+    public Tracker set(String campaignURL) {
+        this.campaignURL = campaignURL;
+        return set();
+    }
+
+    /**
+     * Attach TVTracking to tagging
+     *
+     * @param campaignURL   campaign url
+     * @param visitDuration campaign visit duration
+     * @return Tracker instance
+     */
+    public Tracker set(String campaignURL, int visitDuration) {
+        this.visitDuration = visitDuration;
+        return set(campaignURL);
+    }
+
+    /**
+     * Detach TVTracking to tagging
+     */
+    public void unset() {
+        tracker.unsetParam(Hit.HitParam.TVT.stringValue());
     }
 }

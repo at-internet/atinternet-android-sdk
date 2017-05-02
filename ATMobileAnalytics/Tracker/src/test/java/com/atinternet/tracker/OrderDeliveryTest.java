@@ -28,10 +28,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @Config(sdk =21)
@@ -51,28 +48,5 @@ public class OrderDeliveryTest extends AbstractTestClass {
         assertEquals(-1, orderDelivery.getShippingFeesTaxFree(), 0);
         assertEquals(-1, orderDelivery.getShippingFeesTaxIncluded(), 0);
         assertNull(orderDelivery.getDeliveryMethod());
-    }
-
-    @Test
-    public void setTest() {
-        Random r = new Random();
-        int[] vals = {
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500)
-        };
-        int i = 0;
-        Order o = orderDelivery.set(vals[i++], vals[i++], String.valueOf(vals[i]));
-        assertNotNull(o.getId());
-        i = 0;
-        
-        assertEquals(vals[i++], orderDelivery.getShippingFeesTaxFree(), 0);
-        assertEquals(vals[i++], orderDelivery.getShippingFeesTaxIncluded(), 0);
-        assertEquals(String.valueOf(vals[i]), orderDelivery.getDeliveryMethod());
-
-        orderDelivery = orderDelivery.setDeliveryMethod("6").setShippingFeesTaxFree(6).setShippingFeesTaxIncluded(6);
-        assertEquals(6, orderDelivery.getShippingFeesTaxFree(), 0);
-        assertEquals(6, orderDelivery.getShippingFeesTaxIncluded(), 0);
-        assertEquals("6", orderDelivery.getDeliveryMethod());
     }
 }

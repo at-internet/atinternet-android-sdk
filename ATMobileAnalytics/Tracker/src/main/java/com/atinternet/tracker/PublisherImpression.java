@@ -22,27 +22,31 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Publisher subclass to manage Publisher impression only
+ */
 public class PublisherImpression extends Publisher {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
-    public PublisherImpression(Tracker tracker) {
+    PublisherImpression(Tracker tracker) {
         super(tracker);
         action = Action.View;
+    }
+
+    /**
+     * Force action to view
+     *
+     * @param action /
+     * @return Publisher instance
+     */
+    @Override
+    public Publisher setAction(Action action) {
+        return super.setAction(Action.View);
     }
 
     @Override
     public void sendImpression() {
         // Do Nothing
         Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "This method is overrided to do nothing");
-    }
-
-    @Override
-    public Publisher setAction(Action action) {
-        return super.setAction(Action.View);
     }
 
     @Override

@@ -20,7 +20,7 @@ Gradle can restore 3rd-party libraries in your projects.
 
   In your build.gradle module, add in dependencies block :
 
-	   compile 'com.atinternet:Tracker:2.3.4'
+	   compile 'com.atinternet:Tracker:2.3.5'
 
 ### License
 MIT

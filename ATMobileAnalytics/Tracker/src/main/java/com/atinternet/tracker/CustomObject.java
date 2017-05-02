@@ -26,21 +26,27 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+/**
+ * Wrapper class to inject custom data in tracking
+ */
 public class CustomObject extends BusinessObject {
 
     private String value;
-
-    /**
-     * Get the customObject value
-     *
-     * @return String
-     */
-    public String getValue() {
-        return value;
-    }
+    private boolean isPersistent;
 
     CustomObject setValue(String value) {
         this.value = value;
+        return this;
+    }
+
+    /**
+     * Specify if CustomObject have to be permanent
+     *
+     * @param persistent /
+     * @return CustomObject instance
+     */
+    public CustomObject setPersistent(boolean persistent) {
+        this.isPersistent = persistent;
         return this;
     }
 
@@ -58,8 +64,17 @@ public class CustomObject extends BusinessObject {
         value = new JSONObject().toString();
     }
 
+    /**
+     * Get the custom object value
+     *
+     * @return the custom data as string - json formatted
+     */
+    public String getValue() {
+        return value;
+    }
+
     @Override
     void setEvent() {
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), value, new ParamOption().setAppend(true).setEncode(true));
+        tracker.setParam(Hit.HitParam.JSON.stringValue(), value, new ParamOption().setAppend(true).setEncode(true).setPersistent(isPersistent));
     }
 }

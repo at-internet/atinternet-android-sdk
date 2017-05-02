@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.Date;
 
+/**
+ * Wrapper class to manage Screen instances
+ */
 public class DynamicScreens extends Helper {
 
     DynamicScreens(Tracker tracker) {
@@ -31,12 +34,12 @@ public class DynamicScreens extends Helper {
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId int
-     * @param name     String
-     * @param update   Date
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @return the DynamicScreen instance
      * @deprecated Since 2.2.1, use {@link #add(String, String, Date)} instead.
      */
     @Deprecated
@@ -52,12 +55,12 @@ public class DynamicScreens extends Helper {
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId String
-     * @param name     String
-     * @param update   Date
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @return the DynamicScreen instance
      */
     public DynamicScreen add(String screenId, String name, Date update) {
         DynamicScreen dynamicScreen = new DynamicScreen(tracker)
@@ -71,13 +74,13 @@ public class DynamicScreens extends Helper {
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId int
-     * @param name     String
-     * @param update   Date
-     * @param chapter1 String
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @param chapter1 dynamic screen first chapter
+     * @return the DynamicScreen instance
      * @deprecated Since 2.2.1, use {@link #add(String, String, Date, String)} instead.
      */
     @Deprecated
@@ -86,27 +89,27 @@ public class DynamicScreens extends Helper {
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId String
-     * @param name     String
-     * @param update   Date
-     * @param chapter1 String
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @param chapter1 dynamic screen first chapter
+     * @return the DynamicScreen instance
      */
     public DynamicScreen add(String screenId, String name, Date update, String chapter1) {
         return add(screenId, name, update).setChapter1(chapter1);
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId int
-     * @param name     String
-     * @param update   Date
-     * @param chapter1 String
-     * @param chapter2 String
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @param chapter1 dynamic screen first chapter
+     * @param chapter2 dynamic screen second chapter
+     * @return the DynamicScreen instance
      * @deprecated Since 2.2.1, use {@link #add(String, String, Date, String, String)} instead.
      */
     @Deprecated
@@ -115,29 +118,29 @@ public class DynamicScreens extends Helper {
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId String
-     * @param name     String
-     * @param update   Date
-     * @param chapter1 String
-     * @param chapter2 String
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @param chapter1 dynamic screen first chapter
+     * @param chapter2 dynamic screen second chapter
+     * @return the DynamicScreen instance
      */
     public DynamicScreen add(String screenId, String name, Date update, String chapter1, String chapter2) {
         return add(screenId, name, update, chapter1).setChapter2(chapter2);
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId int
-     * @param name     String
-     * @param update   Date
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @param chapter1 dynamic screen first chapter
+     * @param chapter2 dynamic screen second chapter
+     * @param chapter3 dynamic screen third chapter
+     * @return the DynamicScreen instance
      * @deprecated Since 2.2.1, use {@link #add(String, String, Date, String, String, String)} instead.
      */
     @Deprecated
@@ -146,15 +149,15 @@ public class DynamicScreens extends Helper {
     }
 
     /**
-     * Add an dynamic label
+     * Add a new dynamic screen
      *
-     * @param screenId String
-     * @param name     String
-     * @param update   Date
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @return DynamicScreen
+     * @param screenId dynamic screen identifier
+     * @param name     dynamic screen name
+     * @param update   dynamic screen update date
+     * @param chapter1 dynamic screen first chapter
+     * @param chapter2 dynamic screen second chapter
+     * @param chapter3 dynamic screen third chapter
+     * @return the DynamicScreen instance
      */
     public DynamicScreen add(String screenId, String name, Date update, String chapter1, String chapter2, String chapter3) {
         return add(screenId, name, update, chapter1, chapter2).setChapter3(chapter3);

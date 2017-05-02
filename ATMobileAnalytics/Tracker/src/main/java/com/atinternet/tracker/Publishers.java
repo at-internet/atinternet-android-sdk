@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+/**
+ * Wrapper class to manage Publisher instances
+ */
 public class Publishers extends Helper {
 
     Publishers(Tracker tracker) {
@@ -33,10 +36,10 @@ public class Publishers extends Helper {
     }
 
     /**
-     * Add a pub
+     * Add a publisher advertising
      *
-     * @param campaignId String
-     * @return Publisher
+     * @param campaignId campaign identifier
+     * @return the Publisher instance
      */
     public Publisher add(String campaignId) {
         Publisher pub = new Publisher(tracker).setCampaignId(campaignId);
@@ -46,7 +49,7 @@ public class Publishers extends Helper {
     }
 
     /**
-     * Send all impressions
+     * Send all publisher impressions
      */
     public void sendImpressions() {
         ArrayList<BusinessObject> impressions = new ArrayList<>();

@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.text.DecimalFormat;
 
+/**
+ * Wrapper class for gps location tracking
+ */
 public class Location extends ScreenInfo {
 
     private static final String DECIMAL_FORMAT = "#.00";
@@ -31,43 +34,50 @@ public class Location extends ScreenInfo {
     private double latitude;
     private double longitude;
 
+    Location(Tracker tracker) {
+        super(tracker);
+        latitude = -1.;
+        longitude = -1.;
+    }
+
     /**
-     * Get the latitude
+     * Get the latitude value
      *
-     * @return double
+     * @return the latitude value
      */
     public double getLatitude() {
         return latitude;
     }
 
     /**
-     * Get the longitude
+     * Get the longitude value
      *
-     * @return double
+     * @return the longitude value
      */
     public double getLongitude() {
         return longitude;
     }
 
-    Location setLatitude(double latitude) {
+    /**
+     * Set a new latitude
+     *
+     * @param latitude /
+     * @return Location instance
+     */
+    public Location setLatitude(double latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    Location setLongitude(double longitude) {
+    /**
+     * Set a new longitude
+     *
+     * @param longitude /
+     * @return Location instance
+     */
+    public Location setLongitude(double longitude) {
         this.longitude = longitude;
         return this;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
-    Location(Tracker tracker) {
-        super(tracker);
-        latitude = -1.;
-        longitude = -1.;
     }
 
     @Override

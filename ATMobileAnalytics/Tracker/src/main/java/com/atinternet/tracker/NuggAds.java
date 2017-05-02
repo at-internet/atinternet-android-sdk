@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import org.json.JSONObject;
 
+/**
+ * Wrapper class to manage NuggAd instances
+ */
 public class NuggAds extends Helper {
 
     NuggAds(Tracker tracker) {
@@ -31,10 +34,10 @@ public class NuggAds extends Helper {
     }
 
     /**
-     * Add a nuggAd
+     * Add a nuggAd object data
      *
-     * @param nuggAdData JSONObject
-     * @return NuggAd
+     * @param nuggAdData /
+     * @return a new NuggAd instance
      */
     public NuggAd add(JSONObject nuggAdData) {
         NuggAd nuggAd = new NuggAd(tracker).setNuggAdData(nuggAdData);

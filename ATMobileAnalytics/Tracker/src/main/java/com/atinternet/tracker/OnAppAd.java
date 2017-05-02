@@ -22,13 +22,24 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Abstract class to manage advertising tracking
+ */
 public abstract class OnAppAd extends BusinessObject {
+
+    Action action;
 
     /**
      * Enum with different advertisement type
      */
     public enum Action {
+        /**
+         * Ad Tracking impression
+         */
         View("ati"),
+        /**
+         * Ad Tracking touch
+         */
         Touch("atc");
 
         private final String str;
@@ -40,21 +51,20 @@ public abstract class OnAppAd extends BusinessObject {
         public String stringValue() {
             return str;
         }
-    }
 
-    Action action;
+    }
 
     /**
      * Get action type
      *
-     * @return OnAppAd.Action
+     * @return the action type
      */
     public Action getAction() {
         return action;
     }
 
     /**
-     * Send this impression
+     * Send the ad impression event
      */
     public void sendImpression() {
         action = Action.View;
@@ -62,7 +72,7 @@ public abstract class OnAppAd extends BusinessObject {
     }
 
     /**
-     * Send this touch
+     * Send the ad touch event
      */
     public void sendTouch() {
         action = Action.Touch;

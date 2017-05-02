@@ -31,7 +31,7 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CustomVarTest extends AbstractTestClass {
 
@@ -66,7 +66,7 @@ public class CustomVarTest extends AbstractTestClass {
     public void setEventTest() {
         customVar.setValue("test").setEvent();
         assertEquals(1, buffer.getVolatileParams().size());
-        assertEquals("x1", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("test", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals("x1", buffer.getVolatileParams().get("x1").getKey());
+        assertEquals("test", buffer.getVolatileParams().get("x1").getValues().get(0).execute());
     }
 }

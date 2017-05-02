@@ -22,13 +22,23 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage global context tracking
+ */
 public class Context {
 
     /**
      * Enum with different background mode
      */
     public enum BackgroundMode {
-        Normal, Task
+        /**
+         * Foreground tracking
+         */
+        Normal,
+        /**
+         * Tracking in background
+         */
+        Task
     }
 
     // Tracker instance
@@ -40,10 +50,14 @@ public class Context {
     // Tracker background mode
     private BackgroundMode backgroundMode = null;
 
+    Context(Tracker tracker) {
+        this.tracker = tracker;
+    }
+
     /**
      * Get level 2
      *
-     * @return int
+     * @return the level 2
      */
     public int getLevel2() {
         return level2;
@@ -52,7 +66,7 @@ public class Context {
     /**
      * Get the background mode
      *
-     * @return BackgroundMode
+     * @return the BackgroundMode
      */
     public BackgroundMode getBackgroundMode() {
         return backgroundMode;
@@ -61,7 +75,7 @@ public class Context {
     /**
      * Set a new level 2
      *
-     * @param level2 int
+     * @param level2 /
      */
     public void setLevel2(int level2) {
         this.level2 = level2;
@@ -75,7 +89,7 @@ public class Context {
     /**
      * Set a new background mode
      *
-     * @param backgroundMode BackgroundMode
+     * @param backgroundMode /
      */
     public void setBackgroundMode(BackgroundMode backgroundMode) {
         this.backgroundMode = backgroundMode;
@@ -90,14 +104,5 @@ public class Context {
                     break;
             }
         }
-    }
-
-    /**
-     * Default Constructor
-     *
-     * @param tracker Tracker
-     */
-    public Context(Tracker tracker) {
-        this.tracker = tracker;
     }
 }

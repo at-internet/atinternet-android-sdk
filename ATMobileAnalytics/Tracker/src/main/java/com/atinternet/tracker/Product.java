@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Wrapper class to manage product for SalesTracker or viewed products tracking
+ */
 public class Product extends BusinessObject {
 
     /**
@@ -65,73 +68,79 @@ public class Product extends BusinessObject {
         return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
     }
 
+    Product(Tracker tracker) {
+        super(tracker);
+        action = Action.View;
+        productId = "";
+    }
+
     /**
      * Get action
      *
-     * @return Product.Action
+     * @return the action type
      */
     public Action getAction() {
         return action;
     }
 
     /**
-     * Get product id
+     * Get product identifier
      *
-     * @return String
+     * @return the product identifier
      */
     public String getProductId() {
         return productId;
     }
 
     /**
-     * Get first category
+     * Get product first category
      *
-     * @return String
+     * @return the product first category
      */
     public String getCategory1() {
         return category1;
     }
 
     /**
-     * Get second category
+     * Get product second category
      *
-     * @return String
+     * @return the product second category
      */
     public String getCategory2() {
         return category2;
     }
 
     /**
-     * Get third category
+     * Get product third category
      *
-     * @return String
+     * @return the product third category
      */
     public String getCategory3() {
         return category3;
     }
 
     /**
-     * Get fourth category
+     * Get product fourth category
      *
-     * @return String
+     * @return the product fourth category
      */
     public String getCategory4() {
         return category4;
     }
 
     /**
-     * Get fifth category
+     * Get product fifth category
      *
-     * @return String
+     * @return the product fifth category
      */
     public String getCategory5() {
         return category5;
     }
 
     /**
-     * Get sixth category
+     * Get product sixth category
      *
-     * @return String
+     * @return the product sixth category
      */
     public String getCategory6() {
         return category6;
@@ -140,7 +149,7 @@ public class Product extends BusinessObject {
     /**
      * Get quantity
      *
-     * @return int
+     * @return the product quantity
      */
     public int getQuantity() {
         return quantity;
@@ -149,7 +158,7 @@ public class Product extends BusinessObject {
     /**
      * Get unit price tax included value
      *
-     * @return double
+     * @return the product unit price tax included value
      */
     public double getUnitPriceTaxIncluded() {
         return unitPriceTaxIncluded;
@@ -158,7 +167,7 @@ public class Product extends BusinessObject {
     /**
      * Get unit price tax free value
      *
-     * @return double
+     * @return the product unit price tax free value
      */
     public double getUnitPriceTaxFree() {
         return unitPriceTaxFree;
@@ -167,7 +176,7 @@ public class Product extends BusinessObject {
     /**
      * Get discount tax included value
      *
-     * @return double
+     * @return the product discount tax included value
      */
     public double getDiscountTaxIncluded() {
         return discountTaxIncluded;
@@ -176,7 +185,7 @@ public class Product extends BusinessObject {
     /**
      * Get discount tax free value
      *
-     * @return double
+     * @return the product discount tax free value
      */
     public double getDiscountTaxFree() {
         return discountTaxFree;
@@ -185,7 +194,7 @@ public class Product extends BusinessObject {
     /**
      * Get promotional code
      *
-     * @return String
+     * @return the product promotional code
      */
     public String getPromotionalCode() {
         return promotionalCode;
@@ -194,8 +203,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new action
      *
-     * @param action Product.Action
-     * @return Product
+     * @param action /
+     * @return Product instance
      */
     public Product setAction(Action action) {
         this.action = action;
@@ -203,10 +212,10 @@ public class Product extends BusinessObject {
     }
 
     /**
-     * Set a new product id
+     * Set a new product identifier
      *
-     * @param productId String
-     * @return Product
+     * @param productId product identifier
+     * @return Product instance
      */
     public Product setProductId(String productId) {
         this.productId = productId;
@@ -216,8 +225,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new first category
      *
-     * @param category1 String
-     * @return Product
+     * @param category1 /
+     * @return Product instance
      */
     public Product setCategory1(String category1) {
         this.category1 = category1;
@@ -227,8 +236,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new second category
      *
-     * @param category2 String
-     * @return Product
+     * @param category2 /
+     * @return Product instance
      */
     public Product setCategory2(String category2) {
         this.category2 = category2;
@@ -238,8 +247,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new third category
      *
-     * @param category3 String
-     * @return Product
+     * @param category3 /
+     * @return Product instance
      */
     public Product setCategory3(String category3) {
         this.category3 = category3;
@@ -249,8 +258,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new fourth category
      *
-     * @param category4 String
-     * @return Product
+     * @param category4 /
+     * @return Product instance
      */
     public Product setCategory4(String category4) {
         this.category4 = category4;
@@ -260,8 +269,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new fifth category
      *
-     * @param category5 String
-     * @return Product
+     * @param category5 /
+     * @return Product instance
      */
     public Product setCategory5(String category5) {
         this.category5 = category5;
@@ -271,8 +280,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new sixth category
      *
-     * @param category6 String
-     * @return Product
+     * @param category6 /
+     * @return Product instance
      */
     public Product setCategory6(String category6) {
         this.category6 = category6;
@@ -282,8 +291,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new quantity
      *
-     * @param quantity int
-     * @return Product
+     * @param quantity /
+     * @return Product instance
      */
     public Product setQuantity(int quantity) {
         this.quantity = quantity;
@@ -293,8 +302,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new unit price tax included value
      *
-     * @param unitPriceTaxIncluded double
-     * @return Product
+     * @param unitPriceTaxIncluded /
+     * @return Product instance
      */
     public Product setUnitPriceTaxIncluded(double unitPriceTaxIncluded) {
         this.unitPriceTaxIncluded = unitPriceTaxIncluded;
@@ -304,8 +313,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new unit price tax free
      *
-     * @param unitPriceTaxFree double
-     * @return Product
+     * @param unitPriceTaxFree /
+     * @return Product instance
      */
     public Product setUnitPriceTaxFree(double unitPriceTaxFree) {
         this.unitPriceTaxFree = unitPriceTaxFree;
@@ -315,8 +324,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new discount tax included value
      *
-     * @param discountTaxIncluded double
-     * @return Product
+     * @param discountTaxIncluded /
+     * @return Product instance
      */
     public Product setDiscountTaxIncluded(double discountTaxIncluded) {
         this.discountTaxIncluded = discountTaxIncluded;
@@ -326,8 +335,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new discount tax free value
      *
-     * @param discountTaxFree double
-     * @return Product
+     * @param discountTaxFree /
+     * @return Product instance
      */
     public Product setDiscountTaxFree(double discountTaxFree) {
         this.discountTaxFree = discountTaxFree;
@@ -337,8 +346,8 @@ public class Product extends BusinessObject {
     /**
      * Set a new promotional code
      *
-     * @param promotionalCode String
-     * @return Product
+     * @param promotionalCode /
+     * @return Product instance
      */
     public Product setPromotionalCode(String promotionalCode) {
         this.promotionalCode = promotionalCode;
@@ -348,20 +357,14 @@ public class Product extends BusinessObject {
     /**
      * Get CustomObjects
      *
-     * @return CustomObjects
+     * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
         return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
     }
 
-    Product(Tracker tracker) {
-        super(tracker);
-        action = Action.View;
-        productId = "";
-    }
-
     /**
-     * Send products view hit
+     * Send viewed product
      */
     public void sendView() {
         action = Action.View;

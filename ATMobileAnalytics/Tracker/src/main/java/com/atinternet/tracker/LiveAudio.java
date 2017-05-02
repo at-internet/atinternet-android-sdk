@@ -22,13 +22,22 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for live audio tracking
+ */
 public class LiveAudio extends RichMedia {
+
+    LiveAudio(MediaPlayer player) {
+        super(player);
+        broadcastMode = BroadcastMode.Live;
+        type = "audio";
+    }
 
     /**
      * Set a new name
      *
-     * @param name String
-     * @return LiveAudio
+     * @param name /
+     * @return LiveAudio instance
      */
     public LiveAudio setName(String name) {
         this.name = name;
@@ -38,8 +47,8 @@ public class LiveAudio extends RichMedia {
     /**
      * Set a new level2
      *
-     * @param level2 int
-     * @return LiveAudio
+     * @param level2 /
+     * @return LiveAudio instance
      */
     public LiveAudio setLevel2(int level2) {
         this.level2 = level2;
@@ -48,10 +57,10 @@ public class LiveAudio extends RichMedia {
     }
 
     /**
-     * Change boolean isBuffering value
+     * Change boolean "isBuffering" value
      *
-     * @param isBuffering boolean
-     * @return LiveAudio
+     * @param isBuffering /
+     * @return LiveAudio instance
      */
     public LiveAudio setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
@@ -60,10 +69,10 @@ public class LiveAudio extends RichMedia {
     }
 
     /**
-     * Change boolean isEmbedded value
+     * Change boolean "isEmbedded" value
      *
-     * @param isEmbedded boolean
-     * @return LiveAudio
+     * @param isEmbedded /
+     * @return LiveAudio instance
      */
     public LiveAudio setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
@@ -74,8 +83,8 @@ public class LiveAudio extends RichMedia {
     /**
      * Set a new first chapter
      *
-     * @param chapter1 String
-     * @return LiveAudio
+     * @param chapter1 /
+     * @return LiveAudio instance
      */
     public LiveAudio setChapter1(String chapter1) {
         this.chapter1 = chapter1;
@@ -85,8 +94,8 @@ public class LiveAudio extends RichMedia {
     /**
      * Set a new second chapter
      *
-     * @param chapter2 String
-     * @return LiveAudio
+     * @param chapter2 /
+     * @return LiveAudio instance
      */
     public LiveAudio setChapter2(String chapter2) {
         this.chapter2 = chapter2;
@@ -96,8 +105,8 @@ public class LiveAudio extends RichMedia {
     /**
      * Set a new third chapter
      *
-     * @param chapter3 String
-     * @return LiveAudio
+     * @param chapter3 /
+     * @return LiveAudio instance
      */
     public LiveAudio setChapter3(String chapter3) {
         this.chapter3 = chapter3;
@@ -107,8 +116,8 @@ public class LiveAudio extends RichMedia {
     /**
      * Set a new action
      *
-     * @param action RichMedia.Action
-     * @return LiveAudio
+     * @param action /
+     * @return LiveAudio instance
      */
     public LiveAudio setAction(Action action) {
         this.action = action;
@@ -119,17 +128,11 @@ public class LiveAudio extends RichMedia {
     /**
      * Set a new webdomain
      *
-     * @param webDomain String
-     * @return LiveAudio
+     * @param webDomain /
+     * @return LiveAudio instance
      */
     public LiveAudio setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
-    }
-
-    LiveAudio(MediaPlayer player) {
-        super(player);
-        broadcastMode = BroadcastMode.Live;
-        type = "audio";
     }
 }

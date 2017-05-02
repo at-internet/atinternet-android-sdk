@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ProductsTest extends AbstractTestClass {
 
@@ -56,25 +56,19 @@ public class ProductsTest extends AbstractTestClass {
     public void addOneTest() {
         Product p = new Product(tracker).setProductId("pdtID");
         p = productsTracker.add(p);
-        p = productsCart.add(p);
+        productsCart.add(p);
 
         assertEquals(1, tracker.getBusinessObjects().size());
         assertEquals(1, tracker.Cart().getProductsList().size());
-
-        assertEquals("pdtID", ((Product) tracker.getBusinessObjects().get(p.getId())).getProductId());
-        assertEquals("pdtID", tracker.Cart().getProductsList().get(0).getProductId());
     }
 
     @Test
     public void addTwoTest() {
-        Product p = productsTracker.add("p1");
+        productsTracker.add("p1");
         productsCart.add("p1");
 
         assertEquals(1, tracker.getBusinessObjects().size());
         assertEquals(1, tracker.Cart().getProductsList().size());
-
-        assertEquals("p1", ((Product) tracker.getBusinessObjects().get(p.getId())).getProductId());
-        assertEquals("p1", tracker.Cart().getProductsList().get(0).getProductId());
     }
 
     @Test
@@ -95,9 +89,6 @@ public class ProductsTest extends AbstractTestClass {
 
         assertEquals(1, tracker.getBusinessObjects().size());
         assertEquals(1, tracker.Cart().getProductsList().size());
-
-        assertEquals("pdtID2", ((Product) tracker.getBusinessObjects().get(p2.getId())).getProductId());
-        assertEquals("pdtID", tracker.Cart().getProductsList().get(0).getProductId());
     }
 
     @Test

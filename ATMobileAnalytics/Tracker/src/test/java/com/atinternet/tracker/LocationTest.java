@@ -30,18 +30,16 @@ import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class LocationTest extends AbstractTestClass {
 
     private Location location;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         location = new Location(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -51,21 +49,16 @@ public class LocationTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        assertEquals(5., location.setLatitude(5.).getLatitude(), 0.1);
-        assertEquals(6., location.setLongitude(6.).getLongitude(), 0.1);
-    }
-
-    @Test
     public void setEventTest() {
         location.setLatitude(87876576.87787).setLongitude(3786765.915656).setEvent();
 
         assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("gy", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("87876576.88", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("gy").getValues().size());
+        assertEquals("87876576.88", buffer.getVolatileParams().get("gy").getValues().get(0).execute());
 
-        assertEquals("gx", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("3786765.92", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("gx").getValues().size());
+        assertEquals("3786765.92", buffer.getVolatileParams().get("gx").getValues().get(0).execute());
     }
 }

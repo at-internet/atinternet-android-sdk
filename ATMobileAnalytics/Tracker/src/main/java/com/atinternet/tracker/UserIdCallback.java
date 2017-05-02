@@ -22,11 +22,14 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * UserIdCallback should be implemented when getUserId method in async mode called
+ */
 public interface UserIdCallback {
     /**
-     * Callback called when getUserId is used
+     * Called when user id has been get
      *
-     * @param id String
+     * @param id String: the user id
      */
     void receiveUserId(String id);
 }

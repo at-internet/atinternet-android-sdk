@@ -23,16 +23,13 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 /**
+ * Wrapper class to Location instances
+ *
  * @deprecated Since 2.3.0, Location is now only available as a screen object property.
  */
 @Deprecated
 public class Locations extends Helper {
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
     Locations(Tracker tracker) {
         super(tracker);
     }
@@ -40,9 +37,9 @@ public class Locations extends Helper {
     /**
      * Add a location
      *
-     * @param latitude  double
-     * @param longitude double
-     * @return Location
+     * @param latitude  latitude value
+     * @param longitude longitude value
+     * @return Location instance
      */
     public Location add(double latitude, double longitude) {
         Location loc = new Location(tracker)

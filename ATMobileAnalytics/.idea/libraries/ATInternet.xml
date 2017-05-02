@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ATInternet">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/TestApp/libs/ATInternet.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -29,22 +29,19 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CartTest extends AbstractTestClass {
 
     private Cart cart;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         cart = new Cart(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -58,13 +55,9 @@ public class CartTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        assertEquals("90", cart.setCartId("90").getCartId());
-    }
-
-    @Test
     public void setEventTest() {
-        Product p = cart.setCartId("76").Products().add("pdtid")
+        cart.setCartId("76")
+                .Products().add("pdtid")
                 .setCategory1("cat")
                 .setCategory2("chap1")
                 .setQuantity(2)
@@ -74,34 +67,31 @@ public class CartTest extends AbstractTestClass {
                 .setPromotionalCode("promo")
                 .setUnitPriceTaxIncluded(7.0);
 
-        assertNotNull(p.getId());
-
-
         cart.setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
 
-        assertEquals("idcart", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("76", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("idcart").getValues().size());
+        assertEquals("76", buffer.getVolatileParams().get("idcart").getValues().get(0).execute());
 
-        assertEquals("pdt1", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("cat::chap1::pdtid", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("pdt1").getValues().size());
+        assertEquals("cat::chap1::pdtid", buffer.getVolatileParams().get("pdt1").getValues().get(0).execute());
 
-        assertEquals("qte1", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("2", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("qte1").getValues().size());
+        assertEquals("2", buffer.getVolatileParams().get("qte1").getValues().get(0).execute());
 
-        assertEquals("mtht1", buffer.getVolatileParams().get(3).getKey());
-        assertEquals("6.0", buffer.getVolatileParams().get(3).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mtht1").getValues().size());
+        assertEquals("6.0", buffer.getVolatileParams().get("mtht1").getValues().get(0).execute());
 
-        assertEquals("mt1", buffer.getVolatileParams().get(4).getKey());
-        assertEquals("7.0", buffer.getVolatileParams().get(4).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mt1").getValues().size());
+        assertEquals("7.0", buffer.getVolatileParams().get("mt1").getValues().get(0).execute());
 
-        assertEquals("dscht1", buffer.getVolatileParams().get(5).getKey());
-        assertEquals("4.0", buffer.getVolatileParams().get(5).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("dscht1").getValues().size());
+        assertEquals("4.0", buffer.getVolatileParams().get("dscht1").getValues().get(0).execute());
 
-        assertEquals("dsc1", buffer.getVolatileParams().get(6).getKey());
-        assertEquals("4.0", buffer.getVolatileParams().get(6).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("dsc1").getValues().size());
+        assertEquals("4.0", buffer.getVolatileParams().get("dsc1").getValues().get(0).execute());
 
-        assertEquals("pcode1", buffer.getVolatileParams().get(7).getKey());
-        assertEquals("promo", buffer.getVolatileParams().get(7).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("pcode1").getValues().size());
+        assertEquals("promo", buffer.getVolatileParams().get("pcode1").getValues().get(0).execute());
     }
 }

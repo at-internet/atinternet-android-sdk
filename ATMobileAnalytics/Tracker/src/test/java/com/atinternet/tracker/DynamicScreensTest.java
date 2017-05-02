@@ -29,11 +29,10 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.Date;
-import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class DynamicScreensTest extends AbstractTestClass {
 
@@ -47,59 +46,25 @@ public class DynamicScreensTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add("8", "test", date);
+        dynamicScreens.add("1", "2", new Date());
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
-        assertEquals("test", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
-        assertEquals(date, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getUpdate());
     }
 
     @Test
     public void addTwoTest() {
-        Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add("8", "name", date, "chapter1");
+        dynamicScreens.add("1", "2", new Date(), "3");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
-        assertEquals("name", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
-        assertEquals("chapter1", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter1());
-        assertEquals(date, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getUpdate());
     }
 
     @Test
     public void addThreeTest() {
-        Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add("8", "name", date, "chapter1", "chapter2");
+        dynamicScreens.add("1", "2", new Date(), "3", "4");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("8", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
-        assertEquals("name", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
-        assertEquals("chapter1", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter1());
-        assertEquals("chapter2", ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter2());
-        assertEquals(date, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getUpdate());
     }
 
     @Test
     public void addFourTest() {
-        Random r = new Random();
-        String[] vals = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-        Date date = new Date();
-        DynamicScreen dynamicScreen = dynamicScreens.add(vals[i++], vals[i++], date, vals[i++], vals[i++], vals[i]);
-        i = 0;
-
+        dynamicScreens.add("1", "2", new Date(), "3", "4", "5");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals(vals[i++], ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getScreenId());
-        assertEquals(vals[i++], ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getName());
-        assertEquals(vals[i++], ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter1());
-        assertEquals(vals[i++], ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter2());
-        assertEquals(vals[i], ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getChapter3());
-        assertEquals(date, ((DynamicScreen) tracker.getBusinessObjects().get(dynamicScreen.getId())).getUpdate());
     }
 }

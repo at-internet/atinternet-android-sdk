@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class MediaPlayerTest extends AbstractTestClass {
 
@@ -81,10 +81,5 @@ public class MediaPlayerTest extends AbstractTestClass {
         LiveAudios liveAudios = mediaPlayer.LiveAudios();
         assertNotNull(mediaPlayer.LiveAudios());
         assertSame(liveAudios, mediaPlayer.LiveAudios());
-    }
-
-    @Test
-    public void setTest() {
-        assertEquals(123, mediaPlayer.setPlayerId(123).getPlayerId());
     }
 }

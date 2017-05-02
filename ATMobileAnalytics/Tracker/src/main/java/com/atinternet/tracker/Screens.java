@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage Screen instances
+ */
 public class Screens extends Helper {
 
     Screens(Tracker tracker) {
@@ -29,9 +32,9 @@ public class Screens extends Helper {
     }
 
     /**
-     * Add a screen
+     * Add a new screen
      *
-     * @return Screen
+     * @return the Screen instance
      */
     public Screen add() {
         Screen screen = new Screen(tracker);
@@ -41,10 +44,10 @@ public class Screens extends Helper {
     }
 
     /**
-     * Add a screen
+     * Add a new screen
      *
-     * @param context android.content.Context
-     * @return Screen
+     * @param context current Activity context
+     * @return the Screen instance
      */
     public Screen add(android.content.Context context) {
         Screen screen = new Screen(tracker)
@@ -55,10 +58,10 @@ public class Screens extends Helper {
     }
 
     /**
-     * Add a screen
+     * Add a new screen
      *
-     * @param name String
-     * @return Screen
+     * @param name screen name
+     * @return the Screen instance
      */
     public Screen add(String name) {
         Screen screen = new Screen(tracker)
@@ -69,36 +72,36 @@ public class Screens extends Helper {
     }
 
     /**
-     * Add a screen
+     * Add a new screen
      *
-     * @param name     Strin
-     * @param chapter1 String
-     * @return Screen
+     * @param name     screen name
+     * @param chapter1 screen first chapter
+     * @return the Screen instance
      */
     public Screen add(String name, String chapter1) {
         return add(name).setChapter1(chapter1);
     }
 
     /**
-     * Add a screen
+     * Add a new screen
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @return Screen
+     * @param name     screen name
+     * @param chapter1 screen first chapter
+     * @param chapter2 screen second chapter
+     * @return the Screen instance
      */
     public Screen add(String name, String chapter1, String chapter2) {
         return add(name, chapter1).setChapter2(chapter2);
     }
 
     /**
-     * Add a screen
+     * Add a new screen
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @return Screen
+     * @param name     screen name
+     * @param chapter1 screen first chapter
+     * @param chapter2 screen second chapter
+     * @param chapter3 screen third chapter
+     * @return the Screen instance
      */
     public Screen add(String name, String chapter1, String chapter2, String chapter3) {
         return add(name, chapter1, chapter2).setChapter3(chapter3);

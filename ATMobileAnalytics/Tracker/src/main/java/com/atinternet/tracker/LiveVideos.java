@@ -24,6 +24,9 @@ package com.atinternet.tracker;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper class to LiveVideo instances
+ */
 public class LiveVideos {
 
     final ArrayList<LiveVideo> list = new ArrayList<>();
@@ -36,8 +39,8 @@ public class LiveVideos {
     /**
      * Create new video
      *
-     * @param name String
-     * @return LiveVideo
+     * @param name live video name
+     * @return LiveVideo instance
      */
     public LiveVideo add(String name) {
         int index = -1;
@@ -65,9 +68,9 @@ public class LiveVideos {
     /**
      * Create new video
      *
-     * @param name     String
-     * @param chapter1 String
-     * @return LiveVideo
+     * @param name     live video name
+     * @param chapter1 live video first chapter
+     * @return LiveVideo instance
      */
     public LiveVideo add(String name, String chapter1) {
         return add(name).setChapter1(chapter1);
@@ -76,10 +79,10 @@ public class LiveVideos {
     /**
      * Create new video
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @return LiveVideo
+     * @param name     live video name
+     * @param chapter1 live video first chapter
+     * @param chapter2 live video second chapter
+     * @return LiveVideo instance
      */
     public LiveVideo add(String name, String chapter1, String chapter2) {
         return add(name, chapter1).setChapter2(chapter2);
@@ -88,11 +91,11 @@ public class LiveVideos {
     /**
      * Create new video
      *
-     * @param name     String
-     * @param chapter1 String
-     * @param chapter2 String
-     * @param chapter3 String
-     * @return LiveVideo
+     * @param name     live video name
+     * @param chapter1 live video first chapter
+     * @param chapter2 live video second chapter
+     * @param chapter3 live video third chapter
+     * @return LiveVideo instance
      */
     public LiveVideo add(String name, String chapter1, String chapter2, String chapter3) {
         return add(name, chapter1, chapter2).setChapter3(chapter3);
@@ -101,7 +104,7 @@ public class LiveVideos {
     /**
      * Remove a live video
      *
-     * @param name String
+     * @param name live video name
      */
     public void remove(String name) {
         int length = list.size();

@@ -33,7 +33,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class OrdersTest extends AbstractTestClass {
 
@@ -47,29 +47,13 @@ public class OrdersTest extends AbstractTestClass {
 
     @Test
     public void addOneTest() {
-        Order order = orders.add("orderID", 78.0);
+        orders.add("orderID", 78.0);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("orderID", ((Order) tracker.getBusinessObjects().get(order.getId())).getOrderId());
-        assertEquals(78.0, ((Order) tracker.getBusinessObjects().get(order.getId())).getTurnover(), 0);
     }
 
     @Test
     public void addTwoTest() {
-        Random r = new Random();
-        int[] vals = {
-                r.nextInt(500),
-                r.nextInt(500),
-                r.nextInt(500)
-        };
-        int i = 0;
-
-        Order order = orders.add("order" + vals[i++], (double) vals[i++], vals[i]);
+        orders.add("orderId", 1., 2);
         assertEquals(1, tracker.getBusinessObjects().size());
-        i = 0;
-
-        assertEquals("order" + vals[i++], ((Order) tracker.getBusinessObjects().get(order.getId())).getOrderId());
-        assertEquals((double) vals[i++], ((Order) tracker.getBusinessObjects().get(order.getId())).getTurnover(), 0);
-        assertEquals(vals[i], ((Order) tracker.getBusinessObjects().get(order.getId())).getStatus());
-        assertSame(order, tracker.getBusinessObjects().get(order.getId()));
     }
 }

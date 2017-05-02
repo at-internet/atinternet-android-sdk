@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+/**
+ * Class to manage tracker configuration
+ */
 public class Configuration extends LinkedHashMap<String, Object> {
 
     private static final String ENCODING = "UTF-8";
@@ -121,7 +124,7 @@ public class Configuration extends LinkedHashMap<String, Object> {
     /**
      * Stringify configuration
      *
-     * @return String
+     * @return the pretty printed configuration
      */
     public String toString() {
         StringBuilder sb = new StringBuilder("Tracker configuration : \n");

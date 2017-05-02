@@ -24,9 +24,12 @@ package com.atinternet.tracker;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Abstract class to manage screen tracking
+ */
 public abstract class AbstractScreen extends BusinessObject {
 
-    public enum Action {
+    enum Action {
         View("view");
 
         private final String str;
@@ -41,11 +44,11 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
 
-    String name;
-    String chapter1;
-    String chapter2;
-    String chapter3;
-    Action action;
+    protected String name;
+    protected String chapter1;
+    protected String chapter2;
+    protected String chapter3;
+    protected Action action;
     boolean isBasketScreen;
     int level2;
 
@@ -83,9 +86,9 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
     /**
-     * Get the name
+     * Get the screen name
      *
-     * @return String
+     * @return the screen name
      */
     public String getName() {
         return name;
@@ -94,16 +97,16 @@ public abstract class AbstractScreen extends BusinessObject {
     /**
      * Get the action type
      *
-     * @return AbstractScreen.Action
+     * @return the action type
      */
     public Action getAction() {
         return action;
     }
 
     /**
-     * Get the level2
+     * Get the level 2
      *
-     * @return int
+     * @return the level 2
      */
     public int getLevel2() {
         return level2;
@@ -112,7 +115,7 @@ public abstract class AbstractScreen extends BusinessObject {
     /**
      * Get the first chapter
      *
-     * @return String
+     * @return the first chapter
      */
     public String getChapter1() {
         return chapter1;
@@ -121,7 +124,7 @@ public abstract class AbstractScreen extends BusinessObject {
     /**
      * Get the second chapter
      *
-     * @return String
+     * @return the second chapter
      */
     public String getChapter2() {
         return chapter2;
@@ -130,25 +133,25 @@ public abstract class AbstractScreen extends BusinessObject {
     /**
      * Get the third chapter
      *
-     * @return String
+     * @return the third chapter
      */
     public String getChapter3() {
         return chapter3;
     }
 
     /**
-     * Get boolean isBasketScreen value
+     * Get "isBasketScreen" value
      *
-     * @return boolean
+     * @return true is screen is basket screen
      */
     public boolean isBasketScreen() {
         return isBasketScreen;
     }
 
     /**
-     * Set a cart
+     * Attach a cart to screen
      *
-     * @param cart Cart
+     * @param cart the cart instance
      */
     public void setCart(Cart cart) {
         this.cart = cart;
@@ -156,11 +159,11 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
     /**
-     * Add location informations
+     * Attach location information to screen
      *
-     * @param latitude  double
-     * @param longitude double
-     * @return Location
+     * @param latitude  latitude x value
+     * @param longitude longitude y value
+     * @return the Location instance
      */
     public Location Location(double latitude, double longitude) {
         return location == null ? (location = new Location(tracker)
@@ -169,41 +172,41 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
     /**
-     * Add aisle informations
+     * Attach visited aisle information to screen
      *
-     * @param level1 String
-     * @return Aisle
+     * @param level1 first aisle level
+     * @return the Aisle instance
      */
     public Aisle Aisle(String level1) {
         return aisle == null ? (aisle = new Aisle(tracker).setLevel1(level1)) : aisle;
     }
 
     /**
-     * Add a custom tree structure
+     * Attach a custom tree structure to screen
      *
-     * @param category1 int
-     * @return CustomTreeStructure
+     * @param category1 first custom tree structure category
+     * @return the CustomTreeStructure instance
      */
     public CustomTreeStructure CustomTreeStructure(int category1) {
         return customTreeStructure == null ? (customTreeStructure = new CustomTreeStructure(tracker).setCategory1(category1)) : customTreeStructure;
     }
 
     /**
-     * Add campaign informations
+     * Attach campaign information to screen
      *
-     * @param campaignId String
-     * @return Campaign
+     * @param campaignId campaign identifier
+     * @return the Campaign identifier
      */
     public Campaign Campaign(String campaignId) {
         return campaign == null ? (campaign = new Campaign(tracker).setCampaignId(campaignId)) : campaign;
     }
 
     /**
-     * Add an order
+     * Attach an order to screen
      *
-     * @param orderId  String
-     * @param turnover double
-     * @return Order
+     * @param orderId  order identifier
+     * @param turnover order turnover
+     * @return the Order instance
      * @deprecated Since 2.3.4, bug was revealed when this method is used. Use Orders tracker property instead.
      */
     @Deprecated
@@ -212,11 +215,11 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
     /**
-     * Add internal search informations
+     * Attach internal search information to screen
      *
-     * @param keywordLabel     String
-     * @param resultScreenNumber int
-     * @return InternalSearch
+     * @param keywordLabel       keyword has been searched
+     * @param resultScreenNumber screen result number
+     * @return the InternalSearch instance
      */
     public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber) {
         return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
@@ -225,48 +228,49 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
     /**
-     * Get CustomVars
+     * Get a wrapper for CustomVar management
      *
-     * @return CustomVars
+     * @return CustomVars instance
      */
     public CustomVars CustomVars() {
         return customVars == null ? (customVars = new CustomVars(this)) : customVars;
     }
 
     /**
-     * Get CustomObjects
+     * Get a wrapper for CustomObject management
      *
-     * @return CustomObjects
+     * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
         return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
     }
 
     /**
-     * Get Publishers
+     * Get a wrapper for PublisherImpression management
      *
-     * @return PublisherImpressions
+     * @return PublisherImpressions instance
      */
     public PublisherImpressions Publishers() {
         return publisherImpressions == null ? (publisherImpressions = new PublisherImpressions(this)) : publisherImpressions;
     }
 
     /**
-     * Get SelfPromotions
+     * Get a wrapper for SelfPromotionImpression management
      *
-     * @return SelfPromotionImpressions
+     * @return SelfPromotionImpressions instance
      */
     public SelfPromotionImpressions SelfPromotions() {
         return selfPromotionImpressions == null ? (selfPromotionImpressions = new SelfPromotionImpressions(this)) : selfPromotionImpressions;
     }
 
     /**
-     * Send a screen view event
+     * Send the screen view event
      */
     public void sendView() {
         action = Action.View;
         tracker.getDispatcher().dispatch(this);
     }
+
 
     AbstractScreen(Tracker tracker) {
         super(tracker);

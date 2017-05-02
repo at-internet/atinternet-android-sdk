@@ -24,9 +24,11 @@ package com.atinternet.tracker;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+/**
+ * Wrapper class for advertising publisher tracking
+ */
 public class Publisher extends OnAppAd {
     private static final String PUBLISHER_FORMAT = "PUB-%1$s-%2$s-%3$s-%4$s-%5$s-%6$s-%7$s-%8$s";
     private static final String SCREEN = "screen";
@@ -48,10 +50,15 @@ public class Publisher extends OnAppAd {
         return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
     }
 
+    Publisher(Tracker tracker) {
+        super(tracker);
+        campaignId = "";
+    }
+
     /**
-     * Get campaign id
+     * Get campaign identifier
      *
-     * @return String
+     * @return the publisher campaign identifier
      */
     public String getCampaignId() {
         return campaignId;
@@ -60,7 +67,7 @@ public class Publisher extends OnAppAd {
     /**
      * Get creation
      *
-     * @return String
+     * @return the publisher creation
      */
     public String getCreation() {
         return creation;
@@ -69,7 +76,7 @@ public class Publisher extends OnAppAd {
     /**
      * Get variant
      *
-     * @return String
+     * @return the publisher variant
      */
     public String getVariant() {
         return variant;
@@ -78,7 +85,7 @@ public class Publisher extends OnAppAd {
     /**
      * Get format
      *
-     * @return String
+     * @return the publisher format
      */
     public String getFormat() {
         return format;
@@ -87,7 +94,7 @@ public class Publisher extends OnAppAd {
     /**
      * Get general placement
      *
-     * @return String
+     * @return the publisher general placement
      */
     public String getGeneralPlacement() {
         return generalPlacement;
@@ -96,16 +103,16 @@ public class Publisher extends OnAppAd {
     /**
      * Get detailed placement
      *
-     * @return String
+     * @return the publisher detailed placement
      */
     public String getDetailedPlacement() {
         return detailedPlacement;
     }
 
     /**
-     * Get advertiser id
+     * Get advertiser identifier
      *
-     * @return String
+     * @return the publisher edvertiser identifier
      */
     public String getAdvertiserId() {
         return advertiserId;
@@ -114,7 +121,7 @@ public class Publisher extends OnAppAd {
     /**
      * Get url
      *
-     * @return String
+     * @return the publisher url
      */
     public String getUrl() {
         return url;
@@ -123,8 +130,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new campaign id
      *
-     * @param campaignId String
-     * @return Publisher
+     * @param campaignId campaign identifier
+     * @return Publisher instance
      */
     public Publisher setCampaignId(String campaignId) {
         this.campaignId = campaignId;
@@ -134,8 +141,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new creation
      *
-     * @param creation String
-     * @return Publisher
+     * @param creation /
+     * @return Publisher instance
      */
     public Publisher setCreation(String creation) {
         this.creation = creation;
@@ -145,8 +152,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set variant
      *
-     * @param variant String
-     * @return Pubisher
+     * @param variant /
+     * @return Publisher instance
      */
     public Publisher setVariant(String variant) {
         this.variant = variant;
@@ -156,8 +163,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set format
      *
-     * @param format String
-     * @return Publisher
+     * @param format /
+     * @return Publisher instance
      */
     public Publisher setFormat(String format) {
         this.format = format;
@@ -167,8 +174,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new general placement
      *
-     * @param generalPlacement String
-     * @return Publisher
+     * @param generalPlacement /
+     * @return Publisher instance
      */
     public Publisher setGeneralPlacement(String generalPlacement) {
         this.generalPlacement = generalPlacement;
@@ -178,8 +185,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new detailed placement
      *
-     * @param detailedPlacement String
-     * @return Publisher
+     * @param detailedPlacement /
+     * @return Publisher instance
      */
     public Publisher setDetailedPlacement(String detailedPlacement) {
         this.detailedPlacement = detailedPlacement;
@@ -189,8 +196,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new advertiser id
      *
-     * @param advertiserId String
-     * @return Publisher
+     * @param advertiserId /
+     * @return Publisher instance
      */
     public Publisher setAdvertiserId(String advertiserId) {
         this.advertiserId = advertiserId;
@@ -200,8 +207,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new url
      *
-     * @param url String
-     * @return Publisher
+     * @param url /
+     * @return Publisher instance
      */
     public Publisher setUrl(String url) {
         this.url = url;
@@ -211,8 +218,8 @@ public class Publisher extends OnAppAd {
     /**
      * Set a new action
      *
-     * @param action OnAppAd.Action
-     * @return Publisher
+     * @param action /
+     * @return Publisher instance
      */
     public Publisher setAction(Action action) {
         this.action = action;
@@ -222,15 +229,10 @@ public class Publisher extends OnAppAd {
     /**
      * Get CustomObjects
      *
-     * @return CustomObjects
+     * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
         return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
-    }
-
-    Publisher(Tracker tracker) {
-        super(tracker);
-        campaignId = "";
     }
 
     @Override
@@ -246,18 +248,13 @@ public class Publisher extends OnAppAd {
                 url != null ? url : "");
 
         Buffer buffer = tracker.getBuffer();
-        ArrayList<int[]> indexes = Tool.findParameterPosition(Hit.HitParam.HitType.stringValue(), buffer.getVolatileParams(), buffer.getPersistentParams());
         String currentType = "";
-
-        for (int[] index : indexes) {
-            int arrayID = index[0];
-            int itemPosition = index[1];
-            if (arrayID == 0) {
-                currentType = buffer.getVolatileParams().get(itemPosition).getValue().execute();
-            } else {
-                currentType = buffer.getPersistentParams().get(itemPosition).getValue().execute();
-            }
+        if (buffer.getVolatileParams().containsKey(Hit.HitParam.HitType.stringValue())) {
+            currentType = buffer.getVolatileParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
+        } else if (buffer.getPersistentParams().containsKey(Hit.HitParam.HitType.stringValue())) {
+            currentType = buffer.getPersistentParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
         }
+
         if (!currentType.equals(SCREEN) && !currentType.equals(AD_TRACKING)) {
             tracker.setParam(Hit.HitParam.HitType.stringValue(), AD_TRACKING);
         }

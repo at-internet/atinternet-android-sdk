@@ -22,6 +22,9 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class to manage rich media tracking
+ */
 public class MediaPlayer {
 
     private final Tracker tracker;
@@ -31,68 +34,68 @@ public class MediaPlayer {
     private LiveVideos liveVideos;
     private LiveAudios liveAudios;
 
+    Tracker getTracker() {
+        return tracker;
+    }
+
+    MediaPlayer(Tracker tracker) {
+        this.tracker = tracker;
+        playerId = 1;
+    }
+
     /**
-     * Get Videos
+     * Get Videos instance
      *
-     * @return Videos
+     * @return the Videos instance
      */
     public Videos Videos() {
         return videos == null ? (videos = new Videos(this)) : videos;
     }
 
     /**
-     * Get Audios
+     * Get Audios instance
      *
-     * @return Audios
+     * @return the Audios instance
      */
     public Audios Audios() {
         return audios == null ? (audios = new Audios(this)) : audios;
     }
 
     /**
-     * Get LiveVideos
+     * Get LiveVideos instance
      *
-     * @return LiveVideos
+     * @return the LiveVideos instance
      */
     public LiveVideos LiveVideos() {
         return liveVideos == null ? (liveVideos = new LiveVideos(this)) : liveVideos;
     }
 
     /**
-     * Get LiveAudios
+     * Get LiveAudios instance
      *
-     * @return LiveAudios
+     * @return the LiveAudios instance
      */
     public LiveAudios LiveAudios() {
         return liveAudios == null ? (liveAudios = new LiveAudios(this)) : liveAudios;
     }
 
-    Tracker getTracker() {
-        return tracker;
-    }
-
     /**
-     * Get the player id
+     * Get the player identifier
      *
-     * @return int
+     * @return the player identifier
      */
     public int getPlayerId() {
         return playerId;
     }
 
     /**
-     * Set a new player id
+     * Set a new player identifier
      *
-     * @param playerId int
-     * @return MediaPlayer
+     * @param playerId player identifier
+     * @return the MediaPlayer instance
      */
     public MediaPlayer setPlayerId(int playerId) {
         this.playerId = playerId;
         return this;
-    }
-
-    MediaPlayer(Tracker tracker) {
-        this.tracker = tracker;
-        playerId = 1;
     }
 }

@@ -22,13 +22,22 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for live video tracking
+ */
 public class LiveVideo extends RichMedia {
+
+    LiveVideo(MediaPlayer player) {
+        super(player);
+        broadcastMode = BroadcastMode.Live;
+        type = "video";
+    }
 
     /**
      * Set a new name
      *
-     * @param name String
-     * @return LiveAudio
+     * @param name /
+     * @return LiveVideo instance
      */
     public LiveVideo setName(String name) {
         this.name = name;
@@ -38,8 +47,8 @@ public class LiveVideo extends RichMedia {
     /**
      * Set a new level2
      *
-     * @param level2 int
-     * @return LiveAudio
+     * @param level2 /
+     * @return LiveVideo instance
      */
     public LiveVideo setLevel2(int level2) {
         this.level2 = level2;
@@ -48,10 +57,10 @@ public class LiveVideo extends RichMedia {
     }
 
     /**
-     * Change boolean isBuffering value
+     * Change boolean "isBuffering" value
      *
-     * @param isBuffering boolean
-     * @return LiveVideo
+     * @param isBuffering /
+     * @return LiveVideo instance
      */
     public LiveVideo setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
@@ -60,10 +69,10 @@ public class LiveVideo extends RichMedia {
     }
 
     /**
-     * Change boolean isEmbedded value
+     * Change boolean "isEmbedded" value
      *
-     * @param isEmbedded boolean
-     * @return LiveVideo
+     * @param isEmbedded /
+     * @return LiveVideo instance
      */
     public LiveVideo setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
@@ -74,8 +83,8 @@ public class LiveVideo extends RichMedia {
     /**
      * Set a new first chapter
      *
-     * @param chapter1 String
-     * @return LiveVideo
+     * @param chapter1 /
+     * @return LiveVideo instance
      */
     public LiveVideo setChapter1(String chapter1) {
         this.chapter1 = chapter1;
@@ -85,8 +94,8 @@ public class LiveVideo extends RichMedia {
     /**
      * Set a new second chapter
      *
-     * @param chapter2 String
-     * @return LiveVideo
+     * @param chapter2 /
+     * @return LiveVideo instance
      */
     public LiveVideo setChapter2(String chapter2) {
         this.chapter2 = chapter2;
@@ -96,8 +105,8 @@ public class LiveVideo extends RichMedia {
     /**
      * Set a new third chapter
      *
-     * @param chapter3 String
-     * @return LiveVideo
+     * @param chapter3 /
+     * @return LiveVideo instance
      */
     public LiveVideo setChapter3(String chapter3) {
         this.chapter3 = chapter3;
@@ -107,8 +116,8 @@ public class LiveVideo extends RichMedia {
     /**
      * Set a new action
      *
-     * @param action RichMedia.Action
-     * @return LiveVideo
+     * @param action /
+     * @return LiveVideo instance
      */
     public LiveVideo setAction(Action action) {
         this.action = action;
@@ -119,17 +128,11 @@ public class LiveVideo extends RichMedia {
     /**
      * Set a new webdomain
      *
-     * @param webDomain String
-     * @return LiveVideo
+     * @param webDomain /
+     * @return LiveVideo instance
      */
     public LiveVideo setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
-    }
-
-    LiveVideo(MediaPlayer player) {
-        super(player);
-        broadcastMode = BroadcastMode.Live;
-        type = "video";
     }
 }

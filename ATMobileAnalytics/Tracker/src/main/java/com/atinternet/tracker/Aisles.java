@@ -23,6 +23,8 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 /**
+ * Wrapper class to manage Aisle instances
+ *
  * @deprecated Since 2.3.0, Aisle is now only available as a screen object property.
  */
 @Deprecated
@@ -35,8 +37,8 @@ public class Aisles extends Helper {
     /**
      * Add an aisle
      *
-     * @param level1 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @return a Aisle instance
      */
     public Aisle add(String level1) {
         Aisle aisle = new Aisle(tracker)
@@ -49,9 +51,9 @@ public class Aisles extends Helper {
     /**
      * Add an aisle
      *
-     * @param level1 String
-     * @param level2 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @param level2 aisle second level
+     * @return a Aisle instance
      */
     public Aisle add(String level1, String level2) {
         return add(level1).setLevel2(level2);
@@ -60,10 +62,10 @@ public class Aisles extends Helper {
     /**
      * Add an aisle
      *
-     * @param level1 String
-     * @param level2 String
-     * @param level3 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @param level2 aisle second level
+     * @param level3 aisle third level
+     * @return a Aisle instance
      */
     public Aisle add(String level1, String level2, String level3) {
         return add(level1, level2).setLevel3(level3);
@@ -72,11 +74,11 @@ public class Aisles extends Helper {
     /**
      * Add an aisle
      *
-     * @param level1 String
-     * @param level2 String
-     * @param level3 String
-     * @param level4 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @param level2 aisle second level
+     * @param level3 aisle third level
+     * @param level4 aisle fourth level
+     * @return a Aisle instance
      */
     public Aisle add(String level1, String level2, String level3, String level4) {
         return add(level1, level2, level3).setLevel4(level4);
@@ -85,12 +87,12 @@ public class Aisles extends Helper {
     /**
      * Add an aisle
      *
-     * @param level1 String
-     * @param level2 String
-     * @param level3 String
-     * @param level4 String
-     * @param level5 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @param level2 aisle second level
+     * @param level3 aisle third level
+     * @param level4 aisle fourth level
+     * @param level5 aisle fifth level
+     * @return a Aisle instance
      */
     public Aisle add(String level1, String level2, String level3, String level4, String level5) {
         return add(level1, level2, level3, level4).setLevel5(level5);
@@ -99,13 +101,13 @@ public class Aisles extends Helper {
     /**
      * Add an aisle
      *
-     * @param level1 String
-     * @param level2 String
-     * @param level3 String
-     * @param level4 String
-     * @param level5 String
-     * @param level6 String
-     * @return Aisle
+     * @param level1 aisle first level
+     * @param level2 aisle second level
+     * @param level3 aisle third level
+     * @param level4 aisle fourth level
+     * @param level5 aisle fifth level
+     * @param level6 aisle sixth level
+     * @return a Aisle instance
      */
     public Aisle add(String level1, String level2, String level3, String level4, String level5, String level6) {
         return add(level1, level2, level3, level4, level5).setLevel6(level6);

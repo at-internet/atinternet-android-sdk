@@ -32,18 +32,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class InternalSearchTest extends AbstractTestClass {
 
     private InternalSearch internalSearch;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         internalSearch = new InternalSearch(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -59,34 +57,33 @@ public class InternalSearchTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        assertEquals("search", internalSearch.setKeyword("search").getKeyword());
-        assertEquals(123, internalSearch.setResultScreenNumber(123).getResultScreenNumber());
-        assertEquals(123, internalSearch.setResultPosition(123).getResultPosition());
-    }
-
-    @Test
     public void setEventTest() {
         internalSearch.setKeyword("search").setResultScreenNumber(3).setEvent();
-        assertEquals(2, buffer.getVolatileParams().size());
-        assertEquals("mc", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("search", buffer.getVolatileParams().get(0).getValue().execute());
 
-        assertEquals("np", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("3", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("mc").getValues().size());
+        assertEquals("search", buffer.getVolatileParams().get("mc").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("np").getValues().size());
+        assertEquals("3", buffer.getVolatileParams().get("np").getValues().get(0).execute());
     }
 
     @Test
     public void setEventTouchTest() {
         internalSearch.setKeyword("se)a..rù c^h").setResultScreenNumber(3).setResultPosition(5).setEvent();
+
         assertEquals(3, buffer.getVolatileParams().size());
-        assertEquals("mc", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("search", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("np", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("3", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("mc").getValues().size());
+        assertEquals("search", buffer.getVolatileParams().get("mc").getValues().get(0).execute());
 
-        assertEquals("mcrg", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("5", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("np").getValues().size());
+        assertEquals("3", buffer.getVolatileParams().get("np").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("mcrg").getValues().size());
+        assertEquals("5", buffer.getVolatileParams().get("mcrg").getValues().get(0).execute());
     }
 }

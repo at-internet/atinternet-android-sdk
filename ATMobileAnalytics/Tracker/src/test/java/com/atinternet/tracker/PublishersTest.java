@@ -28,11 +28,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class PublishersTest extends AbstractTestClass {
 
@@ -46,9 +44,7 @@ public class PublishersTest extends AbstractTestClass {
 
     @Test
     public void addTest() {
-        int id = new Random().nextInt(500);
-        Publisher publisher = publishers.add("pub" + id);
+        publishers.add("pub");
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("pub" + id, ((Publisher) tracker.getBusinessObjects().get(publisher.getId())).getCampaignId());
     }
 }

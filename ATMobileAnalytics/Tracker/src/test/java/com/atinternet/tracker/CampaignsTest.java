@@ -32,7 +32,7 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CampaignsTest extends AbstractTestClass {
 
@@ -47,8 +47,7 @@ public class CampaignsTest extends AbstractTestClass {
     @Test
     public void addTest() {
         int id = new Random().nextInt(500);
-        Campaign campaign = campaigns.add("campaign" + id);
+        campaigns.add("campaign" + id);
         assertEquals(1, tracker.getBusinessObjects().size());
-        assertEquals("campaign" + id, ((Campaign) tracker.getBusinessObjects().get(campaign.getId())).getCampaignId());
     }
 }

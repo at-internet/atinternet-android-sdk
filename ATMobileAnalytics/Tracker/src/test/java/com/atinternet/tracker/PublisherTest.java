@@ -30,23 +30,19 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class PublisherTest extends AbstractTestClass {
 
     private Publisher publisher;
-    private Buffer buffer;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         publisher = new Publisher(tracker);
-        buffer = tracker.getBuffer();
     }
 
     @Test
@@ -70,42 +66,17 @@ public class PublisherTest extends AbstractTestClass {
     }
 
     @Test
-    public void setTest() {
-        Random r = new Random();
-        String[] vals = {
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500)),
-                String.valueOf(r.nextInt(500))
-        };
-        int i = 0;
-
-        assertEquals(vals[i], publisher.setCampaignId(vals[i++]).getCampaignId());
-        assertEquals(vals[i], publisher.setAdvertiserId(vals[i++]).getAdvertiserId());
-        assertEquals(vals[i], publisher.setCreation(vals[i++]).getCreation());
-        assertEquals(vals[i], publisher.setFormat(vals[i++]).getFormat());
-        assertEquals(vals[i], publisher.setVariant(vals[i++]).getVariant());
-        assertEquals(vals[i], publisher.setGeneralPlacement(vals[i++]).getGeneralPlacement());
-        assertEquals(vals[i], publisher.setDetailedPlacement(vals[i++]).getDetailedPlacement());
-        assertEquals(vals[i], publisher.setUrl(vals[i]).getUrl());
-        assertEquals(OnAppAd.Action.Touch, publisher.setAction(OnAppAd.Action.Touch).getAction());
-    }
-
-    @Test
     public void setEventImpressionTest() {
         publisher.setCampaignId("[pub]").setEvent();
 
         assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("AT", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("ati", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("PUB-[pub]-------", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("ati").getValues().size());
+        assertEquals("PUB-[pub]-------", buffer.getVolatileParams().get("ati").getValues().get(0).execute());
     }
 
     @Test
@@ -114,15 +85,16 @@ public class PublisherTest extends AbstractTestClass {
         publisher.setEvent();
 
         assertEquals(3, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("AT", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("stc", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("{\"test\":\"value\"}", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals("{\"test\":\"value\"}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
 
-        assertEquals("ati", buffer.getVolatileParams().get(2).getKey());
-        assertEquals("PUB-[pub]-------", buffer.getVolatileParams().get(2).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("ati").getValues().size());
+        assertEquals("PUB-[pub]-------", buffer.getVolatileParams().get("ati").getValues().get(0).execute());
     }
 
     @Test
@@ -130,11 +102,30 @@ public class PublisherTest extends AbstractTestClass {
         publisher.setCampaignId("[pub]").setGeneralPlacement("[pub2]").setAction(OnAppAd.Action.Touch).setEvent();
 
         assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
 
-        assertEquals("type", buffer.getVolatileParams().get(0).getKey());
-        assertEquals("AT", buffer.getVolatileParams().get(0).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
 
-        assertEquals("atc", buffer.getVolatileParams().get(1).getKey());
-        assertEquals("PUB-[pub]----[pub2]---", buffer.getVolatileParams().get(1).getValue().execute());
+        assertEquals(1, buffer.getVolatileParams().get("atc").getValues().size());
+        assertEquals("PUB-[pub]----[pub2]---", buffer.getVolatileParams().get("atc").getValues().get(0).execute());
+    }
+
+    @Test
+    public void multiplesValuesTest() {
+        new Publisher(tracker).setCampaignId("[pub]").setEvent();
+        new Publisher(tracker).setCampaignId("[pub1]").setEvent();
+        new Publisher(tracker).setCampaignId("[pub2]").setEvent();
+
+        assertEquals(2, buffer.getVolatileParams().size());
+        assertEquals(0, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("AT", buffer.getVolatileParams().get("type").getValues().get(0).execute());
+
+        assertEquals(3, buffer.getVolatileParams().get("ati").getValues().size());
+        assertEquals("PUB-[pub]-------", buffer.getVolatileParams().get("ati").getValues().get(0).execute());
+        assertEquals("PUB-[pub1]-------", buffer.getVolatileParams().get("ati").getValues().get(1).execute());
+        assertEquals("PUB-[pub2]-------", buffer.getVolatileParams().get("ati").getValues().get(2).execute());
     }
 }

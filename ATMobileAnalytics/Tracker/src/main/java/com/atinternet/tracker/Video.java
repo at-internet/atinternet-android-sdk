@@ -22,14 +22,23 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+/**
+ * Wrapper class for video media tracking
+ */
 public class Video extends RichMedia {
 
     private int duration;
 
+    Video(MediaPlayer player) {
+        super(player);
+        broadcastMode = BroadcastMode.Clip;
+        type = "video";
+    }
+
     /**
      * Get duration
      *
-     * @return int
+     * @return the duration
      */
     public int getDuration() {
         return duration;
@@ -38,8 +47,8 @@ public class Video extends RichMedia {
     /**
      * Set a new duration
      *
-     * @param duration int
-     * @return Video
+     * @param duration /
+     * @return Video instance
      */
     public Video setDuration(int duration) {
         this.duration = duration;
@@ -50,8 +59,8 @@ public class Video extends RichMedia {
     /**
      * Set an new name
      *
-     * @param name String
-     * @return Video
+     * @param name /
+     * @return Video instance
      */
     public Video setName(String name) {
         this.name = name;
@@ -61,8 +70,8 @@ public class Video extends RichMedia {
     /**
      * Set a new level 2
      *
-     * @param level2 int
-     * @return Video
+     * @param level2 /
+     * @return Video instance
      */
     public Video setLevel2(int level2) {
         this.level2 = level2;
@@ -71,10 +80,10 @@ public class Video extends RichMedia {
     }
 
     /**
-     * Change boolean isBuffering value
+     * Change boolean "isBuffering" value
      *
-     * @param isBuffering boolean
-     * @return Video
+     * @param isBuffering /
+     * @return Video instance
      */
     public Video setBuffering(boolean isBuffering) {
         this.isBuffering = isBuffering;
@@ -83,10 +92,10 @@ public class Video extends RichMedia {
     }
 
     /**
-     * Change boolean isEmbedded value
+     * Change boolean "isEmbedded" value
      *
-     * @param isEmbedded boolean
-     * @return Video
+     * @param isEmbedded /
+     * @return Video instance
      */
     public Video setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
@@ -97,8 +106,8 @@ public class Video extends RichMedia {
     /**
      * Set a new first chapter
      *
-     * @param chapter1 String
-     * @return Video
+     * @param chapter1 /
+     * @return Video instance
      */
     public Video setChapter1(String chapter1) {
         this.chapter1 = chapter1;
@@ -108,8 +117,8 @@ public class Video extends RichMedia {
     /**
      * Set a new second chapter
      *
-     * @param chapter2 String
-     * @return Video
+     * @param chapter2 /
+     * @return Video instance
      */
     public Video setChapter2(String chapter2) {
         this.chapter2 = chapter2;
@@ -119,8 +128,8 @@ public class Video extends RichMedia {
     /**
      * Set a new third chapter
      *
-     * @param chapter3 String
-     * @return Video
+     * @param chapter3 /
+     * @return Video instance
      */
     public Video setChapter3(String chapter3) {
         this.chapter3 = chapter3;
@@ -130,8 +139,8 @@ public class Video extends RichMedia {
     /**
      * Set a new action
      *
-     * @param action RichMedia.Action
-     * @return Video
+     * @param action /
+     * @return Video instance
      */
     public Video setAction(Action action) {
         this.action = action;
@@ -142,18 +151,12 @@ public class Video extends RichMedia {
     /**
      * Set a new webdomain
      *
-     * @param webDomain String
-     * @return Video
+     * @param webDomain /
+     * @return Video instance
      */
     public Video setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
-    }
-
-    Video(MediaPlayer player) {
-        super(player);
-        broadcastMode = BroadcastMode.Clip;
-        type = "video";
     }
 
     @Override
