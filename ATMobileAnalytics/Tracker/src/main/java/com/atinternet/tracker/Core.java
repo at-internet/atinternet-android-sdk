@@ -336,10 +336,8 @@ class Builder implements Runnable {
         StringBuilder queryString = new StringBuilder();
 
         String configuration = buildConfiguration();
-        String idClient = tracker.getInternalUserId();
-        if (idClient == null) {
-            idClient = "";
-        }
+        String idClient = "";
+
 
         // Calcul pour connaitre la longueur maximum du hit
         String oltParameter = Tool.getTimeStamp().execute();
@@ -351,7 +349,7 @@ class Builder implements Runnable {
             dictionary = prepareQuery();
             Set<String> keySet = dictionary.keySet();
 
-            if (idClient.equals("") && dictionary.get(Hit.HitParam.UserId.stringValue()) != null) {
+            if (dictionary.get(Hit.HitParam.UserId.stringValue()) != null) {
                 idClient = dictionary.get(Hit.HitParam.UserId.stringValue()).first;
                 MAX_LENGTH_AVAILABLE -= idClient.length();
             }
@@ -1057,7 +1055,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.3.5";
+            return "2.3.6";
         }
     };
 

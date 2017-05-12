@@ -163,14 +163,18 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * @param visible true if debugger should be visible
      */
     public static void setViewerVisibility(boolean visible) {
-        bubbleVisibility = visible ? VISIBLE : GONE;
-        bubbleImage.get().setVisibility(bubbleVisibility);
+        if (bubbleImage != null) {
+            bubbleVisibility = visible ? VISIBLE : GONE;
+            bubbleImage.get().setVisibility(bubbleVisibility);
+        }
     }
 
     static void setDebuggerViewerLayout(boolean visible) {
-        viewerVisibility = visible ? VISIBLE : GONE;
-        debuggerViewerLayout.get().setVisibility(viewerVisibility);
-        setAlphaBackground(visible, false);
+        if (debuggerViewerLayout != null) {
+            viewerVisibility = visible ? VISIBLE : GONE;
+            debuggerViewerLayout.get().setVisibility(viewerVisibility);
+            setAlphaBackground(visible, false);
+        }
     }
 
     static DebuggerEventListAdapter getDebuggerEventListAdapter() {

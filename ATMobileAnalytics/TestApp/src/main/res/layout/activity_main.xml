@@ -9,11 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.atinternet.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Integration Testing App" />
-
     <Button
         android:id="@+id/sendHit"
         android:layout_width="wrap_content"

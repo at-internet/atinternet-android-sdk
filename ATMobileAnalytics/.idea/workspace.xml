@@ -7,114 +7,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fd7fdf2-db46-4622-95d9-7515ac863253" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dictionaries/nsagnette.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/ATInternet.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/ant_1_8_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/ant_launcher_1_8_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_22_2_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/asm_5_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/asm_analysis_5_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/asm_commons_5_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/asm_tree_5_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/asm_util_5_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/commons_codec_1_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/hamcrest_core_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/junit_4_10.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/maven_ant_tasks_2_1_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/objenesis_1_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_ads_8_1_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_ads_8_4_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_appindexing_8_1_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_basement_8_1_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_basement_8_4_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/robolectric_2_4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/robolectric_annotations_2_4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/sqlite4java_0_282.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_22_2_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_22_2_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_23_0_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_22_2_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_22_2_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_23_0_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/vtd_xml_2_11.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/libs/ATInternet.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/androidTest/java/com/atinternet/ApplicationTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/SecondScreenActivity.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/TestAppClass.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/drawable-hdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/drawable-mdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/drawable-xhdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/drawable-xxhdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/layout/main_layout.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/layout/second_layout.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values-v21/styles.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values/array.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/sonar-project.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/assets/defaultConfiguration.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Buffer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Builder.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/BusinessObject.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Closure.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CrashDetectionHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Dispatcher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Helper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/LifeCycle.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Lists.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/OrderCustomVar.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Param.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/PluginParam.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ScreenInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Sender.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Storage.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TechnicalContext.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tool.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerActivityLifeCyle.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerKeys.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerQueue.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/res/layout/debugger_bubble_layout.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/main/res/values/values.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/HitTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ParamOptionTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ParamTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/defaultConfiguration.json" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/drawable/atinternet_logo.png" afterPath="$PROJECT_DIR$/TestApp/src/main/res/drawable/atinternet_logo.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-hdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-hdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-mdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-mdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-xhdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-xhdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-xxhdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/TestApp/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/TestApp.iml" afterPath="$PROJECT_DIR$/TestApp/TestApp.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/build.gradle" afterPath="$PROJECT_DIR$/TestApp/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/proguard-rules.pro" afterPath="$PROJECT_DIR$/TestApp/proguard-rules.pro" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/Integration.java" afterPath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/Integration.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" afterPath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/Operation.java" afterPath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/Operation.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values-w820dp/dimens.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/res/values-w820dp/dimens.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values/dimens.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/res/values/dimens.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApp/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/TestApp/src/main/res/values/styles.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/Tracker.iml" afterPath="$PROJECT_DIR$/Tracker/Tracker.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/build.gradle" afterPath="$PROJECT_DIR$/Tracker/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/core.manifest.json" afterPath="$PROJECT_DIR$/Tracker/core.manifest.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/gradlew" afterPath="$PROJECT_DIR$/Tracker/gradlew" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/local.properties" afterPath="$PROJECT_DIR$/Tracker/local.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Debugger.java" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Debugger.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../README.md" afterPath="$PROJECT_DIR$/../README.md" />
     </list>
     <ignored path="ATMobileAnalytics.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -316,11 +219,9 @@
       <file leaf-file-name="SetConfigCallback.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/SetConfigCallback.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
+            <state relative-caret-position="150">
               <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#1468#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -375,6 +276,11 @@
           <value>
             <list>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-ads-lite:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAdsLite1024Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Displays the sub-projects of root project 'ATMobileAnalytics'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="projects" />
@@ -412,11 +318,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="compileDebugSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-gass:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesGass1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -480,11 +381,11 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="createProdDelivery" />
+                <option name="name" value="transformResourcesWithMergeJavaResForReleaseUnitTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformResourcesWithMergeJavaResForReleaseUnitTest" />
+                <option name="name" value="createBuildFile" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -530,6 +431,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="transformClassesAndResourcesWithSyncLibJarsForDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-tasks:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesTasks1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -583,6 +489,11 @@
                 <option name="name" value="assemble" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-base:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBase1024Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="compileReleaseUnitTestSources" />
               </ExternalTaskPojo>
@@ -590,10 +501,6 @@
                 <option name="description" value="Installs the android (on device) tests for the Debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="installDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="clearDelivery" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks on currently connected devices." />
@@ -742,11 +649,6 @@
                 <option name="name" value="lintRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-tasks:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesTasks1021Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="generateDebugAssets" />
               </ExternalTaskPojo>
@@ -774,6 +676,11 @@
                 <option name="name" value="transformResourcesWithMergeJavaResForDebugUnitTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-basement:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBasement1024Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="compileDebugRenderscript" />
               </ExternalTaskPojo>
@@ -784,11 +691,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareDebugUnitTestDependencies" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-basement:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBasement1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -818,12 +720,11 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="mergeDebugProguardFiles" />
+                <option name="name" value="createDelivery" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-ads:10.2.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAds1021Library" />
+                <option name="name" value="mergeDebugProguardFiles" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -841,6 +742,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="processReleaseJavaRes" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-gass:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesGass1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1000,11 +906,6 @@
                 <option name="name" value="help" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-clearcut:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesClearcut1021Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="mergeDebugAssets" />
               </ExternalTaskPojo>
@@ -1015,11 +916,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="javaPreCompileRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-ads-lite:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAdsLite1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Uninstall all applications." />
@@ -1096,11 +992,6 @@
                 <option name="name" value="javaPreCompileDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-base:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBase1021Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Installs and runs instrumentation tests for all flavors on connected devices." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="connectedAndroidTest" />
@@ -1112,6 +1003,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="transformResourcesWithMergeJavaResForRelease" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-clearcut:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesClearcut1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1152,10 +1048,6 @@
                 <option name="name" value="generateReleaseBuildConfig" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="createAlphaDelivery" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Displays the signing info for each variant." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="signingReport" />
@@ -1172,6 +1064,11 @@
                 <option name="description" value="Deletes the build directory." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="clean" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-ads:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAds1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project." />
@@ -1892,7 +1789,16 @@
             <list>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="createDelivery" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="mergeDebugProguardFiles" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-ads-lite:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAdsLite1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays the sub-projects of project ':Tracker'." />
@@ -1906,11 +1812,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="validateSigningDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-ads:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAds1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -1936,6 +1837,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="processReleaseJavaRes" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-gass:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesGass1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -1985,11 +1891,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="incrementalDebugJavaCompilationSafeguard" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-gass:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesGass1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -2094,7 +1995,7 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="createProdDelivery" />
+                <option name="name" value="createBuildFile" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -2153,6 +2054,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="transformClassesAndResourcesWithSyncLibJarsForDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-tasks:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesTasks1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -2227,6 +2133,11 @@
                 <option name="name" value="assemble" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-base:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBase1024Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="incrementalDebugUnitTestJavaCompilationSafeguard" />
               </ExternalTaskPojo>
@@ -2244,11 +2155,6 @@
                 <option name="name" value="compileReleaseUnitTestSources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-clearcut:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesClearcut1021Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Installs the android (on device) tests for the Debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="installDebugAndroidTest" />
@@ -2259,20 +2165,11 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="clearDelivery" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="javaPreCompileReleaseUnitTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="javaPreCompileRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-ads-lite:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAdsLite1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks on currently connected devices." />
@@ -2432,11 +2329,6 @@
                 <option name="name" value="javaPreCompileDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-base:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBase1021Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Run unit tests for the debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="testDebugUnitTest" />
@@ -2453,6 +2345,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="transformResourcesWithMergeJavaResForRelease" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-clearcut:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesClearcut1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -2483,11 +2380,6 @@
                 <option name="description" value="Assembles and tests this project and all projects that depend on it." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="buildDependents" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-tasks:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesTasks1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -2525,6 +2417,11 @@
                 <option name="name" value="mergeReleaseAssets" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-basement:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBasement1024Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="compileDebugRenderscript" />
               </ExternalTaskPojo>
@@ -2539,15 +2436,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="prepareDebugUnitTestDependencies" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.google.android.gms:play-services-basement:10.2.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesBasement1021Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
-                <option name="name" value="createAlphaDelivery" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -2574,6 +2462,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="preDebugBuild" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.google.android.gms:play-services-ads:10.2.4" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAds1024Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -3271,7 +3164,29 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ATMobileAnalytics" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ATMobileAnalytics" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tracker" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -3372,28 +3287,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="tracker" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ATMobileAnalytics" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ATMobileAnalytics" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tracker" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -3886,27 +3779,27 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1680" height="970" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1680" height="970" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48013246" sideWeight="0.503231" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35099337" sideWeight="0.49676898" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38992974" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38992974" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25091577" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25091577" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39900663" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -3972,73 +3865,15 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="263" column="5" selection-start-line="263" selection-start-column="5" selection-end-line="263" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="20" column="51" selection-start-line="20" selection-start-column="51" selection-end-line="20" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="20" column="51" selection-start-line="20" selection-start-column="51" selection-end-line="20" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java" />
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java" />
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java" />
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java" />
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4046,20 +3881,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="25" column="43" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TechnicalContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TechnicalContext.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/BufferTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ReferrerReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -4068,14 +3891,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="283" column="56" selection-start-line="283" selection-start-column="56" selection-end-line="283" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTrackingPlugin.java" />
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/content/Context.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4083,39 +3899,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Builder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="54" column="67" selection-start-line="54" selection-start-column="67" selection-end-line="54" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Buffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="133" column="72" selection-start-line="133" selection-start-column="72" selection-end-line="133" selection-end-column="72" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerActivityLifeCyle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="57" column="40" selection-start-line="57" selection-start-column="40" selection-end-line="57" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Builder.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Buffer.java" />
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerActivityLifeCyle.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/LifeCycleTest.java" />
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/LifeCycle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="180" column="62" selection-start-line="180" selection-start-column="62" selection-end-line="180" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/LifeCycle.java" />
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/org/json/JSONObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4123,14 +3911,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="195" column="11" selection-start-line="195" selection-start-column="11" selection-end-line="195" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tool.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/ToolTest.java" />
     <entry file="file://$PROJECT_DIR$/TestApp/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
@@ -4147,14 +3928,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Sender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="138" column="22" selection-start-line="138" selection-start-column="22" selection-end-line="138" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Sender.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4162,14 +3936,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerKeys.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="174" column="47" selection-start-line="174" selection-start-column="47" selection-end-line="174" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerKeys.java" />
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/java/lang/Enum.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4178,14 +3945,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/TechnicalContextTest.java" />
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TechnicalContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="292" column="36" selection-start-line="292" selection-start-column="19" selection-end-line="292" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TechnicalContext.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/BuilderTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/TrackerTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/ConfigurationTest.java" />
@@ -4193,14 +3953,7 @@
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/NuggAdTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/StorageTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/AbstractTestClass.java" />
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Dispatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="153" column="53" selection-start-line="153" selection-start-column="24" selection-end-line="153" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Dispatcher.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/TVTrackingTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/IdentifiedVisitorTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TVTracking.java">
@@ -4211,14 +3964,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Storage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="189" column="16" selection-start-line="189" selection-start-column="16" selection-end-line="189" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Storage.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4235,33 +3981,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1065">
-          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerQueue.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/androidTest/java/com/atinternet/tracker/SetConfigCallbackTest.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/SetConfigCallback.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="150">
           <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#1468#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/FirstScreenActivity.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
