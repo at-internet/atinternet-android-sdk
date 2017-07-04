@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="@dimen/padding_record_button"
+        android:left="@dimen/padding_record_button"
+        android:right="@dimen/padding_record_button"
+        android:top="@dimen/padding_record_button">
+        <shape android:shape="oval">
+            <solid android:color="@android:color/holo_red_dark" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <stroke
+                android:width="2dp"
+                android:color="@android:color/white" />
+        </shape>
+    </item>
+</layer-list>

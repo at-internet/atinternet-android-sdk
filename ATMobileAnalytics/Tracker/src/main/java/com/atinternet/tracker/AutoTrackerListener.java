@@ -22,21 +22,23 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import android.annotation.SuppressLint;
-import android.util.AttributeSet;
-import android.widget.ImageView;
+/**
+ * AutoTrackerListener should be implemented to customize AutoTracking business objects
+ */
+public interface AutoTrackerListener {
+    /**
+     * Called when AutoTracker detects screen to customize it
+     *
+     * @param screen Screen: the detected screen
+     * @return the customized screen
+     */
+    Screen screenDetected(Screen screen);
 
-@SuppressLint("Instantiatable")
-public class ATImageView extends ImageView {
-    public ATImageView(android.content.Context context) {
-        super(context);
-    }
-
-    public ATImageView(android.content.Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public ATImageView(android.content.Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+    /**
+     * Called when AutoTracker detects gesture to customize it
+     *
+     * @param gesture Gesture: the detected gesture
+     * @return the customized gesture
+     */
+    Gesture gestureDetected(Gesture gesture);
 }

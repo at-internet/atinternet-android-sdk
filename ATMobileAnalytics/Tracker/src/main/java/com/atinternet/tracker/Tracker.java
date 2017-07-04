@@ -152,10 +152,10 @@ public class Tracker {
         this.internalUserId = internalUserId;
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @TargetApi(14)
     private void setTrackerActivityLifecycle() {
         isTrackerActivityLifeCycleEnabled = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && appContext.get() instanceof Application) {
+        if (Build.VERSION.SDK_INT >= 14 && appContext.get() instanceof Application) {
             ((Application) appContext.get()).registerActivityLifecycleCallbacks(new TrackerActivityLifeCycle(configuration));
         }
     }

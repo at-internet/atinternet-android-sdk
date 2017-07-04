@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractTestClass {
 
     final String pattern = "dd-MM-yyyy";
@@ -50,6 +51,7 @@ public abstract class AbstractTestClass {
             put("plugins", "");
             put("storage", "required");
             put("hashUserId", false);
+            put("token", "tokenTest");
             put("persistIdentifiedVisitor", true);
             put("tvtURL", "");
             put("tvtVisitDuration", 10);
@@ -57,11 +59,14 @@ public abstract class AbstractTestClass {
             put("campaignLastPersistence", false);
             put("campaignLifetime", 30);
             put("sessionBackgroundDuration", 60);
+            put("atEnv", "prod");
         }};
         tracker = new Tracker(RuntimeEnvironment.application, conf);
+
         buffer = tracker.getBuffer();
         buffer.getPersistentParams().clear();
         buffer.getVolatileParams().clear();
+
     }
 
     // Méthode rendant accessible un attribut privé

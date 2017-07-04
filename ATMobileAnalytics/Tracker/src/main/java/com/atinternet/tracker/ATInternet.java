@@ -28,7 +28,6 @@ import java.util.HashMap;
  * Use this class to manage tracker instances
  */
 public class ATInternet {
-
     /**
      * Overlay permission Activity result code
      */
@@ -50,13 +49,18 @@ public class ATInternet {
 
     private final HashMap<String, Tracker> trackers = new HashMap<>();
 
+
     /**
-     * Get a tracker with "defaultTracker" name
+     * Get AutoTracker singleton
      *
-     * @return Tracker instance
+     * @param args first value must be auto tracker token
+     * @return AutoTracker instance
      */
-    public Tracker getDefaultTracker() {
-        return getTracker("defaultTracker");
+    public AutoTracker getDefaultTracker(String... args) {
+        if (!trackers.containsKey("defaultTracker")) {
+            trackers.put("defaultTracker", AutoTracker.getInstance(args));
+        }
+        return (AutoTracker) trackers.get("defaultTracker");
     }
 
     /**

@@ -41,4 +41,3 @@ public class ATRelativeLayout extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 }
-

@@ -41,12 +41,6 @@ public class ATInternetTest {
     }
 
     @Test
-    public void getDefaultTracker() {
-        Tracker t = ATInternet.getInstance().getDefaultTracker();
-        assertEquals(t, ATInternet.getInstance().getDefaultTracker());
-    }
-
-    @Test
     public void getOtherTracker() {
         Tracker tracker = ATInternet.getInstance().getTracker(RuntimeEnvironment.application, "test");
         assertEquals(tracker, ATInternet.getInstance().getTracker(RuntimeEnvironment.application, "test"));

@@ -107,6 +107,11 @@ public class TrackerConfigurationKeys {
     public static final String SITE = "site";
 
     /**
+     * Constant for token configuration
+     */
+    public static final String TOKEN = "autoTrackerToken";
+
+    /**
      * Constant for pixel path configuration
      */
     public static final String PIXEL_PATH = "pixelPath";

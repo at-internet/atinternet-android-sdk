@@ -397,7 +397,7 @@ class LifeCycle {
     }
 }
 
-@TargetApi(android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@TargetApi(14)
 class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks {
 
     protected static final int DELAY = 300;

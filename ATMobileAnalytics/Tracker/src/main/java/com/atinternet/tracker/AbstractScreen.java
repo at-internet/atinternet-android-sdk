@@ -271,6 +271,11 @@ public abstract class AbstractScreen extends BusinessObject {
         tracker.getDispatcher().dispatch(this);
     }
 
+    AbstractScreen() {
+        action = Action.View;
+        level2 = -1;
+        name = "";
+    }
 
     AbstractScreen(Tracker tracker) {
         super(tracker);

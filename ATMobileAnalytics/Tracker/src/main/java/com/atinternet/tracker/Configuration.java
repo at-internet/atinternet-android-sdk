@@ -108,11 +108,13 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("hashUserId", false)
                         .put("persistIdentifiedVisitor", true)
                         .put("tvtURL", "")
+                        .put("token", "")
                         .put("tvtVisitDuration", 10)
                         .put("tvtSpotValidityTime", 5)
                         .put("campaignLastPersistence", false)
                         .put("campaignLifetime", 30)
-                        .put("sessionBackgroundDuration", 60);
+                        .put("sessionBackgroundDuration", 60)
+                        .put("atEnv", "prod");
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }

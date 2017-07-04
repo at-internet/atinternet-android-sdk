@@ -55,14 +55,10 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Set;
 
-import static android.view.View.GONE;
-import static android.view.View.OnClickListener;
-import static android.view.View.VISIBLE;
-
 /**
  * Class to manage Debugger feature
  */
-public class Debugger extends GestureDetector.SimpleOnGestureListener implements OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
+public class Debugger extends GestureDetector.SimpleOnGestureListener implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
 
     private static int viewerVisibility = View.GONE;
     private static int bubbleVisibility = View.VISIBLE;
@@ -130,7 +126,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * @param tracker tracker instance
      */
     public static void create(Context context, Tracker tracker) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(context)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + context.getPackageName()));
@@ -164,14 +160,14 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      */
     public static void setViewerVisibility(boolean visible) {
         if (bubbleImage != null) {
-            bubbleVisibility = visible ? VISIBLE : GONE;
+            bubbleVisibility = visible ? View.VISIBLE : View.GONE;
             bubbleImage.get().setVisibility(bubbleVisibility);
         }
     }
 
     static void setDebuggerViewerLayout(boolean visible) {
         if (debuggerViewerLayout != null) {
-            viewerVisibility = visible ? VISIBLE : GONE;
+            viewerVisibility = visible ? View.VISIBLE : View.GONE;
             debuggerViewerLayout.get().setVisibility(viewerVisibility);
             setAlphaBackground(visible, false);
         }
@@ -219,7 +215,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (gestureDetector.onTouchEvent(event) || viewerVisibility == VISIBLE) {
+        if (gestureDetector.onTouchEvent(event) || viewerVisibility == View.VISIBLE) {
             return true;
         } else {
             switch (event.getAction()) {
@@ -321,7 +317,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         if (animate) {
             Tool.setVisibleViewWithAnimation(hitDetailViewer, true);
         } else {
-            hitDetailViewer.setVisibility(VISIBLE);
+            hitDetailViewer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -369,14 +365,14 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         if (currentViewVisibleId == -1) {
             currentViewVisibleId = R.id.eventViewer;
         }
-        debuggerViewerLayout.get().findViewById(currentViewVisibleId).setVisibility(VISIBLE);
-        if (viewerVisibility == VISIBLE) {
-            debuggerViewerLayout.get().setVisibility(VISIBLE);
+        debuggerViewerLayout.get().findViewById(currentViewVisibleId).setVisibility(View.VISIBLE);
+        if (viewerVisibility == View.VISIBLE) {
+            debuggerViewerLayout.get().setVisibility(View.VISIBLE);
             noEventsLayout.setVisibility(debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
             setAlphaBackground(true, true);
-        } else if (viewerVisibility == GONE) {
-            debuggerViewerLayout.get().setVisibility(GONE);
+        } else if (viewerVisibility == View.GONE) {
+            debuggerViewerLayout.get().setVisibility(View.GONE);
         }
 
         WindowManager.LayoutParams debuggerViewerLayoutParams = new WindowManager.LayoutParams(
@@ -400,7 +396,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * Show or hide viewer
      */
     private void toggleViewer() {
-        if (viewerVisibility == GONE) {
+        if (viewerVisibility == View.GONE) {
             viewerVisibility = View.VISIBLE;
             Tool.setVisibleViewWithAnimation(debuggerViewerLayout.get(), true);
             debuggerEventListAdapter.get().notifyDataSetChanged();
@@ -411,7 +407,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             eventListView.setVisibility(!debuggerEvents.isEmpty() ? View.VISIBLE : View.GONE);
             setAlphaBackground(true, true);
         } else {
-            viewerVisibility = GONE;
+            viewerVisibility = View.GONE;
             Tool.setVisibleViewWithAnimation(debuggerViewerLayout.get(), false);
             setAlphaBackground(false, true);
         }
@@ -674,7 +670,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             String hourString = new SimpleDateFormat(HOUR_FORMAT, Locale.getDefault()).format(offlineHit.getDate());
             String dateString = new SimpleDateFormat(DATE_STRING, Locale.getDefault()).format(offlineHit.getDate());
 
-            noOfflineHitsLayout.setVisibility(GONE);
+            noOfflineHitsLayout.setVisibility(View.GONE);
 
             TextView hitTextView = (TextView) convertView.findViewById(R.id.hitTextView);
             TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);

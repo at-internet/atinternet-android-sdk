@@ -40,6 +40,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -76,6 +77,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
@@ -360,6 +362,7 @@ class Builder implements Runnable {
             for (String parameterKey : keySet) {
                 String value = dictionary.get(parameterKey).first;
                 String separator = dictionary.get(parameterKey).second;
+
 
                 // Si la valeur du paramètre est trop grande
                 if (value.length() > MAX_LENGTH_AVAILABLE) {
@@ -1043,6 +1046,56 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
     }
 }
 
+class EventQueue extends LinkedBlockingQueue<Runnable> {
+    private Handler handler;
+    private static EventQueue instance;
+    private final ExecutorService executorService;
+
+    static EventQueue getInstance() {
+        return instance == null ? (instance = new EventQueue()) : instance;
+    }
+
+    private EventQueue() {
+        executorService = Executors.newSingleThreadExecutor();
+        handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Runnable task;
+                    while ((task = take()) != null) {
+                        executorService.execute(task);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    EventQueue cancel(Runnable runnable) {
+        handler.removeCallbacks(runnable);
+
+        return this;
+    }
+
+    Runnable insert(final Runnable runnable, int... delay) {
+        Runnable cancelable;
+        handler.postDelayed(cancelable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    put(runnable);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, delay.length == 1 ? delay[0] : 200);
+        return cancelable;
+    }
+}
+
+
 class TechnicalContext {
 
     static String screenName = "";
@@ -1055,7 +1108,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.3.6";
+            return "2.6.0";
         }
     };
 
@@ -1227,7 +1280,7 @@ class TechnicalContext {
         };
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @TargetApi(17)
     static Closure getDiagonal() {
         return new Closure() {
             @Override
@@ -1243,12 +1296,12 @@ class TechnicalContext {
 
                 try {
                     // includes window decorations (statusbar bar/menu bar)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17) {
                         widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
                         heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
                     }
                     // includes window decorations (statusbar bar/menu bar)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if (Build.VERSION.SDK_INT >= 17) {
                         Point realSize = new Point();
                         d.getRealSize(realSize);
 
@@ -1336,6 +1389,10 @@ class Tool {
 
     enum CallbackType {
         firstLaunch, build, send, partner, warning, save, error
+    }
+
+    static String upperCaseFirstLetter(String s) {
+        return String.valueOf(s.charAt(0)).toUpperCase() + s.substring(1);
     }
 
     static String percentEncode(String s) {
@@ -1508,7 +1565,7 @@ class Tool {
         }
     }
 
-    static Map toMap(JSONObject jsonObject) {
+    static Map<String, Object> toMap(JSONObject jsonObject) {
         Map<String, Object> map = new HashMap<>();
 
         Iterator<String> keysItr = jsonObject.keys();
@@ -1633,9 +1690,9 @@ class Tool {
 
     @SuppressWarnings("deprecation")
     @SuppressLint("deprecation")
-    @TargetApi(Build.VERSION_CODES.M)
+    @TargetApi(23)
     static int getColor(android.content.Context context, int colorId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= 23) {
             return context.getResources().getColor(colorId, null);
         } else {
             return context.getResources().getColor(colorId);
