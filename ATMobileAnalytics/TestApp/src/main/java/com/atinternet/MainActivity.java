@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements AutoTrackerListener {
 
-    private static final String TOKEN = "44586204-102b-41b4-8662-aa1809719145";
+    private static final String TOKEN = "b9018069-a492-40c3-a8f1-6ab182b45247";
     AutoTracker tracker;
 
     @Override

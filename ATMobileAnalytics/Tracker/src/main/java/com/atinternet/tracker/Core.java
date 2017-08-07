@@ -1108,7 +1108,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.6.0";
+            return "2.6.1";
         }
     };
 

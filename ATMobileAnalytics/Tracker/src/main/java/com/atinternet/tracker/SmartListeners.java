@@ -457,8 +457,13 @@ class SmartTrackerActivityLifecycle extends TrackerActivityLifeCycle implements 
         sensorOrientationManager.unregisterListener();
         SmartContext.listenersSet = false;
         Window win = activity.getWindow();
-        InteractionListener interactionListener = (InteractionListener) win.getCallback();
-        win.setCallback(interactionListener.getDefaultCallback());
+        Window.Callback callback = win.getCallback();
+        if (callback instanceof InteractionListener) {
+            InteractionListener interactionListener = (InteractionListener) callback;
+            win.setCallback(interactionListener.getDefaultCallback());
+        } else {
+            win.setCallback(callback);
+        }
         handler.postDelayed(toolbarCancelable, DELAY);
     }
 
