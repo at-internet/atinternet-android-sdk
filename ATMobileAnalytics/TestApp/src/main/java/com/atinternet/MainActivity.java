@@ -9,28 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
-import com.atinternet.tracker.AutoTracker;
-import com.atinternet.tracker.AutoTrackerListener;
 import com.atinternet.tracker.Debugger;
-import com.atinternet.tracker.Gesture;
-import com.atinternet.tracker.Screen;
+import com.atinternet.tracker.Tracker;
 
-import java.util.HashMap;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity implements AutoTrackerListener {
-
-    private static final String TOKEN = "b9018069-a492-40c3-a8f1-6ab182b45247";
-    AutoTracker tracker;
+    Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tracker = ATInternet.getInstance().getDefaultTracker(TOKEN);
+        tracker = ATInternet.getInstance().getDefaultTracker();
         tracker.setSiteId(410501, null, true);
         tracker.setLog("logdev", null, true);
-        tracker.enableAutoTracking(true);
 
         findViewById(R.id.sendHit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,9 +31,7 @@ public class MainActivity extends AppCompatActivity implements AutoTrackerListen
                 tracker.Screens().add("HomeTest").sendView();
             }
         });
-
         if (overlayPermission()) {
-            tracker.enableLiveTagging(true);
             Debugger.create(this, tracker);
         }
     }
@@ -62,23 +53,9 @@ public class MainActivity extends AppCompatActivity implements AutoTrackerListen
         if (requestCode == ATInternet.ALLOW_OVERLAY_INTENT_RESULT_CODE) {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (Settings.canDrawOverlays(this)) {
-                    tracker.enableLiveTagging(true);
+                    Debugger.create(this, tracker);
                 }
             }
         }
-    }
-
-    @Override
-    public Screen screenDetected(Screen screen) {
-        return screen.setLevel2(2)
-                .setName("NewName");
-    }
-
-    @Override
-    public Gesture gestureDetected(Gesture gesture) {
-        gesture.CustomObjects().add(new HashMap<String, Object>() {{
-            put("Enrich", "Test");
-        }});
-        return gesture;
     }
 }

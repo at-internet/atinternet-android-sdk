@@ -3,11 +3,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
     }
@@ -29,7 +29,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.6.1"
+version = "2.7.0"
 
 install {
     repositories.mavenInstaller {
@@ -72,12 +72,7 @@ bintray {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.android.support:appcompat-v7:25.3.1'
-    provided 'com.google.android.gms:play-services-ads:11.0.0'
-    provided('io.socket:socket.io-client:0.8.3') {
-        // excluding org.json which is provided by Android
-        exclude group: 'org.json', module: 'json'
-    }
+    provided 'com.google.android.gms:play-services-ads:11.0.4'
     testCompile 'org.robolectric:robolectric:3.3.2'
     testCompile 'junit:junit:4.12'
 }
@@ -90,28 +85,11 @@ clean {
 }
 
 task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
+    from project.rootDir.absolutePath + '/Tracker/src/main/java'
     classifier = 'sources'
 }
 
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    destinationDir = new File(project.rootDir, "documentation/" + version)
-    failOnError false
-
-    options.memberLevel = JavadocMemberLevel.PUBLIC
-    options.header = "ATInternet Android SDK API " + version
-    options.stylesheetFile = new File(projectDir, "docs-res/style.css");
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
 artifacts {
-    archives javadocJar
     archives sourcesJar
 }
 

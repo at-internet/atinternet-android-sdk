@@ -548,28 +548,6 @@ class Builder implements Runnable {
             putAll(volatileParams);
         }};
 
-        // PLUGINS EXECUTION
-        for (String availablePlg : Lists.getAvailablePluginsParamKey()) {
-            if (completeBuffer.containsKey(availablePlg)) {
-                String pluginClass;
-                if ((pluginClass = PluginParam.get(tracker).get(Hit.HitParam.TVT.stringValue())) != null) {
-                    final Plugin plugin;
-                    try {
-                        plugin = (Plugin) Class.forName(pluginClass).newInstance();
-                        plugin.execute(tracker);
-                        completeBuffer.get(Hit.HitParam.JSON.stringValue()).getValues().add(new Closure() {
-                            @Override
-                            public String execute() {
-                                return plugin.getResponse();
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
         // ORGANISE PARAMS
         ArrayList<Param> params = organizeParameters(completeBuffer);
 
@@ -1046,56 +1024,6 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
     }
 }
 
-class EventQueue extends LinkedBlockingQueue<Runnable> {
-    private Handler handler;
-    private static EventQueue instance;
-    private final ExecutorService executorService;
-
-    static EventQueue getInstance() {
-        return instance == null ? (instance = new EventQueue()) : instance;
-    }
-
-    private EventQueue() {
-        executorService = Executors.newSingleThreadExecutor();
-        handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Runnable task;
-                    while ((task = take()) != null) {
-                        executorService.execute(task);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    EventQueue cancel(Runnable runnable) {
-        handler.removeCallbacks(runnable);
-
-        return this;
-    }
-
-    Runnable insert(final Runnable runnable, int... delay) {
-        Runnable cancelable;
-        handler.postDelayed(cancelable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    put(runnable);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, delay.length == 1 ? delay[0] : 200);
-        return cancelable;
-    }
-}
-
-
 class TechnicalContext {
 
     static String screenName = "";
@@ -1108,7 +1036,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.6.1";
+            return "2.7.0";
         }
     };
 
@@ -1924,12 +1852,6 @@ class Lists {
             add("car");
             add("cn");
             add("ts");
-        }};
-    }
-
-    static HashSet<String> getAvailablePluginsParamKey() {
-        return new HashSet<String>() {{
-            add(Hit.HitParam.TVT.stringValue());
         }};
     }
 

@@ -51,16 +51,12 @@ public class ATInternet {
 
 
     /**
-     * Get AutoTracker singleton
+     * Get default tracker
      *
-     * @param args first value must be auto tracker token
-     * @return AutoTracker instance
+     * @return Tracker instance
      */
-    public AutoTracker getDefaultTracker(String... args) {
-        if (!trackers.containsKey("defaultTracker")) {
-            trackers.put("defaultTracker", AutoTracker.getInstance(args));
-        }
-        return (AutoTracker) trackers.get("defaultTracker");
+    public Tracker getDefaultTracker() {
+        return getTracker("defaultTracker");
     }
 
     /**
