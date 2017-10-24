@@ -202,9 +202,15 @@ public class Tracker {
                     Param existingParam;
                     if ((existingParam = buffer.getPersistentParams().get(key)) != null) {
                         newValues = existingParam.getValues();
+                        if (existingParam.getOptions() != null) {
+                            newParam.getOptions().setType(existingParam.getOptions().getType());
+                        }
                     }
                     if ((existingParam = buffer.getVolatileParams().get(key)) != null) {
                         existingParam.getValues().add(value);
+                        if (existingParam.getOptions() != null) {
+                            newParam.getOptions().setType(existingParam.getOptions().getType());
+                        }
                     }
                 } else {
                     buffer.getVolatileParams().remove(key);
@@ -217,8 +223,14 @@ public class Tracker {
                     Param existingParam;
                     if ((existingParam = buffer.getVolatileParams().get(key)) != null) {
                         newValues = existingParam.getValues();
+                        if (existingParam.getOptions() != null) {
+                            newParam.getOptions().setType(existingParam.getOptions().getType());
+                        }
                     } else if ((existingParam = buffer.getPersistentParams().get(key)) != null) {
                         newValues = new ArrayList<>(existingParam.getValues());
+                        if (existingParam.getOptions() != null) {
+                            newParam.getOptions().setType(existingParam.getOptions().getType());
+                        }
                     }
                 }
                 newValues.add(value);
@@ -1117,7 +1129,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, String value) {
-        return handleNotClosureStringParameterSetting(key, value);
+        return setParam(key, value, new ParamOption());
     }
 
     /**
@@ -1129,6 +1141,11 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, final String value, ParamOption options) {
+        if (options.getType() != ParamOption.Type.JSON && Tool.isJSON(value)) {
+            options.setType(ParamOption.Type.JSON);
+        } else if (options.getType() != ParamOption.Type.Array && Tool.isArray(value)) {
+            options.setType(ParamOption.Type.Array);
+        }
         return handleNotClosureStringParameterSetting(key, value, options);
     }
 
@@ -1140,7 +1157,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, List value) {
-        return handleNotClosureStringParameterSetting(key, value);
+        return setParam(key, value, new ParamOption());
     }
 
     /**
@@ -1152,6 +1169,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, List value, ParamOption options) {
+        options.setType(ParamOption.Type.Array);
         return handleNotClosureStringParameterSetting(key, value, options);
     }
 
@@ -1163,7 +1181,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, Object[] value) {
-        return handleNotClosureStringParameterSetting(key, value);
+        return setParam(key, value, new ParamOption());
     }
 
     /**
@@ -1175,6 +1193,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, Object[] value, ParamOption options) {
+        options.setType(ParamOption.Type.Array);
         return handleNotClosureStringParameterSetting(key, value, options);
     }
 
@@ -1186,7 +1205,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, Map value) {
-        return handleNotClosureStringParameterSetting(key, value);
+        return setParam(key, value, new ParamOption());
     }
 
     /**
@@ -1198,6 +1217,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, Map value, ParamOption options) {
+        options.setType(ParamOption.Type.JSON);
         return handleNotClosureStringParameterSetting(key, value, options);
     }
 

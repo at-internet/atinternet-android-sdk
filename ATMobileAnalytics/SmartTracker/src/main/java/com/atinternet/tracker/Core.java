@@ -560,48 +560,56 @@ class Builder implements Runnable {
             String strValue = paramValues.remove(0).execute();
             if (strValue != null) {
 
-                if (Tool.isJSONObject(strValue)) {
-                    try {
-                        Map result = new HashMap();
-                        result.putAll(Tool.toMap(new JSONObject(strValue)));
-                        for (Closure closureValue : paramValues) {
-                            String appendValue = closureValue.execute();
-                            if (Tool.isJSONObject(appendValue)) {
-                                result.putAll(Tool.toMap(new JSONObject(appendValue)));
-                            } else {
-                                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Couldn't append value to a JSONObject");
-                            }
-                        }
-                        strValue = new JSONObject(result).toString();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else if (Tool.isJSONArray(strValue)) {
-                    try {
-                        List result = new ArrayList();
-                        JSONArray valArray = new JSONArray(strValue);
-                        for (int i = 0; i < valArray.length(); i++) {
-                            result.add(valArray.get(i));
-                        }
-                        for (Closure closureValue : paramValues) {
-                            String appendValue = closureValue.execute();
-                            if (Tool.isJSONArray(appendValue)) {
-                                valArray = new JSONArray(appendValue);
-                                for (int i = 0; i < valArray.length(); i++) {
-                                    result.add(valArray.get(i));
+                if (p.getOptions() != null) {
+                    if (p.getOptions().getType() == ParamOption.Type.JSON) {
+                        try {
+                            Map result = new HashMap();
+                            result.putAll(Tool.toMap(new JSONObject(strValue)));
+                            for (Closure closureValue : paramValues) {
+                                String appendValue = closureValue.execute();
+                                if (Tool.isJSON(appendValue)) {
+                                    result.putAll(Tool.toMap(new JSONObject(appendValue)));
+                                } else {
+                                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Couldn't append value to a JSONObject");
                                 }
-                            } else {
-                                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Couldn't append value to an array");
                             }
+                            strValue = new JSONObject(result).toString();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        strValue = result.toString();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    } else if (p.getOptions().getType() == ParamOption.Type.Array) {
+                        try {
+                            List result = new ArrayList();
+                            JSONArray valArray = new JSONArray(strValue);
+                            for (int i = 0; i < valArray.length(); i++) {
+                                result.add(valArray.get(i));
+                            }
+                            for (Closure closureValue : paramValues) {
+                                String appendValue = closureValue.execute();
+                                if (Tool.isArray(appendValue)) {
+                                    valArray = new JSONArray(appendValue);
+                                    for (int i = 0; i < valArray.length(); i++) {
+                                        result.add(valArray.get(i));
+                                    }
+                                } else {
+                                    result.add(appendValue);
+                                }
+                            }
+                            strValue = result.toString();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        // NOT JSON
+                        for (Closure closureValue : paramValues) {
+                            strValue += p.getOptions().getSeparator();
+                            strValue += closureValue.execute();
+                        }
                     }
                 } else {
                     // NOT JSON
                     for (Closure closureValue : paramValues) {
-                        strValue += p.getOptions() != null ? p.getOptions().getSeparator() : ",";
+                        strValue += ",";
                         strValue += closureValue.execute();
                     }
                 }
@@ -1086,7 +1094,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.7.0s";
+            return "2.7.1s";
         }
     };
 
@@ -1525,7 +1533,7 @@ class Tool {
         return result + s;
     }
 
-    static boolean isJSONObject(String s) {
+    static boolean isJSON(String s) {
         try {
             JSONObject object = new JSONObject(s);
             return true;
@@ -1534,7 +1542,7 @@ class Tool {
         }
     }
 
-    static boolean isJSONArray(String s) {
+    static boolean isArray(String s) {
         try {
             JSONArray array = new JSONArray(s);
             return true;
@@ -1646,7 +1654,7 @@ class Tool {
                 String[] elem = queryComponent.split("=");
                 if (elem.length > 1) {
                     elem[1] = Tool.percentDecode(elem[1]);
-                    if (Tool.isJSONObject(elem[1])) {
+                    if (Tool.isJSON(elem[1])) {
                         JSONObject json = new JSONObject(elem[1]);
                         if (elem[0].equals(Hit.HitParam.JSON.stringValue())) {
                             map.put(elem[0], json.toString(3));

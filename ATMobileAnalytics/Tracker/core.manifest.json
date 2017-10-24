@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "type": "core",
   "config": {
     "storage": {
@@ -128,6 +128,14 @@
       "title": "Geode_Tag_SDK_Config_Title_downloadSource",
       "description": "Geode_Tag_SDK_Config_Description_downloadSource",
       "defaultValue": "int",
+      "type": "string",
+      "public": false,
+      "global": true
+    },
+    "atEnv": {
+      "title" : "Geode_Tag_SDK_Config_Title_atEnv",
+      "description": "Geode_Tag_SDK_Config_Description_Geode_Tag_SDK_Config_Title_atEnv",
+      "defaultValue": "prod",
       "type": "string",
       "public": false,
       "global": true

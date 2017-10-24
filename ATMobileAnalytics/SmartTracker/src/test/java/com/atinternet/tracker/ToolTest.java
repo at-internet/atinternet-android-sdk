@@ -64,9 +64,9 @@ public class ToolTest extends AbstractTestClass {
 
     @Test
     public void parseJSONTest() {
-        assertFalse(Tool.isJSONObject("test"));
-        assertTrue(Tool.isJSONObject("{\"test\": [1,2,3]}"));
-        assertTrue(Tool.isJSONArray("[1,2,3]"));
+        assertFalse(Tool.isJSON("test"));
+        assertTrue(Tool.isJSON("{\"test\": [1,2,3]}"));
+        assertTrue(Tool.isArray("[1,2,3]"));
     }
 
     @Test

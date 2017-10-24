@@ -24,6 +24,7 @@ package com.atinternet.tracker;
 
 import android.util.Pair;
 
+import org.json.JSONArray;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -302,7 +303,7 @@ public class BuilderTest extends AbstractTestClass {
 
         assertEquals(2, formattedParameters.size());
 
-        assertEquals("&array=[{\"test\":\"value\"}]", formattedParameters.get("array").first);
+        assertEquals("&array=[{\"test\":\"value\"}, value]", formattedParameters.get("array").first);
         assertEquals("&stc={\"key1\":\"value1\",\"key2\":\"value2\"}", formattedParameters.get("stc").first);
     }
 

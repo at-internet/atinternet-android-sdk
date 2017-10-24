@@ -27,6 +27,10 @@ package com.atinternet.tracker;
  */
 public class ParamOption {
 
+    enum Type {
+        JSON, Array, Default,
+    }
+
     /**
      * Enum for relative position
      */
@@ -59,6 +63,7 @@ public class ParamOption {
     private String separator;
     private boolean persistent;
     private boolean append;
+    private Type type;
 
     /**
      * Get relative position parameter
@@ -112,6 +117,10 @@ public class ParamOption {
      */
     public boolean isAppend() {
         return append;
+    }
+
+    Type getType() {
+        return this.type;
     }
 
     /**
@@ -180,6 +189,11 @@ public class ParamOption {
         return this;
     }
 
+    ParamOption setType(Type type) {
+        this.type = type;
+        return this;
+    }
+
     /**
      * Default constructor
      */
@@ -190,5 +204,6 @@ public class ParamOption {
         encode = false;
         persistent = false;
         append = false;
+        type = Type.Default;
     }
 }
