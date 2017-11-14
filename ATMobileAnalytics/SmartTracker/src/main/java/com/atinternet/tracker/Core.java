@@ -159,6 +159,12 @@ class Buffer {
     private String device;
     private Closure deviceClosure;
 
+    private String manufacturer;
+    private Closure manufacturerClosure;
+
+    private String model;
+    private Closure modelClosure;
+
     private String diagonal;
     private Closure diagonalClosure;
 
@@ -199,6 +205,8 @@ class Buffer {
         persistentParams.put("ptag", new Param("ptag", TechnicalContext.PTAG, persistent));
         persistentParams.put("lng", new Param("lng", TechnicalContext.getLanguage(), persistent));
         persistentParams.put("mfmd", new Param("mfmd", deviceClosure, persistentWithEncoding));
+        persistentParams.put("manufacturer", new Param("manufacturer", manufacturerClosure, persistentWithEncoding));
+        persistentParams.put("model", new Param("model", modelClosure, persistentWithEncoding));
         persistentParams.put("os", new Param("os", osClosure, persistent));
         persistentParams.put("apid", new Param("apid", apidClosure, persistent));
         persistentParams.put("apvr", new Param("apvr", apvrClosure, persistentWithEncoding));
@@ -215,6 +223,8 @@ class Buffer {
     private void initConstantClosures() {
         os = TechnicalContext.getOS().execute();
         device = TechnicalContext.getDevice().execute();
+        manufacturer = TechnicalContext.getManufacturer().execute();
+        model = TechnicalContext.getModel().execute();
         apid = TechnicalContext.getApplicationIdentifier().execute();
         apvr = TechnicalContext.getApplicationVersion().execute();
         diagonal = TechnicalContext.getDiagonal().execute();
@@ -230,6 +240,20 @@ class Buffer {
             @Override
             public String execute() {
                 return device;
+            }
+        };
+
+        manufacturerClosure = new Closure() {
+            @Override
+            public String execute() {
+                return manufacturer;
+            }
+        };
+
+        modelClosure = new Closure() {
+            @Override
+            public String execute() {
+                return model;
             }
         };
 
@@ -1094,7 +1118,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.7.1s";
+            return "2.8.0s";
         }
     };
 
@@ -1202,6 +1226,24 @@ class TechnicalContext {
             @Override
             public String execute() {
                 return String.format("[%1$s]-[%2$s]", Build.BRAND, Tool.removeCharacters(Build.MODEL, " ", "-", ".").toLowerCase());
+            }
+        };
+    }
+
+    static Closure getManufacturer() {
+        return new Closure() {
+            @Override
+            public String execute() {
+                return Build.MANUFACTURER;
+            }
+        };
+    }
+
+    static Closure getModel() {
+        return new Closure() {
+            @Override
+            public String execute() {
+                return Build.MODEL;
             }
         };
     }
@@ -1903,6 +1945,8 @@ class Lists {
             add("ptag");
             add("lng");
             add("mfmd");
+            add("manufacturer");
+            add("model");
             add("os");
             add("apvr");
             add("hl");

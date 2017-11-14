@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.7.1",
+  "version": "2.8.0",
   "type": "core",
   "config": {
     "storage": {
@@ -100,6 +100,14 @@
       "public": true,
       "global": true
     },
+    "enableSmartSDK": {
+      "title": "Geode_Tag_SDK_Config_Title_enableSmartSDK",
+      "description": "Geode_Tag_SDK_Config_Description_enableSmartSDK",
+      "defaultValue": "false",
+      "type": "bool",
+      "public": true,
+      "global": true
+    },
     "campaignLifetime": {
       "title": "Geode_Tag_SDK_Config_Title_lifetime",
       "description": "Geode_Tag_SDK_Config_Description_lifetime",
@@ -130,6 +138,14 @@
       "defaultValue": "int",
       "type": "string",
       "public": false,
+      "global": true
+    },
+    "autoTrackerToken": {
+      "title" : "Geode_Tag_SDK_Config_Title_autoTrackerToken",
+      "description": "Geode_Tag_SDK_Config_Description_autoTrackerToken",
+      "defaultValue": "",
+      "type": "string",
+      "public": true,
       "global": true
     },
     "atEnv": {

@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.7.1",
+  "version": "2.8.0",
   "type": "core",
   "config": {
     "storage": {
@@ -96,6 +96,14 @@
       "title": "Geode_Tag_SDK_Config_Title_enableCrashDetection",
       "description": "Geode_Tag_SDK_Config_Description_enableCrashDetection",
       "defaultValue": "true",
+      "type": "bool",
+      "public": true,
+      "global": true
+    },
+    "enableSmartSDK": {
+      "title": "Geode_Tag_SDK_Config_Title_enableSmartSDK",
+      "description": "Geode_Tag_SDK_Config_Description_enableSmartSDK",
+      "defaultValue": "false",
       "type": "bool",
       "public": true,
       "global": true

@@ -103,6 +103,8 @@ public class ListsTest extends AbstractTestClass {
         assertTrue(readOnlyParameters.contains("ptag"));
         assertTrue(readOnlyParameters.contains("lng"));
         assertTrue(readOnlyParameters.contains("mfmd"));
+        assertTrue(readOnlyParameters.contains("manufacturer"));
+        assertTrue(readOnlyParameters.contains("model"));
         assertTrue(readOnlyParameters.contains("os"));
         assertTrue(readOnlyParameters.contains("apvr"));
         assertTrue(readOnlyParameters.contains("hl"));
@@ -110,7 +112,7 @@ public class ListsTest extends AbstractTestClass {
         assertTrue(readOnlyParameters.contains("car"));
         assertTrue(readOnlyParameters.contains("cn"));
         assertTrue(readOnlyParameters.contains("ts"));
-        assertEquals(11, readOnlyParameters.size());
+        assertEquals(13, readOnlyParameters.size());
     }
 
     @Test

@@ -31,31 +31,8 @@ public class MainActivity extends AppCompatActivity {
                 tracker.Screens().add("HomeTest").sendView();
             }
         });
-        if (overlayPermission()) {
-            Debugger.create(this, tracker);
-        }
-    }
 
-    private boolean overlayPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, ATInternet.ALLOW_OVERLAY_INTENT_RESULT_CODE);
-                return false;
-            }
-        }
-        return true;
-    }
+        Debugger.create(this, tracker);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ATInternet.ALLOW_OVERLAY_INTENT_RESULT_CODE) {
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (Settings.canDrawOverlays(this)) {
-                    Debugger.create(this, tracker);
-                }
-            }
-        }
     }
 }

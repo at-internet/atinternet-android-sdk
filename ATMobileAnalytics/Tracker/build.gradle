@@ -4,9 +4,9 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '27.0.1'
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
@@ -29,7 +29,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.7.1"
+version = "2.8.0"
 
 install {
     repositories.mavenInstaller {
@@ -71,10 +71,10 @@ bintray {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.google.android.gms:play-services-ads:11.0.4'
-    testCompile 'org.robolectric:robolectric:3.3.2'
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.google.android.gms:play-services-ads:11.6.0'
+    testImplementation 'org.robolectric:robolectric:3.3.2'
+    testImplementation 'junit:junit:4.12'
 }
 
 clean {
@@ -103,7 +103,7 @@ task createDelivery {
             rename('Tracker-release.aar', 'Tracker.aar')
         }
         copy {
-            from 'build/intermediates/bundles/default/'
+            from 'build/intermediates/bundles/release/'
             into destination
             include('classes.jar')
             rename('classes.jar', 'Tracker.jar')

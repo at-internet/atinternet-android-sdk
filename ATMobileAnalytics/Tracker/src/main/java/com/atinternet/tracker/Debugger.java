@@ -93,6 +93,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private final DebuggerOfflineHitsAdapter debuggerOfflineHitsAdapter;
 
     private WindowManager.LayoutParams bubbleImageLayoutParams;
+    private static int windowType;
 
     private int initialX;
     private int initialY;
@@ -126,6 +127,12 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * @param tracker tracker instance
      */
     public static void create(Context context, Tracker tracker) {
+        if (Build.VERSION.SDK_INT >= 26) {
+            windowType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }
+        else {
+            windowType = WindowManager.LayoutParams.TYPE_PHONE;
+        }
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(context)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -353,7 +360,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         bubbleImageLayoutParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                windowType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
@@ -378,7 +385,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         WindowManager.LayoutParams debuggerViewerLayoutParams = new WindowManager.LayoutParams(
                 metrics.widthPixels - 10,
                 ratio * metrics.heightPixels / 10,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                windowType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         debuggerViewerLayoutParams.gravity = Gravity.TOP | Gravity.START;

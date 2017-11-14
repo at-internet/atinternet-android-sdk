@@ -76,7 +76,7 @@ public class BufferTest extends AbstractTestClass {
     @Test
     public void addContextVariablesTest() throws Exception {
         executePrivateMethod(buffer, "addContextVariables", new Object[]{tracker});
-        assertEquals(15, buffer.getPersistentParams().size());
+        assertEquals(17, buffer.getPersistentParams().size());
         assertEquals(TechnicalContext.VTAG.execute(), buffer.getPersistentParams().get("vtag").getValues().get(0).execute());
         assertEquals("Android", buffer.getPersistentParams().get("ptag").getValues().get(0).execute());
     }
@@ -86,6 +86,10 @@ public class BufferTest extends AbstractTestClass {
         executePrivateMethod(buffer, "initConstantClosures", new Object[0]);
         assertNotNull(getAccessibleField(buffer, "osClosure"));
         assertNotNull(getAccessibleField(buffer, "deviceClosure"));
+        assertNotNull(getAccessibleField(buffer, "manufacturerClosure"));
+        assertNotNull(getAccessibleField(buffer, "modelClosure"));
+        assertNotNull(getAccessibleField(buffer, "apidClosure"));
         assertNotNull(getAccessibleField(buffer, "apvrClosure"));
+        assertNotNull(getAccessibleField(buffer, "diagonalClosure"));
     }
 }
