@@ -25,6 +25,7 @@ package com.atinternet.tracker;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -381,9 +382,24 @@ class SmartEvent {
         this.smartView = smartView;
         screen = new Screen();
         isDefaultMethod = this.smartView == null || this.smartView.getId() == -1;
-        String defaultMethodName = getDefaultMethodName();
-        methodName = isDefaultMethod ? defaultMethodName : defaultMethodName + " " + rootView.getResources().getResourceEntryName(this.smartView.getId());
+        methodName = getDefaultMethodName();
+        if (!isDefaultMethod) {
+            String resourceName = getResourceName(rootView);
+            if (resourceName != null) {
+                methodName += " " + resourceName;
+            }
+        }
         title = methodName;
+    }
+
+    private String getResourceName(View rootView) {
+        try {
+            Resources res = rootView.getResources();
+            return res.getResourceEntryName(smartView.getId());
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     String getType() {
