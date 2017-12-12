@@ -75,18 +75,22 @@ public class Screen extends AbstractScreen {
     }
 
     JSONArray getSuggestedEvents(View rootView) throws JSONException {
-        ArrayList<View> touchables = ReflectionAPI.getAllTouchables((ViewGroup) rootView);
-        JSONArray jsonArray = new JSONArray();
-        for (View v : touchables) {
-            int[] coords = new int[2];
-            v.getLocationOnScreen(coords);
-            SmartEvent event = new SmartEvent(new SmartView(v, coords), rootView, -1, -1, "tap", "single");
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("event", event.getType())
-                    .put("data", event.getData());
-            jsonArray.put(jsonObject);
+        if (rootView instanceof ViewGroup) {
+            ArrayList<View> touchables = ReflectionAPI.getAllTouchables((ViewGroup) rootView);
+
+            JSONArray jsonArray = new JSONArray();
+            for (View v : touchables) {
+                int[] coords = new int[2];
+                v.getLocationOnScreen(coords);
+                SmartEvent event = new SmartEvent(new SmartView(v, coords), rootView, -1, -1, "tap", "single");
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("event", event.getType())
+                        .put("data", event.getData());
+                jsonArray.put(jsonObject);
+            }
+            return jsonArray;
         }
-        return jsonArray;
+        return null;
     }
 
     JSONObject getData() {

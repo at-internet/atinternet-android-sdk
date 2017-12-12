@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "type": "core",
   "config": {
     "storage": {

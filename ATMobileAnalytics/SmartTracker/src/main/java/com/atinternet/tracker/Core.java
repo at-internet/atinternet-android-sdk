@@ -1118,7 +1118,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.8.1s";
+            return "2.8.2s";
         }
     };
 

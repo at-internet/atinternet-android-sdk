@@ -202,10 +202,13 @@ class InteractionListener implements Window.Callback {
         List<ViewRootData> views = ReflectionAPI.getViewRootDatas(currentActivity);
         if (!views.isEmpty()) {
             ViewRootData vrd = views.get(views.size() - 1);
-            ViewGroup vg = (ViewGroup) vrd.getView();
-            View child = vg.getChildAt(vg.getChildCount() - 1);
-            if (!(child instanceof ATLayer) && vrd.isDialogType() && vg.findViewById(R.id.atCustomDialogTitle) == null) {
-                vg.addView(new ATLayer(currentActivity, smartSender));
+            View v = vrd.getView();
+            if(v instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup) v;
+                View child = vg.getChildAt(vg.getChildCount() - 1);
+                if (!(child instanceof ATLayer) && vrd.isDialogType() && vg.findViewById(R.id.atCustomDialogTitle) == null) {
+                    vg.addView(new ATLayer(currentActivity, smartSender));
+                }
             }
         }
 
