@@ -166,7 +166,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * @param visible true if debugger should be visible
      */
     public static void setViewerVisibility(boolean visible) {
-        if (bubbleImage != null) {
+        if (bubbleImage != null && bubbleImage.get() != null) {
             bubbleVisibility = visible ? View.VISIBLE : View.GONE;
             bubbleImage.get().setVisibility(bubbleVisibility);
         }
