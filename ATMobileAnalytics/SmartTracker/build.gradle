@@ -76,7 +76,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly 'com.android.support:appcompat-v7:26.1.0'
     compileOnly 'com.google.android.gms:play-services-ads:11.8.0'
-    compileOnly('io.socket:socket.io-client:0.8.3') {
+    compileOnly('io.socket:socket.io-client:1.0.0') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
