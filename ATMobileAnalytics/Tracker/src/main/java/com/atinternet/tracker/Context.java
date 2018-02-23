@@ -95,13 +95,10 @@ public class Context {
         this.backgroundMode = backgroundMode;
 
         if (backgroundMode != null) {
-            switch (backgroundMode) {
-                case Task:
-                    tracker.setParam(Hit.HitParam.BackgroundMode.stringValue(), "task", new ParamOption().setPersistent(true));
-                    break;
-                default:
-                    tracker.unsetParam(Hit.HitParam.BackgroundMode.stringValue());
-                    break;
+            if (backgroundMode == BackgroundMode.Task) {
+                tracker.setParam(Hit.HitParam.BackgroundMode.stringValue(), "task", new ParamOption().setPersistent(true));
+            } else {
+                tracker.unsetParam(Hit.HitParam.BackgroundMode.stringValue());
             }
         }
     }

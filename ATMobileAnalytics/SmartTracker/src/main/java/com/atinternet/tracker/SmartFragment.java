@@ -37,6 +37,7 @@ public abstract class SmartFragment extends android.support.v4.app.Fragment {
 
     /**
      * Abstract method to get the current fragment class : please use return this
+     *
      * @return the current fragment class
      */
     public abstract android.support.v4.app.Fragment getFragment();
@@ -55,9 +56,8 @@ public abstract class SmartFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @android.support.annotation.Nullable ViewGroup container, @android.support.annotation.Nullable Bundle savedInstanceState) {
-
-        TechnicalContext.screenName = null;
-        TechnicalContext.level2 = 0;
+        TechnicalContext.setScreenName(null);
+        TechnicalContext.setLevel2(0);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

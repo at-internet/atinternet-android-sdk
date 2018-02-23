@@ -65,7 +65,10 @@ public class Product extends BusinessObject {
     private CustomObjects customObjects;
 
     LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
-        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+        if (customObjectsMap == null) {
+            customObjectsMap = new LinkedHashMap<>();
+        }
+        return customObjectsMap;
     }
 
     Product(Tracker tracker) {
@@ -360,7 +363,10 @@ public class Product extends BusinessObject {
      * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
-        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+        if (customObjects == null) {
+            customObjects = new CustomObjects(this);
+        }
+        return customObjects;
     }
 
     /**

@@ -28,7 +28,7 @@ package com.atinternet.tracker;
 public class ParamOption {
 
     enum Type {
-        JSON, Array, Default,
+        JSON, ARRAY, DEFAULT,
     }
 
     /**
@@ -204,6 +204,6 @@ public class ParamOption {
         encode = false;
         persistent = false;
         append = false;
-        type = Type.Default;
+        type = Type.DEFAULT;
     }
 }

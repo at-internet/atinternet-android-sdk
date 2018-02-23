@@ -85,12 +85,13 @@ public class Tracker {
         nuggad
     }
 
-    protected static WeakReference<android.content.Context> appContext;
+    static final String TAG = "ATINTERNET";
+    static WeakReference<android.content.Context> appContext;
     private static Thread.UncaughtExceptionHandler defaultCrashHandler;
     private static boolean isTrackerActivityLifeCycleEnabled = false;
     private static Storage storage;
 
-    protected TrackerListener listener;
+    private TrackerListener listener;
     private Dispatcher dispatcher;
     private Buffer buffer;
     private String internalUserId;
@@ -176,7 +177,7 @@ public class Tracker {
                 setTrackerActivityLifecycle();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
     }
 
@@ -185,7 +186,7 @@ public class Tracker {
         if (!Lists.getReadOnlyParams().contains(key)) {
             buffer.getVolatileParams().put(key, new Param(key, value));
         } else {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, String.format("Param %s is read only. Value will not be updated", key));
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format("Param %s is read only. Value will not be updated", key));
         }
 
         return this;
@@ -238,7 +239,7 @@ public class Tracker {
                 buffer.getVolatileParams().put(key, newParam);
             }
         } else {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, String.format("Param %s is read only. Value will not be updated", key));
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format("Param %s is read only. Value will not be updated", key));
         }
 
         return this;
@@ -328,12 +329,12 @@ public class Tracker {
                 if (callback != null) {
                     String userID = TechnicalContext.getUserId((String) configuration.get(TrackerConfigurationKeys.IDENTIFIER)).execute();
                     if ((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !doNotTrackEnabled()) {
-                        callback.receiveUserId(Tool.SHA_256(userID));
+                        callback.receiveUserId(Tool.SHA256(userID));
                     } else {
                         callback.receiveUserId(userID);
                     }
                 } else {
-                    Tool.executeCallback(listener, Tool.CallbackType.warning, "Enabled to get user id");
+                    Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Enabled to get user id");
                 }
             }
         });
@@ -346,7 +347,7 @@ public class Tracker {
      */
     public String getUserIdSync() {
         if (internalUserId == null) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "User id must be set");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "User id must be set");
         }
         return internalUserId;
     }
@@ -366,7 +367,10 @@ public class Tracker {
      * @return Screens instance
      */
     public Screens Screens() {
-        return screens == null ? (screens = new Screens(this)) : screens;
+        if (screens == null) {
+            screens = new Screens(this);
+        }
+        return screens;
     }
 
     /**
@@ -375,7 +379,10 @@ public class Tracker {
      * @return Gestures instance
      */
     public Gestures Gestures() {
-        return gestures == null ? (gestures = new Gestures(this)) : gestures;
+        if (gestures == null) {
+            gestures = new Gestures(this);
+        }
+        return gestures;
     }
 
     /**
@@ -384,7 +391,10 @@ public class Tracker {
      * @return Event
      */
     Event Event() {
-        return event == null ? (event = new Event(this)) : event;
+        if (event == null) {
+            event = new Event(this);
+        }
+        return event;
     }
 
     /**
@@ -393,7 +403,10 @@ public class Tracker {
      * @return Offline instance
      */
     public Offline Offline() {
-        return offline == null ? (offline = new Offline(this)) : offline;
+        if (offline == null) {
+            offline = new Offline(this);
+        }
+        return offline;
     }
 
     /**
@@ -402,7 +415,10 @@ public class Tracker {
      * @return Context instance
      */
     public Context Context() {
-        return context == null ? (context = new Context(this)) : context;
+        if (context == null) {
+            context = new Context(this);
+        }
+        return context;
     }
 
     /**
@@ -411,7 +427,10 @@ public class Tracker {
      * @return NuggAd instance
      */
     public NuggAds NuggAds() {
-        return nuggAds == null ? (nuggAds = new NuggAds(this)) : nuggAds;
+        if (nuggAds == null) {
+            nuggAds = new NuggAds(this);
+        }
+        return nuggAds;
     }
 
     /**
@@ -420,7 +439,10 @@ public class Tracker {
      * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
-        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+        if (customObjects == null) {
+            customObjects = new CustomObjects(this);
+        }
+        return customObjects;
     }
 
     /**
@@ -429,7 +451,10 @@ public class Tracker {
      * @return IdentifiedVisitor instance
      */
     public IdentifiedVisitor IdentifiedVisitor() {
-        return identifiedVisitor == null ? (identifiedVisitor = new IdentifiedVisitor(this)) : identifiedVisitor;
+        if (identifiedVisitor == null) {
+            identifiedVisitor = new IdentifiedVisitor(this);
+        }
+        return identifiedVisitor;
     }
 
     /**
@@ -438,7 +463,10 @@ public class Tracker {
      * @return Publishers instance
      */
     public Publishers Publishers() {
-        return publishers == null ? (publishers = new Publishers(this)) : publishers;
+        if (publishers == null) {
+            publishers = new Publishers(this);
+        }
+        return publishers;
     }
 
     /**
@@ -447,7 +475,10 @@ public class Tracker {
      * @return SelfPromotions instance
      */
     public SelfPromotions SelfPromotions() {
-        return selfPromotions == null ? (selfPromotions = new SelfPromotions(this)) : selfPromotions;
+        if (selfPromotions == null) {
+            selfPromotions = new SelfPromotions(this);
+        }
+        return selfPromotions;
     }
 
     /**
@@ -456,7 +487,10 @@ public class Tracker {
      * @return DynamicScreens instance
      */
     public DynamicScreens DynamicScreens() {
-        return dynamicScreens == null ? (dynamicScreens = new DynamicScreens(this)) : dynamicScreens;
+        if (dynamicScreens == null) {
+            dynamicScreens = new DynamicScreens(this);
+        }
+        return dynamicScreens;
     }
 
     /**
@@ -465,7 +499,10 @@ public class Tracker {
      * @return Products instance
      */
     public Products Products() {
-        return products == null ? (products = new Products(this)) : products;
+        if (products == null) {
+            products = new Products(this);
+        }
+        return products;
     }
 
     /**
@@ -474,7 +511,10 @@ public class Tracker {
      * @return Cart instance
      */
     public Cart Cart() {
-        return cart == null ? (cart = new Cart(this)) : cart;
+        if (cart == null) {
+            cart = new Cart(this);
+        }
+        return cart;
     }
 
     /**
@@ -483,7 +523,10 @@ public class Tracker {
      * @return MediaPlayers instance
      */
     public MediaPlayers Players() {
-        return mediaPlayers == null ? (mediaPlayers = new MediaPlayers(this)) : mediaPlayers;
+        if (mediaPlayers == null) {
+            mediaPlayers = new MediaPlayers(this);
+        }
+        return mediaPlayers;
     }
 
     /**
@@ -494,7 +537,10 @@ public class Tracker {
      */
     @Deprecated
     public Locations Locations() {
-        return locations == null ? (locations = new Locations(this)) : locations;
+        if (locations == null) {
+            locations = new Locations(this);
+        }
+        return locations;
     }
 
     /**
@@ -505,7 +551,10 @@ public class Tracker {
      */
     @Deprecated
     public CustomVars CustomVars() {
-        return customVars == null ? (customVars = new CustomVars(this)) : customVars;
+        if (customVars == null) {
+            customVars = new CustomVars(this);
+        }
+        return customVars;
     }
 
     /**
@@ -516,7 +565,10 @@ public class Tracker {
      */
     @Deprecated
     public Aisles Aisles() {
-        return aisles == null ? (aisles = new Aisles(this)) : aisles;
+        if (aisles == null) {
+            aisles = new Aisles(this);
+        }
+        return aisles;
     }
 
     /**
@@ -525,7 +577,10 @@ public class Tracker {
      * @return Campaigns instance
      */
     public Campaigns Campaigns() {
-        return campaigns == null ? (campaigns = new Campaigns(this)) : campaigns;
+        if (campaigns == null) {
+            campaigns = new Campaigns(this);
+        }
+        return campaigns;
     }
 
     /**
@@ -536,7 +591,10 @@ public class Tracker {
      */
     @Deprecated
     public CustomTreeStructures CustomTreeStructures() {
-        return customTreeStructures == null ? (customTreeStructures = new CustomTreeStructures(this)) : customTreeStructures;
+        if (customTreeStructures == null) {
+            customTreeStructures = new CustomTreeStructures(this);
+        }
+        return customTreeStructures;
     }
 
     /**
@@ -547,7 +605,10 @@ public class Tracker {
      */
     @Deprecated
     public InternalSearches InternalSearches() {
-        return internalSearches == null ? (internalSearches = new InternalSearches(this)) : internalSearches;
+        if (internalSearches == null) {
+            internalSearches = new InternalSearches(this);
+        }
+        return internalSearches;
     }
 
     /**
@@ -556,7 +617,10 @@ public class Tracker {
      * @return Orders instance
      */
     public Orders Orders() {
-        return orders == null ? (orders = new Orders(this)) : orders;
+        if (orders == null) {
+            orders = new Orders(this);
+        }
+        return orders;
     }
 
     /**
@@ -568,7 +632,7 @@ public class Tracker {
      */
     public void setLog(String log, SetConfigCallback setConfigCallback, boolean... sync) {
         if (TextUtils.isEmpty(log)) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for log, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for log, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.LOG, log, setConfigCallback, sync);
         }
@@ -583,7 +647,7 @@ public class Tracker {
      */
     public void setSecuredLog(String securedLog, SetConfigCallback setConfigCallback, boolean... sync) {
         if (TextUtils.isEmpty(securedLog)) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for secured log, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for secured log, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.LOG_SSL, securedLog, setConfigCallback, sync);
         }
@@ -598,7 +662,7 @@ public class Tracker {
      */
     public void setDomain(String domain, SetConfigCallback setConfigCallback, boolean... sync) {
         if (TextUtils.isEmpty(domain)) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for domain, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for domain, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.DOMAIN, domain, setConfigCallback, sync);
         }
@@ -613,7 +677,7 @@ public class Tracker {
      */
     public void setSiteId(int siteId, SetConfigCallback setConfigCallback, boolean... sync) {
         if (siteId <= 0) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for site id, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for site id, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.SITE, siteId, setConfigCallback, sync);
         }
@@ -628,7 +692,7 @@ public class Tracker {
      */
     public void setOfflineMode(OfflineMode offlineMode, SetConfigCallback setConfigCallback, boolean... sync) {
         if (offlineMode == null) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for offline mode, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for offline mode, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.OFFLINE_MODE, offlineMode.toString(), setConfigCallback, sync);
         }
@@ -654,7 +718,7 @@ public class Tracker {
      */
     public void setIdentifierType(IdentifierType identifierType, SetConfigCallback setConfigCallback, boolean... sync) {
         if (identifierType == null) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for identifier type, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for identifier type, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.IDENTIFIER, identifierType.toString(), setConfigCallback, sync);
         }
@@ -682,17 +746,17 @@ public class Tracker {
         if (plugins == null) {
             setConfig(TrackerConfigurationKeys.PLUGINS, "", setConfigCallback, sync);
         } else {
-            String value = "";
+            StringBuilder value = new StringBuilder();
             boolean isFirst = true;
             for (PluginKey plugin : plugins) {
                 if (isFirst) {
                     isFirst = false;
                 } else {
-                    value += ",";
+                    value.append(',');
                 }
-                value += plugin.toString();
+                value.append(plugin.toString());
             }
-            setConfig(TrackerConfigurationKeys.PLUGINS, value, setConfigCallback, sync);
+            setConfig(TrackerConfigurationKeys.PLUGINS, value.toString(), setConfigCallback, sync);
         }
     }
 
@@ -705,7 +769,7 @@ public class Tracker {
      */
     public void setPixelPath(String pixelPath, SetConfigCallback setConfigCallback, boolean... sync) {
         if (TextUtils.isEmpty(pixelPath)) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for pixel path, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for pixel path, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.PIXEL_PATH, pixelPath, setConfigCallback, sync);
         }
@@ -753,7 +817,7 @@ public class Tracker {
      */
     public void setCampaignLifetime(int lifetime, SetConfigCallback setConfigCallback, boolean... sync) {
         if (lifetime <= 0) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for campaign lifetime, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for campaign lifetime, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.CAMPAIGN_LIFETIME, lifetime, setConfigCallback, sync);
         }
@@ -768,7 +832,7 @@ public class Tracker {
      */
     public void setSessionBackgroundDuration(int duration, SetConfigCallback setConfigCallback, boolean... sync) {
         if (duration <= 0) {
-            Tool.executeCallback(listener, Tool.CallbackType.warning, "Bad value for session background duration, default value retained");
+            Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Bad value for session background duration, default value retained");
         } else {
             setConfig(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION, duration, setConfigCallback, sync);
         }
@@ -783,40 +847,42 @@ public class Tracker {
         return new TrackerListener() {
             @Override
             public void trackerNeedsFirstLaunchApproval(String message) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: First Launch \n\tMessage: " + message);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: First Launch \n\tMessage: " + message);
             }
 
             @Override
             public void buildDidEnd(HitStatus status, String message) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Building Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Building Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
             }
 
             @Override
             public void sendDidEnd(HitStatus status, String message) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Sending Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Sending Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
             }
 
             @Override
             public void didCallPartner(String response) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Calling Partner \n\tResponse: " + response);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Calling Partner \n\tResponse: " + response);
             }
 
             @Override
             public void warningDidOccur(String message) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Warning \n\tMessage: " + message);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Warning \n\tMessage: " + message);
             }
 
             @Override
             public void saveDidEnd(String message) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Saving Hit \n\tMessage: " + message);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Saving Hit \n\tMessage: " + message);
             }
 
             @Override
             public void errorDidOccur(String message) {
-                Log.d("ATINTERNET", "Debugging message: \n\tEvent: Error \n\tMessage: " + message);
+                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Error \n\tMessage: " + message);
             }
         };
     }
+
+    private final String ERROR_OVERWRITE_KEY_CONFIG_FORMAT = "Cannot to overwrite %s configuration";
 
     /**
      * Set a new configuration
@@ -838,7 +904,7 @@ public class Tracker {
                 if (!Lists.getReadOnlyConfigs().contains(key)) {
                     configuration.put(key, conf.get(key));
                 } else {
-                    Tool.executeCallback(listener, Tool.CallbackType.warning, "Cannot to overwrite " + key + " configuration");
+                    Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
                 }
             }
             refreshConfigurationDependencies();
@@ -854,7 +920,7 @@ public class Tracker {
                         if (!Lists.getReadOnlyConfigs().contains(key)) {
                             configuration.put(key, conf.get(key));
                         } else {
-                            Tool.executeCallback(listener, Tool.CallbackType.warning, "Cannot to overwrite " + key + " configuration");
+                            Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
                         }
                     }
                     refreshConfigurationDependencies();
@@ -891,7 +957,7 @@ public class Tracker {
                 configuration.put(key, value);
                 refreshConfigurationDependencies();
             } else {
-                Tool.executeCallback(listener, Tool.CallbackType.warning, "Cannot to overwrite " + key + " configuration");
+                Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
             }
         } else {
             TrackerQueue.getInstance().put(new Runnable() {
@@ -904,7 +970,7 @@ public class Tracker {
                             setConfigCallback.setConfigEnd();
                         }
                     } else {
-                        Tool.executeCallback(listener, Tool.CallbackType.warning, "Cannot to overwrite " + key + " configuration");
+                        Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
                     }
                 }
             });
@@ -943,16 +1009,16 @@ public class Tracker {
      */
     public Tracker() {
         try {
-            android.content.Context context = ((Application) Class.forName("android.app.ActivityThread")
+            android.content.Context ctx = ((Application) Class.forName("android.app.ActivityThread")
                     .getMethod("currentApplication").invoke(null, (Object[]) null));
-            appContext = new WeakReference<>(context);
+            appContext = new WeakReference<>(ctx);
             configuration = new Configuration(appContext.get());
             initTracker();
             if (!LifeCycle.isInitialized) {
                 LifeCycle.initLifeCycle(appContext.get());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
     }
 
@@ -987,7 +1053,7 @@ public class Tracker {
                 LifeCycle.initLifeCycle(appContext.get());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
     }
 
@@ -1143,8 +1209,8 @@ public class Tracker {
     public Tracker setParam(String key, final String value, ParamOption options) {
         if (options.getType() != ParamOption.Type.JSON && Tool.isJSON(value)) {
             options.setType(ParamOption.Type.JSON);
-        } else if (options.getType() != ParamOption.Type.Array && Tool.isArray(value)) {
-            options.setType(ParamOption.Type.Array);
+        } else if (options.getType() != ParamOption.Type.ARRAY && Tool.isArray(value)) {
+            options.setType(ParamOption.Type.ARRAY);
         }
         return handleNotClosureStringParameterSetting(key, value, options);
     }
@@ -1169,7 +1235,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, List value, ParamOption options) {
-        options.setType(ParamOption.Type.Array);
+        options.setType(ParamOption.Type.ARRAY);
         return handleNotClosureStringParameterSetting(key, value, options);
     }
 
@@ -1193,7 +1259,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setParam(String key, Object[] value, ParamOption options) {
-        options.setType(ParamOption.Type.Array);
+        options.setType(ParamOption.Type.ARRAY);
         return handleNotClosureStringParameterSetting(key, value, options);
     }
 
@@ -1235,8 +1301,8 @@ public class Tracker {
      * Reset Screen context to prevent bad link between screen and gesture
      */
     public void resetScreenContext() {
-        TechnicalContext.screenName = null;
-        TechnicalContext.level2 = 0;
+        TechnicalContext.setScreenName(null);
+        TechnicalContext.setLevel2(0);
     }
 
     /**
@@ -1245,10 +1311,11 @@ public class Tracker {
     public void dispatch() {
         if (businessObjects.size() > 0) {
             ArrayList<BusinessObject> onAppAds = new ArrayList<>();
-            ArrayList<BusinessObject> customObjects = new ArrayList<>();
-            ArrayList<BusinessObject> objects = new ArrayList<BusinessObject>() {{
-                addAll(businessObjects.values());
-            }};
+            ArrayList<BusinessObject> customObjs = new ArrayList<>();
+
+            ArrayList<BusinessObject> objects = new ArrayList<>();
+            objects.addAll(businessObjects.values());
+
             ArrayList<BusinessObject> screenObjects = new ArrayList<>();
             ArrayList<BusinessObject> salesTrackerObjects = new ArrayList<>();
             ArrayList<BusinessObject> internalSearchObjects = new ArrayList<>();
@@ -1257,13 +1324,13 @@ public class Tracker {
             for (BusinessObject businessObject : objects) {
 
                 if (!(businessObject instanceof Product)) {
-                    dispatchObjects(productsObjects, customObjects);
+                    dispatchObjects(productsObjects, customObjs);
                 }
 
                 // Dispatch onAppAds before sending other object
                 if (!(businessObject instanceof OnAppAd || businessObject instanceof ScreenInfo || businessObject instanceof AbstractScreen || businessObject instanceof InternalSearch || businessObject instanceof Cart || businessObject instanceof Order)
                         || (businessObject instanceof OnAppAd && ((OnAppAd) businessObject).getAction() == OnAppAd.Action.Touch)) {
-                    dispatchObjects(onAppAds, customObjects);
+                    dispatchObjects(onAppAds, customObjs);
                 }
 
                 if (businessObject instanceof OnAppAd) {
@@ -1271,12 +1338,12 @@ public class Tracker {
                     if (ad.getAction() == OnAppAd.Action.View) {
                         onAppAds.add(ad);
                     } else {
-                        customObjects.add(businessObject);
-                        dispatcher.dispatch((BusinessObject[]) customObjects.toArray(new BusinessObject[customObjects.size()]));
-                        customObjects.clear();
+                        customObjs.add(businessObject);
+                        dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
+                        customObjs.clear();
                     }
                 } else if (businessObject instanceof CustomObject || businessObject instanceof NuggAd) {
-                    customObjects.add(businessObject);
+                    customObjs.add(businessObject);
                 } else if (businessObject instanceof ScreenInfo) {
                     screenObjects.add(businessObject);
                 } else if (businessObject instanceof InternalSearch) {
@@ -1286,27 +1353,27 @@ public class Tracker {
                 } else if (businessObject instanceof Order || businessObject instanceof Cart) {
                     salesTrackerObjects.add(businessObject);
                 } else if (businessObject instanceof AbstractScreen) {
-                    onAppAds.addAll(customObjects);
+                    onAppAds.addAll(customObjs);
                     onAppAds.addAll(screenObjects);
                     onAppAds.addAll(internalSearchObjects);
 
                     //Sales tracker
-                    ArrayList<BusinessObject> orders = new ArrayList<>();
-                    Cart cart = null;
+                    ArrayList<BusinessObject> ordersObjects = new ArrayList<>();
+                    Cart crt = null;
 
                     for (BusinessObject obj : salesTrackerObjects) {
                         if (obj instanceof Cart) {
-                            cart = (Cart) obj;
+                            crt = (Cart) obj;
                         } else {
-                            orders.add(obj);
+                            ordersObjects.add(obj);
                         }
                     }
 
-                    if (cart != null && (((AbstractScreen) businessObject).isBasketScreen() || !orders.isEmpty())) {
-                        onAppAds.add(cart);
+                    if (crt != null && (((AbstractScreen) businessObject).isBasketScreen() || !ordersObjects.isEmpty())) {
+                        onAppAds.add(crt);
                     }
 
-                    onAppAds.addAll(orders);
+                    onAppAds.addAll(ordersObjects);
                     onAppAds.add(businessObject);
                     dispatcher.dispatch((BusinessObject[]) onAppAds.toArray(new BusinessObject[onAppAds.size()]));
 
@@ -1314,31 +1381,31 @@ public class Tracker {
                     salesTrackerObjects.clear();
                     internalSearchObjects.clear();
                     onAppAds.clear();
-                    customObjects.clear();
+                    customObjs.clear();
                 } else {
                     if (businessObject instanceof Gesture && ((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
                         onAppAds.addAll(internalSearchObjects);
                         internalSearchObjects.clear();
                     }
-                    onAppAds.addAll(customObjects);
+                    onAppAds.addAll(customObjs);
                     onAppAds.add(businessObject);
                     dispatcher.dispatch((BusinessObject[]) onAppAds.toArray(new BusinessObject[onAppAds.size()]));
 
                     onAppAds.clear();
-                    customObjects.clear();
+                    customObjs.clear();
                 }
             }
 
-            dispatchObjects(onAppAds, customObjects);
+            dispatchObjects(onAppAds, customObjs);
 
-            dispatchObjects(productsObjects, customObjects);
+            dispatchObjects(productsObjects, customObjs);
 
-            if (!customObjects.isEmpty() || !screenObjects.isEmpty() || !internalSearchObjects.isEmpty()) {
-                customObjects.addAll(screenObjects);
-                customObjects.addAll(internalSearchObjects);
-                dispatcher.dispatch((BusinessObject[]) customObjects.toArray(new BusinessObject[customObjects.size()]));
+            if (!customObjs.isEmpty() || !screenObjects.isEmpty() || !internalSearchObjects.isEmpty()) {
+                customObjs.addAll(screenObjects);
+                customObjs.addAll(internalSearchObjects);
+                dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
 
-                customObjects.clear();
+                customObjs.clear();
                 screenObjects.clear();
                 internalSearchObjects.clear();
             }

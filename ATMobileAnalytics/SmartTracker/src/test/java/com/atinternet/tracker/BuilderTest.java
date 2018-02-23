@@ -24,7 +24,6 @@ package com.atinternet.tracker;
 
 import android.util.Pair;
 
-import org.json.JSONArray;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -75,11 +74,11 @@ public class BuilderTest extends AbstractTestClass {
 
     @Test
     public void multiHitsFailedNotSplittableValueTest() {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 1; i <= 150; i++) {
-            s += "verybigvalue" + i;
+            s.append("verybigvalue").append(i);
         }
-        buffer.getVolatileParams().put("stc", new Param("stc", closureValue(s)));
+        buffer.getVolatileParams().put("stc", new Param("stc", closureValue(s.toString())));
         builder = new Builder(tracker);
 
         ArrayList<String> hits = (ArrayList<String>) builder.build()[0];

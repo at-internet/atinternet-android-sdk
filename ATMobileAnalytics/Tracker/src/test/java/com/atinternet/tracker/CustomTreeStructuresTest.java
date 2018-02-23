@@ -28,8 +28,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
 @Config(sdk = 21)

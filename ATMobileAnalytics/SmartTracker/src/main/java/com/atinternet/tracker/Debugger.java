@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -65,8 +67,17 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private static final float ALPHA_BACKGROUND = .3f;
     private static final float DELTA = 100;
 
-    static boolean isActive;
-    static int currentViewVisibleId = -1;
+    private static boolean active;
+    private static int currentViewVisibleId = -1;
+
+    static boolean isActive() {
+        return active;
+    }
+
+    static int getCurrentViewVisibleId() {
+        return currentViewVisibleId;
+    }
+
     private static int itemPosition = -1;
     private static final ArrayList<Debugger.DebuggerEvent> debuggerEvents = new ArrayList<>();
     private static final ArrayList<Hit> offlineHits = new ArrayList<>();
@@ -129,8 +140,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     public static void create(Context context, Tracker tracker) {
         if (Build.VERSION.SDK_INT >= 26) {
             windowType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        }
-        else {
+        } else {
             windowType = WindowManager.LayoutParams.TYPE_PHONE;
         }
         if (Build.VERSION.SDK_INT >= 23) {
@@ -189,7 +199,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     }
 
     private Debugger(Context ctx, Tracker tr) {
-        isActive = true;
+        active = true;
         context = new WeakReference<>(ctx);
         remove();
         if (context.get().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -220,6 +230,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         return true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (gestureDetector.onTouchEvent(event) || viewerVisibility == View.VISIBLE) {
@@ -252,6 +263,9 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                     bubbleImageLayoutParams.y = initialY
                             + (int) (event.getRawY() - initialTouchY);
                     ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage.get(), bubbleImageLayoutParams);
+                    break;
+                default:
+                    Log.i(Tracker.TAG, "ignored action");
                     break;
             }
             return true;
@@ -328,6 +342,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void inflateViews(Context context) {
         debuggerViewerLayout = new WeakReference<>((ATFrameLayout) View.inflate(context, R.layout.debugger_layout, null));
 

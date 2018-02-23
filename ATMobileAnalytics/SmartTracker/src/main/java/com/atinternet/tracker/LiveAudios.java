@@ -43,22 +43,15 @@ public class LiveAudios {
      * @return LiveAudio instance
      */
     public LiveAudio add(String name) {
-        int index = -1;
-        int length = list.size();
+        int index = searchLiveAudioIndexByName(name);
         LiveAudio liveAudio;
-        for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
-                index = i;
-                break;
-            }
-        }
         if (index == -1) {
             liveAudio = new LiveAudio(player)
                     .setName(name);
 
             list.add(liveAudio);
         } else {
-            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.warning, "This liveAudio already exists");
+            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "This liveAudio already exists");
             liveAudio = list.get(index);
         }
 
@@ -107,15 +100,7 @@ public class LiveAudios {
      * @param name live audio name
      */
     public void remove(String name) {
-        int length = list.size();
-        int index = -1;
-
-        for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
-                index = i;
-                break;
-            }
-        }
+        int index = searchLiveAudioIndexByName(name);
         if (index > -1) {
             if (list.get(index).executor != null && !list.get(index).executor.isShutdown()) {
                 list.get(index).sendStop();
@@ -131,5 +116,16 @@ public class LiveAudios {
         while (!list.isEmpty()) {
             remove(list.get(0).getName());
         }
+    }
+
+    private int searchLiveAudioIndexByName(String name) {
+        int length = list.size();
+        for (int i = 0; i < length; i++) {
+            if (list.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

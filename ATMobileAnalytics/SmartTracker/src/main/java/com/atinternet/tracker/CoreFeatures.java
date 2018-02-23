@@ -31,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,14 +131,10 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
             public String execute() {
                 boolean hasCrashed = preferences.getBoolean(CRASH_DETECTION, false);
                 if (hasCrashed) {
-                    final String lastScreen = preferences.getString(CRASH_LAST_SCREEN, "");
-                    final String className = preferences.getString(CRASH_CLASS_CAUSE, "");
-                    final String exceptionName = preferences.getString(CRASH_EXCEPTION_NAME, "");
-                    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>() {{
-                        put("lastscreen", lastScreen);
-                        put("classname", className);
-                        put("error", exceptionName);
-                    }};
+                    LinkedHashMap<String, String> map = new LinkedHashMap<>();
+                    map.put("lastscreen", preferences.getString(CRASH_LAST_SCREEN, ""));
+                    map.put("classname", preferences.getString(CRASH_CLASS_CAUSE, ""));
+                    map.put("error", preferences.getString(CRASH_EXCEPTION_NAME, ""));
                     preferences.edit().putBoolean(CRASH_DETECTION, false).apply();
                     try {
                         return new JSONObject().put("crash", new JSONObject(map)).toString();
@@ -167,6 +164,11 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
 }
 
 class LifeCycle {
+
+    /**
+     * Key representing if it's first launch (backward compat)
+     */
+    static final String AT_FIRST_LAUNCH = "ATFirstLaunch";
 
     /**
      * Key representing version code app
@@ -243,10 +245,9 @@ class LifeCycle {
      */
     private static String versionCode;
 
-    /**
-     * Date format
-     */
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+    private LifeCycle() {
+        throw new IllegalStateException("Private class");
+    }
 
     /**
      * Init lifecycle
@@ -274,14 +275,15 @@ class LifeCycle {
 
     static void firstSessionInit(SharedPreferences preferences, SharedPreferences backwardPreferences) {
         // If SDKV1 lifecycle exists
-        if (backwardPreferences != null && backwardPreferences.getString("ATFirstLaunch", null) != null) {
+        if (backwardPreferences != null && backwardPreferences.getString(AT_FIRST_LAUNCH, null) != null) {
             preferences.edit().putBoolean(FIRST_SESSION, false)
-                    .putString(FIRST_SESSION_DATE, backwardPreferences.getString("ATFirstLaunch", ""))
+                    .putString(FIRST_SESSION_DATE, backwardPreferences.getString(AT_FIRST_LAUNCH, ""))
                     .putInt(SESSION_COUNT, backwardPreferences.getInt("ATLaunchCount", 0))
                     .putString(LAST_SESSION_DATE, backwardPreferences.getString("ATLastLaunch", "")).apply();
 
-            backwardPreferences.edit().putString("ATFirstLaunch", null).apply();
+            backwardPreferences.edit().putString(AT_FIRST_LAUNCH, null).apply();
         } else {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
             preferences.edit()
                     .putBoolean(FIRST_SESSION, true)
                     .putBoolean(FIRST_SESSION_AFTER_UPDATE, false)
@@ -309,7 +311,7 @@ class LifeCycle {
 
     static void newSessionInit(SharedPreferences preferences) {
         try {
-
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
             updateFirstSession(preferences);
             // Calcul dsfs
             String firstLaunchDate = preferences.getString(FIRST_SESSION_DATE, "");
@@ -352,7 +354,7 @@ class LifeCycle {
                         .apply();
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
         sessionId = UUID.randomUUID().toString();
     }
@@ -426,8 +428,8 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        TechnicalContext.screenName = null;
-        TechnicalContext.level2 = 0;
+        TechnicalContext.setScreenName(null);
+        TechnicalContext.setLevel2(0);
         if (savedActivityName == null || activity == null || !activity.getClass().getCanonicalName().equals(savedActivityName)
                 || activity.getTaskId() == savedActivityTaskId) {
             timeInBackground = -1;
@@ -447,7 +449,7 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
 
     @Override
     public void onActivityResumed(Activity activity) {
-        if (Debugger.isActive) {
+        if (Debugger.isActive()) {
             handler.removeCallbacks(debuggerCancelable);
             Debugger.setViewerVisibility(true);
         }
@@ -458,7 +460,7 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
         savedActivityName = activity.getClass().getCanonicalName();
         savedActivityTaskId = activity.getTaskId();
         timeInBackground = System.currentTimeMillis();
-        if (Debugger.isActive) {
+        if (Debugger.isActive()) {
             handler.postDelayed(debuggerCancelable, DELAY);
         }
     }

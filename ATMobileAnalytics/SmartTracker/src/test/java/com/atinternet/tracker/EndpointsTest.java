@@ -36,24 +36,24 @@ public class EndpointsTest extends AbstractTestClass {
     @Test
     public void getResourceEndpointDevTest() {
         Endpoints endpoints = new Endpoints("dev", "tokenTest", "1.0.0");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.Socket), "https://smartsdk.dev.aws.atinternet-solutions.com");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.GetConfig), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/tokenTest/version/1.0.0");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.CheckConfig), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/tokenTest/version/1.0.0/lastUpdate");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.SOCKET), "https://smartsdk.dev.aws.atinternet-solutions.com");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.GET_CONFIG), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/tokenTest/version/1.0.0");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.CHECK_CONFIG), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/tokenTest/version/1.0.0/lastUpdate");
     }
 
     @Test
     public void getResourceEndpointPreprodTest() {
         Endpoints endpoints = new Endpoints("preprod", "tokenTest", "1.0.0");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.Socket), "https://smartsdk.preprod.aws.atinternet-solutions.com");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.GetConfig), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/preprod/token/tokenTest/version/1.0.0");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.CheckConfig), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/preprod/token/tokenTest/version/1.0.0/lastUpdate");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.SOCKET), "https://smartsdk.preprod.aws.atinternet-solutions.com");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.GET_CONFIG), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/preprod/token/tokenTest/version/1.0.0");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.CHECK_CONFIG), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/preprod/token/tokenTest/version/1.0.0/lastUpdate");
     }
 
     @Test
     public void getResourceEndpointProdTest() {
         Endpoints endpoints = new Endpoints("prod", "tokenTest", "1.0.0");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.Socket), "https://smartsdk.atinternet-solutions.com");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.GetConfig), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/tokenTest/version/1.0.0");
-        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.CheckConfig), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/tokenTest/version/1.0.0/lastUpdate");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.SOCKET), "https://smartsdk.atinternet-solutions.com");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.GET_CONFIG), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/tokenTest/version/1.0.0");
+        assertEquals(endpoints.getResourceEndpoint(Endpoints.Resource.CHECK_CONFIG), "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/tokenTest/version/1.0.0/lastUpdate");
     }
 }

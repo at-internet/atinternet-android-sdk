@@ -46,12 +46,12 @@ public class PublisherImpression extends Publisher {
     @Override
     public void sendImpression() {
         // Do Nothing
-        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "This method is overrided to do nothing");
+        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "This method is overrided to do nothing");
     }
 
     @Override
     public void sendTouch() {
         // Do Nothing
-        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "This method is overrided to do nothing");
+        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "This method is overrided to do nothing");
     }
 }

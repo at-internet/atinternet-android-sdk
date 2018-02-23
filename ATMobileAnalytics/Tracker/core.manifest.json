@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.8.3",
+  "version": "2.8.4",
   "type": "core",
   "config": {
     "storage": {
@@ -141,7 +141,7 @@
       "global": true
     },
     "autoTrackerToken": {
-      "title" : "Geode_Tag_SDK_Config_Title_autoTrackerToken",
+      "title": "Geode_Tag_SDK_Config_Title_autoTrackerToken",
       "description": "Geode_Tag_SDK_Config_Description_autoTrackerToken",
       "defaultValue": "",
       "type": "string",
@@ -149,7 +149,7 @@
       "global": true
     },
     "atEnv": {
-      "title" : "Geode_Tag_SDK_Config_Title_atEnv",
+      "title": "Geode_Tag_SDK_Config_Title_atEnv",
       "description": "Geode_Tag_SDK_Config_Description_Geode_Tag_SDK_Config_Title_atEnv",
       "defaultValue": "prod",
       "type": "string",

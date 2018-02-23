@@ -44,15 +44,8 @@ public class Audios {
      * @return the Audio instance
      */
     public Audio add(String name, int duration) {
-        int index = -1;
-        int length = list.size();
         Audio audio;
-        for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
-                index = i;
-                break;
-            }
-        }
+        int index = searchAudioIndexByName(name);
         if (index == -1) {
             audio = new Audio(player)
                     .setName(name)
@@ -60,7 +53,7 @@ public class Audios {
 
             list.add(audio);
         } else {
-            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.warning, "Audio with the same name already exists");
+            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "Audio with the same name already exists");
             audio = list.get(index);
         }
 
@@ -112,15 +105,7 @@ public class Audios {
      * @param name audio identified by name
      */
     public void remove(String name) {
-        int length = list.size();
-        int index = -1;
-
-        for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
-                index = i;
-                break;
-            }
-        }
+        int index = searchAudioIndexByName(name);
         if (index > -1) {
             if (list.get(index).executor != null && !list.get(index).executor.isShutdown()) {
                 list.get(index).sendStop();
@@ -136,5 +121,15 @@ public class Audios {
         while (!list.isEmpty()) {
             remove(list.get(0).getName());
         }
+    }
+
+    private int searchAudioIndexByName(String name) {
+        int length = list.size();
+        for (int i = 0; i < length; i++) {
+            if (list.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

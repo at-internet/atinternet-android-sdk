@@ -184,7 +184,7 @@ public class DynamicScreen extends AbstractScreen {
 
         if (screenId.length() > 255) {
             screenId = "";
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "screenId too long, replaced by empty value");
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "screenId too long, replaced by empty value");
         }
 
         tracker.setParam(Hit.HitParam.DynamicScreenId.stringValue(), screenId);

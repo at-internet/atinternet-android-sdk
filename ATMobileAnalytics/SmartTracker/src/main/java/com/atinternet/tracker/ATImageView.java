@@ -26,7 +26,7 @@ import android.annotation.SuppressLint;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-@SuppressLint("Instantiatable")
+@SuppressLint({"Instantiatable", "AppCompatCustomView"})
 public class ATImageView extends ImageView {
     public ATImageView(android.content.Context context) {
         super(context);

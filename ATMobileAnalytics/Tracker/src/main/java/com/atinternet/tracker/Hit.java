@@ -272,10 +272,9 @@ public class Hit {
     }
 
     static HitType getHitType(final LinkedHashMap<String, Param> volatileParams, final LinkedHashMap<String, Param> persistentParams) {
-        LinkedHashMap<String, Param> buffer = new LinkedHashMap<String, Param>() {{
-            putAll(volatileParams);
-            putAll(persistentParams);
-        }};
+        LinkedHashMap<String, Param> buffer = new LinkedHashMap<>();
+        buffer.putAll(volatileParams);
+        buffer.putAll(persistentParams);
 
         HitType type = HitType.Screen;
 

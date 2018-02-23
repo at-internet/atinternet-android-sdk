@@ -59,8 +59,8 @@ public class Screen extends AbstractScreen {
 
     Screen() {
         super();
-        className = (SmartContext.currentFragment != null && SmartContext.currentFragment.get() != null) ? SmartContext.currentFragment.get().getClass().getSimpleName() :
-                (SmartContext.currentActivity != null && SmartContext.currentActivity.get() != null) ? SmartContext.currentActivity.get().getClass().getSimpleName() : null;
+        String activityClassName = (SmartContext.currentActivity != null && SmartContext.currentActivity.get() != null) ? SmartContext.currentActivity.get().getClass().getSimpleName() : null;
+        className = (SmartContext.currentFragment != null && SmartContext.currentFragment.get() != null) ? SmartContext.currentFragment.get().getClass().getSimpleName() : activityClassName;
         title = className;
         app = AutoTracker.getInstance().getApplication();
         if (app != null) {

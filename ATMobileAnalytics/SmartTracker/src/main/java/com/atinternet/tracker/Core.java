@@ -46,6 +46,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
 import android.view.View;
@@ -135,9 +136,7 @@ class Param {
     Param(String key, final Closure value) {
         this();
         this.key = key;
-        this.values = new ArrayList<Closure>() {{
-            add(value);
-        }};
+        this.values.add(value);
     }
 
     Param(String key, Closure value, ParamOption paramOption) {
@@ -287,6 +286,7 @@ class Builder implements Runnable {
     private static final String MH_PARAMETER_FORMAT = "%1$s-%2$s-%3$s";
     private static final String MHID_FORMAT = "%02d%02d%02d%d";
     private static final String OPT_OUT = "opt-out";
+    private static final String MHERR = "mherr";
     private static final int REFCONFIGCHUNKS = 4;
     private static final int MH_PARAMETER_MAX_LENGTH = 30;
     private static final int MHERR_PARAMETER_LENGTH = 8;
@@ -346,7 +346,7 @@ class Builder implements Runnable {
 
 
         if (hitConfigChunks != REFCONFIGCHUNKS) {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.error, "There is something wrong with configuration : " + conf);
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.ERROR, "There is something wrong with configuration : " + conf);
             conf = new StringBuilder();
         }
 
@@ -361,23 +361,23 @@ class Builder implements Runnable {
 
         StringBuilder queryString = new StringBuilder();
 
-        String configuration = buildConfiguration();
+        String configStr = buildConfiguration();
         String idClient = "";
 
 
         // Calcul pour connaitre la longueur maximum du hit
         String oltParameter = Tool.getTimeStamp().execute();
-        int MAX_LENGTH_AVAILABLE = HIT_MAX_LENGTH - (configuration.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
-        MAX_LENGTH_AVAILABLE -= idClient.length();
+        int maxLengthAvailable = HIT_MAX_LENGTH - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
+        maxLengthAvailable -= idClient.length();
 
         LinkedHashMap<String, Pair<String, String>> dictionary;
-        if (!TextUtils.isEmpty(configuration)) {
+        if (!TextUtils.isEmpty(configStr)) {
             dictionary = prepareQuery();
             Set<String> keySet = dictionary.keySet();
 
             if (dictionary.get(Hit.HitParam.UserId.stringValue()) != null) {
                 idClient = dictionary.get(Hit.HitParam.UserId.stringValue()).first;
-                MAX_LENGTH_AVAILABLE -= idClient.length();
+                maxLengthAvailable -= idClient.length();
             }
 
             // Outerloop est un label de référence si jamais une boucle doit être interrompue
@@ -389,7 +389,7 @@ class Builder implements Runnable {
 
 
                 // Si la valeur du paramètre est trop grande
-                if (value.length() > MAX_LENGTH_AVAILABLE) {
+                if (value.length() > maxLengthAvailable) {
 
                     // Si le paramètre est découpable
                     if (Lists.getSliceReadyParams().contains(parameterKey)) {
@@ -406,11 +406,11 @@ class Builder implements Runnable {
                             String currentSplitValue = valuesList[i];
 
                             // Si la valeur courante est trop grande
-                            if (currentSplitValue.length() > MAX_LENGTH_AVAILABLE) {
+                            if (currentSplitValue.length() > maxLengthAvailable) {
                                 // Erreur : Valeur trop longue non découpable
                                 indexError = countSplitHits;
                                 queryString.append(currentKey);
-                                int currentMaxLength = MAX_LENGTH_AVAILABLE - (MHERR_PARAMETER_LENGTH + queryString.length());
+                                int currentMaxLength = maxLengthAvailable - (MHERR_PARAMETER_LENGTH + queryString.length());
 
                                 // On cherche la position du dernier % afin d'éviter les exceptions au moment de la découpe brutale
                                 String splitError = currentSplitValue.substring(0, currentMaxLength);
@@ -421,13 +421,13 @@ class Builder implements Runnable {
                                 } else {
                                     queryString.append(splitError);
                                 }
-                                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Multihits: Param " + parameterKey + " value still too long after slicing");
+                                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: Param " + parameterKey + " value still too long after slicing");
 
                                 // On retourne à l'endroit du code où se trouve outerloop
                                 break outerloop;
                             }
                             // Sinon si le hit déjà construit + la valeur courante est trop grand
-                            else if (queryString.length() + currentSplitValue.length() > MAX_LENGTH_AVAILABLE) {
+                            else if (queryString.length() + currentSplitValue.length() > maxLengthAvailable) {
                                 // On créé un nouveau tronçon
                                 countSplitHits++;
                                 prepareHitsList.add(queryString.toString());
@@ -444,12 +444,12 @@ class Builder implements Runnable {
                     } else {
                         // Erreur : le paramètre n'est pas découpable
                         indexError = countSplitHits;
-                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Multihits: parameter " + parameterKey + " value not allowed to be sliced");
+                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: parameter " + parameterKey + " value not allowed to be sliced");
                         break;
                     }
                 }
                 // Sinon, si le hit est trop grand, on le découpe entre deux paramètres
-                else if (queryString.length() + value.length() > MAX_LENGTH_AVAILABLE) {
+                else if (queryString.length() + value.length() > maxLengthAvailable) {
                     countSplitHits++;
                     prepareHitsList.add(queryString.toString());
                     queryString = new StringBuilder()
@@ -465,15 +465,15 @@ class Builder implements Runnable {
             // Si un seul hit est construit
             if (countSplitHits == 1) {
                 if (indexError == countSplitHits) {
-                    hitsList.add(configuration + makeSubQuery("mherr", "1") + queryString);
+                    hitsList.add(configStr + makeSubQuery(MHERR, "1") + queryString);
                 } else {
-                    hitsList.add(configuration + queryString);
+                    hitsList.add(configStr + queryString);
                 }
             }
             // Sinon, si le nombre de tronçons > 999, erreur
             else if (countSplitHits > HIT_MAX_COUNT) {
-                hitsList.add(configuration + makeSubQuery("mherr", "1") + queryString);
-                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Multihits: too much hit parts");
+                hitsList.add(configStr + makeSubQuery(MHERR, "1") + queryString);
+                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: too much hit parts");
             }
             // Sinon, on ajoute les hits construits à la liste de hits à envoyer
             else {
@@ -483,21 +483,21 @@ class Builder implements Runnable {
                     String countSplitHitsString = countSplitHits.toString();
                     String mhParameter = makeSubQuery("mh", String.format(MH_PARAMETER_FORMAT, Tool.formatNumberLength(Integer.toString(i + 1), countSplitHitsString.length()), countSplitHitsString, mhID));
                     if (indexError == (i + 1)) {
-                        hitsList.add(configuration + mhParameter + makeSubQuery("mherr", "1") + prepareHitsList.get(i));
+                        hitsList.add(configStr + mhParameter + makeSubQuery(MHERR, "1") + prepareHitsList.get(i));
                     } else {
-                        hitsList.add(configuration + mhParameter + prepareHitsList.get(i));
+                        hitsList.add(configStr + mhParameter + prepareHitsList.get(i));
                     }
                 }
             }
             if (tracker.getListener() != null) {
-                String message = "";
+                StringBuilder message = new StringBuilder();
                 for (String hit : hitsList) {
-                    message += hit + "\n";
+                    message.append(hit).append('\n');
                 }
-                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.build, message, TrackerListener.HitStatus.Success);
+                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, message.toString(), TrackerListener.HitStatus.Success);
             }
         } else {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.build, "Empty configuration", TrackerListener.HitStatus.Failed);
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "Empty configuration", TrackerListener.HitStatus.Failed);
         }
 
         return new Object[]{hitsList, oltParameter};
@@ -567,19 +567,17 @@ class Builder implements Runnable {
     LinkedHashMap<String, Pair<String, String>> prepareQuery() {
         LinkedHashMap<String, Pair<String, String>> formattedParameters = new LinkedHashMap<>();
 
-        LinkedHashMap<String, Param> completeBuffer = new LinkedHashMap<String, Param>() {{
-            putAll(persistentParams);
-            putAll(volatileParams);
-        }};
+        LinkedHashMap<String, Param> completeBuffer = new LinkedHashMap<>();
+        completeBuffer.putAll(persistentParams);
+        completeBuffer.putAll(volatileParams);
 
         // ORGANISE PARAMS
         ArrayList<Param> params = organizeParameters(completeBuffer);
 
         // PREPARE
         for (final Param p : params) {
-            List<Closure> paramValues = new ArrayList<Closure>() {{
-                addAll(p.getValues());
-            }};
+            List<Closure> paramValues = new ArrayList<>();
+            paramValues.addAll(p.getValues());
 
             String strValue = paramValues.remove(0).execute();
             if (strValue != null) {
@@ -594,14 +592,14 @@ class Builder implements Runnable {
                                 if (Tool.isJSON(appendValue)) {
                                     result.putAll(Tool.toMap(new JSONObject(appendValue)));
                                 } else {
-                                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Couldn't append value to a JSONObject");
+                                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Couldn't append value to a JSONObject");
                                 }
                             }
                             strValue = new JSONObject(result).toString();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    } else if (p.getOptions().getType() == ParamOption.Type.Array) {
+                    } else if (p.getOptions().getType() == ParamOption.Type.ARRAY) {
                         try {
                             List result = new ArrayList();
                             JSONArray valArray = new JSONArray(strValue);
@@ -625,17 +623,21 @@ class Builder implements Runnable {
                         }
                     } else {
                         // NOT JSON
+                        StringBuilder strBuilder = new StringBuilder(strValue);
                         for (Closure closureValue : paramValues) {
-                            strValue += p.getOptions().getSeparator();
-                            strValue += closureValue.execute();
+                            strBuilder.append(p.getOptions().getSeparator())
+                                    .append(closureValue.execute());
                         }
+                        strValue = strBuilder.toString();
                     }
                 } else {
                     // NOT JSON
+                    StringBuilder strBuilder = new StringBuilder(strValue);
                     for (Closure closureValue : paramValues) {
-                        strValue += ",";
-                        strValue += closureValue.execute();
+                        strBuilder.append(',')
+                                .append(closureValue.execute());
                     }
+                    strValue = strBuilder.toString();
                 }
 
                 String key = p.getKey();
@@ -644,7 +646,7 @@ class Builder implements Runnable {
                     if (TechnicalContext.doNotTrackEnabled(Tracker.getAppContext())) {
                         strValue = OPT_OUT;
                     } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
-                        strValue = Tool.SHA_256(strValue);
+                        strValue = Tool.SHA256(strValue);
                     }
                     tracker.setInternalUserId(strValue);
                 } else if (key.equals(Hit.HitParam.Referrer.stringValue())) {
@@ -715,7 +717,7 @@ class Sender implements Runnable {
             saveHitDatabase(hit);
         }
         // Si pas de connexion
-        else if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.offline || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
+        else if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
             // Si le hit ne provient pas du offline
             if (storage.getOfflineMode() != Tracker.OfflineMode.never && !hit.isOffline()) {
                 saveHitDatabase(hit);
@@ -742,7 +744,7 @@ class Sender implements Runnable {
                             updateRetryCount(hit);
                         }
                     }
-                    Tool.executeCallback(trackerListener, Tool.CallbackType.send, message, TrackerListener.HitStatus.Failed);
+                    Tool.executeCallback(trackerListener, Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
                     updateDebugger(message, "error48", false);
                 }
                 // Le hit a été envoyé
@@ -751,7 +753,7 @@ class Sender implements Runnable {
                     if (hit.isOffline()) {
                         storage.deleteHit(hit.getUrl());
                     }
-                    Tool.executeCallback(trackerListener, Tool.CallbackType.send, hit.getUrl(), TrackerListener.HitStatus.Success);
+                    Tool.executeCallback(trackerListener, Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
                     updateDebugger(hit.getUrl(), "sent48", true);
                 }
             } catch (final Exception e) {
@@ -792,30 +794,32 @@ class Sender implements Runnable {
     }
 
     static void sendOfflineHits(TrackerListener listener, Storage storage, boolean forceSendOfflineHits, boolean async) {
-        if ((storage.getOfflineMode() != Tracker.OfflineMode.always || forceSendOfflineHits) && TechnicalContext.getConnection() != TechnicalContext.ConnectionType.offline && !OfflineHitProcessing) {
+        if ((storage.getOfflineMode() != Tracker.OfflineMode.always || forceSendOfflineHits)
+                && TechnicalContext.getConnection() != TechnicalContext.ConnectionType.OFFLINE
+                && !OfflineHitProcessing
+                && TrackerQueue.getEnabledFillQueueFromDatabase()
+                && storage.getCountOfflineHits() > 0) {
 
-            if (TrackerQueue.getEnabledFillQueueFromDatabase() && storage.getCountOfflineHits() > 0) {
-                ArrayList<Hit> offlineHits = storage.getOfflineHits();
-                if (async) {
-                    TrackerQueue.setEnabledFillQueueFromDatabase(false);
-                    for (Hit hit : offlineHits) {
-                        Sender sender = new Sender(listener, hit, forceSendOfflineHits);
-                        TrackerQueue.getInstance().put(sender);
-                    }
-                    TrackerQueue.getInstance().put(new Runnable() {
-                        @Override
-                        public void run() {
-                            TrackerQueue.setEnabledFillQueueFromDatabase(true);
-                        }
-                    });
-                } else {
-                    OfflineHitProcessing = true;
-                    for (Hit hit : offlineHits) {
-                        Sender sender = new Sender(listener, hit, forceSendOfflineHits);
-                        sender.send(false);
-                    }
-                    OfflineHitProcessing = false;
+            ArrayList<Hit> offlineHits = storage.getOfflineHits();
+            if (async) {
+                TrackerQueue.setEnabledFillQueueFromDatabase(false);
+                for (Hit hit : offlineHits) {
+                    Sender sender = new Sender(listener, hit, forceSendOfflineHits);
+                    TrackerQueue.getInstance().put(sender);
                 }
+                TrackerQueue.getInstance().put(new Runnable() {
+                    @Override
+                    public void run() {
+                        TrackerQueue.setEnabledFillQueueFromDatabase(true);
+                    }
+                });
+            } else {
+                OfflineHitProcessing = true;
+                for (Hit hit : offlineHits) {
+                    Sender sender = new Sender(listener, hit, forceSendOfflineHits);
+                    sender.send(false);
+                }
+                OfflineHitProcessing = false;
             }
         }
     }
@@ -832,10 +836,10 @@ class Sender implements Runnable {
     void saveHitDatabase(final Hit hit) {
         final String url = storage.saveHit(hit.getUrl(), System.currentTimeMillis(), oltParameter);
         if (!TextUtils.isEmpty(url)) {
-            Tool.executeCallback(trackerListener, Tool.CallbackType.save, hit.getUrl());
+            Tool.executeCallback(trackerListener, Tool.CallbackType.SAVE, hit.getUrl());
             updateDebugger(url, "save48", true);
         } else {
-            Tool.executeCallback(trackerListener, Tool.CallbackType.warning, "Hit could not be saved : " + hit.getUrl());
+            Tool.executeCallback(trackerListener, Tool.CallbackType.WARNING, "Hit could not be saved : " + hit.getUrl());
             updateDebugger("Hit could not be saved : " + hit.getUrl(), "warning48", false);
         }
     }
@@ -858,7 +862,7 @@ class Sender implements Runnable {
                 @Override
                 public void run() {
                     Debugger.getDebuggerEvents().add(0, new Debugger.DebuggerEvent(message, type, isHit));
-                    if (Debugger.currentViewVisibleId == com.atinternet.tracker.R.id.eventViewer) {
+                    if (Debugger.getCurrentViewVisibleId() == com.atinternet.tracker.R.id.eventViewer) {
                         Debugger.getDebuggerEventListAdapter().notifyDataSetChanged();
                     }
                 }
@@ -881,9 +885,8 @@ class Dispatcher {
             businessObject.setEvent();
 
             if (businessObject instanceof AbstractScreen) {
-                trackerObjects = new ArrayList<BusinessObject>() {{
-                    addAll(tracker.getBusinessObjects().values());
-                }};
+                trackerObjects = new ArrayList<>();
+                trackerObjects.addAll(tracker.getBusinessObjects().values());
 
                 boolean hasOrder = false;
 
@@ -907,9 +910,8 @@ class Dispatcher {
                     tracker.Cart().setEvent();
                 }
             } else if (businessObject instanceof Gesture) {
-                trackerObjects = new ArrayList<BusinessObject>() {{
-                    addAll(tracker.getBusinessObjects().values());
-                }};
+                trackerObjects = new ArrayList<>();
+                trackerObjects.addAll(tracker.getBusinessObjects().values());
 
                 if (((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
                     for (BusinessObject object : trackerObjects) {
@@ -922,9 +924,8 @@ class Dispatcher {
             }
 
             tracker.getBusinessObjects().remove(businessObject.getId());
-            trackerObjects = new ArrayList<BusinessObject>() {{
-                addAll(tracker.getBusinessObjects().values());
-            }};
+            trackerObjects = new ArrayList<>();
+            trackerObjects.addAll(tracker.getBusinessObjects().values());
 
             for (BusinessObject object : trackerObjects) {
                 if ((object instanceof CustomObject || object instanceof NuggAd) && object.getTimestamp() < businessObject.getTimestamp()) {
@@ -935,11 +936,12 @@ class Dispatcher {
         }
 
         if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
-            TechnicalContext.screenName = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Screen.stringValue()));
-            CrashDetectionHandler.setCrashLastScreen(TechnicalContext.screenName);
+            String sn = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Screen.stringValue()));
+            TechnicalContext.setScreenName(sn);
+            CrashDetectionHandler.setCrashLastScreen(sn);
 
             String level2 = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Level2.stringValue()));
-            TechnicalContext.level2 = (!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0;
+            TechnicalContext.setLevel2((!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0);
 
             SharedPreferences preferences = Tracker.getPreferences();
             if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
@@ -1034,14 +1036,18 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
                         scheduledExecutorService.execute(runnable);
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e(Tracker.TAG, e.toString());
+                    Thread.currentThread().interrupt();
                 }
             }
         }).start();
     }
 
     static TrackerQueue getInstance() {
-        return instance == null ? (instance = new TrackerQueue()) : instance;
+        if (instance == null) {
+            instance = new TrackerQueue();
+        }
+        return instance;
     }
 
     @Override
@@ -1051,7 +1057,8 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
                 super.put(runnable);
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
+            Thread.currentThread().interrupt();
         }
     }
 }
@@ -1062,7 +1069,10 @@ class EventQueue extends LinkedBlockingQueue<Runnable> {
     private final ExecutorService executorService;
 
     static EventQueue getInstance() {
-        return instance == null ? (instance = new EventQueue()) : instance;
+        if (instance == null) {
+            instance = new EventQueue();
+        }
+        return instance;
     }
 
     private EventQueue() {
@@ -1077,7 +1087,8 @@ class EventQueue extends LinkedBlockingQueue<Runnable> {
                         executorService.execute(task);
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e(Tracker.TAG, e.toString());
+                    Thread.currentThread().interrupt();
                 }
             }
         }).start();
@@ -1090,17 +1101,18 @@ class EventQueue extends LinkedBlockingQueue<Runnable> {
     }
 
     Runnable insert(final Runnable runnable, int... delay) {
-        Runnable cancelable;
-        handler.postDelayed(cancelable = new Runnable() {
+        Runnable cancelable = new Runnable() {
             @Override
             public void run() {
                 try {
                     put(runnable);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e(Tracker.TAG, e.toString());
+                    Thread.currentThread().interrupt();
                 }
             }
-        }, delay.length == 1 ? delay[0] : 200);
+        };
+        handler.postDelayed(cancelable, delay.length == 1 ? delay[0] : 200);
         return cancelable;
     }
 }
@@ -1108,8 +1120,24 @@ class EventQueue extends LinkedBlockingQueue<Runnable> {
 
 class TechnicalContext {
 
-    static String screenName = "";
-    static int level2 = 0;
+    private static String screenName = "";
+    private static int level2 = 0;
+
+    static void setScreenName(String sn) {
+        screenName = sn;
+    }
+
+    static String getScreenName() {
+        return screenName;
+    }
+
+    static void setLevel2(int lv) {
+        level2 = lv;
+    }
+
+    static int getLevel2() {
+        return level2;
+    }
 
     private static final int RETRY_GET_ADVERTISING_COUNT = 3;
     private static final String ANDROID_ID_KEY = "androidId";
@@ -1118,7 +1146,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.8.3s";
+            return "2.8.4s";
         }
     };
 
@@ -1130,7 +1158,7 @@ class TechnicalContext {
     };
 
     enum ConnectionType {
-        gprs, edge, twog, threeg, threegplus, fourg, wifi, offline, unknown
+        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, WIFI, OFFLINE, UNKNOWN
     }
 
     static ConnectionType getConnection() {
@@ -1142,34 +1170,34 @@ class TechnicalContext {
 
         if (networkInfo != null) {
             if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                return ConnectionType.wifi;
+                return ConnectionType.WIFI;
             } else {
                 switch (telephonyManager.getNetworkType()) {
                     case TelephonyManager.NETWORK_TYPE_GPRS:
-                        return ConnectionType.gprs;
+                        return ConnectionType.GPRS;
                     case TelephonyManager.NETWORK_TYPE_EDGE:
-                        return ConnectionType.edge;
+                        return ConnectionType.EDGE;
                     case TelephonyManager.NETWORK_TYPE_1xRTT:
-                        return ConnectionType.twog;
+                        return ConnectionType.TWOG;
                     case TelephonyManager.NETWORK_TYPE_CDMA:
                     case TelephonyManager.NETWORK_TYPE_UMTS:
                     case TelephonyManager.NETWORK_TYPE_EVDO_0:
                     case TelephonyManager.NETWORK_TYPE_EVDO_A:
                     case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                        return ConnectionType.threeg;
+                        return ConnectionType.THREEG;
                     case TelephonyManager.NETWORK_TYPE_HSPA:
                     case TelephonyManager.NETWORK_TYPE_HSDPA:
                     case TelephonyManager.NETWORK_TYPE_HSUPA:
-                        return ConnectionType.threegplus;
+                        return ConnectionType.THREEGPLUS;
                     case TelephonyManager.NETWORK_TYPE_HSPAP:
                     case TelephonyManager.NETWORK_TYPE_LTE:
-                        return ConnectionType.fourg;
+                        return ConnectionType.FOURG;
                     default:
-                        return ConnectionType.unknown;
+                        return ConnectionType.UNKNOWN;
                 }
             }
         } else {
-            return ConnectionType.offline;
+            return ConnectionType.OFFLINE;
         }
     }
 
@@ -1178,21 +1206,21 @@ class TechnicalContext {
             @Override
             public String execute() {
                 switch (getConnection()) {
-                    case gprs:
+                    case GPRS:
                         return "gprs";
-                    case edge:
+                    case EDGE:
                         return "edge";
-                    case twog:
+                    case TWOG:
                         return "2g";
-                    case threeg:
+                    case THREEG:
                         return "3g";
-                    case threegplus:
+                    case THREEGPLUS:
                         return "3g+";
-                    case fourg:
+                    case FOURG:
                         return "4g";
-                    case wifi:
+                    case WIFI:
                         return "wifi";
-                    case unknown:
+                    case UNKNOWN:
                         return "unknown";
                     default:
                         return "offline";
@@ -1318,7 +1346,6 @@ class TechnicalContext {
                         .getDefaultDisplay();
                 d.getMetrics(metrics);
 
-                // since SDK_INT = 1;
                 int widthPixels = metrics.widthPixels;
                 int heightPixels = metrics.heightPixels;
 
@@ -1337,7 +1364,8 @@ class TechnicalContext {
                         heightPixels = realSize.y;
 
                     }
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    Log.e(Tracker.TAG, e.toString());
                 }
 
                 double x = Math.pow(widthPixels / metrics.xdpi, 2);
@@ -1396,7 +1424,7 @@ class TechnicalContext {
                             return "opt-out";
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(Tracker.TAG, e.toString());
                         return "";
                     }
                 }
@@ -1416,7 +1444,7 @@ class TechnicalContext {
 class Tool {
 
     enum CallbackType {
-        firstLaunch, build, send, partner, warning, save, error
+        FIRST_LAUNCH, BUILD, SEND, PARTNER, WARNING, SAVE, ERROR
     }
 
     static String upperCaseFirstLetter(String s) {
@@ -1427,7 +1455,7 @@ class Tool {
         try {
             s = URLEncoder.encode(s, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
         return s.replace("+", "%20")
                 .replace("*", "%2A")
@@ -1440,7 +1468,7 @@ class Tool {
         try {
             s = URLDecoder.decode(s, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
         return s;
     }
@@ -1456,7 +1484,7 @@ class Tool {
     @SuppressWarnings("unchecked")
     static String convertToString(Object value, String separator) {
         separator = (!TextUtils.isEmpty(separator)) ? separator : ",";
-        String result = "";
+        StringBuilder result = new StringBuilder();
         boolean isFirst = true;
 
         if (value != null) {
@@ -1465,10 +1493,10 @@ class Tool {
                 for (Object object : listResult) {
                     value = object;
                     if (isFirst) {
-                        result = convertToString(value, separator);
+                        result = new StringBuilder(convertToString(value, separator));
                         isFirst = false;
                     } else {
-                        result += separator + convertToString(value, separator);
+                        result.append(separator).append(convertToString(value, separator));
                     }
                 }
             } else if (value instanceof Object[]) {
@@ -1476,13 +1504,13 @@ class Tool {
                 value = Arrays.asList(objects);
                 return convertToString(value, separator);
             } else if (value instanceof Map) {
-                result = new JSONObject((Map) value).toString();
+                result = new StringBuilder(new JSONObject((Map) value).toString());
             } else {
-                result = String.valueOf(value);
+                result = new StringBuilder(String.valueOf(value));
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     static ArrayList<Pair<Param, Integer>> findParametersWithPosition(String key, ArrayList<Param> parameters) {
@@ -1530,22 +1558,22 @@ class Tool {
     static void executeCallback(TrackerListener trackerListener, CallbackType callbackType, String message, TrackerListener.HitStatus... hitStatuses) {
         if (trackerListener != null) {
             switch (callbackType) {
-                case firstLaunch:
+                case FIRST_LAUNCH:
                     trackerListener.trackerNeedsFirstLaunchApproval(message);
                     break;
-                case build:
+                case BUILD:
                     trackerListener.buildDidEnd(hitStatuses[0], message);
                     break;
-                case send:
+                case SEND:
                     trackerListener.sendDidEnd(hitStatuses[0], message);
                     break;
-                case partner:
+                case PARTNER:
                     trackerListener.didCallPartner(message);
                     break;
-                case warning:
+                case WARNING:
                     trackerListener.warningDidOccur(message);
                     break;
-                case save:
+                case SAVE:
                     trackerListener.saveDidEnd(message);
                     break;
                 default://error
@@ -1568,16 +1596,16 @@ class Tool {
     }
 
     static String formatNumberLength(String s, int length) {
-        String result = "";
+        StringBuilder sb = new StringBuilder();
         for (int i = s.length(); i < length; i++) {
-            result += "0";
+            sb.append('0');
         }
-        return result + s;
+        return sb.append(s).toString();
     }
 
     static boolean isJSON(String s) {
         try {
-            JSONObject object = new JSONObject(s);
+            new JSONObject(s);
             return true;
         } catch (JSONException e) {
             return false;
@@ -1586,7 +1614,7 @@ class Tool {
 
     static boolean isArray(String s) {
         try {
-            JSONArray array = new JSONArray(s);
+            new JSONArray(s);
             return true;
         } catch (JSONException e) {
             return false;
@@ -1603,7 +1631,7 @@ class Tool {
             try {
                 value = jsonObject.get(key);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(Tracker.TAG, e.toString());
             }
             map.put(key, value);
         }
@@ -1643,27 +1671,27 @@ class Tool {
         return result.toString();
     }
 
-    static String SHA_256(String s) {
+    static String SHA256(String s) {
         String baseString = "AT" + s;
-        String result = "";
+        StringBuilder sb = new StringBuilder();
         try {
             MessageDigest md;
             md = MessageDigest.getInstance("SHA-256");
             md.update(baseString.getBytes());
 
-            byte byteData[] = md.digest();
+            byte[] byteData = md.digest();
 
             for (byte aByteData : byteData) {
                 String hex = Integer.toHexString(0xff & aByteData);
                 if (hex.length() == 1) {
-                    result += "0";
+                    sb.append('0');
                 }
-                result += hex;
+                sb.append(hex);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
-        return result;
+        return sb.toString();
     }
 
     static Drawable getResizedImage(int imageID, android.content.Context context, int width, int height) {
@@ -1711,7 +1739,7 @@ class Tool {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
         return map;
     }
@@ -1745,6 +1773,7 @@ class Storage extends SQLiteOpenHelper {
     private static final String HIT = "hit";
     private static final String RETRY = "retry";
     private static final String DATE = "date";
+    private static final String SELECT_ALL_QUERY = "SELECT * FROM " + HITS_STORAGE_TABLE + " ";
     private static final String CREATE_TABLE_QUERY =
             "CREATE TABLE IF NOT EXISTS " + HITS_STORAGE_TABLE + " (" +
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " +
@@ -1798,22 +1827,22 @@ class Storage extends SQLiteOpenHelper {
 
     String buildHitToStore(String hit, String olt) {
         String[] hitComponents = hit.split("&");
-        String newHit = hitComponents[0];
+        StringBuilder newHitBuilder = new StringBuilder(hitComponents[0]);
 
         for (int i = 1; i < hitComponents.length; i++) {
             String[] parameterComponents = hitComponents[i].split("=");
 
             if (parameterComponents[0].equals("cn")) {
-                newHit += "&cn=offline";
+                newHitBuilder.append("&cn=offline");
             } else {
-                newHit += "&" + hitComponents[i];
+                newHitBuilder.append('&').append(hitComponents[i]);
             }
 
             if (parameterComponents[0].equals("ts") || parameterComponents[0].equals("mh")) {
-                newHit += "&olt=" + olt;
+                newHitBuilder.append("&olt=").append(olt);
             }
         }
-        return newHit;
+        return newHitBuilder.toString();
     }
 
     void updateRetry(String hit, int retry) {
@@ -1827,7 +1856,7 @@ class Storage extends SQLiteOpenHelper {
     int getCountOfflineHits() {
         int result = -1;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + HITS_STORAGE_TABLE, null);
+        Cursor c = db.rawQuery(SELECT_ALL_QUERY, null);
         if (c != null) {
             result = c.getCount();
             c.close();
@@ -1855,7 +1884,7 @@ class Storage extends SQLiteOpenHelper {
     ArrayList<Hit> getOfflineHits() {
         ArrayList<Hit> hits = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + HITS_STORAGE_TABLE + " ORDER BY " + ID + " ASC", null);
+        Cursor c = db.rawQuery(SELECT_ALL_QUERY + "ORDER BY " + ID + " ASC", null);
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
             do {
@@ -1873,7 +1902,7 @@ class Storage extends SQLiteOpenHelper {
 
     Hit getOldestOfflineHit() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + HITS_STORAGE_TABLE + " WHERE " + DATE + " = (SELECT MIN(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
+        Cursor c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MIN(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
         if (c != null && c.moveToFirst()) {
             String hit = c.getString(c.getColumnIndex(HIT));
             String time = c.getString(c.getColumnIndex(DATE));
@@ -1891,7 +1920,7 @@ class Storage extends SQLiteOpenHelper {
 
     Hit getLatestOfflineHit() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + HITS_STORAGE_TABLE + " WHERE " + DATE + " = (SELECT MAX(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
+        Cursor c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MAX(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
         if (c != null && c.moveToFirst()) {
             String hit = c.getString(c.getColumnIndex(HIT));
             String time = c.getString(c.getColumnIndex(DATE));
@@ -1910,59 +1939,62 @@ class Storage extends SQLiteOpenHelper {
 
 class Lists {
 
+    private Lists() {
+        throw new IllegalStateException("Private class");
+    }
+
     static HashMap<String, Hit.HitType> getProcessedTypes() {
-        return new HashMap<String, Hit.HitType>() {{
-            put("audio", Hit.HitType.Audio);
-            put("video", Hit.HitType.Video);
-            put("vpre", Hit.HitType.Video);
-            put("vmid", Hit.HitType.Video);
-            put("vpost", Hit.HitType.Video);
-            put("animation", Hit.HitType.Animation);
-            put("anim", Hit.HitType.Animation);
-            put("podcast", Hit.HitType.PodCast);
-            put("rss", Hit.HitType.RSS);
-            put("email", Hit.HitType.Email);
-            put("pub", Hit.HitType.Publicite);
-            put("ad", Hit.HitType.Publicite);
-            put("click", Hit.HitType.Touch);
-            put("clic", Hit.HitType.Touch);
-            put("AT", Hit.HitType.AdTracking);
-            put("pdt", Hit.HitType.ProduitImpression);
-            put("mvt", Hit.HitType.MvTesting);
-            put("wbo", Hit.HitType.Weborama);
-            put("screen", Hit.HitType.Screen);
-        }};
+        HashMap<String, Hit.HitType> map = new HashMap<>();
+        map.put("audio", Hit.HitType.Audio);
+        map.put("video", Hit.HitType.Video);
+        map.put("vpre", Hit.HitType.Video);
+        map.put("vmid", Hit.HitType.Video);
+        map.put("vpost", Hit.HitType.Video);
+        map.put("animation", Hit.HitType.Animation);
+        map.put("anim", Hit.HitType.Animation);
+        map.put("podcast", Hit.HitType.PodCast);
+        map.put("rss", Hit.HitType.RSS);
+        map.put("email", Hit.HitType.Email);
+        map.put("pub", Hit.HitType.Publicite);
+        map.put("ad", Hit.HitType.Publicite);
+        map.put("click", Hit.HitType.Touch);
+        map.put("clic", Hit.HitType.Touch);
+        map.put("AT", Hit.HitType.AdTracking);
+        map.put("pdt", Hit.HitType.ProduitImpression);
+        map.put("mvt", Hit.HitType.MvTesting);
+        map.put("wbo", Hit.HitType.Weborama);
+        map.put("screen", Hit.HitType.Screen);
+        return map;
     }
 
     static HashSet<String> getReadOnlyConfigs() {
-        return new HashSet<String>() {{
-        }};
+        return new HashSet<>();
     }
 
     static HashSet<String> getReadOnlyParams() {
-        return new HashSet<String>() {{
-            add("vtag");
-            add("ptag");
-            add("lng");
-            add("mfmd");
-            add("manufacturer");
-            add("model");
-            add("os");
-            add("apvr");
-            add("hl");
-            add("r");
-            add("car");
-            add("cn");
-            add("ts");
-        }};
+        HashSet<String> set = new HashSet<>();
+        set.add("vtag");
+        set.add("ptag");
+        set.add("lng");
+        set.add("mfmd");
+        set.add("manufacturer");
+        set.add("model");
+        set.add("os");
+        set.add("apvr");
+        set.add("hl");
+        set.add("r");
+        set.add("car");
+        set.add("cn");
+        set.add("ts");
+        return set;
     }
 
     static HashSet<String> getSliceReadyParams() {
-        return new HashSet<String>() {{
-            add("ati");
-            add("atc");
-            add("pdtl");
-            add("stc");
-        }};
+        HashSet<String> set = new HashSet<>();
+        set.add("ati");
+        set.add("atc");
+        set.add("pdtl");
+        set.add("stc");
+        return set;
     }
 }

@@ -1,6 +1,7 @@
 package com.atinternet.tracker;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
 
 class GetConfigRequester implements Runnable {
 
@@ -19,9 +21,11 @@ class GetConfigRequester implements Runnable {
     private static final int CONFIGURATION_TIME_TO_LIVE_RANDOM = 1200;
 
     private String endpoint;
+    private Random random;
 
     GetConfigRequester(String endpoint) {
         this.endpoint = endpoint;
+        random = new Random();
     }
 
     @Override
@@ -31,7 +35,7 @@ class GetConfigRequester implements Runnable {
             if (!TextUtils.isEmpty(endpoint)) {
                 int timeToLive = -1;
                 if (AutoTracker.getInstance().isEnabledAutoTracking()) {
-                    timeToLive = CONFIGURATION_TIME_TO_LIVE + (int) (Math.random() * CONFIGURATION_TIME_TO_LIVE_RANDOM);
+                    timeToLive = CONFIGURATION_TIME_TO_LIVE + random.nextInt() * CONFIGURATION_TIME_TO_LIVE_RANDOM;
                 }
                 if (AutoTracker.getInstance().isEnabledLiveTagging()) {
                     timeToLive = 0;
@@ -72,7 +76,7 @@ class GetConfigRequester implements Runnable {
             }
             AutoTracker.getInstance().setAutoTrackingConfiguration(new JSONObject(conf));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
     }
 }

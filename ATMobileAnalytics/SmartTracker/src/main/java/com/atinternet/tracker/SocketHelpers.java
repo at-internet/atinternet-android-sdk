@@ -42,12 +42,19 @@ abstract class SocketReceivable {
 
 class SocketEmitterMessages {
 
+    private static final String EVENT = "event";
+    private static final String DATA = "data";
+
+    private SocketEmitterMessages() {
+        throw new IllegalStateException("Private class");
+    }
+
     static JSONObject DeviceAskedForLive() {
         try {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("event", "DeviceAskedForLive")
-                    .put("data", AutoTracker.getInstance().getApplication().getData());
+            jsonObject.put(EVENT, "DeviceAskedForLive")
+                    .put(DATA, AutoTracker.getInstance().getApplication().getData());
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -60,8 +67,8 @@ class SocketEmitterMessages {
             JSONObject jsonObject = new JSONObject();
             JSONObject dataObject = new JSONObject();
             dataObject.put("token", AutoTracker.getInstance().getToken());
-            jsonObject.put("event", eventName)
-                    .put("data", dataObject);
+            jsonObject.put(EVENT, eventName)
+                    .put(DATA, dataObject);
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -74,8 +81,8 @@ class SocketEmitterMessages {
             JSONObject jsonObject = new JSONObject();
             JSONObject dataObject = new JSONObject();
             dataObject.put("token", AutoTracker.getInstance().getToken());
-            jsonObject.put("event", "DeviceAcceptedLive")
-                    .put("data", dataObject);
+            jsonObject.put(EVENT, "DeviceAcceptedLive")
+                    .put(DATA, dataObject);
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -87,8 +94,8 @@ class SocketEmitterMessages {
         try {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("event", "DeviceVersion")
-                    .put("data", AutoTracker.getInstance().getApplication().getData());
+            jsonObject.put(EVENT, "DeviceVersion")
+                    .put(DATA, AutoTracker.getInstance().getApplication().getData());
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -100,8 +107,8 @@ class SocketEmitterMessages {
         try {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("event", "app")
-                    .put("data", AutoTracker.getInstance().getApplication().getData());
+            jsonObject.put(EVENT, "app")
+                    .put(DATA, AutoTracker.getInstance().getApplication().getData());
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -113,8 +120,8 @@ class SocketEmitterMessages {
         try {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("event", "DeviceTokenAlreadyUsed")
-                    .put("data", AutoTracker.getInstance().getApplication().getData());
+            jsonObject.put(EVENT, "DeviceTokenAlreadyUsed")
+                    .put(DATA, AutoTracker.getInstance().getApplication().getData());
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -133,8 +140,8 @@ class SocketEmitterMessages {
             JSONObject screenObject = screen.getData();
 
             dataObject.put("screen", screenObject);
-            jsonObject.put("event", "viewDidAppear")
-                    .put("data", dataObject);
+            jsonObject.put(EVENT, "viewDidAppear")
+                    .put(DATA, dataObject);
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -146,8 +153,8 @@ class SocketEmitterMessages {
         try {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("event", event.getType())
-                    .put("data", event.getData());
+            jsonObject.put(EVENT, event.getType())
+                    .put(DATA, event.getData());
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -173,8 +180,8 @@ class SocketEmitterMessages {
                     .put("direction", SensorOrientationManager.orientation);
 
 
-            jsonObject.put("event", "screenRotation")
-                    .put("data", dataObject);
+            jsonObject.put(EVENT, "screenRotation")
+                    .put(DATA, dataObject);
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -197,8 +204,8 @@ class SocketEmitterMessages {
                 dataObject.put("tree", screen.getSuggestedEvents(sc.getAttachedRootView()));
             }
 
-            jsonObject.put("event", eventName)
-                    .put("data", dataObject);
+            jsonObject.put(EVENT, eventName)
+                    .put(DATA, dataObject);
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -208,6 +215,10 @@ class SocketEmitterMessages {
 }
 
 class SocketFactory {
+
+    private SocketFactory() {
+        throw new IllegalStateException("Private class");
+    }
 
     static SocketReceivable create(SmartSender smartSender, JSONObject message) throws JSONException {
         String eventName = message.getString("event");
@@ -243,12 +254,12 @@ class InterfaceAskedForLiveReceivable extends SocketReceivable {
 
         long now = System.currentTimeMillis();
         long elapsed = now - smartSender.startTime;
-        if (elapsed < SmartSender.COOLDOWN ) {
+        if (elapsed < SmartSender.COOLDOWN) {
             return;
         }
 
-        if (smartSender.getAliveState() != SmartSender.AliveState.Asked) {
-            smartSender.setAliveState(SmartSender.AliveState.Asked);
+        if (smartSender.getAliveState() != SmartSender.AliveState.ASKED) {
+            smartSender.setAliveState(SmartSender.AliveState.ASKED);
 
             JSONObject data = message.getJSONObject("data");
             boolean warning = false;
@@ -258,16 +269,16 @@ class InterfaceAskedForLiveReceivable extends SocketReceivable {
                     smartSender.sendMessage(SocketEmitterMessages.DeviceTokenAlreadyUsed(), true);
                     warning = true;
                 } else if (data.has("version") && !AutoTracker.getInstance().getApplication().getVersion().equals(data.getString("version"))) {
-                    if (smartSender.getLiveConnectionState() != SmartSender.LiveConnectionState.Pending) {
+                    if (smartSender.getLiveConnectionState() != SmartSender.LiveConnectionState.PENDING) {
                         smartSender.sendMessage(SocketEmitterMessages.DeviceVersion(), true);
-                        smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Pending);
+                        smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.PENDING);
                     }
-                    smartSender.setAliveState(SmartSender.AliveState.None);
+                    smartSender.setAliveState(SmartSender.AliveState.NONE);
                     warning = true;
                 }
             }
-            if (!warning && smartSender.getLiveConnectionState() != SmartSender.LiveConnectionState.Connected) {
-                smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Pending);
+            if (!warning && smartSender.getLiveConnectionState() != SmartSender.LiveConnectionState.CONNECTED) {
+                smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.PENDING);
 
                 final Activity currentActivity = SmartContext.currentActivity != null ? SmartContext.currentActivity.get() : null;
                 if (currentActivity != null) {
@@ -280,8 +291,8 @@ class InterfaceAskedForLiveReceivable extends SocketReceivable {
                                     .setNegativeButton(R.string.pairing_refuse_button, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Disconnected, "DeviceRefusedLive");
-                                            smartSender.setAliveState(SmartSender.AliveState.None);
+                                            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.DISCONNECTED, "DeviceRefusedLive");
+                                            smartSender.setAliveState(SmartSender.AliveState.NONE);
                                             dialogInterface.dismiss();
                                             smartSender.startTime = System.currentTimeMillis();
                                         }
@@ -289,8 +300,8 @@ class InterfaceAskedForLiveReceivable extends SocketReceivable {
                                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Connected, "DeviceAcceptedLive");
-                                            smartSender.setAliveState(SmartSender.AliveState.None);
+                                            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.CONNECTED, "DeviceAcceptedLive");
+                                            smartSender.setAliveState(SmartSender.AliveState.NONE);
                                             dialogInterface.dismiss();
                                         }
                                     }));
@@ -310,7 +321,7 @@ class InterfaceAcceptedLiveReceivable extends SocketReceivable {
 
     @Override
     protected void process() throws JSONException {
-        smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Connected);
+        smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.CONNECTED);
     }
 }
 
@@ -322,9 +333,9 @@ class InterfaceRefusedLiveReceivable extends SocketReceivable {
 
     @Override
     protected void process() throws JSONException {
-        if (smartSender.getAliveState() != SmartSender.AliveState.Refused && smartSender.getLiveConnectionState() != SmartSender.LiveConnectionState.Disconnected) {
-            smartSender.setAliveState(SmartSender.AliveState.Refused);
-            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Disconnected);
+        if (smartSender.getAliveState() != SmartSender.AliveState.REFUSED && smartSender.getLiveConnectionState() != SmartSender.LiveConnectionState.DISCONNECTED) {
+            smartSender.setAliveState(SmartSender.AliveState.REFUSED);
+            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.DISCONNECTED);
 
             final Activity currentActivity = SmartContext.currentActivity != null ? SmartContext.currentActivity.get() : null;
             if (currentActivity != null) {
@@ -337,7 +348,7 @@ class InterfaceRefusedLiveReceivable extends SocketReceivable {
                                 .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        smartSender.setAliveState(SmartSender.AliveState.None);
+                                        smartSender.setAliveState(SmartSender.AliveState.NONE);
                                         dialogInterface.dismiss();
                                     }
                                 }));
@@ -376,9 +387,9 @@ class InterfaceStoppedLiveReceivable extends SocketReceivable {
 
     @Override
     protected void process() throws JSONException {
-        if (smartSender.getAliveState() != SmartSender.AliveState.Stopped) {
-            smartSender.setAliveState(SmartSender.AliveState.Stopped);
-            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Disconnected);
+        if (smartSender.getAliveState() != SmartSender.AliveState.STOPPED) {
+            smartSender.setAliveState(SmartSender.AliveState.STOPPED);
+            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.DISCONNECTED);
 
             final Activity currentActivity = SmartContext.currentActivity != null ? SmartContext.currentActivity.get() : null;
             if (currentActivity != null) {
@@ -391,7 +402,7 @@ class InterfaceStoppedLiveReceivable extends SocketReceivable {
                                 .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        smartSender.setAliveState(SmartSender.AliveState.None);
+                                        smartSender.setAliveState(SmartSender.AliveState.NONE);
                                         dialogInterface.dismiss();
                                     }
                                 }));
@@ -410,9 +421,9 @@ class InterfaceAbortedLiveRequestReceivable extends SocketReceivable {
 
     @Override
     protected void process() throws JSONException {
-        if (smartSender.getAliveState() != SmartSender.AliveState.Aborted) {
-            smartSender.setAliveState(SmartSender.AliveState.Aborted);
-            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.Disconnected);
+        if (smartSender.getAliveState() != SmartSender.AliveState.ABORTED) {
+            smartSender.setAliveState(SmartSender.AliveState.ABORTED);
+            smartSender.setLiveConnectionState(SmartSender.LiveConnectionState.DISCONNECTED);
 
             final Activity currentActivity = SmartContext.currentActivity != null ? SmartContext.currentActivity.get() : null;
             if (currentActivity != null) {
@@ -425,7 +436,7 @@ class InterfaceAbortedLiveRequestReceivable extends SocketReceivable {
                                 .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        smartSender.setAliveState(SmartSender.AliveState.None);
+                                        smartSender.setAliveState(SmartSender.AliveState.NONE);
                                         dialogInterface.dismiss();
                                     }
                                 }));
@@ -447,21 +458,18 @@ class ScreenshotRequestReceivable extends SocketReceivable {
         JSONObject data = message.getJSONObject("data");
         boolean valid = false;
         Activity currentActivity = SmartContext.currentActivity != null ? SmartContext.currentActivity.get() : null;
-        if (data != null) {
-            if (data.has("screen")) {
-                JSONObject screenObj = data.getJSONObject("screen");
-                if (screenObj.has("className")) {
-                    String className = screenObj.getString("className");
-                    if (currentActivity != null && currentActivity.getClass().getSimpleName().equals(className)) {
+        if (data != null && data.has("screen")) {
+            JSONObject screenObj = data.getJSONObject("screen");
+            if (screenObj.has("className")) {
+                String className = screenObj.getString("className");
+                if (currentActivity != null && currentActivity.getClass().getSimpleName().equals(className)) {
+                    valid = true;
+                } else {
+                    android.support.v4.app.Fragment frag = SmartContext.currentFragment != null ? SmartContext.currentFragment.get() : null;
+                    if (frag != null && frag.getClass().getSimpleName().equals(className)) {
                         valid = true;
-                    } else {
-                        android.support.v4.app.Fragment frag = SmartContext.currentFragment != null ? SmartContext.currentFragment.get() : null;
-                        if (frag != null && frag.getClass().getSimpleName().equals(className)) {
-                            valid = true;
-                        }
                     }
                 }
-
             }
         }
 

@@ -27,6 +27,10 @@ package com.atinternet.tracker;
  */
 public class TrackerConfigurationKeys {
 
+    private TrackerConfigurationKeys() {
+        throw new IllegalStateException("Utility class");
+    }
+
     // Key representing the namespace used for preferences
     static final String PREFERENCES = "ATPreferencesKey";
 

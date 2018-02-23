@@ -49,7 +49,10 @@ public class MediaPlayer {
      * @return the Videos instance
      */
     public Videos Videos() {
-        return videos == null ? (videos = new Videos(this)) : videos;
+        if (videos == null) {
+            videos = new Videos(this);
+        }
+        return videos;
     }
 
     /**
@@ -58,7 +61,10 @@ public class MediaPlayer {
      * @return the Audios instance
      */
     public Audios Audios() {
-        return audios == null ? (audios = new Audios(this)) : audios;
+        if (audios == null) {
+            audios = new Audios(this);
+        }
+        return audios;
     }
 
     /**
@@ -67,7 +73,10 @@ public class MediaPlayer {
      * @return the LiveVideos instance
      */
     public LiveVideos LiveVideos() {
-        return liveVideos == null ? (liveVideos = new LiveVideos(this)) : liveVideos;
+        if (liveVideos == null) {
+            liveVideos = new LiveVideos(this);
+        }
+        return liveVideos;
     }
 
     /**
@@ -76,7 +85,10 @@ public class MediaPlayer {
      * @return the LiveAudios instance
      */
     public LiveAudios LiveAudios() {
-        return liveAudios == null ? (liveAudios = new LiveAudios(this)) : liveAudios;
+        if (liveAudios == null) {
+            liveAudios = new LiveAudios(this);
+        }
+        return liveAudios;
     }
 
     /**

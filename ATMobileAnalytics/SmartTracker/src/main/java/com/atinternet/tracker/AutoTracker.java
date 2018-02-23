@@ -47,13 +47,15 @@ public class AutoTracker extends Tracker {
     private App app;
     private boolean enabledLiveTagging;
     private boolean enabledAutoTracking;
-    private String appVersion;
 
     private SmartSender smartSender;
     private Endpoints endpoints;
 
     static AutoTracker getInstance(String... args) {
-        return instance == null ? instance = new AutoTracker(args) : instance;
+        if (instance == null) {
+            instance = new AutoTracker(args);
+        }
+        return instance;
     }
 
     AutoTracker(String... args) {
@@ -61,11 +63,11 @@ public class AutoTracker extends Tracker {
         Context context = appContext.get();
 
         token = retrieveValidToken(args);
-        appVersion = getAppVersion(context);
+        String appVersion = getAppVersion(context);
         app = new App(token, appVersion);
 
         endpoints = new Endpoints(String.valueOf(configuration.get("atEnv")), token, appVersion);
-        smartSender = new SmartSender(token, endpoints.getResourceEndpoint(Endpoints.Resource.Socket));
+        smartSender = new SmartSender(token, endpoints.getResourceEndpoint(Endpoints.Resource.SOCKET));
         WindowManager wm = (WindowManager) context.getSystemService(android.content.Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         float scale = UI.getScale(d);
@@ -146,7 +148,7 @@ public class AutoTracker extends Tracker {
     public void enableAutoTracking(boolean enabled) {
         enabledAutoTracking = enabled;
         if (enabledAutoTracking && getConfigRequester == null) {
-            getConfigRequester = new GetConfigRequester(endpoints.getResourceEndpoint(Endpoints.Resource.GetConfig));
+            getConfigRequester = new GetConfigRequester(endpoints.getResourceEndpoint(Endpoints.Resource.GET_CONFIG));
             smartTrackerActivityLifecycle.setGetConfigRequester(getConfigRequester);
             TrackerQueue.getInstance().put(getConfigRequester);
         }

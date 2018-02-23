@@ -40,6 +40,10 @@ import java.util.concurrent.CountDownLatch;
 
 final class ReflectionAPI {
 
+    private ReflectionAPI() {
+        throw new IllegalStateException("Private Class");
+    }
+
     /**
      * Takes screenshot of provided activity and puts it into bitmap.
      *
@@ -136,12 +140,13 @@ final class ReflectionAPI {
 
         List rootObjects = null;
         List<LayoutParams> paramsObject = null;
-        Object result;
+        Object result = getFieldValue("mRoots", globalWindowManager);
 
-        if ((result = getFieldValue("mRoots", globalWindowManager)) instanceof List) {
+        if (result instanceof List) {
             rootObjects = (List) result;
         }
-        if ((result = getFieldValue("mParams", globalWindowManager)) instanceof List) {
+        result = getFieldValue("mParams", globalWindowManager);
+        if (result instanceof List) {
             paramsObject = (List<LayoutParams>) result;
         }
 
@@ -182,10 +187,10 @@ final class ReflectionAPI {
         for (int i = 0; i < baseView.getChildCount(); i++) {
             View child = baseView.getChildAt(i);
             Object mListenerInfo;
-            if (child.isShown() && (mListenerInfo = getFieldValue("mListenerInfo", child)) != null) {
-                if (getFieldValue("mOnClickListener", mListenerInfo) != null || getFieldValue("mOnTouchListener", mListenerInfo) != null) {
-                    touchables.add(child);
-                }
+            if (child.isShown()
+                    && (mListenerInfo = getFieldValue("mListenerInfo", child)) != null
+                    && (getFieldValue("mOnClickListener", mListenerInfo) != null || getFieldValue("mOnTouchListener", mListenerInfo) != null)) {
+                touchables.add(child);
             }
             if (child instanceof ViewGroup) {
                 touchables.addAll(getTouchablesByReflection((ViewGroup) child));

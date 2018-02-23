@@ -58,7 +58,7 @@ public class NuggAd extends BusinessObject {
                 e.printStackTrace();
             }
         } else {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "NuggAd not enabled");
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "NuggAd not enabled");
         }
     }
 }

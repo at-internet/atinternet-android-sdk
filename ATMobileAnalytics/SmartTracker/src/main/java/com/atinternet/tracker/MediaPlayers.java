@@ -63,7 +63,7 @@ public class MediaPlayers extends Helper {
 
             return player;
         } else {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.warning, "Player with the same id already exists");
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Player with the same id already exists");
             return players.get(playerId);
         }
     }

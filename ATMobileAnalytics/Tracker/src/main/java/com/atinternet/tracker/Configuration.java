@@ -71,7 +71,8 @@ public class Configuration extends LinkedHashMap<String, Object> {
                 }
             }
         }
-        for (String key : configuration.keySet()) {
+        for (Entry<String, Object> entry : configuration.entrySet()) {
+            String key = entry.getKey();
             put(key, configuration.get(key));
         }
     }
@@ -125,6 +126,7 @@ public class Configuration extends LinkedHashMap<String, Object> {
      *
      * @return the pretty printed configuration
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Tracker configuration : \n");
         Iterator<Entry<String, Object>> iter = entrySet().iterator();

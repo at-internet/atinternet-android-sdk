@@ -38,8 +38,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -226,7 +224,6 @@ class App {
 class SmartView {
     private int id;
     private String className;
-    private String text;
     private String path;
     private String screenShot;
     private float x;
@@ -246,7 +243,6 @@ class SmartView {
         height = view == null ? 0 : view.getHeight();
         visible = view != null && view.isShown();
         path = view == null ? "/" : getPath(view);
-        text = view == null ? "" : (view instanceof ViewGroup ? getTextViewGroup((ViewGroup) view) : detectViewText(view));
         position = view == null ? -1 : getPositionInTreeView(view);
     }
 
@@ -279,50 +275,18 @@ class SmartView {
     }
 
     private String getPath(View view) {
-        StringBuilder path = new StringBuilder(view.getClass().getSimpleName());
+        StringBuilder pathSb = new StringBuilder(view.getClass().getSimpleName());
         ViewParent parent = view.getParent();
         while (parent != null) {
-            path.insert(0, "/")
+            pathSb.insert(0, "/")
                     .insert(0, parent.getClass().getSimpleName());
             parent = parent.getParent();
         }
-        return path.toString();
-    }
-
-    private String getTextViewGroup(ViewGroup view) {
-        String text = null;
-        for (int i = 0; i < view.getChildCount(); i++) {
-            View child = view.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                text = getTextViewGroup((ViewGroup) child);
-            } else {
-                text = detectViewText(child);
-            }
-            if (!TextUtils.isEmpty(text)) {
-                break;
-            }
-        }
-        return text;
-    }
-
-    private String detectViewText(View view) {
-        if (view instanceof EditText) {
-            EditText editText = (EditText) view;
-            CharSequence hint;
-            if ((hint = editText.getHint()) == null) {
-                return "";
-            } else {
-                return hint.toString();
-            }
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString();
-        } else {
-            return "";
-        }
+        return pathSb.toString();
     }
 
     private int getPositionInTreeView(View view) {
-        int position = -1;
+        int pos = -1;
         ViewParent parent = view.getParent();
         if (!(parent instanceof ViewGroup)) {
             return 0;
@@ -332,13 +296,13 @@ class SmartView {
         for (int i = 0; i < length; i++) {
             View child = parentVG.getChildAt(i);
             if (child.getClass().isAssignableFrom(view.getClass())) {
-                position++;
+                pos++;
                 if (child.equals(view)) {
-                    return position;
+                    return pos;
                 }
             }
         }
-        return position;
+        return pos;
     }
 
     JSONObject getData(float scale) {
@@ -349,7 +313,6 @@ class SmartView {
                     .put("y", (int) (y / scale))
                     .put("width", (int) (width / scale))
                     .put("height", (int) (height / scale))
-                    .put("text", text)
                     .put("path", path)
                     .put("screenshot", screenShot)
                     .put("visible", visible)

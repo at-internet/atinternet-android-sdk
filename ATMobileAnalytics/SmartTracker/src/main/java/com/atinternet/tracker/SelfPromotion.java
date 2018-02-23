@@ -42,7 +42,10 @@ public class SelfPromotion extends OnAppAd {
     private CustomObjects customObjects;
 
     LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
-        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+        if (customObjectsMap == null) {
+            customObjectsMap = new LinkedHashMap<>();
+        }
+        return customObjectsMap;
     }
 
     SelfPromotion(Tracker tracker) {
@@ -127,7 +130,10 @@ public class SelfPromotion extends OnAppAd {
      * @return the CustomObjects instance
      */
     public CustomObjects CustomObjects() {
-        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+        if (customObjects == null) {
+            customObjects = new CustomObjects(this);
+        }
+        return customObjects;
     }
 
     @Override
@@ -151,12 +157,14 @@ public class SelfPromotion extends OnAppAd {
         }
 
         if (action == Action.Touch) {
-            if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
-                tracker.setParam(Hit.HitParam.OnAppAdTouchScreen.stringValue(), TechnicalContext.screenName, new ParamOption().setEncode(true));
+            String sn = TechnicalContext.getScreenName();
+            if (!TextUtils.isEmpty(sn)) {
+                tracker.setParam(Hit.HitParam.OnAppAdTouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
             }
 
-            if (TechnicalContext.level2 > 0) {
-                tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), TechnicalContext.level2);
+            int lvl2 = TechnicalContext.getLevel2();
+            if (lvl2 > 0) {
+                tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), lvl2);
             }
         }
 

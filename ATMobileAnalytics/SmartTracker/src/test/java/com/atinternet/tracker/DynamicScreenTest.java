@@ -90,11 +90,11 @@ public class DynamicScreenTest extends AbstractTestClass {
     @Test
     public void setEventWithTooLongScreenIdTest() {
         Date date = new Date();
-        String id = "";
+        StringBuilder id = new StringBuilder();
         for (int i = 0; i < 256; i++) {
-            id += i;
+            id.append(i);
         }
-        dynamicScreen.setScreenId(id).setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
+        dynamicScreen.setScreenId(id.toString()).setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
 
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());

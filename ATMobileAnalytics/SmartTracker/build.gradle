@@ -1,10 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 26
@@ -29,7 +30,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-def standardVersion = "2.8.3"
+def standardVersion = "2.8.4"
 version = standardVersion + "s"
 
 install {
@@ -73,8 +74,8 @@ bintray {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly 'com.android.support:appcompat-v7:26.0.2'
-    compileOnly 'com.google.android.gms:play-services-ads:11.6.0'
+    compileOnly 'com.android.support:appcompat-v7:26.1.0'
+    compileOnly 'com.google.android.gms:play-services-ads:11.8.0'
     compileOnly('io.socket:socket.io-client:0.8.3') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
@@ -103,7 +104,7 @@ task javadoc(type: Javadoc) {
 
     options.memberLevel = JavadocMemberLevel.PUBLIC
     options.header = "ATInternet Android SDK API " + standardVersion
-    options.stylesheetFile = new File(projectDir, "docs-res/style.css");
+    options.stylesheetFile = new File(projectDir, "docs-res/style.css")
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -150,4 +151,36 @@ task createBuildFile {
     def file = new File(project.rootDir, "build.properties")
     file.createNewFile()
     file.text = "version=" + standardVersion + "\n"
+}
+
+jacoco {
+    toolVersion = "0.7.1.201405082137"
+}
+
+def coverageSourceDirs = [
+        project.rootDir.absolutePath + '/SmartTracker/src/main/java/com/atinternet/Tracker'
+]
+
+task jacocoTestReport(type: JacocoReport, dependsOn: "testReleaseUnitTest") {
+    group = "Reporting"
+
+    description = "Generate Jacoco coverage reports"
+
+    classDirectories = fileTree(
+            dir: project.rootDir.absolutePath + '/SmartTracker/build/intermediates/classes/release/com/atinternet/tracker',
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/*$ViewInjector*.*',
+                       '**/BuildConfig.*',
+                       '**/Manifest*.*']
+    )
+
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = files(project.rootDir.absolutePath + '/SmartTracker/build/jacoco/testReleaseUnitTest.exec')
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }

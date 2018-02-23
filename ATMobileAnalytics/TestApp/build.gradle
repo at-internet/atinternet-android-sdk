@@ -23,6 +23,9 @@ android {
 }
 
 repositories {
+    maven {
+        url "https://dl.bintray.com/atinternet/maven/"
+    }
     flatDir {
         dirs 'libs'
     }
@@ -30,6 +33,10 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.0.2'
-    api project(':Tracker')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation('io.socket:socket.io-client:0.8.3') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+    implementation 'com.atinternet:SmartTracker:2.8.3s'
 }

@@ -79,7 +79,10 @@ public class Gesture extends BusinessObject {
     private CustomObjects customObjects;
 
     LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
-        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+        if (customObjectsMap == null) {
+            customObjectsMap = new LinkedHashMap<>();
+        }
+        return customObjectsMap;
     }
 
     Gesture(Tracker tracker) {
@@ -99,9 +102,12 @@ public class Gesture extends BusinessObject {
      */
     @Deprecated
     public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber) {
-        return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
-                .setKeyword(keywordLabel)
-                .setResultScreenNumber(resultScreenNumber)) : internalSearch;
+        if (internalSearch == null) {
+            internalSearch = new InternalSearch(tracker)
+                    .setKeyword(keywordLabel)
+                    .setResultScreenNumber(resultScreenNumber);
+        }
+        return internalSearch;
     }
 
     /**
@@ -113,10 +119,13 @@ public class Gesture extends BusinessObject {
      * @return the InternalSearch instance
      */
     public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber, int resultPosition) {
-        return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
-                .setKeyword(keywordLabel)
-                .setResultScreenNumber(resultScreenNumber)
-                .setResultPosition(resultPosition)) : internalSearch;
+        if (internalSearch == null) {
+            internalSearch = new InternalSearch(tracker)
+                    .setKeyword(keywordLabel)
+                    .setResultScreenNumber(resultScreenNumber)
+                    .setResultPosition(resultPosition);
+        }
+        return internalSearch;
     }
 
     /**
@@ -125,7 +134,10 @@ public class Gesture extends BusinessObject {
      * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
-        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+        if (customObjects == null) {
+            customObjects = new CustomObjects(this);
+        }
+        return customObjects;
     }
 
     /**
@@ -298,12 +310,14 @@ public class Gesture extends BusinessObject {
 
     @Override
     void setEvent() {
-        if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
-            tracker.setParam(Hit.HitParam.TouchScreen.stringValue(), TechnicalContext.screenName, new ParamOption().setEncode(true));
+        String sn = TechnicalContext.getScreenName();
+        if (!TextUtils.isEmpty(sn)) {
+            tracker.setParam(Hit.HitParam.TouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
         }
 
-        if (TechnicalContext.level2 > 0) {
-            tracker.setParam(Hit.HitParam.TouchLevel2.stringValue(), TechnicalContext.level2);
+        int lvl2 = TechnicalContext.getLevel2();
+        if (lvl2 > 0) {
+            tracker.setParam(Hit.HitParam.TouchLevel2.stringValue(), lvl2);
         }
 
         if (level2 > 0) {

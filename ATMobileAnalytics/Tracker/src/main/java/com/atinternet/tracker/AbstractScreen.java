@@ -70,19 +70,31 @@ public abstract class AbstractScreen extends BusinessObject {
     private SelfPromotionImpressions selfPromotionImpressions;
 
     LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
-        return customObjectsMap == null ? (customObjectsMap = new LinkedHashMap<>()) : customObjectsMap;
+        if (customObjectsMap == null) {
+            customObjectsMap = new LinkedHashMap<>();
+        }
+        return customObjectsMap;
     }
 
     LinkedHashMap<String, CustomVar> getCustomVarsMap() {
-        return customVarsMap == null ? (customVarsMap = new LinkedHashMap<>()) : customVarsMap;
+        if (customVarsMap == null) {
+            customVarsMap = new LinkedHashMap<>();
+        }
+        return customVarsMap;
     }
 
     LinkedHashMap<String, SelfPromotionImpression> getSelfPromotionImpressionsMap() {
-        return selfPromotionImpressionsMap == null ? (selfPromotionImpressionsMap = new LinkedHashMap<>()) : selfPromotionImpressionsMap;
+        if (selfPromotionImpressionsMap == null) {
+            selfPromotionImpressionsMap = new LinkedHashMap<>();
+        }
+        return selfPromotionImpressionsMap;
     }
 
     LinkedHashMap<String, PublisherImpression> getPublisherImpressionsMap() {
-        return publisherImpressionsMap == null ? (publisherImpressionsMap = new LinkedHashMap<>()) : publisherImpressionsMap;
+        if (publisherImpressionsMap == null) {
+            publisherImpressionsMap = new LinkedHashMap<>();
+        }
+        return publisherImpressionsMap;
     }
 
     /**
@@ -166,9 +178,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return the Location instance
      */
     public Location Location(double latitude, double longitude) {
-        return location == null ? (location = new Location(tracker)
-                .setLatitude(latitude)
-                .setLongitude(longitude)) : location;
+        if (location == null) {
+            location = new Location(tracker).setLatitude(latitude).setLongitude(longitude);
+        }
+        return location;
     }
 
     /**
@@ -178,7 +191,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return the Aisle instance
      */
     public Aisle Aisle(String level1) {
-        return aisle == null ? (aisle = new Aisle(tracker).setLevel1(level1)) : aisle;
+        if (aisle == null) {
+            aisle = new Aisle(tracker).setLevel1(level1);
+        }
+        return aisle;
     }
 
     /**
@@ -188,7 +204,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return the CustomTreeStructure instance
      */
     public CustomTreeStructure CustomTreeStructure(int category1) {
-        return customTreeStructure == null ? (customTreeStructure = new CustomTreeStructure(tracker).setCategory1(category1)) : customTreeStructure;
+        if (customTreeStructure == null) {
+            customTreeStructure = new CustomTreeStructure(tracker).setCategory1(category1);
+        }
+        return customTreeStructure;
     }
 
     /**
@@ -198,7 +217,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return the Campaign identifier
      */
     public Campaign Campaign(String campaignId) {
-        return campaign == null ? (campaign = new Campaign(tracker).setCampaignId(campaignId)) : campaign;
+        if (campaign == null) {
+            campaign = new Campaign(tracker).setCampaignId(campaignId);
+        }
+        return campaign;
     }
 
     /**
@@ -211,7 +233,10 @@ public abstract class AbstractScreen extends BusinessObject {
      */
     @Deprecated
     public Order Order(String orderId, double turnover) {
-        return order == null ? (order = new Order(tracker).setOrderId(orderId).setTurnover(turnover)) : order;
+        if (order == null) {
+            order = new Order(tracker).setOrderId(orderId).setTurnover(turnover);
+        }
+        return order;
     }
 
     /**
@@ -222,9 +247,12 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return the InternalSearch instance
      */
     public InternalSearch InternalSearch(String keywordLabel, int resultScreenNumber) {
-        return internalSearch == null ? (internalSearch = new InternalSearch(tracker)
-                .setKeyword(keywordLabel)
-                .setResultScreenNumber(resultScreenNumber)) : internalSearch;
+        if (internalSearch == null) {
+            internalSearch = new InternalSearch(tracker)
+                    .setKeyword(keywordLabel)
+                    .setResultScreenNumber(resultScreenNumber);
+        }
+        return internalSearch;
     }
 
     /**
@@ -233,7 +261,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return CustomVars instance
      */
     public CustomVars CustomVars() {
-        return customVars == null ? (customVars = new CustomVars(this)) : customVars;
+        if (customVars == null) {
+            customVars = new CustomVars(this);
+        }
+        return customVars;
     }
 
     /**
@@ -242,7 +273,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return CustomObjects instance
      */
     public CustomObjects CustomObjects() {
-        return customObjects == null ? (customObjects = new CustomObjects(this)) : customObjects;
+        if (customObjects == null) {
+            customObjects = new CustomObjects(this);
+        }
+        return customObjects;
     }
 
     /**
@@ -251,7 +285,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return PublisherImpressions instance
      */
     public PublisherImpressions Publishers() {
-        return publisherImpressions == null ? (publisherImpressions = new PublisherImpressions(this)) : publisherImpressions;
+        if (publisherImpressions == null) {
+            publisherImpressions = new PublisherImpressions(this);
+        }
+        return publisherImpressions;
     }
 
     /**
@@ -260,7 +297,10 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return SelfPromotionImpressions instance
      */
     public SelfPromotionImpressions SelfPromotions() {
-        return selfPromotionImpressions == null ? (selfPromotionImpressions = new SelfPromotionImpressions(this)) : selfPromotionImpressions;
+        if (selfPromotionImpressions == null) {
+            selfPromotionImpressions = new SelfPromotionImpressions(this);
+        }
+        return selfPromotionImpressions;
     }
 
     /**

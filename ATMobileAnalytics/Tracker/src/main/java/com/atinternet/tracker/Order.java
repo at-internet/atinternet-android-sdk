@@ -58,7 +58,10 @@ public class Order extends BusinessObject {
      * @return OrderDiscount instance
      */
     public OrderDiscount Discount() {
-        return orderDiscount == null ? (orderDiscount = new OrderDiscount(this)) : orderDiscount;
+        if (orderDiscount == null) {
+            orderDiscount = new OrderDiscount(this);
+        }
+        return orderDiscount;
     }
 
     /**
@@ -67,7 +70,10 @@ public class Order extends BusinessObject {
      * @return OrderAmount instance
      */
     public OrderAmount Amount() {
-        return orderAmount == null ? (orderAmount = new OrderAmount(this)) : orderAmount;
+        if (orderAmount == null) {
+            orderAmount = new OrderAmount(this);
+        }
+        return orderAmount;
     }
 
     /**
@@ -76,7 +82,10 @@ public class Order extends BusinessObject {
      * @return OrderDelivery instance
      */
     public OrderDelivery Delivery() {
-        return orderDelivery == null ? (orderDelivery = new OrderDelivery(this)) : orderDelivery;
+        if (orderDelivery == null) {
+            orderDelivery = new OrderDelivery(this);
+        }
+        return orderDelivery;
     }
 
     /**
@@ -85,7 +94,10 @@ public class Order extends BusinessObject {
      * @return OrderCustomVars instance
      */
     public OrderCustomVars CustomVars() {
-        return customVariables = (customVariables == null) ? new OrderCustomVars() : customVariables;
+        if (customVariables == null) {
+            customVariables = new OrderCustomVars();
+        }
+        return customVariables;
     }
 
     /**

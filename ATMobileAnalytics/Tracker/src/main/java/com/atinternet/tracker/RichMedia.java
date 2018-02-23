@@ -218,12 +218,14 @@ public abstract class RichMedia extends BusinessObject {
             }
 
             if (!isEmbedded) {
-                if (!TextUtils.isEmpty(TechnicalContext.screenName)) {
-                    tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), TechnicalContext.screenName, encode);
+                String sn = TechnicalContext.getScreenName();
+                if (!TextUtils.isEmpty(sn)) {
+                    tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), sn, encode);
                 }
 
-                if (TechnicalContext.level2 > 0) {
-                    tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), TechnicalContext.level2);
+                int lvl2 = TechnicalContext.getLevel2();
+                if (lvl2 > 0) {
+                    tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), lvl2);
                 }
             }
         }

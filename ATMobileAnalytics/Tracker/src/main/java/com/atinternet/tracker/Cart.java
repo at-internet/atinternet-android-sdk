@@ -35,7 +35,10 @@ public class Cart extends BusinessObject {
 
 
     ArrayList<Product> getProductsList() {
-        return productsList == null ? (productsList = new ArrayList<>()) : productsList;
+        if (productsList == null) {
+            productsList = new ArrayList<>();
+        }
+        return productsList;
     }
 
     Cart(Tracker tracker) {
@@ -50,7 +53,10 @@ public class Cart extends BusinessObject {
      * @return the Products instance
      */
     public Products Products() {
-        return products == null ? (products = new Products(this)) : products;
+        if (products == null) {
+            products = new Products(this);
+        }
+        return products;
     }
 
     /**

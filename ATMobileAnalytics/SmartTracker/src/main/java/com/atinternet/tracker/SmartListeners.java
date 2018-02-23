@@ -87,6 +87,9 @@ class SensorOrientationManager implements SensorEventListener {
             case Surface.ROTATION_270:
                 newOrientation = 2;
                 break;
+            default:
+                break;
+
         }
         if (orientation != newOrientation) {
             orientation = newOrientation;
@@ -96,7 +99,7 @@ class SensorOrientationManager implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
+        // Do nothing
     }
 }
 
@@ -124,7 +127,6 @@ class InteractionListener implements Window.Callback {
     @Override
     public boolean dispatchKeyEvent(KeyEvent keyEvent) {
         if (keyEvent.getAction() == KeyEvent.ACTION_UP && keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            // TODO Track it ??
             Log.d(TAG, "Back detected ");
         }
         return defaultCallback.dispatchKeyEvent(keyEvent);
@@ -203,7 +205,7 @@ class InteractionListener implements Window.Callback {
         if (!views.isEmpty()) {
             ViewRootData vrd = views.get(views.size() - 1);
             View v = vrd.getView();
-            if(v instanceof ViewGroup) {
+            if (v instanceof ViewGroup) {
                 ViewGroup vg = (ViewGroup) v;
                 View child = vg.getChildAt(vg.getChildCount() - 1);
                 if (!(child instanceof ATLayer) && vrd.isDialogType() && vg.findViewById(R.id.atCustomDialogTitle) == null) {
@@ -515,7 +517,7 @@ class SmartTrackerActivityLifecycle extends TrackerActivityLifeCycle implements 
 
     @Override
     public void onOrientationChange(final int orientation) {
-        if (smartSender.getLiveConnectionState() == SmartSender.LiveConnectionState.Pending) {
+        if (smartSender.getLiveConnectionState() == SmartSender.LiveConnectionState.PENDING) {
             smartSender.reset();
         } else {
             final SmartEvent smartEvent = new SmartEvent(new SmartView(null, new int[2]).setClassName("UIRotation"), null, -1, -1, "deviceRotate", "-1");

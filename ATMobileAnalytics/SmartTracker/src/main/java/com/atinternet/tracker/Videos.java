@@ -44,15 +44,8 @@ public class Videos {
      * @return Video instance
      */
     public Video add(String name, int duration) {
-        int index = -1;
-        int length = list.size();
+        int index = searchVideoIndexByName(name);
         Video video;
-        for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
-                index = i;
-                break;
-            }
-        }
         if (index == -1) {
             video = new Video(player)
                     .setName(name)
@@ -60,7 +53,7 @@ public class Videos {
 
             list.add(video);
         } else {
-            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.warning, "Video with the same name already exists");
+            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "Video with the same name already exists");
             video = list.get(index);
         }
 
@@ -112,14 +105,7 @@ public class Videos {
      * @param name video identified by name
      */
     public void remove(String name) {
-        int length = list.size();
-        int index = -1;
-        for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
-                index = i;
-                break;
-            }
-        }
+        int index = searchVideoIndexByName(name);
         if (index > -1) {
             if (list.get(index).executor != null && !list.get(index).executor.isShutdown()) {
                 list.get(index).sendStop();
@@ -135,5 +121,16 @@ public class Videos {
         while (!list.isEmpty()) {
             remove(list.get(0).getName());
         }
+    }
+
+    private int searchVideoIndexByName(String name) {
+        int length = list.size();
+        for (int i = 0; i < length; i++) {
+            if (list.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -34,6 +35,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -127,6 +129,11 @@ class Popup {
 }
 
 final class SmartContext {
+
+    private SmartContext() {
+        throw new IllegalStateException("Private class");
+    }
+
     static boolean listenersSet = false;
     static WeakReference<Activity> currentActivity;
     static WeakReference<android.support.v4.app.Fragment> currentFragment;
@@ -135,30 +142,18 @@ final class SmartContext {
 class SmartSender implements View.OnClickListener {
 
     enum LiveConnectionState {
-        Disconnected, Pending, Connected
+        DISCONNECTED, PENDING, CONNECTED
     }
 
     enum AliveState {
-        Aborted, Stopped, Refused, Asked, None
+        ABORTED, STOPPED, REFUSED, ASKED, NONE
     }
 
     long startTime = System.currentTimeMillis();
     static final int COOLDOWN = 3000;
 
     private static final int DELAY = 3000;
-    private static final HashSet<String> NOT_TRACKABLE_EVENT_LIST = new HashSet<String>() {{
-        add("DeviceAcceptedLive");
-        add("DeviceAskedForLive");
-        add("DeviceRefusedLive");
-        add("DeviceTokenAlreadyUsed");
-        add("DeviceVersion");
-        add("DeviceAbortedLiveRequest");
-        add("DeviceStoppedLive");
-        add("ScreenshotUpdated");
-        add("app");
-        add("screenshot");
-        add("screenRotation");
-    }};
+    private static final HashSet<String> NOT_TRACKABLE_EVENT_LIST = new HashSet<>();
 
     private JSONObject lastViewDidAppear;
     private LiveConnectionState liveConnectionState;
@@ -175,6 +170,17 @@ class SmartSender implements View.OnClickListener {
     SmartSender(String token, String socketEndpoint) {
         this.token = token;
         this.socketEndpoint = socketEndpoint;
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceAcceptedLive");
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceAskedForLive");
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceRefusedLive");
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceTokenAlreadyUsed");
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceVersion");
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceAbortedLiveRequest");
+        NOT_TRACKABLE_EVENT_LIST.add("DeviceStoppedLive");
+        NOT_TRACKABLE_EVENT_LIST.add("ScreenshotUpdated");
+        NOT_TRACKABLE_EVENT_LIST.add("app");
+        NOT_TRACKABLE_EVENT_LIST.add("screenshot");
+        NOT_TRACKABLE_EVENT_LIST.add("screenRotation");
     }
 
     Toolbar getToolbar() {
@@ -191,8 +197,8 @@ class SmartSender implements View.OnClickListener {
 
     void reset() {
         this.popup.dismiss();
-        aliveState = AliveState.None;
-        setLiveConnectionState(LiveConnectionState.Disconnected);
+        aliveState = AliveState.NONE;
+        setLiveConnectionState(LiveConnectionState.DISCONNECTED);
     }
 
     AliveState getAliveState() {
@@ -215,7 +221,7 @@ class SmartSender implements View.OnClickListener {
             Tool.runOnMainThread(currentActivity, new Runnable() {
                 @Override
                 public void run() {
-                    if (liveConnectionState == LiveConnectionState.Connected) {
+                    if (liveConnectionState == LiveConnectionState.CONNECTED) {
                         toolbar.setConnectedState();
                         handler.removeCallbacks(runnable);
                         if (args.length == 1 && args[0].equals("DeviceAcceptedLive")) {
@@ -225,7 +231,7 @@ class SmartSender implements View.OnClickListener {
                         if (lastViewDidAppear != null) {
                             sendMessage(lastViewDidAppear);
                         }
-                    } else if (liveConnectionState == LiveConnectionState.Pending) {
+                    } else if (liveConnectionState == LiveConnectionState.PENDING) {
                         toolbar.setPendingState();
                         if (args.length == 1 && args[0].equals("Device")) {
                             runnable = new Runnable() {
@@ -237,7 +243,7 @@ class SmartSender implements View.OnClickListener {
                             };
                             handler.postDelayed(runnable, 0);
                         }
-                    } else if (liveConnectionState == LiveConnectionState.Disconnected) {
+                    } else if (liveConnectionState == LiveConnectionState.DISCONNECTED) {
                         toolbar.setDisconnectedState();
                         handler.removeCallbacks(runnable);
                         if (args.length == 1) {
@@ -261,7 +267,7 @@ class SmartSender implements View.OnClickListener {
     }
 
     private void initWebSocket() {
-        liveConnectionState = LiveConnectionState.Disconnected;
+        liveConnectionState = LiveConnectionState.DISCONNECTED;
         try {
             io.socket.client.IO.Options opts = new io.socket.client.IO.Options();
             opts.query = "token=" + token;
@@ -299,7 +305,7 @@ class SmartSender implements View.OnClickListener {
                     .on("InterfaceAbortedLiveRequest", listener);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Tracker.TAG, e.toString());
         }
     }
 
@@ -320,16 +326,15 @@ class SmartSender implements View.OnClickListener {
             final String view = "." + data.getJSONObject("view").getString("className");
             final String screen = "." + data.getJSONObject("screen").getString("className");
 
-            arrayList = new ArrayList<String>() {{
-                add(eventKeyBase + position + view + screen);
-                add(eventKeyBase + position + view);
-                add(eventKeyBase + position);
-                add(eventKeyBase + position + screen);
-                add(eventKeyBase);
-                add(eventKeyBase + view);
-                add(eventKeyBase + screen);
-                add(eventKeyBase + view + screen);
-            }};
+            arrayList = new ArrayList<>();
+            arrayList.add(eventKeyBase + position + view + screen);
+            arrayList.add(eventKeyBase + position + view);
+            arrayList.add(eventKeyBase + position);
+            arrayList.add(eventKeyBase + position + screen);
+            arrayList.add(eventKeyBase);
+            arrayList.add(eventKeyBase + view);
+            arrayList.add(eventKeyBase + screen);
+            arrayList.add(eventKeyBase + view + screen);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -495,22 +500,19 @@ class SmartSender implements View.OnClickListener {
             if (event.equals("viewDidAppear")) {
                 lastViewDidAppear = jsonObject;
             }
-            if (AutoTracker.getInstance().isEnabledAutoTracking()) {
-                if (shouldTrackEvent(event)) {
-                    TrackerQueue.getInstance().put(new Runnable() {
-                        @Override
-                        public void run() {
-                            mapConfAndSend(jsonObject);
-                        }
-                    });
-                }
-            }
-            if (AutoTracker.getInstance().isEnabledLiveTagging()) {
-                if (socketIOClient != null && socketIOClient.connected()) {
-                    if (liveConnectionState == LiveConnectionState.Connected || (force.length == 1 && force[0])) {
-                        socketIOClient.emit("message", jsonObject);
+            if (AutoTracker.getInstance().isEnabledAutoTracking() && shouldTrackEvent(event)) {
+                TrackerQueue.getInstance().put(new Runnable() {
+                    @Override
+                    public void run() {
+                        mapConfAndSend(jsonObject);
                     }
-                }
+                });
+            }
+            if (AutoTracker.getInstance().isEnabledLiveTagging()
+                    && socketIOClient != null
+                    && socketIOClient.connected()
+                    && (liveConnectionState == LiveConnectionState.CONNECTED || (force.length == 1 && force[0]))) {
+                socketIOClient.emit("message", jsonObject);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -522,14 +524,14 @@ class SmartSender implements View.OnClickListener {
         int currentId = view.getId();
         if (currentId == R.id.recordButtonView) {
             switch (liveConnectionState) {
-                case Disconnected:
-                    setLiveConnectionState(LiveConnectionState.Pending, "Device");
+                case DISCONNECTED:
+                    setLiveConnectionState(LiveConnectionState.PENDING, "Device");
                     break;
-                case Pending:
-                    setLiveConnectionState(LiveConnectionState.Disconnected, "DeviceAbortedLiveRequest");
+                case PENDING:
+                    setLiveConnectionState(LiveConnectionState.DISCONNECTED, "DeviceAbortedLiveRequest");
                     break;
-                case Connected:
-                    setLiveConnectionState(LiveConnectionState.Disconnected, "DeviceStoppedLive");
+                case CONNECTED:
+                    setLiveConnectionState(LiveConnectionState.DISCONNECTED, "DeviceStoppedLive");
                     break;
             }
         } else if (currentId == R.id.cameraImageView) {
@@ -559,7 +561,7 @@ class SmartSender implements View.OnClickListener {
         flash.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                // Do Nothing because event must be ignored
             }
 
             @Override
@@ -570,7 +572,7 @@ class SmartSender implements View.OnClickListener {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                // Do Nothing because event must be ignored
             }
         });
 
@@ -584,14 +586,20 @@ class SmartSender implements View.OnClickListener {
 
 class UI {
 
+    private UI() {
+        throw new IllegalStateException("Private class");
+    }
+
     private static HashMap<String, Typeface> fonts;
 
     static HashMap<String, Typeface> getFonts(final Context c) {
-        return fonts == null ? fonts = new HashMap<String, Typeface>() {{
-            put("OpenSans-Regular", Typeface.createFromAsset(c.getAssets(), "fonts/OpenSans-Regular.ttf"));
-            put("Montserrat-Bold", Typeface.createFromAsset(c.getAssets(), "fonts/Montserrat-Bold.ttf"));
-            put("Montserrat-Regular", Typeface.createFromAsset(c.getAssets(), "fonts/Montserrat-Regular.ttf"));
-        }} : fonts;
+        if (fonts == null) {
+            fonts = new HashMap<>();
+            fonts.put("OpenSans-Regular", Typeface.createFromAsset(c.getAssets(), "fonts/OpenSans-Regular.ttf"));
+            fonts.put("Montserrat-Bold", Typeface.createFromAsset(c.getAssets(), "fonts/Montserrat-Bold.ttf"));
+            fonts.put("Montserrat-Regular", Typeface.createFromAsset(c.getAssets(), "fonts/Montserrat-Regular.ttf"));
+        }
+        return fonts;
     }
 
     static Pair<Integer, Integer> getScreenSize(Display d) {
@@ -606,7 +614,8 @@ class UI {
                     Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
                     return new Pair<>(realSize.x, realSize.y);
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                Log.e(Tracker.TAG, e.toString());
             }
         }
         DisplayMetrics metrics = new DisplayMetrics();
@@ -662,8 +671,8 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
     private static final int TIMER = 1000;
     private static final String TIMER_FORMAT = "%02d : %02d : %02d";
 
-    private static int TOOLBAR_WIDTH;
-    private static int TOOLBAR_HEIGHT;
+    private static int TOOLBARWIDTH;
+    private static int TOOLBARHEIGHT;
     private static WeakReference<ATRelativeLayout> toolbarLayout;
 
     private final View recordButtonView;
@@ -671,7 +680,7 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
     private final TextView timerTextView;
 
     private final Handler handler;
-    private final Runnable timer;
+    private final Runnable timerRunnable;
     private final WindowManager wm;
     private final WindowManager.LayoutParams toolbarLayoutParams;
     private final GestureDetector gestureDetector;
@@ -681,11 +690,11 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
     private int hours;
 
     private void startTimer() {
-        handler.postDelayed(timer, TIMER);
+        handler.postDelayed(timerRunnable, TIMER);
     }
 
     private void stopTimer() {
-        handler.removeCallbacks(timer);
+        handler.removeCallbacks(timerRunnable);
         seconds = 0;
         min = 0;
         hours = 0;
@@ -715,17 +724,18 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
         toolbarLayout.get().setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     Toolbar() {
         Context c = AutoTracker.appContext.get();
         seconds = 0;
         min = 0;
         hours = 0;
         handler = new Handler();
-        timer = new Runnable() {
+        timerRunnable = new Runnable() {
             @Override
             public void run() {
                 updateTimer();
-                handler.postDelayed(timer, TIMER);
+                handler.postDelayed(timerRunnable, TIMER);
             }
         };
 
@@ -733,13 +743,13 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
         wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(metrics);
 
-        TOOLBAR_WIDTH = (int) (200 * metrics.density);
-        TOOLBAR_HEIGHT = (int) (50 * metrics.density);
+        TOOLBARWIDTH = (int) (200 * metrics.density);
+        TOOLBARHEIGHT = (int) (50 * metrics.density);
 
         toolbarLayout = new WeakReference<>((ATRelativeLayout) View.inflate(c, R.layout.toolbar_layout, null));
         recordButtonView = toolbarLayout.get().findViewById(R.id.recordButtonView);
-        connectionTextView = (TextView) toolbarLayout.get().findViewById(R.id.connectionTextView);
-        timerTextView = (TextView) toolbarLayout.get().findViewById(R.id.timerTextView);
+        connectionTextView = toolbarLayout.get().findViewById(R.id.connectionTextView);
+        timerTextView = toolbarLayout.get().findViewById(R.id.timerTextView);
 
         Typeface tp = UI.getFonts(c).get("OpenSans-Regular");
         connectionTextView.setTypeface(tp);
@@ -748,16 +758,23 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
         gestureDetector = new GestureDetector(c, this);
         toolbarLayout.get().setOnTouchListener(this);
 
+        int windowType;
+        if (Build.VERSION.SDK_INT >= 26) {
+            windowType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            windowType = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+
         toolbarLayoutParams = new WindowManager.LayoutParams(
-                TOOLBAR_WIDTH,
-                TOOLBAR_HEIGHT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                TOOLBARWIDTH,
+                TOOLBARHEIGHT,
+                windowType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
         toolbarLayoutParams.gravity = Gravity.TOP | Gravity.START;
-        toolbarLayoutParams.x = metrics.widthPixels / 2 - (TOOLBAR_WIDTH / 2);
-        toolbarLayoutParams.y = metrics.heightPixels - (TOOLBAR_HEIGHT * 2);
+        toolbarLayoutParams.x = metrics.widthPixels / 2 - (TOOLBARWIDTH / 2);
+        toolbarLayoutParams.y = metrics.heightPixels - (TOOLBARHEIGHT * 2);
 
         wm.addView(toolbarLayout.get(), toolbarLayoutParams);
     }
@@ -784,18 +801,17 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
         toolbarLayout.get().findViewById(R.id.cameraImageView).setOnClickListener(cl);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (gestureDetector.onTouchEvent(event)) {
             return true;
         } else {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_MOVE:
-                    toolbarLayoutParams.x = (int) event.getRawX() - (TOOLBAR_WIDTH / 2);
-                    toolbarLayoutParams.y = (int) event.getRawY() - TOOLBAR_HEIGHT;
-                    wm.updateViewLayout(toolbarLayout.get(), toolbarLayoutParams);
-                    break;
+            int action = event.getAction();
+            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
+                toolbarLayoutParams.x = (int) event.getRawX() - (TOOLBARWIDTH / 2);
+                toolbarLayoutParams.y = (int) event.getRawY() - TOOLBARHEIGHT;
+                wm.updateViewLayout(toolbarLayout.get(), toolbarLayoutParams);
             }
             return true;
         }

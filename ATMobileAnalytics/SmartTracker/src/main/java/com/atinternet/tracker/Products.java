@@ -177,9 +177,8 @@ public class Products extends Helper {
                 cart.getProductsList().remove(index);
             }
         } else {
-            ArrayList<BusinessObject> objects = new ArrayList<BusinessObject>() {{
-                addAll(tracker.getBusinessObjects().values());
-            }};
+            ArrayList<BusinessObject> objects = new ArrayList<>();
+            objects.addAll(tracker.getBusinessObjects().values());
             length = objects.size();
             for (int i = 0; i < length; i++) {
                 if (objects.get(i) instanceof Product && ((Product) objects.get(i)).getProductId().equals(productId)) {
@@ -197,9 +196,8 @@ public class Products extends Helper {
         if (cart != null) {
             cart.getProductsList().clear();
         } else {
-            ArrayList<BusinessObject> objects = new ArrayList<BusinessObject>() {{
-                addAll(tracker.getBusinessObjects().values());
-            }};
+            ArrayList<BusinessObject> objects = new ArrayList<>();
+            objects.addAll(tracker.getBusinessObjects().values());
             for (BusinessObject obj : objects) {
                 if (obj instanceof Product) {
                     tracker.getBusinessObjects().remove(obj.getId());
