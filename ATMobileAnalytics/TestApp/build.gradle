@@ -38,5 +38,5 @@ dependencies {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
-    implementation 'com.atinternet:SmartTracker:2.8.3s'
+    implementation project(':SmartTracker')
 }

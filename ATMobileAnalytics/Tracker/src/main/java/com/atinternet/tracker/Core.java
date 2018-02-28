@@ -1089,7 +1089,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.8.4";
+            return "2.8.5";
         }
     };
 
@@ -1187,7 +1187,11 @@ class TechnicalContext {
         return new Closure() {
             @Override
             public String execute() {
-                return Locale.getDefault() != null ? Locale.getDefault().toString().toLowerCase() : "";
+                Locale localeDefault = Locale.getDefault();
+                if (localeDefault == null) {
+                    return "";
+                }
+                return String.format("%1$s-%2$s-%3$s", localeDefault.getLanguage(), localeDefault.getCountry(), localeDefault.getVariant());
             }
         };
     }
