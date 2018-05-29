@@ -107,7 +107,7 @@ public class TrackerTest extends AbstractTestClass {
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("8652e6fddc89d1392129e8f5ade37e4288406503e5b73bad51619d6e4f3ce50c", tracker.getUserIdSync());
 
-        TechnicalContext.doNotTrack(RuntimeEnvironment.application, true);
+        TechnicalContext.optOut(RuntimeEnvironment.application, true);
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("opt-out", tracker.getUserIdSync());
 
@@ -693,10 +693,10 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void doNotTrackTest() {
+    public void optOutTest() {
         Builder builder = new Builder(tracker);
         assertFalse(((ArrayList<String>) builder.build()[0]).get(0).contains("&idclient=" + "opt-out"));
-        TechnicalContext.doNotTrack(RuntimeEnvironment.application, true);
+        TechnicalContext.optOut(RuntimeEnvironment.application, true);
         tracker.setParam("idclient", TechnicalContext.getUserId("androidId"));
         builder = new Builder(tracker);
         String url = ((ArrayList<String>) builder.build()[0]).get(0);
@@ -711,10 +711,5 @@ public class TrackerTest extends AbstractTestClass {
         String url = ((ArrayList<String>) builder.build()[0]).get(0);
 
         assertTrue(url.contains("&test="));
-    }
-
-    @Test
-    public void doNotTrackEnabledTest() {
-        assertFalse(doNotTrackEnabled());
     }
 }

@@ -44,8 +44,8 @@ public class Audios {
      * @return the Audio instance
      */
     public Audio add(String name, int duration) {
-        int index = searchAudioIndexByName(name);
         Audio audio;
+        int index = searchAudioIndexByName(name);
         if (index == -1) {
             audio = new Audio(player)
                     .setName(name)
@@ -106,10 +106,12 @@ public class Audios {
      */
     public void remove(String name) {
         int index = searchAudioIndexByName(name);
-        if (list.get(index).executor != null && !list.get(index).executor.isShutdown()) {
-            list.get(index).sendStop();
+        if (index > -1) {
+            if (list.get(index).scheduler != null && !list.get(index).scheduler.isShutdown()) {
+                list.get(index).sendStop();
+            }
+            list.remove(index);
         }
-        list.remove(index);
     }
 
     /**
@@ -128,7 +130,6 @@ public class Audios {
                 return i;
             }
         }
-
         return -1;
     }
 }

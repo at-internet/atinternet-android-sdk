@@ -102,7 +102,7 @@ public class LiveAudios {
     public void remove(String name) {
         int index = searchLiveAudioIndexByName(name);
         if (index > -1) {
-            if (list.get(index).executor != null && !list.get(index).executor.isShutdown()) {
+            if (list.get(index).scheduler != null && !list.get(index).scheduler.isShutdown()) {
                 list.get(index).sendStop();
             }
             list.remove(index);
@@ -125,7 +125,6 @@ public class LiveAudios {
                 return i;
             }
         }
-
         return -1;
     }
 }

@@ -18,10 +18,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
     lintOptions {
         abortOnError false
     }
@@ -30,7 +26,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.8.5"
+version = "2.9.0"
 
 install {
     repositories.mavenInstaller {
@@ -72,8 +68,8 @@ bintray {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly 'com.google.android.gms:play-services-ads:11.8.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compileOnly 'com.google.android.gms:play-services-ads:15.0.1'
     testImplementation 'org.robolectric:robolectric:3.3.2'
     testImplementation 'junit:junit:4.12'
 }
@@ -104,7 +100,7 @@ task createDelivery {
             rename('Tracker-release.aar', 'Tracker.aar')
         }
         copy {
-            from 'build/intermediates/bundles/release/'
+            from 'build/intermediates/packaged-classes/release/'
             into destination
             include('classes.jar')
             rename('classes.jar', 'Tracker.jar')

@@ -47,6 +47,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -641,7 +642,7 @@ class Builder implements Runnable {
                 String key = p.getKey();
 
                 if (key.equals(Hit.HitParam.UserId.stringValue())) {
-                    if (TechnicalContext.doNotTrackEnabled(Tracker.getAppContext())) {
+                    if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
                         strValue = OPT_OUT;
                     } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
                         strValue = Tool.SHA256(strValue);
@@ -1089,7 +1090,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.8.5";
+            return "2.9.0";
         }
     };
 
@@ -1346,7 +1347,7 @@ class TechnicalContext {
                 final android.content.Context context = Tracker.getAppContext();
                 SharedPreferences preferences = context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
 
-                if (preferences.getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false)) {
+                if (preferences.getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false)) {
                     return "opt-out";
                 } else if (identifier.equals(ANDROID_ID_KEY)) {
                     return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -1379,12 +1380,12 @@ class TechnicalContext {
         };
     }
 
-    static void doNotTrack(android.content.Context context, boolean enabled) {
-        context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).edit().putBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, enabled).apply();
+    static void optOut(android.content.Context context, boolean enabled) {
+        context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).edit().putBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, enabled).apply();
     }
 
-    static boolean doNotTrackEnabled(android.content.Context context) {
-        return context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false);
+    static boolean optOutEnabled(android.content.Context context) {
+        return context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false);
     }
 }
 
@@ -1551,6 +1552,8 @@ class Tool {
     }
 
     static boolean isJSON(String s) {
+        if (s == null) return false;
+
         try {
             new JSONObject(s);
             return true;
@@ -1560,6 +1563,8 @@ class Tool {
     }
 
     static boolean isArray(String s) {
+        if (s == null) return false;
+
         try {
             new JSONArray(s);
             return true;
@@ -1592,6 +1597,35 @@ class Tool {
             return persistents.get(key);
         }
         return null;
+    }
+
+    static SparseIntArray sortSparseIntArrayByKey(SparseIntArray arr) {
+        int length = arr.size();
+        int[] keys = new int[length];
+        for (int i = 0; i < length; i++) {
+            keys[i] = arr.keyAt(i);
+        }
+
+        boolean swapped;
+        do {
+            swapped = false;
+            for (int i = 1; i < length - 1; i++) {
+                int k = keys[i - 1];
+                int k1 = keys[i];
+                if (k > k1) {
+                    keys[i - 1] = k1;
+                    keys[i] = k;
+                    swapped = true;
+                }
+            }
+        } while (swapped);
+
+        SparseIntArray res = new SparseIntArray();
+        for (int k : keys) {
+            res.append(k, arr.get(k));
+        }
+
+        return res;
     }
 
     static String appendParameterValues(Param param) {
@@ -1914,10 +1948,6 @@ class Lists {
         return map;
     }
 
-    static HashSet<String> getReadOnlyConfigs() {
-        return new HashSet<>();
-    }
-
     static HashSet<String> getReadOnlyParams() {
         HashSet<String> set = new HashSet<>();
         set.add("vtag");
@@ -1933,8 +1963,10 @@ class Lists {
         set.add("car");
         set.add("cn");
         set.add("ts");
+        set.add("olt");
         return set;
     }
+
 
     static HashSet<String> getSliceReadyParams() {
         HashSet<String> set = new HashSet<>();

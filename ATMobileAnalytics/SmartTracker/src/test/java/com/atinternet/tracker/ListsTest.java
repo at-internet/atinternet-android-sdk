@@ -91,31 +91,6 @@ public class ListsTest extends AbstractTestClass {
     }
 
     @Test
-    public void getReadOnlyConfigTest() {
-        HashSet<String> readOnlyConfig = Lists.getReadOnlyConfigs();
-        assertEquals(0, readOnlyConfig.size());
-    }
-
-    @Test
-    public void getReadOnlyParametersTest() {
-        HashSet<String> readOnlyParameters = Lists.getReadOnlyParams();
-        assertTrue(readOnlyParameters.contains("vtag"));
-        assertTrue(readOnlyParameters.contains("ptag"));
-        assertTrue(readOnlyParameters.contains("lng"));
-        assertTrue(readOnlyParameters.contains("mfmd"));
-        assertTrue(readOnlyParameters.contains("manufacturer"));
-        assertTrue(readOnlyParameters.contains("model"));
-        assertTrue(readOnlyParameters.contains("os"));
-        assertTrue(readOnlyParameters.contains("apvr"));
-        assertTrue(readOnlyParameters.contains("hl"));
-        assertTrue(readOnlyParameters.contains("r"));
-        assertTrue(readOnlyParameters.contains("car"));
-        assertTrue(readOnlyParameters.contains("cn"));
-        assertTrue(readOnlyParameters.contains("ts"));
-        assertEquals(13, readOnlyParameters.size());
-    }
-
-    @Test
     public void getSliceReadyParameterTest() {
         HashSet<String> sliceReadyParameter = Lists.getSliceReadyParams();
         assertTrue(sliceReadyParameter.contains("ati"));

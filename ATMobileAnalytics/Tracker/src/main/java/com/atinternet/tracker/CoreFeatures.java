@@ -255,6 +255,7 @@ class LifeCycle {
      * @param context Context
      */
     static void initLifeCycle(Context context) {
+
         SharedPreferences preferences = Tracker.getPreferences();
         try {
             versionCode = String.valueOf(context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).versionCode);
@@ -310,6 +311,9 @@ class LifeCycle {
     }
 
     static void newSessionInit(SharedPreferences preferences) {
+        /// Do not track
+        if (Tracker.doNotTrackEnabled()) return;
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         try {
             updateFirstSession(preferences);
@@ -369,6 +373,7 @@ class LifeCycle {
             @Override
             public String execute() {
                 try {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
                     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
                     // fs
@@ -379,12 +384,12 @@ class LifeCycle {
 
                     if (!TextUtils.isEmpty(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, ""))) {
                         map.put("scsu", preferences.getInt(SESSION_COUNT_SINCE_UPDATE, 0));
-                        map.put("fsdau", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, "")));
+                        map.put("fsdau", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, simpleDateFormat.format(new Date()))));
                         map.put("dsu", preferences.getInt(DAYS_SINCE_UPDATE, 0));
                     }
 
                     map.put("sc", preferences.getInt(SESSION_COUNT, 0));
-                    map.put("fsd", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE, "")));
+                    map.put("fsd", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE, simpleDateFormat.format(new Date()))));
                     map.put("dsls", preferences.getInt(DAYS_SINCE_LAST_SESSION, 0));
                     map.put("dsfs", preferences.getInt(DAYS_SINCE_FIRST_SESSION, 0));
                     map.put("sessionId", sessionId);

@@ -41,7 +41,7 @@ public class TrackerConfigurationKeys {
     static final String CAMPAIGN_ADDED_KEY = "ATCampaignAdded";
 
     //Global key representing if user wants tracked or not
-    static final String DO_NOT_TRACK_ENABLED = "ATDoNotTrackEnabled";
+    static final String OPT_OUT_ENABLED = "ATDoNotTrackEnabled";
 
     //Global key representing campaign marketing saved
     static final String MARKETING_CAMPAIGN_SAVED = "ATMarketingCampaignSaved";

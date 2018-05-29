@@ -105,19 +105,14 @@ public class TechnicalContextTest extends AbstractTestClass {
     }
 
     @Test
-    public void doNotTrackTest() {
-        TechnicalContext.doNotTrack(RuntimeEnvironment.application, true);
-        assertTrue(RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.DO_NOT_TRACK_ENABLED, false));
+    public void optOutTest() {
+        TechnicalContext.optOut(RuntimeEnvironment.application, true);
+        assertTrue(RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false));
     }
 
     @Test
     public void getUUIDTest() {
         String uuid = TechnicalContext.getUserId("UUID").execute();
         assertTrue(uuid.equals(TechnicalContext.getUserId("UUID").execute()));
-    }
-
-    @Test
-    public void doNotTrackEnabledTest() {
-        assertFalse(TechnicalContext.doNotTrackEnabled(RuntimeEnvironment.application));
     }
 }

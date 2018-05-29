@@ -1,64 +1,50 @@
 package com.atinternet;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.atinternet.tracker.ATInternet;
-import com.atinternet.tracker.AutoTracker;
-import com.atinternet.tracker.Debugger;
+import com.atinternet.tracker.ParamOption;
+import com.atinternet.tracker.Tracker;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TOKEN = "test";
-    AutoTracker tracker;
+    Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.sendHit).setOnClickListener(this);
 
-        tracker = ATInternet.getInstance().getAutoTracker(TOKEN);
-        tracker.setSiteId(410501, null, true);
-        tracker.setLog("logdev", null, true);
+        tracker = ATInternet.getInstance().getDefaultTracker();
+        tracker.setDefaultListener();
+        tracker.setSiteId(552987, null, true);
+        tracker.setLog("logp", null, true);
 
-        findViewById(R.id.sendHit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tracker.Screens().add("HomeTest").sendView();
-            }
-        });
-
-        if (overlayPermission()) {
-            tracker.enableLiveTagging(true);
-        }
-    }
-
-    private boolean overlayPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, ATInternet.ALLOW_OVERLAY_INTENT_RESULT_CODE);
-                return false;
-            }
-        }
-        return true;
+        CheckBox optOut = findViewById(R.id.optOut);
+        optOut.setChecked(Tracker.optOutEnabled());
+        optOut.setOnClickListener(this);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Add code below to enable live tagging
-        if (requestCode == ATInternet.ALLOW_OVERLAY_INTENT_RESULT_CODE) {
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (Settings.canDrawOverlays(this)) {
-                    tracker.enableLiveTagging(true);
-                }
-            }
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.sendHit:
+                String s = "Click";
+                tracker.Gestures().add(s).sendTouch();
+                break;
+            case R.id.optOut:
+                Tracker.optOut(((CheckBox) v).isChecked());
+                break;
         }
     }
 }

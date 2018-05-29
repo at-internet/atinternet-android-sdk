@@ -77,25 +77,25 @@ public class MediaPlayers extends Helper {
         MediaPlayer player = players.remove(playerId);
         if (player != null) {
             for (Video video : player.Videos().list) {
-                if (video.executor != null && !video.executor.isShutdown()) {
+                if (video.scheduler != null && !video.scheduler.isShutdown()) {
                     video.sendStop();
                 }
             }
             player.Videos().removeAll();
             for (LiveVideo liveVideo : player.LiveVideos().list) {
-                if (liveVideo.executor != null && !liveVideo.executor.isShutdown()) {
+                if (liveVideo.scheduler != null && !liveVideo.scheduler.isShutdown()) {
                     liveVideo.sendStop();
                 }
             }
             player.LiveVideos().removeAll();
             for (Audio audio : player.Audios().list) {
-                if (audio.executor != null && !audio.executor.isShutdown()) {
+                if (audio.scheduler != null && !audio.scheduler.isShutdown()) {
                     audio.sendStop();
                 }
             }
             player.Audios().removeAll();
             for (LiveAudio liveAudio : player.LiveAudios().list) {
-                if (liveAudio.executor != null && !liveAudio.executor.isShutdown()) {
+                if (liveAudio.scheduler != null && !liveAudio.scheduler.isShutdown()) {
                     liveAudio.sendStop();
                 }
             }

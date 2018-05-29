@@ -183,63 +183,64 @@ public class Tracker {
 
     private Tracker processSetParam(String key, Closure value) {
         // Check whether the parameter is not in read only mode
-        if (!Lists.getReadOnlyParams().contains(key)) {
-            buffer.getVolatileParams().put(key, new Param(key, value));
-        } else {
+        if (Lists.getReadOnlyParams().contains(key)) {
             Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format("Param %s is read only. Value will not be updated", key));
+            return this;
         }
-
+        buffer.getVolatileParams().put(key, new Param(key, value));
         return this;
     }
 
+
     private Tracker processSetParam(String key, Closure value, ParamOption newParamOptions) {
         // Check whether the parameter is not in read only mode
-        if (!Lists.getReadOnlyParams().contains(key)) {
-            Param newParam = new Param(key, value, newParamOptions);
-            List<Closure> newValues = new ArrayList<>();
-
-            if (newParam.isPersistent()) {
-                if (newParamOptions.isAppend()) {
-                    Param existingParam;
-                    if ((existingParam = buffer.getPersistentParams().get(key)) != null) {
-                        newValues = existingParam.getValues();
-                        if (existingParam.getOptions() != null) {
-                            newParam.getOptions().setType(existingParam.getOptions().getType());
-                        }
-                    }
-                    if ((existingParam = buffer.getVolatileParams().get(key)) != null) {
-                        existingParam.getValues().add(value);
-                        if (existingParam.getOptions() != null) {
-                            newParam.getOptions().setType(existingParam.getOptions().getType());
-                        }
-                    }
-                } else {
-                    buffer.getVolatileParams().remove(key);
-                }
-                newValues.add(value);
-                newParam.setValues(newValues);
-                buffer.getPersistentParams().put(key, newParam);
-            } else {
-                if (newParamOptions.isAppend()) {
-                    Param existingParam;
-                    if ((existingParam = buffer.getVolatileParams().get(key)) != null) {
-                        newValues = existingParam.getValues();
-                        if (existingParam.getOptions() != null) {
-                            newParam.getOptions().setType(existingParam.getOptions().getType());
-                        }
-                    } else if ((existingParam = buffer.getPersistentParams().get(key)) != null) {
-                        newValues = new ArrayList<>(existingParam.getValues());
-                        if (existingParam.getOptions() != null) {
-                            newParam.getOptions().setType(existingParam.getOptions().getType());
-                        }
-                    }
-                }
-                newValues.add(value);
-                newParam.setValues(newValues);
-                buffer.getVolatileParams().put(key, newParam);
-            }
-        } else {
+        if (Lists.getReadOnlyParams().contains(key)) {
             Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format("Param %s is read only. Value will not be updated", key));
+            return this;
+        }
+
+        Param newParam = new Param(key, value, newParamOptions);
+        List<Closure> newValues = new ArrayList<>();
+
+        if (newParam.isPersistent()) {
+            if (newParamOptions.isAppend()) {
+                Param existingParam;
+                if ((existingParam = buffer.getPersistentParams().get(key)) != null) {
+                    newValues = existingParam.getValues();
+                    if (existingParam.getOptions() != null) {
+                        newParam.getOptions().setType(existingParam.getOptions().getType());
+                    }
+                }
+                if ((existingParam = buffer.getVolatileParams().get(key)) != null) {
+                    existingParam.getValues().add(value);
+                    if (existingParam.getOptions() != null) {
+                        newParam.getOptions().setType(existingParam.getOptions().getType());
+                    }
+                }
+            } else {
+                buffer.getVolatileParams().remove(key);
+            }
+            newValues.add(value);
+            newParam.setValues(newValues);
+            buffer.getPersistentParams().put(key, newParam);
+        } else {
+            if (newParamOptions.isAppend()) {
+                Param existingParam;
+                if ((existingParam = buffer.getVolatileParams().get(key)) != null) {
+                    newValues = existingParam.getValues();
+                    if (existingParam.getOptions() != null) {
+                        newParam.getOptions().setType(existingParam.getOptions().getType());
+                    }
+                } else if ((existingParam = buffer.getPersistentParams().get(key)) != null) {
+                    newValues = new ArrayList<>(existingParam.getValues());
+                    if (existingParam.getOptions() != null) {
+                        newParam.getOptions().setType(existingParam.getOptions().getType());
+                    }
+                }
+            }
+            newValues.add(value);
+            newParam.setValues(newValues);
+            buffer.getVolatileParams().put(key, newParam);
         }
 
         return this;
@@ -328,7 +329,7 @@ public class Tracker {
             public void run() {
                 if (callback != null) {
                     String userID = TechnicalContext.getUserId((String) configuration.get(TrackerConfigurationKeys.IDENTIFIER)).execute();
-                    if ((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !doNotTrackEnabled()) {
+                    if ((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !optOutEnabled()) {
                         callback.receiveUserId(Tool.SHA256(userID));
                     } else {
                         callback.receiveUserId(userID);
@@ -901,11 +902,7 @@ public class Tracker {
             }
             Set<String> keys = conf.keySet();
             for (String key : keys) {
-                if (!Lists.getReadOnlyConfigs().contains(key)) {
-                    configuration.put(key, conf.get(key));
-                } else {
-                    Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
-                }
+                configuration.put(key, conf.get(key));
             }
             refreshConfigurationDependencies();
         } else {
@@ -917,11 +914,7 @@ public class Tracker {
                     }
                     Set<String> keys = conf.keySet();
                     for (String key : keys) {
-                        if (!Lists.getReadOnlyConfigs().contains(key)) {
-                            configuration.put(key, conf.get(key));
-                        } else {
-                            Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
-                        }
+                        configuration.put(key, conf.get(key));
                     }
                     refreshConfigurationDependencies();
                     if (setConfigCallback != null) {
@@ -953,24 +946,16 @@ public class Tracker {
      */
     public void setConfig(final String key, final Object value, final SetConfigCallback setConfigCallback, boolean... sync) {
         if (sync.length == 1 && sync[0]) {
-            if (!Lists.getReadOnlyConfigs().contains(key)) {
-                configuration.put(key, value);
-                refreshConfigurationDependencies();
-            } else {
-                Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
-            }
+            configuration.put(key, value);
+            refreshConfigurationDependencies();
         } else {
             TrackerQueue.getInstance().put(new Runnable() {
                 @Override
                 public void run() {
-                    if (!Lists.getReadOnlyConfigs().contains(key)) {
-                        configuration.put(key, value);
-                        refreshConfigurationDependencies();
-                        if (setConfigCallback != null) {
-                            setConfigCallback.setConfigEnd();
-                        }
-                    } else {
-                        Tool.executeCallback(listener, Tool.CallbackType.WARNING, String.format(ERROR_OVERWRITE_KEY_CONFIG_FORMAT, key));
+                    configuration.put(key, value);
+                    refreshConfigurationDependencies();
+                    if (setConfigCallback != null) {
+                        setConfigCallback.setConfigEnd();
                     }
                 }
             });
@@ -1077,22 +1062,49 @@ public class Tracker {
      *
      * @param enabled /
      */
-    public static void doNotTrack(final boolean enabled) {
+    public static void optOut(final boolean enabled) {
         TrackerQueue.getInstance().put(new Runnable() {
             @Override
             public void run() {
-                TechnicalContext.doNotTrack(appContext.get(), enabled);
+                TechnicalContext.optOut(appContext.get(), enabled);
             }
         });
     }
 
     /**
-     * Get "doNotTrack" value
+     * Get "optOut" value
      *
-     * @return true if "doNotTrack" is enabled
+     * @return true if "optOut" is enabled
      */
+    public static boolean optOutEnabled() {
+        return TechnicalContext.optOutEnabled(appContext.get());
+    }
+
+    /**
+     * Disable user identification
+     *
+     * @param enabled /
+     * @deprecated please use {@link #optOut(boolean)} instead
+     */
+    @Deprecated
+    public static void doNotTrack(final boolean enabled) {
+        TrackerQueue.getInstance().put(new Runnable() {
+            @Override
+            public void run() {
+                TechnicalContext.optOut(appContext.get(), enabled);
+            }
+        });
+    }
+
+    /**
+     * Get "optOut" value
+     *
+     * @return true if "optOut" is enabled
+     * @deprecated please use {@link #optOutEnabled()} instead
+     */
+    @Deprecated
     public static boolean doNotTrackEnabled() {
-        return TechnicalContext.doNotTrackEnabled(appContext.get());
+        return TechnicalContext.optOutEnabled(appContext.get());
     }
 
     /**

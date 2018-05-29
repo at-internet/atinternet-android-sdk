@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.util.SparseIntArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -60,6 +62,25 @@ public class ToolTest extends AbstractTestClass {
     @Test
     public void formatNumberLengthTest() {
         assertEquals("007", Tool.formatNumberLength("7", 3));
+    }
+
+    @Test
+    public void sortSparseIntArrayByKeyTest() {
+        SparseIntArray arr = new SparseIntArray();
+        arr.append(3, 0);
+        arr.append(2, 0);
+        arr.append(4, 0);
+        arr.append(54, 0);
+        arr.append(20, 0);
+        arr.append(1, 0);
+        SparseIntArray res = Tool.sortSparseIntArrayByKey(arr);
+
+        assertEquals(1, res.keyAt(0));
+        assertEquals(2, res.keyAt(1));
+        assertEquals(3, res.keyAt(2));
+        assertEquals(4, res.keyAt(3));
+        assertEquals(20, res.keyAt(4));
+        assertEquals(54, res.keyAt(5));
     }
 
     @Test

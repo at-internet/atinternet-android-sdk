@@ -22,6 +22,8 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.util.SparseIntArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -63,6 +65,25 @@ public class ToolTest extends AbstractTestClass {
     }
 
     @Test
+    public void sortSparseIntArrayByKeyTest() {
+        SparseIntArray arr = new SparseIntArray();
+        arr.append(3, 0);
+        arr.append(2, 0);
+        arr.append(4, 0);
+        arr.append(54, 0);
+        arr.append(20, 0);
+        arr.append(1, 0);
+        SparseIntArray res = Tool.sortSparseIntArrayByKey(arr);
+
+        assertEquals(1, res.keyAt(0));
+        assertEquals(2, res.keyAt(1));
+        assertEquals(3, res.keyAt(2));
+        assertEquals(4, res.keyAt(3));
+        assertEquals(20, res.keyAt(4));
+        assertEquals(54, res.keyAt(5));
+    }
+
+    @Test
     public void parseJSONTest() {
         assertFalse(Tool.isJSON("test"));
         assertTrue(Tool.isJSON("{\"test\": [1,2,3]}"));
@@ -87,7 +108,7 @@ public class ToolTest extends AbstractTestClass {
 
     @Test
     public void percentDecodeTest() {
-        String encodingHit = "s%3D552987%26vtag%3D2.0.0%26ptag%3DAndroid%26lng%3Dfr_fr%26manufacturer%3Dsamsung%26model%3DSM-G920F%26mfmd%3D%5Bgoogle%5D-%5Bnexus5%5D%26os%3D%5Bandroid%5D-%5B5.0.1%5D%26apvr%3D%5B1.0%5D%26hl%3D13x36x23%26r%3D1080x1776%26cn%3Doffline%26na%3D1422880583.9140000343322754%26olt%3D1422880583.9089999198913574%26idclient%3Df54d728a-2db6-4b59-9511-48d01c0175ac%26p%3DScreenName%26stc%3D%7B%22Lifecycle%22%3A%7B%22fl%22%3A0%2C%22fld%22%3A20150202%2C%22dsfl%22%3A0%2C%22flau%22%3A0%2C%22dsu%22%3A0%2C%22dslu%22%3A0%2C%22lc%22%3A5%2C%22lcsu%22%3A0%2C%22ldc%22%3A5%2C%22lwc%22%3A5%2C%22lmc%22%3A5%7D%7D%26ref%3Dwww.atinternet.com";
+        String encodingHit = "s%3D552987%26vtag%3D2.0.0%26ptag%3DAndroid%26lng%3Dfr_fr%26manufacturer%3Dsamsung%26model%3DSM%2DG920F%26mfmd%3D%5Bgoogle%5D-%5Bnexus5%5D%26os%3D%5Bandroid%5D-%5B5.0.1%5D%26apvr%3D%5B1.0%5D%26hl%3D13x36x23%26r%3D1080x1776%26cn%3Doffline%26na%3D1422880583.9140000343322754%26olt%3D1422880583.9089999198913574%26idclient%3Df54d728a-2db6-4b59-9511-48d01c0175ac%26p%3DScreenName%26stc%3D%7B%22Lifecycle%22%3A%7B%22fl%22%3A0%2C%22fld%22%3A20150202%2C%22dsfl%22%3A0%2C%22flau%22%3A0%2C%22dsu%22%3A0%2C%22dslu%22%3A0%2C%22lc%22%3A5%2C%22lcsu%22%3A0%2C%22ldc%22%3A5%2C%22lwc%22%3A5%2C%22lmc%22%3A5%7D%7D%26ref%3Dwww.atinternet.com";
         String decodingHit = "s=552987&vtag=2.0.0&ptag=Android&lng=fr_fr&manufacturer=samsung&model=SM-G920F&mfmd=[google]-[nexus5]&os=[android]-[5.0.1]&apvr=[1.0]&hl=13x36x23&r=1080x1776&cn=offline&na=1422880583.9140000343322754&olt=1422880583.9089999198913574&idclient=f54d728a-2db6-4b59-9511-48d01c0175ac&p=ScreenName&stc={\"Lifecycle\":{\"fl\":0,\"fld\":20150202,\"dsfl\":0,\"flau\":0,\"dsu\":0,\"dslu\":0,\"lc\":5,\"lcsu\":0,\"ldc\":5,\"lwc\":5,\"lmc\":5}}&ref=www.atinternet.com";
         assertEquals(decodingHit, Tool.percentDecode(encodingHit));
     }
