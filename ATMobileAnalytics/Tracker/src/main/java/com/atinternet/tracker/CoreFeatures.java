@@ -358,7 +358,7 @@ class LifeCycle {
                         .apply();
             }
         } catch (ParseException e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
         sessionId = UUID.randomUUID().toString();
     }

@@ -36,10 +36,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class StorageTest extends AbstractTestClass {
 
@@ -48,24 +48,13 @@ public class StorageTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        storage = new Storage(RuntimeEnvironment.application);
+        storage = Storage.getInstance(RuntimeEnvironment.application);
     }
 
     @Test
     public void multipleInstanceTest() {
-        Storage storage1 = new Storage(RuntimeEnvironment.application);
-        assertNotSame(storage, storage1);
-    }
-
-    @Test
-    public void getOfflineModeTest() {
-        assertEquals(OfflineMode.required, storage.getOfflineMode());
-    }
-
-    @Test
-    public void setOfflineModeTest() {
-        storage.setOfflineMode(OfflineMode.always);
-        assertEquals(OfflineMode.always, storage.getOfflineMode());
+        Storage storage1 = Storage.getInstance(RuntimeEnvironment.application);
+        assertSame(storage, storage1);
     }
 
     @Test

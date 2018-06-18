@@ -85,12 +85,11 @@ public class Tracker {
         nuggad
     }
 
-    static final String TAG = "ATINTERNET";
-    static WeakReference<android.content.Context> appContext;
-    private static Thread.UncaughtExceptionHandler defaultCrashHandler;
     private static boolean isTrackerActivityLifeCycleEnabled = false;
-    private static Storage storage;
 
+    private static WeakReference<android.content.Context> appContext;
+
+    private Thread.UncaughtExceptionHandler defaultCrashHandler;
     private TrackerListener listener;
     private Dispatcher dispatcher;
     private Buffer buffer;
@@ -124,10 +123,6 @@ public class Tracker {
         return buffer;
     }
 
-    static Storage getStorage() {
-        return storage;
-    }
-
     LinkedHashMap<String, BusinessObject> getBusinessObjects() {
         return businessObjects;
     }
@@ -144,8 +139,8 @@ public class Tracker {
         return appContext.get().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
-    String getInternalUserId() {
-        return internalUserId;
+    OfflineMode getOfflineMode() {
+        return Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE));
     }
 
     void setInternalUserId(String internalUserId) {
@@ -164,8 +159,6 @@ public class Tracker {
         try {
             listener = null;
             defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
-            storage = new Storage(appContext.get());
-            storage.setOfflineMode(Tool.convertStringToOfflineMode((String) configuration.get(TrackerConfigurationKeys.OFFLINE_MODE)));
             buffer = new Buffer(this);
             dispatcher = new Dispatcher(this);
             if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
@@ -177,7 +170,7 @@ public class Tracker {
                 setTrackerActivityLifecycle();
             }
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
     }
 
@@ -261,9 +254,6 @@ public class Tracker {
 
         if (!TextUtils.isEmpty(identifierKey)) {
             buffer.setIdentifierKey(identifierKey);
-        }
-        if (!TextUtils.isEmpty(offlineMode)) {
-            storage.setOfflineMode(Tool.convertStringToOfflineMode(offlineMode));
         }
 
         if (enableCrashDetectionHandler) {
@@ -848,42 +838,40 @@ public class Tracker {
         return new TrackerListener() {
             @Override
             public void trackerNeedsFirstLaunchApproval(String message) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: First Launch \n\tMessage: " + message);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: First Launch \n\tMessage: " + message);
             }
 
             @Override
             public void buildDidEnd(HitStatus status, String message) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Building Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: Building Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
             }
 
             @Override
             public void sendDidEnd(HitStatus status, String message) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Sending Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: Sending Hit \n\tStatus: " + status.toString() + "\n\tMessage: " + message);
             }
 
             @Override
             public void didCallPartner(String response) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Calling Partner \n\tResponse: " + response);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: Calling Partner \n\tResponse: " + response);
             }
 
             @Override
             public void warningDidOccur(String message) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Warning \n\tMessage: " + message);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: Warning \n\tMessage: " + message);
             }
 
             @Override
             public void saveDidEnd(String message) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Saving Hit \n\tMessage: " + message);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: Saving Hit \n\tMessage: " + message);
             }
 
             @Override
             public void errorDidOccur(String message) {
-                Log.d(Tracker.TAG, "Debugging message: \n\tEvent: Error \n\tMessage: " + message);
+                Log.d(ATInternet.TAG, "Debugging message: \n\tEvent: Error \n\tMessage: " + message);
             }
         };
     }
-
-    private final String ERROR_OVERWRITE_KEY_CONFIG_FORMAT = "Cannot to overwrite %s configuration";
 
     /**
      * Set a new configuration
@@ -1003,7 +991,7 @@ public class Tracker {
                 LifeCycle.initLifeCycle(appContext.get());
             }
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
     }
 
@@ -1038,7 +1026,7 @@ public class Tracker {
                 LifeCycle.initLifeCycle(appContext.get());
             }
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
     }
 
@@ -1061,7 +1049,9 @@ public class Tracker {
      * Disable user identification
      *
      * @param enabled /
+     * @deprecated please use the same method in ATInternet class instead
      */
+    @Deprecated
     public static void optOut(final boolean enabled) {
         TrackerQueue.getInstance().put(new Runnable() {
             @Override
@@ -1075,7 +1065,9 @@ public class Tracker {
      * Get "optOut" value
      *
      * @return true if "optOut" is enabled
+     * @deprecated please use the same method in ATInternet class instead
      */
+    @Deprecated
     public static boolean optOutEnabled() {
         return TechnicalContext.optOutEnabled(appContext.get());
     }

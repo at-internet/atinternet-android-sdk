@@ -30,12 +30,12 @@ import java.util.Date;
  */
 public class Offline {
 
+    private final Tracker tracker;
     private final Storage storage;
-    private final TrackerListener listener;
 
     Offline(Tracker tracker) {
-        storage = Tracker.getStorage();
-        listener = tracker.getListener();
+        this.tracker = tracker;
+        this.storage = Storage.getInstance(Tracker.getAppContext());
     }
 
     /**
@@ -104,6 +104,6 @@ public class Offline {
      * Send all hits stored
      */
     public void dispatch() {
-        Sender.sendOfflineHits(listener, storage, true, true);
+        Sender.sendOfflineHits(tracker, storage, true, true);
     }
 }

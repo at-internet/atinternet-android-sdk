@@ -39,7 +39,6 @@ import java.util.Random;
 import static com.atinternet.tracker.Tracker.OfflineMode;
 import static com.atinternet.tracker.Tracker.doNotTrackEnabled;
 import static com.atinternet.tracker.Tracker.getAppContext;
-import static com.atinternet.tracker.Tracker.getStorage;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
@@ -53,7 +52,6 @@ public class TrackerTest extends AbstractTestClass {
 
     private static final int DURATION_SLEEP = 600;
 
-    private Storage storage;
     private final String key = "KEY";
     private SetConfigCallback callback;
 
@@ -61,7 +59,6 @@ public class TrackerTest extends AbstractTestClass {
     public void setUp() throws Exception {
         super.setUp();
         today = String.valueOf(DateFormat.format(pattern, System.currentTimeMillis()));
-        storage = getStorage();
         callback = new SetConfigCallback() {
             @Override
             public void setConfigEnd() {
@@ -72,21 +69,17 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void Constructor() {
-        Tracker.appContext = null;
         new Tracker();
-        assertTrue(Tracker.appContext.get() instanceof Application);
+        assertTrue(Tracker.getAppContext() instanceof Application);
 
-        Tracker.appContext = null;
         new Tracker(RuntimeEnvironment.application);
-        assertTrue(Tracker.appContext.get() instanceof Application);
+        assertTrue(Tracker.getAppContext() instanceof Application);
 
-        Tracker.appContext = null;
         new Tracker(new HashMap<String, Object>());
-        assertTrue(Tracker.appContext.get() instanceof Application);
+        assertTrue(Tracker.getAppContext() instanceof Application);
 
-        Tracker.appContext = null;
         new Tracker(RuntimeEnvironment.application, new HashMap<String, Object>());
-        assertTrue(Tracker.appContext.get() instanceof Application);
+        assertTrue(Tracker.getAppContext() instanceof Application);
     }
 
 
@@ -152,6 +145,11 @@ public class TrackerTest extends AbstractTestClass {
         tracker.setSiteId(1, callback);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 1);
+    }
+
+    @Test
+    public void getOfflineModeTest() {
+        assertEquals(OfflineMode.required, tracker.getOfflineMode());
     }
 
     @Test
@@ -686,9 +684,7 @@ public class TrackerTest extends AbstractTestClass {
     public void refreshConfigurationDependenciesTest() throws Exception {
         Configuration config = tracker.getConfiguration();
         config.put("identifier", "idTest");
-        config.put("storage", "always");
         executePrivateMethod(tracker, "refreshConfigurationDependencies", new Object[0]);
-        assertEquals(OfflineMode.always, storage.getOfflineMode());
 
     }
 
@@ -711,5 +707,10 @@ public class TrackerTest extends AbstractTestClass {
         String url = ((ArrayList<String>) builder.build()[0]).get(0);
 
         assertTrue(url.contains("&test="));
+    }
+
+    @Test
+    public void doNotTrackEnabledTest() {
+        assertFalse(doNotTrackEnabled());
     }
 }

@@ -1,18 +1,13 @@
 package com.atinternet;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
 import com.atinternet.tracker.ATInternet;
-import com.atinternet.tracker.ParamOption;
 import com.atinternet.tracker.Tracker;
-
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,13 +21,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.sendHit).setOnClickListener(this);
 
         tracker = ATInternet.getInstance().getDefaultTracker();
+        tracker.setOfflineMode(Tracker.OfflineMode.always, null, true);
         tracker.setDefaultListener();
         tracker.setSiteId(552987, null, true);
         tracker.setLog("logp", null, true);
-
-        CheckBox optOut = findViewById(R.id.optOut);
-        optOut.setChecked(Tracker.optOutEnabled());
-        optOut.setOnClickListener(this);
     }
 
     @Override
@@ -43,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tracker.Gestures().add(s).sendTouch();
                 break;
             case R.id.optOut:
-                Tracker.optOut(((CheckBox) v).isChecked());
+                ATInternet.optOut(this, !ATInternet.optOutEnabled(this));
                 break;
         }
     }

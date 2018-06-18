@@ -60,7 +60,7 @@ public class AutoTracker extends Tracker {
 
     AutoTracker(String... args) {
         super();
-        Context context = appContext.get();
+        Context context = getAppContext();
 
         token = retrieveValidToken(args);
         String appVersion = getAppVersion(context);

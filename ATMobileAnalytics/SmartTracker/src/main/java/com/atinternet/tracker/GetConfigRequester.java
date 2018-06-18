@@ -76,7 +76,7 @@ class GetConfigRequester implements Runnable {
             }
             AutoTracker.getInstance().setAutoTrackingConfiguration(new JSONObject(conf));
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
     }
 }

@@ -47,7 +47,7 @@ public class OfflineTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        storage = Tracker.getStorage();
+        storage = Storage.getInstance(Tracker.getAppContext());
         offline = new Offline(tracker);
     }
 

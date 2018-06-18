@@ -264,7 +264,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                     ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage.get(), bubbleImageLayoutParams);
                     break;
                 default:
-                    Log.i(Tracker.TAG, "ignored action");
+                    Log.i(ATInternet.TAG, "ignored action");
                     break;
             }
             return true;
@@ -726,7 +726,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             removeOfflineHit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new Storage(Tracker.getAppContext()).deleteHit(offlineHit.getUrl());
+                    Storage.getInstance(Tracker.getAppContext()).deleteHit(offlineHit.getUrl());
                     notifyDataSetChanged();
                     noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
                 }

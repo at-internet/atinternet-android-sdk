@@ -511,7 +511,7 @@ class Builder implements Runnable {
 
         // Envoi du(des) hit(s) construit(s)
         for (String url : urls) {
-            new Sender(tracker.getListener(), new Hit(url), false, oltParameter).send(true);
+            new Sender(tracker, new Hit(url), false, oltParameter).send(true);
         }
     }
 
@@ -695,16 +695,16 @@ class Sender implements Runnable {
 
     private static boolean OfflineHitProcessing = false;
 
-    private final TrackerListener trackerListener;
+    private final Tracker tracker;
     private final Storage storage;
 
     private final Hit hit;
     private final String oltParameter;
     private final boolean forceSendOfflineHits;
 
-    Sender(TrackerListener trackerListener, Hit hit, boolean forceSendOfflineHits, String... oltParameter) {
-        this.trackerListener = trackerListener;
-        this.storage = Tracker.getStorage();
+    Sender(Tracker tracker, Hit hit, boolean forceSendOfflineHits, String... oltParameter) {
+        this.tracker = tracker;
+        this.storage = Storage.getInstance(Tracker.getAppContext());
         this.hit = hit;
         this.forceSendOfflineHits = forceSendOfflineHits;
         this.oltParameter = oltParameter.length > 0 ? oltParameter[0] : "";
@@ -712,13 +712,13 @@ class Sender implements Runnable {
 
     private void send(final Hit hit) {
 
-        if (storage.getOfflineMode() == Tracker.OfflineMode.always && !forceSendOfflineHits) {
+        if (tracker.getOfflineMode() == Tracker.OfflineMode.always && !forceSendOfflineHits) {
             saveHitDatabase(hit);
         }
         // Si pas de connexion
         else if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
             // Si le hit ne provient pas du offline
-            if (storage.getOfflineMode() != Tracker.OfflineMode.never && !hit.isOffline()) {
+            if (tracker.getOfflineMode() != Tracker.OfflineMode.never && !hit.isOffline()) {
                 saveHitDatabase(hit);
             }
         } else {
@@ -736,14 +736,14 @@ class Sender implements Runnable {
 
                 // Le hit n'a pas pu être envoyé
                 if (statusCode != 200) {
-                    if (storage.getOfflineMode() != Tracker.OfflineMode.never) {
+                    if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
                         if (!hit.isOffline()) {
                             saveHitDatabase(hit);
                         } else {
                             updateRetryCount(hit);
                         }
                     }
-                    Tool.executeCallback(trackerListener, Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
+                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
                     updateDebugger(message, "error48", false);
                 }
                 // Le hit a été envoyé
@@ -752,7 +752,7 @@ class Sender implements Runnable {
                     if (hit.isOffline()) {
                         storage.deleteHit(hit.getUrl());
                     }
-                    Tool.executeCallback(trackerListener, Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
+                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
                     updateDebugger(hit.getUrl(), "sent48", true);
                 }
             } catch (final Exception e) {
@@ -763,13 +763,11 @@ class Sender implements Runnable {
                     if (hit.isOffline()) {
                         storage.deleteHit(hit.getUrl());
                     }
-                } else {
-                    if (storage.getOfflineMode() != Tracker.OfflineMode.never) {
-                        if (!hit.isOffline()) {
-                            saveHitDatabase(hit);
-                        } else {
-                            updateRetryCount(hit);
-                        }
+                } else if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
+                    if (!hit.isOffline()) {
+                        saveHitDatabase(hit);
+                    } else {
+                        updateRetryCount(hit);
                     }
                 }
             } finally {
@@ -787,13 +785,13 @@ class Sender implements Runnable {
 
     void send(boolean includeOfflineHits) {
         if (includeOfflineHits) {
-            Sender.sendOfflineHits(trackerListener, storage, false, forceSendOfflineHits);
+            Sender.sendOfflineHits(tracker, storage, false, forceSendOfflineHits);
         }
         send(hit);
     }
 
-    static void sendOfflineHits(TrackerListener listener, Storage storage, boolean forceSendOfflineHits, boolean async) {
-        if ((storage.getOfflineMode() != Tracker.OfflineMode.always || forceSendOfflineHits)
+    static void sendOfflineHits(Tracker tracker, Storage storage, boolean forceSendOfflineHits, boolean async) {
+        if ((tracker.getOfflineMode() != Tracker.OfflineMode.always || forceSendOfflineHits)
                 && TechnicalContext.getConnection() != TechnicalContext.ConnectionType.OFFLINE
                 && !OfflineHitProcessing && TrackerQueue.getEnabledFillQueueFromDatabase()
                 && storage.getCountOfflineHits() > 0) {
@@ -802,7 +800,7 @@ class Sender implements Runnable {
             if (async) {
                 TrackerQueue.setEnabledFillQueueFromDatabase(false);
                 for (Hit hit : offlineHits) {
-                    Sender sender = new Sender(listener, hit, forceSendOfflineHits);
+                    Sender sender = new Sender(tracker, hit, forceSendOfflineHits);
                     TrackerQueue.getInstance().put(sender);
                 }
                 TrackerQueue.getInstance().put(new Runnable() {
@@ -814,7 +812,7 @@ class Sender implements Runnable {
             } else {
                 OfflineHitProcessing = true;
                 for (Hit hit : offlineHits) {
-                    Sender sender = new Sender(listener, hit, forceSendOfflineHits);
+                    Sender sender = new Sender(tracker, hit, forceSendOfflineHits);
                     sender.send(false);
                 }
                 OfflineHitProcessing = false;
@@ -834,10 +832,10 @@ class Sender implements Runnable {
     void saveHitDatabase(final Hit hit) {
         final String url = storage.saveHit(hit.getUrl(), System.currentTimeMillis(), oltParameter);
         if (!TextUtils.isEmpty(url)) {
-            Tool.executeCallback(trackerListener, Tool.CallbackType.SAVE, hit.getUrl());
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SAVE, hit.getUrl());
             updateDebugger(url, "save48", true);
         } else {
-            Tool.executeCallback(trackerListener, Tool.CallbackType.WARNING, "Hit could not be saved : " + hit.getUrl());
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Hit could not be saved : " + hit.getUrl());
             updateDebugger("Hit could not be saved : " + hit.getUrl(), "warning48", false);
         }
     }
@@ -1034,7 +1032,7 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
                         scheduledExecutorService.execute(runnable);
                     }
                 } catch (InterruptedException e) {
-                    Log.e(Tracker.TAG, e.toString());
+                    Log.e(ATInternet.TAG, e.toString());
                     Thread.currentThread().interrupt();
                 }
             }
@@ -1055,7 +1053,7 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
                 super.put(runnable);
             }
         } catch (InterruptedException e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
             Thread.currentThread().interrupt();
         }
     }
@@ -1090,7 +1088,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.9.0";
+            return "2.9.1";
         }
     };
 
@@ -1313,7 +1311,7 @@ class TechnicalContext {
 
                     }
                 } catch (Exception e) {
-                    Log.e(Tracker.TAG, e.toString());
+                    Log.e(ATInternet.TAG, e.toString());
                 }
 
                 double x = Math.pow(widthPixels / metrics.xdpi, 2);
@@ -1372,7 +1370,7 @@ class TechnicalContext {
                             return "opt-out";
                         }
                     } catch (Exception e) {
-                        Log.e(Tracker.TAG, e.toString());
+                        Log.e(ATInternet.TAG, e.toString());
                         return "";
                     }
                 }
@@ -1403,7 +1401,7 @@ class Tool {
         try {
             s = URLEncoder.encode(s, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
         return s.replace("+", "%20")
                 .replace("*", "%2A")
@@ -1416,7 +1414,7 @@ class Tool {
         try {
             s = URLDecoder.decode(s, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
         return s;
     }
@@ -1670,7 +1668,7 @@ class Tool {
                 sb.append(hex);
             }
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
         return sb.toString();
     }
@@ -1720,7 +1718,7 @@ class Tool {
                 }
             }
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
         return map;
     }
@@ -1748,7 +1746,6 @@ class Tool {
 class Storage extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "TrackerDatabase";
     private static final String HITS_STORAGE_TABLE = "StoredOfflineHit";
     private static final String ID = "id";
     private static final String HIT = "hit";
@@ -1762,19 +1759,36 @@ class Storage extends SQLiteOpenHelper {
                     DATE + " INTEGER NOT NULL , " +
                     RETRY + " INTEGER NOT NULL);";
 
-    private Tracker.OfflineMode offlineMode;
 
-    Tracker.OfflineMode getOfflineMode() {
-        return offlineMode;
+    private static Storage instance;
+    private static boolean initialized;
+    private static String DATABASE_PATH;
+
+    static void setDatabasePath(String path) {
+        if (!initialized) {
+            DATABASE_PATH = path;
+        } else {
+            Log.w(ATInternet.TAG, "Changing path when database is already initialized");
+        }
     }
 
-    void setOfflineMode(Tracker.OfflineMode offlineMode) {
-        this.offlineMode = offlineMode;
+    static String getDatabasePath() {
+        return DATABASE_PATH;
     }
 
-    Storage(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.offlineMode = Tracker.OfflineMode.required;
+    private Storage(Context context) {
+        super(context, DATABASE_PATH, null, DATABASE_VERSION);
+        initialized = true;
+    }
+
+    static Storage getInstance(Context context) {
+        if (instance == null) {
+            if (TextUtils.isEmpty(DATABASE_PATH)) {
+                DATABASE_PATH = "TrackerDatabase";
+            }
+            instance = new Storage(context);
+        }
+        return instance;
     }
 
     @Override
@@ -1795,6 +1809,9 @@ class Storage extends SQLiteOpenHelper {
         values.put(RETRY, 0);
         values.put(DATE, time);
         SQLiteDatabase db = getWritableDatabase();
+        if (db == null) {
+            return null;
+        }
         db.insert(HITS_STORAGE_TABLE, null, values);
         db.close();
         return hit;
@@ -1802,6 +1819,9 @@ class Storage extends SQLiteOpenHelper {
 
     void deleteHit(String hit) {
         SQLiteDatabase db = getWritableDatabase();
+        if (db == null) {
+            return;
+        }
         db.delete(HITS_STORAGE_TABLE, HIT + "='" + hit + "'", null);
         db.close();
     }
@@ -1830,6 +1850,9 @@ class Storage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(RETRY, retry);
         SQLiteDatabase db = getWritableDatabase();
+        if (db == null) {
+            return;
+        }
         db.update(HITS_STORAGE_TABLE, values, HIT + "='" + hit + "'", null);
         db.close();
     }
@@ -1837,6 +1860,9 @@ class Storage extends SQLiteOpenHelper {
     int getCountOfflineHits() {
         int result = -1;
         SQLiteDatabase db = getReadableDatabase();
+        if (db == null) {
+            return result;
+        }
         Cursor c = db.rawQuery(SELECT_ALL_QUERY, null);
         if (c != null) {
             result = c.getCount();
@@ -1848,6 +1874,9 @@ class Storage extends SQLiteOpenHelper {
 
     void removeAllOfflineHits() {
         SQLiteDatabase db = getWritableDatabase();
+        if (db == null) {
+            return;
+        }
         db.delete(HITS_STORAGE_TABLE, null, null);
         db.close();
     }
@@ -1858,6 +1887,9 @@ class Storage extends SQLiteOpenHelper {
         cal.add(Calendar.DATE, -storageDuration);
         long maxOldDate = cal.getTime().getTime();
         SQLiteDatabase db = getWritableDatabase();
+        if (db == null) {
+            return;
+        }
         db.delete(HITS_STORAGE_TABLE, DATE + " < " + maxOldDate, null);
         db.close();
     }
@@ -1901,6 +1933,9 @@ class Storage extends SQLiteOpenHelper {
 
     Hit getLatestOfflineHit() {
         SQLiteDatabase db = getReadableDatabase();
+        if (db == null) {
+            return null;
+        }
         Cursor c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MAX(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
         if (c != null && c.moveToFirst()) {
             String hit = c.getString(c.getColumnIndex(HIT));
@@ -1915,6 +1950,26 @@ class Storage extends SQLiteOpenHelper {
         }
         db.close();
         return null;
+    }
+
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        try {
+            return super.getReadableDatabase();
+        } catch (Exception e) {
+            Log.e(ATInternet.TAG, "Cannot getReadableDatabase : " + e);
+            return null;
+        }
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        try {
+            return super.getWritableDatabase();
+        } catch (Exception e) {
+            Log.e(ATInternet.TAG, "Cannot getWritableDatabase : " + e);
+            return null;
+        }
     }
 }
 

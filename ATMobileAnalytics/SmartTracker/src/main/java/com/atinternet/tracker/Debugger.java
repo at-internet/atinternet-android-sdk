@@ -69,15 +69,6 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     private static boolean active;
     private static int currentViewVisibleId = -1;
-
-    static boolean isActive() {
-        return active;
-    }
-
-    static int getCurrentViewVisibleId() {
-        return currentViewVisibleId;
-    }
-
     private static int itemPosition = -1;
     private static final ArrayList<Debugger.DebuggerEvent> debuggerEvents = new ArrayList<>();
     private static final ArrayList<Hit> offlineHits = new ArrayList<>();
@@ -111,6 +102,14 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private float initialTouchX;
     private float initialTouchY;
     private final int ratio;
+
+    static boolean isActive() {
+        return active;
+    }
+
+    static int getCurrentViewVisibleId() {
+        return currentViewVisibleId;
+    }
 
     static Context getContext() {
         if (context != null) {
@@ -265,7 +264,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                     ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(bubbleImage.get(), bubbleImageLayoutParams);
                     break;
                 default:
-                    Log.i(Tracker.TAG, "ignored action");
+                    Log.i(ATInternet.TAG, "ignored action");
                     break;
             }
             return true;
@@ -305,7 +304,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             offlineHitsListView.setVisibility(!offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
         } else if (id == R.id.backToPreviousView) {
             itemPosition = -1;
-            ViewGroup parametersListView = (ViewGroup) hitDetailViewer.findViewById(R.id.parametersListView);
+            ViewGroup parametersListView = hitDetailViewer.findViewById(R.id.parametersListView);
             parametersListView.removeAllViews();
             Tool.setVisibleViewWithAnimation(hitDetailViewer, false);
         }
@@ -318,7 +317,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     }
 
     private void onUpdateAfterItemClick(int position, boolean animate) {
-        ViewGroup parametersListView = (ViewGroup) hitDetailViewer.findViewById(R.id.parametersListView);
+        ViewGroup parametersListView = hitDetailViewer.findViewById(R.id.parametersListView);
         if (currentViewVisibleId == R.id.eventViewer) {
             DebuggerEvent event = debuggerEvents.get(position);
             if (event.isHit()) {
@@ -346,13 +345,13 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     private void inflateViews(Context context) {
         debuggerViewerLayout = new WeakReference<>((ATFrameLayout) View.inflate(context, R.layout.debugger_layout, null));
 
-        eventViewer = (LinearLayout) debuggerViewerLayout.get().findViewById(R.id.eventViewer);
-        offlineViewer = (LinearLayout) debuggerViewerLayout.get().findViewById(R.id.offlineViewer);
-        eventListView = (ListView) debuggerViewerLayout.get().findViewById(R.id.eventListView);
-        offlineHitsListView = (ListView) debuggerViewerLayout.get().findViewById(R.id.offlineHitsListView);
-        noEventsLayout = (RelativeLayout) debuggerViewerLayout.get().findViewById(R.id.noEvents);
-        noOfflineHitsLayout = (RelativeLayout) debuggerViewerLayout.get().findViewById(R.id.noOfflineHits);
-        hitDetailViewer = (LinearLayout) debuggerViewerLayout.get().findViewById(R.id.hitDetailViewer);
+        eventViewer = debuggerViewerLayout.get().findViewById(R.id.eventViewer);
+        offlineViewer = debuggerViewerLayout.get().findViewById(R.id.offlineViewer);
+        eventListView = debuggerViewerLayout.get().findViewById(R.id.eventListView);
+        offlineHitsListView = debuggerViewerLayout.get().findViewById(R.id.offlineHitsListView);
+        noEventsLayout = debuggerViewerLayout.get().findViewById(R.id.noEvents);
+        noOfflineHitsLayout = debuggerViewerLayout.get().findViewById(R.id.noOfflineHits);
+        hitDetailViewer = debuggerViewerLayout.get().findViewById(R.id.hitDetailViewer);
 
         bubbleImage = new WeakReference<>(new ATImageView(context));
         bubbleImage.get().setImageDrawable(Tool.getResizedImage(R.drawable.atinternet_logo, context, (int) (94 * metrics.density), (int) (73 * metrics.density)));
@@ -590,10 +589,10 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
             noEventsLayout.setVisibility(View.GONE);
 
-            ImageView iconHitImageView = (ImageView) convertView.findViewById(R.id.iconHitImageView);
-            TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
-            TextView hitTextView = (TextView) convertView.findViewById(R.id.hitTextView);
-            ImageView typeHitImageView = (ImageView) convertView.findViewById(R.id.typeHitImageView);
+            ImageView iconHitImageView = convertView.findViewById(R.id.iconHitImageView);
+            TextView timeTextView = convertView.findViewById(R.id.timeTextView);
+            TextView hitTextView = convertView.findViewById(R.id.hitTextView);
+            ImageView typeHitImageView = convertView.findViewById(R.id.typeHitImageView);
 
             timeTextView.setText(timeString);
             hitTextView.setText(event.getMessage());
@@ -694,11 +693,11 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
             noOfflineHitsLayout.setVisibility(View.GONE);
 
-            TextView hitTextView = (TextView) convertView.findViewById(R.id.hitTextView);
-            TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
-            TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
-            ImageView typeHitImageView = (ImageView) convertView.findViewById(R.id.typeHitImageView);
-            ImageView removeOfflineHit = (ImageView) convertView.findViewById(R.id.removeOfflineHit);
+            TextView hitTextView = convertView.findViewById(R.id.hitTextView);
+            TextView timeTextView = convertView.findViewById(R.id.timeTextView);
+            TextView dateTextView = convertView.findViewById(R.id.dateTextView);
+            ImageView typeHitImageView = convertView.findViewById(R.id.typeHitImageView);
+            ImageView removeOfflineHit = convertView.findViewById(R.id.removeOfflineHit);
 
             timeTextView.setText(hourString);
             dateTextView.setText(dateString);
@@ -727,7 +726,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
             removeOfflineHit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new Storage(Tracker.getAppContext()).deleteHit(offlineHit.getUrl());
+                    Storage.getInstance(Tracker.getAppContext()).deleteHit(offlineHit.getUrl());
                     notifyDataSetChanged();
                     noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
                 }

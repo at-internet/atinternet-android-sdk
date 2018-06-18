@@ -32,10 +32,45 @@ public class ATInternet {
      * Overlay permission Activity result code
      */
     public static final int ALLOW_OVERLAY_INTENT_RESULT_CODE = 230; // Version number when this code appairs
+    static final String TAG = "ATINTERNET";
 
     private static ATInternet instance = new ATInternet();
 
     private ATInternet() {
+    }
+
+    /**
+     * Set ATInternet database path
+     */
+    public static void setDatabasePath(String path) {
+        Storage.setDatabasePath(path);
+    }
+
+    /**
+     * Get ATInternet database path
+     *
+     * @return Database path
+     */
+    public static String getDatabasePath() {
+        return Storage.getDatabasePath();
+    }
+
+    /**
+     * Disable user identification
+     *
+     * @param enabled /
+     */
+    public static void optOut(android.content.Context context, final boolean enabled) {
+        TechnicalContext.optOut(context, enabled);
+    }
+
+    /**
+     * Get "optOut" value
+     *
+     * @return true if "optOut" is enabled
+     */
+    public static boolean optOutEnabled(android.content.Context context) {
+        return TechnicalContext.optOutEnabled(context);
     }
 
     /**

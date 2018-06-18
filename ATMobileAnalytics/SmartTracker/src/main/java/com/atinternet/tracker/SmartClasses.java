@@ -305,7 +305,7 @@ class SmartSender implements View.OnClickListener {
                     .on("InterfaceAbortedLiveRequest", listener);
 
         } catch (Exception e) {
-            Log.e(Tracker.TAG, e.toString());
+            Log.e(ATInternet.TAG, e.toString());
         }
     }
 
@@ -615,7 +615,7 @@ class UI {
                     return new Pair<>(realSize.x, realSize.y);
                 }
             } catch (Exception e) {
-                Log.e(Tracker.TAG, e.toString());
+                Log.e(ATInternet.TAG, e.toString());
             }
         }
         DisplayMetrics metrics = new DisplayMetrics();
@@ -726,7 +726,7 @@ class Toolbar extends GestureDetector.SimpleOnGestureListener implements View.On
 
     @SuppressLint("ClickableViewAccessibility")
     Toolbar() {
-        Context c = AutoTracker.appContext.get();
+        Context c = AutoTracker.getAppContext();
         seconds = 0;
         min = 0;
         hours = 0;

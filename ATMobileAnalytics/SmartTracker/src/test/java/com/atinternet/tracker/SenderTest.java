@@ -31,7 +31,7 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class SenderTest extends AbstractTestClass {
 
@@ -39,47 +39,11 @@ public class SenderTest extends AbstractTestClass {
 
     private Storage storage;
 
-    private final TrackerListener listener = new TrackerListener() {
-        @Override
-        public void trackerNeedsFirstLaunchApproval(String message) {
-
-        }
-
-        @Override
-        public void buildDidEnd(HitStatus status, String message) {
-
-        }
-
-        @Override
-        public void sendDidEnd(HitStatus status, String message) {
-        }
-
-        @Override
-        public void didCallPartner(String response) {
-
-        }
-
-        @Override
-        public void warningDidOccur(String message) {
-
-        }
-
-        @Override
-        public void saveDidEnd(String message) {
-
-        }
-
-        @Override
-        public void errorDidOccur(String message) {
-
-        }
-    };
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        storage = Tracker.getStorage();
-        sender = new Sender(listener, new Hit("www.atinternet.com"), false);
+        storage = Storage.getInstance(Tracker.getAppContext());
+        sender = new Sender(tracker, new Hit("www.atinternet.com"), false);
     }
 
     public void updateRetryCountTest() throws Exception {
@@ -97,7 +61,7 @@ public class SenderTest extends AbstractTestClass {
     }
 
     @Test
-    public void saveHitDatabaseTest(){
+    public void saveHitDatabaseTest() {
         sender.saveHitDatabase(new Hit("www.hit.com"));
         assertEquals(1, storage.getCountOfflineHits());
     }
