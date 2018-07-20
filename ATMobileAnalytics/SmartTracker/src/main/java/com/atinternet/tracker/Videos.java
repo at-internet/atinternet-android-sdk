@@ -39,21 +39,21 @@ public class Videos {
     /**
      * Add a new video
      *
-     * @param name     video name
-     * @param duration video duration
+     * @param mediaLabel video media label
+     * @param duration   video duration
      * @return Video instance
      */
-    public Video add(String name, int duration) {
-        int index = searchVideoIndexByName(name);
+    public Video add(String mediaLabel, int duration) {
+        int index = searchVideoIndexByMediaLabel(mediaLabel);
         Video video;
         if (index == -1) {
             video = new Video(player)
-                    .setName(name)
+                    .setMediaLabel(mediaLabel)
                     .setDuration(duration);
 
             list.add(video);
         } else {
-            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "Video with the same name already exists");
+            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "This Video already exists");
             video = list.get(index);
         }
 
@@ -63,49 +63,49 @@ public class Videos {
     /**
      * Add a new video
      *
-     * @param name     video name
-     * @param chapter1 video first chapter
-     * @param duration video duration
+     * @param mediaLabel  video media label
+     * @param mediaTheme1 video first media theme
+     * @param duration    video duration
      * @return Video instance
      */
-    public Video add(String name, String chapter1, int duration) {
-        return add(name, duration).setChapter1(chapter1);
+    public Video add(String mediaLabel, String mediaTheme1, int duration) {
+        return add(mediaLabel, duration).setMediaTheme1(mediaTheme1);
     }
 
     /**
      * Add a new video
      *
-     * @param name     video name
-     * @param chapter1 video first chapter
-     * @param chapter2 video second chapter
-     * @param duration video duration
+     * @param mediaLabel  video media label
+     * @param mediaTheme1 video first media theme
+     * @param mediaTheme2 video second media theme
+     * @param duration    video duration
      * @return Video instance
      */
-    public Video add(String name, String chapter1, String chapter2, int duration) {
-        return add(name, chapter1, duration).setChapter2(chapter2);
+    public Video add(String mediaLabel, String mediaTheme1, String mediaTheme2, int duration) {
+        return add(mediaLabel, mediaTheme1, duration).setMediaTheme2(mediaTheme2);
     }
 
     /**
      * Add a new video
      *
-     * @param name     video name
-     * @param chapter1 video first chapter
-     * @param chapter2 video second chapter
-     * @param chapter3 video third chapter
-     * @param duration video duration
+     * @param mediaLabel  video media label
+     * @param mediaTheme1 video first media theme
+     * @param mediaTheme2 video second media theme
+     * @param mediaTheme3 video third media theme
+     * @param duration    video duration
      * @return Video instance
      */
-    public Video add(String name, String chapter1, String chapter2, String chapter3, int duration) {
-        return add(name, chapter1, chapter2, duration).setChapter3(chapter3);
+    public Video add(String mediaLabel, String mediaTheme1, String mediaTheme2, String mediaTheme3, int duration) {
+        return add(mediaLabel, mediaTheme1, mediaTheme2, duration).setMediaTheme3(mediaTheme3);
     }
 
     /**
      * Remove a video
      *
-     * @param name video identified by name
+     * @param mediaLabel video identified by media label
      */
-    public void remove(String name) {
-        int index = searchVideoIndexByName(name);
+    public void remove(String mediaLabel) {
+        int index = searchVideoIndexByMediaLabel(mediaLabel);
         if (index > -1) {
             if (list.get(index).scheduler != null && !list.get(index).scheduler.isShutdown()) {
                 list.get(index).sendStop();
@@ -119,14 +119,14 @@ public class Videos {
      */
     public void removeAll() {
         while (!list.isEmpty()) {
-            remove(list.get(0).getName());
+            remove(list.get(0).getMediaLabel());
         }
     }
 
-    private int searchVideoIndexByName(String name) {
+    private int searchVideoIndexByMediaLabel(String mediaLabel) {
         int length = list.size();
         for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
+            if (list.get(i).getMediaLabel().equals(mediaLabel)) {
                 return i;
             }
         }

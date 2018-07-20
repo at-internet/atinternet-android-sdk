@@ -59,6 +59,7 @@ public abstract class AbstractTestClass {
             put("atEnv", "prod");
         }};
         tracker = new Tracker(RuntimeEnvironment.application, conf);
+        tracker.resetScreenContext();
 
         buffer = tracker.getBuffer();
         buffer.getPersistentParams().clear();

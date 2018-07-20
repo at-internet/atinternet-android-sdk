@@ -6,14 +6,11 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class AudiosTest extends AbstractTestClass {
 
@@ -31,6 +28,7 @@ public class AudiosTest extends AbstractTestClass {
         audios.add("name", 80);
         assertEquals(1, audios.list.size());
         assertEquals("name", audios.list.get(0).getName());
+        assertEquals("name", audios.list.get(0).getMediaLabel());
         assertEquals(80, audios.list.get(0).getDuration());
     }
 
@@ -39,7 +37,9 @@ public class AudiosTest extends AbstractTestClass {
         audios.add("name", "chapter1", 80);
         assertEquals(1, audios.list.size());
         assertEquals("name", audios.list.get(0).getName());
+        assertEquals("name", audios.list.get(0).getMediaLabel());
         assertEquals("chapter1", audios.list.get(0).getChapter1());
+        assertEquals("chapter1", audios.list.get(0).getMediaTheme1());
         assertEquals(80, audios.list.get(0).getDuration());
     }
 
@@ -48,28 +48,27 @@ public class AudiosTest extends AbstractTestClass {
         audios.add("name", "chapter1", "chapter2", 80);
         assertEquals(1, audios.list.size());
         assertEquals("name", audios.list.get(0).getName());
+        assertEquals("name", audios.list.get(0).getMediaLabel());
         assertEquals("chapter1", audios.list.get(0).getChapter1());
+        assertEquals("chapter1", audios.list.get(0).getMediaTheme1());
         assertEquals("chapter2", audios.list.get(0).getChapter2());
+        assertEquals("chapter2", audios.list.get(0).getMediaTheme2());
         assertEquals(80, audios.list.get(0).getDuration());
     }
 
     @Test
     public void addFourTest() {
-        Random r = new Random();
-        int[] vals = {r.nextInt(500), r.nextInt(500), r.nextInt(500), r.nextInt(500), r.nextInt(500)};
-        int i = 0;
-
-        Audio a = audios.add("name" + vals[i++], "chapter" + vals[i++], "chapter" + vals[i++], "chapter" + vals[i++], vals[i]);
-
-        assertNotNull(a.getId());
-
-        i = 0;
+        audios.add("name", "chapter1", "chapter2", "chapter3", 80);
         assertEquals(1, audios.list.size());
-        assertEquals("name" + vals[i++], audios.list.get(0).getName());
-        assertEquals("chapter" + vals[i++], audios.list.get(0).getChapter1());
-        assertEquals("chapter" + vals[i++], audios.list.get(0).getChapter2());
-        assertEquals("chapter" + vals[i++], audios.list.get(0).getChapter3());
-        assertEquals(vals[i], audios.list.get(0).getDuration());
+        assertEquals("name", audios.list.get(0).getName());
+        assertEquals("name", audios.list.get(0).getMediaLabel());
+        assertEquals("chapter1", audios.list.get(0).getChapter1());
+        assertEquals("chapter1", audios.list.get(0).getMediaTheme1());
+        assertEquals("chapter2", audios.list.get(0).getChapter2());
+        assertEquals("chapter2", audios.list.get(0).getMediaTheme2());
+        assertEquals("chapter3", audios.list.get(0).getChapter3());
+        assertEquals("chapter3", audios.list.get(0).getMediaTheme3());
+        assertEquals(80, audios.list.get(0).getDuration());
     }
 
     @Test

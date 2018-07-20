@@ -39,19 +39,19 @@ public class LiveVideos {
     /**
      * Create new video
      *
-     * @param name live video name
+     * @param mediaLabel live video media label
      * @return LiveVideo instance
      */
-    public LiveVideo add(String name) {
-        int index = searchLiveVideoIndexByName(name);
+    public LiveVideo add(String mediaLabel) {
+        int index = searchLiveVideoIndexByMediaLabel(mediaLabel);
         LiveVideo liveVideo;
         if (index == -1) {
             liveVideo = new LiveVideo(player)
-                    .setName(name);
+                    .setMediaLabel(mediaLabel);
 
             list.add(liveVideo);
         } else {
-            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "LiveVideo with the same name already exists");
+            Tool.executeCallback(player.getTracker().getListener(), Tool.CallbackType.WARNING, "This LiveVideo already exists");
             liveVideo = list.get(index);
         }
 
@@ -61,46 +61,46 @@ public class LiveVideos {
     /**
      * Create new video
      *
-     * @param name     live video name
-     * @param chapter1 live video first chapter
+     * @param mediaLabel  live video media label
+     * @param mediaTheme1 live video first media theme
      * @return LiveVideo instance
      */
-    public LiveVideo add(String name, String chapter1) {
-        return add(name).setChapter1(chapter1);
+    public LiveVideo add(String mediaLabel, String mediaTheme1) {
+        return add(mediaLabel).setMediaTheme1(mediaTheme1);
     }
 
     /**
      * Create new video
      *
-     * @param name     live video name
-     * @param chapter1 live video first chapter
-     * @param chapter2 live video second chapter
+     * @param mediaLabel  live video media label
+     * @param mediaTheme1 live video first media theme
+     * @param mediaTheme2 live video second media theme
      * @return LiveVideo instance
      */
-    public LiveVideo add(String name, String chapter1, String chapter2) {
-        return add(name, chapter1).setChapter2(chapter2);
+    public LiveVideo add(String mediaLabel, String mediaTheme1, String mediaTheme2) {
+        return add(mediaLabel, mediaTheme1).setMediaTheme2(mediaTheme2);
     }
 
     /**
      * Create new video
      *
-     * @param name     live video name
-     * @param chapter1 live video first chapter
-     * @param chapter2 live video second chapter
-     * @param chapter3 live video third chapter
+     * @param mediaLabel  live video media label
+     * @param mediaTheme1 live video first media theme
+     * @param mediaTheme2 live video second media theme
+     * @param mediaTheme3 live video third media theme
      * @return LiveVideo instance
      */
-    public LiveVideo add(String name, String chapter1, String chapter2, String chapter3) {
-        return add(name, chapter1, chapter2).setChapter3(chapter3);
+    public LiveVideo add(String mediaLabel, String mediaTheme1, String mediaTheme2, String mediaTheme3) {
+        return add(mediaLabel, mediaTheme1, mediaTheme2).setMediaTheme3(mediaTheme3);
     }
 
     /**
      * Remove a live video
      *
-     * @param name live video name
+     * @param mediaLabel live video media label
      */
-    public void remove(String name) {
-        int index = searchLiveVideoIndexByName(name);
+    public void remove(String mediaLabel) {
+        int index = searchLiveVideoIndexByMediaLabel(mediaLabel);
         if (index > -1) {
             if (list.get(index).scheduler != null && !list.get(index).scheduler.isShutdown()) {
                 list.get(index).sendStop();
@@ -114,14 +114,14 @@ public class LiveVideos {
      */
     public void removeAll() {
         while (!list.isEmpty()) {
-            remove(list.get(0).getName());
+            remove(list.get(0).getMediaLabel());
         }
     }
 
-    private int searchLiveVideoIndexByName(String name) {
+    private int searchLiveVideoIndexByMediaLabel(String mediaLabel) {
         int length = list.size();
         for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
+            if (list.get(i).getMediaLabel().equals(mediaLabel)) {
                 return i;
             }
         }

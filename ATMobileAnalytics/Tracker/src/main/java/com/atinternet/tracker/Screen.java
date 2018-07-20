@@ -36,6 +36,8 @@ public class Screen extends AbstractScreen {
      */
     public Screen setName(String name) {
         this.name = name;
+        TechnicalContext.setScreenName(name);
+        CrashDetectionHandler.setCrashLastScreen(name);
         return this;
     }
 
@@ -91,6 +93,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setLevel2(int level2) {
         this.level2 = level2;
+        TechnicalContext.setLevel2(level2);
         return this;
     }
 

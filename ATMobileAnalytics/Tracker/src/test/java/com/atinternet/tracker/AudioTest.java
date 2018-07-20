@@ -83,15 +83,47 @@ public class AudioTest extends AbstractTestClass {
 
         assertEquals(1, buffer.getVolatileParams().get("m1").getValues().size());
         assertEquals("56", buffer.getVolatileParams().get("m1").getValues().get(0).execute());
+
+        audio.setDuration(56)
+                .setAction(RichMedia.Action.Play)
+                .setMediaLevel2(4)
+                .setMediaLabel("name")
+                .setMediaTheme1("chapter1")
+                .setEvent();
+        assertEquals(8, buffer.getVolatileParams().size());
+
+        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
+        assertEquals("audio", buffer.getVolatileParams().get("type").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
+        assertEquals("chapter1::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("a").getValues().size());
+        assertEquals("play", buffer.getVolatileParams().get("a").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("m6").getValues().size());
+        assertEquals("clip", buffer.getVolatileParams().get("m6").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("plyr").getValues().size());
+        assertEquals("1", buffer.getVolatileParams().get("plyr").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("m5").getValues().size());
+        assertEquals("int", buffer.getVolatileParams().get("m5").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("s2").getValues().size());
+        assertEquals("4", buffer.getVolatileParams().get("s2").getValues().get(0).execute());
+
+        assertEquals(1, buffer.getVolatileParams().get("m1").getValues().size());
+        assertEquals("56", buffer.getVolatileParams().get("m1").getValues().get(0).execute());
     }
 
     @Test
     public void setEventRefreshTest() {
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Refresh)
-                .setLevel2(4)
-                .setName("name")
-                .setChapter1("chapter1")
+                .setMediaLevel2(4)
+                .setMediaLabel("name")
+                .setMediaTheme1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
 
@@ -124,9 +156,9 @@ public class AudioTest extends AbstractTestClass {
     public void setEventPauseTest() {
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Pause)
-                .setLevel2(4)
-                .setName("name")
-                .setChapter1("chapter1")
+                .setMediaLevel2(4)
+                .setMediaLabel("name")
+                .setMediaTheme1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
 
@@ -159,9 +191,9 @@ public class AudioTest extends AbstractTestClass {
     public void setEventStopTest() {
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Stop)
-                .setLevel2(4)
-                .setName("name")
-                .setChapter1("chapter1")
+                .setMediaLevel2(4)
+                .setMediaLabel("name")
+                .setMediaTheme1("chapter1")
                 .setEvent();
         assertEquals(8, buffer.getVolatileParams().size());
 

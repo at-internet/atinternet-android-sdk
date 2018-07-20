@@ -934,13 +934,6 @@ class Dispatcher {
         }
 
         if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
-            String sn = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Screen.stringValue()));
-            TechnicalContext.setScreenName(sn);
-            CrashDetectionHandler.setCrashLastScreen(sn);
-
-            String level2 = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Level2.stringValue()));
-            TechnicalContext.setLevel2((!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0);
-
             SharedPreferences preferences = Tracker.getPreferences();
             if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
                 final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
@@ -1120,6 +1113,11 @@ class TechnicalContext {
     private static String screenName = "";
     private static int level2 = 0;
 
+    static void resetScreenContext() {
+        screenName = null;
+        level2 = 0;
+    }
+
     static void setScreenName(String sn) {
         screenName = sn;
     }
@@ -1144,7 +1142,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.9.1";
+            return "2.9.2";
         }
     };
 

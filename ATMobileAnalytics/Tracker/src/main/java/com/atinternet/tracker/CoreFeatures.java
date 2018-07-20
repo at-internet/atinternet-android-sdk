@@ -168,7 +168,7 @@ class LifeCycle {
     /**
      * Key representing if it's first launch (backward compat)
      */
-    static final String AT_FIRST_LAUNCH = "ATFirstLaunch";
+    private static final String AT_FIRST_LAUNCH = "ATFirstLaunch";
 
     /**
      * Key representing version code app
@@ -218,7 +218,7 @@ class LifeCycle {
     /**
      * Key representing count of days since first session after update
      */
-    static final String DAYS_SINCE_UPDATE = "DaysSinceFirstLaunchAfterUpdate";
+    private static final String DAYS_SINCE_UPDATE = "DaysSinceFirstLaunchAfterUpdate";
 
     /**
      * Key representing count of days since last session
@@ -312,7 +312,7 @@ class LifeCycle {
 
     static void newSessionInit(SharedPreferences preferences) {
         /// Do not track
-        if (Tracker.doNotTrackEnabled()) return;
+        if (ATInternet.optOutEnabled(Tracker.getAppContext())) return;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         try {
@@ -407,13 +407,12 @@ class LifeCycle {
 @TargetApi(14)
 class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks {
 
-    protected static final int DELAY = 300;
-    static final int DELTA = 2;
+    private static final int DELAY = 300, DELTA = 2;
 
-    protected long timeInBackground;
+    private long timeInBackground;
     protected final Configuration configuration;
-    protected String savedActivityName;
-    protected int savedActivityTaskId;
+    private String savedActivityName;
+    private int savedActivityTaskId;
     private Handler handler;
     private Runnable debuggerCancelable;
 
@@ -433,8 +432,7 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        TechnicalContext.setScreenName(null);
-        TechnicalContext.setLevel2(0);
+        TechnicalContext.resetScreenContext();
         if (savedActivityName == null || activity == null || !activity.getClass().getCanonicalName().equals(savedActivityName)
                 || activity.getTaskId() == savedActivityTaskId) {
             timeInBackground = -1;

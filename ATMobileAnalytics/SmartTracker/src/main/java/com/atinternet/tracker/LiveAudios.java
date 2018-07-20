@@ -39,15 +39,15 @@ public class LiveAudios {
     /**
      * Create new LiveAudio
      *
-     * @param name live audio name
+     * @param mediaLabel live audio media label
      * @return LiveAudio instance
      */
-    public LiveAudio add(String name) {
-        int index = searchLiveAudioIndexByName(name);
+    public LiveAudio add(String mediaLabel) {
+        int index = searchLiveAudioIndexByMediaLabel(mediaLabel);
         LiveAudio liveAudio;
         if (index == -1) {
             liveAudio = new LiveAudio(player)
-                    .setName(name);
+                    .setMediaLabel(mediaLabel);
 
             list.add(liveAudio);
         } else {
@@ -61,46 +61,46 @@ public class LiveAudios {
     /**
      * Create new LiveAudio
      *
-     * @param name     live audio name
-     * @param chapter1 live audio first chapter
+     * @param mediaLabel  live audio media label
+     * @param mediaTheme1 live audio first media theme
      * @return LiveAudio instance
      */
-    public LiveAudio add(String name, String chapter1) {
-        return add(name).setChapter1(chapter1);
+    public LiveAudio add(String mediaLabel, String mediaTheme1) {
+        return add(mediaLabel).setMediaTheme1(mediaTheme1);
     }
 
     /**
      * Create new LiveAudio
      *
-     * @param name     live audio name
-     * @param chapter1 live audio first chapter
-     * @param chapter2 live audio second chapter
+     * @param mediaLabel  live audio media label
+     * @param mediaTheme1 live audio first media theme
+     * @param mediaTheme2 live audio second media theme
      * @return LiveAudio instance
      */
-    public LiveAudio add(String name, String chapter1, String chapter2) {
-        return add(name, chapter1).setChapter2(chapter2);
+    public LiveAudio add(String mediaLabel, String mediaTheme1, String mediaTheme2) {
+        return add(mediaLabel, mediaTheme1).setMediaTheme2(mediaTheme2);
     }
 
     /**
      * Create new LiveAudio
      *
-     * @param name     live audio name
-     * @param chapter1 live audio first chapter
-     * @param chapter2 live audio second chapter
-     * @param chapter3 live audio third chapter
+     * @param mediaLabel  live audio media label
+     * @param mediaTheme1 live audio first media theme
+     * @param mediaTheme2 live audio second media theme
+     * @param mediaTheme3 live audio third media theme
      * @return LiveAudio instance
      */
-    public LiveAudio add(String name, String chapter1, String chapter2, String chapter3) {
-        return add(name, chapter1, chapter2).setChapter3(chapter3);
+    public LiveAudio add(String mediaLabel, String mediaTheme1, String mediaTheme2, String mediaTheme3) {
+        return add(mediaLabel, mediaTheme1, mediaTheme2).setMediaTheme3(mediaTheme3);
     }
 
     /**
      * Remove a live audio
      *
-     * @param name live audio name
+     * @param mediaLabel live audio media label
      */
-    public void remove(String name) {
-        int index = searchLiveAudioIndexByName(name);
+    public void remove(String mediaLabel) {
+        int index = searchLiveAudioIndexByMediaLabel(mediaLabel);
         if (index > -1) {
             if (list.get(index).scheduler != null && !list.get(index).scheduler.isShutdown()) {
                 list.get(index).sendStop();
@@ -114,14 +114,14 @@ public class LiveAudios {
      */
     public void removeAll() {
         while (!list.isEmpty()) {
-            remove(list.get(0).getName());
+            remove(list.get(0).getMediaLabel());
         }
     }
 
-    private int searchLiveAudioIndexByName(String name) {
+    private int searchLiveAudioIndexByMediaLabel(String mediaLabel) {
         int length = list.size();
         for (int i = 0; i < length; i++) {
-            if (list.get(i).getName().equals(name)) {
+            if (list.get(i).getMediaLabel().equals(mediaLabel)) {
                 return i;
             }
         }
