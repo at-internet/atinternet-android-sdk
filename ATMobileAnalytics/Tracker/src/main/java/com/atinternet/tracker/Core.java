@@ -955,10 +955,14 @@ class Dispatcher {
         setIdentifiedVisitorInfos();
 
 
-        ParamOption appendWithEncoding = new ParamOption().setAppend(true).setEncode(true).setRelativePosition(ParamOption.RelativePosition.last);
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), appendWithEncoding);
+        ParamOption stcOptions = new ParamOption()
+                .setAppend(true)
+                .setEncode(true)
+                .setType(ParamOption.Type.JSON)
+                .setRelativePosition(ParamOption.RelativePosition.last);
+        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
         if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), appendWithEncoding);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), stcOptions);
         }
 
         final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
