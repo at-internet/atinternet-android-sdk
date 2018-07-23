@@ -126,8 +126,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setName(String name) {
         this.name = name;
-        TechnicalContext.setScreenName(name);
-        CrashDetectionHandler.setCrashLastScreen(name);
+        updateBuiltScreenName();
         return this;
     }
 
@@ -151,6 +150,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setChapter1(String chapter1) {
         this.chapter1 = chapter1;
+        updateBuiltScreenName();
         return this;
     }
 
@@ -162,6 +162,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setChapter2(String chapter2) {
         this.chapter2 = chapter2;
+        updateBuiltScreenName();
         return this;
     }
 
@@ -173,6 +174,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setChapter3(String chapter3) {
         this.chapter3 = chapter3;
+        updateBuiltScreenName();
         return this;
     }
 
@@ -206,25 +208,6 @@ public class Screen extends AbstractScreen {
     @Override
     void setEvent() {
         super.setEvent();
-
-        String value = chapter1;
-        if (value == null) {
-            value = chapter2;
-        } else {
-            value += chapter2 == null ? "" : "::" + chapter2;
-        }
-        if (value == null) {
-            value = chapter3;
-        } else {
-            value += chapter3 == null ? "" : "::" + chapter3;
-        }
-
-        if (value == null) {
-            value = name;
-        } else {
-            value += name == null ? "" : "::" + name;
-        }
-
-        tracker.Event().set("screen", action.stringValue(), value);
+        tracker.Event().set("screen", action.stringValue(), builtScreenName);
     }
 }
