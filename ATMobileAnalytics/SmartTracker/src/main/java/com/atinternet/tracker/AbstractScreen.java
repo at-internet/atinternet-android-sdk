@@ -48,7 +48,6 @@ public abstract class AbstractScreen extends BusinessObject {
     protected String chapter1;
     protected String chapter2;
     protected String chapter3;
-    protected String builtScreenName;
 
     protected Action action;
     boolean isBasketScreen;
@@ -317,7 +316,6 @@ public abstract class AbstractScreen extends BusinessObject {
         action = Action.View;
         level2 = -1;
         name = "";
-        builtScreenName = "";
     }
 
     AbstractScreen(Tracker tracker) {
@@ -325,29 +323,6 @@ public abstract class AbstractScreen extends BusinessObject {
         action = Action.View;
         level2 = -1;
         name = "";
-        builtScreenName = "";
-    }
-
-    void updateBuiltScreenName() {
-        builtScreenName = chapter1;
-        if (builtScreenName == null) {
-            builtScreenName = chapter2;
-        } else {
-            builtScreenName += chapter2 == null ? "" : "::" + chapter2;
-        }
-        if (builtScreenName == null) {
-            builtScreenName = chapter3;
-        } else {
-            builtScreenName += chapter3 == null ? "" : "::" + chapter3;
-        }
-        if (builtScreenName == null) {
-            builtScreenName = name;
-        } else {
-            builtScreenName += name == null ? "" : "::" + name;
-        }
-
-        TechnicalContext.setScreenName(builtScreenName);
-        CrashDetectionHandler.setCrashLastScreen(builtScreenName);
     }
 
     @Override

@@ -63,8 +63,7 @@ public class DynamicScreen extends AbstractScreen {
      */
     @Deprecated
     public DynamicScreen setScreenId(int screenId) {
-        this.screenId = String.valueOf(screenId);
-        return this;
+        return setScreenId(String.valueOf(screenId));
     }
 
     /**
@@ -86,7 +85,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setChapter1(String chapter1) {
         this.chapter1 = chapter1;
-        updateBuiltScreenName();
         return this;
     }
 
@@ -98,7 +96,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setChapter2(String chapter2) {
         this.chapter2 = chapter2;
-        updateBuiltScreenName();
         return this;
     }
 
@@ -110,7 +107,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setChapter3(String chapter3) {
         this.chapter3 = chapter3;
-        updateBuiltScreenName();
         return this;
     }
 
@@ -133,7 +129,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setName(String name) {
         this.name = name;
-        updateBuiltScreenName();
         return this;
     }
 
@@ -157,7 +152,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setLevel2(int level2) {
         this.level2 = level2;
-        TechnicalContext.setLevel2(level2);
         return this;
     }
 

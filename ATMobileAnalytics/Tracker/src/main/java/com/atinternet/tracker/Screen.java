@@ -24,8 +24,11 @@ package com.atinternet.tracker;
  */
 public class Screen extends AbstractScreen {
 
+    private String builtScreenName;
+
     Screen(Tracker tracker) {
         super(tracker);
+        builtScreenName = "";
     }
 
     /**
@@ -108,6 +111,28 @@ public class Screen extends AbstractScreen {
     public Screen setIsBasketScreen(boolean isBasketScreen) {
         this.isBasketScreen = isBasketScreen;
         return this;
+    }
+
+    void updateBuiltScreenName() {
+        builtScreenName = chapter1;
+        if (builtScreenName == null) {
+            builtScreenName = chapter2;
+        } else {
+            builtScreenName += chapter2 == null ? "" : "::" + chapter2;
+        }
+        if (builtScreenName == null) {
+            builtScreenName = chapter3;
+        } else {
+            builtScreenName += chapter3 == null ? "" : "::" + chapter3;
+        }
+        if (builtScreenName == null) {
+            builtScreenName = name;
+        } else {
+            builtScreenName += name == null ? "" : "::" + name;
+        }
+
+        TechnicalContext.setScreenName(builtScreenName);
+        CrashDetectionHandler.setCrashLastScreen(builtScreenName);
     }
 
     @Override

@@ -36,6 +36,7 @@ import java.util.ArrayList;
  */
 public class Screen extends AbstractScreen {
 
+    private String builtScreenName;
     private String title;
     private String className;
     private int width;
@@ -59,6 +60,7 @@ public class Screen extends AbstractScreen {
 
     Screen() {
         super();
+        builtScreenName = "";
         String activityClassName = (SmartContext.currentActivity != null && SmartContext.currentActivity.get() != null) ? SmartContext.currentActivity.get().getClass().getSimpleName() : null;
         className = (SmartContext.currentFragment != null && SmartContext.currentFragment.get() != null) ? SmartContext.currentFragment.get().getClass().getSimpleName() : activityClassName;
         title = className;
@@ -201,8 +203,32 @@ public class Screen extends AbstractScreen {
         return this;
     }
 
+    private void updateBuiltScreenName() {
+        builtScreenName = chapter1;
+        if (builtScreenName == null) {
+            builtScreenName = chapter2;
+        } else {
+            builtScreenName += chapter2 == null ? "" : "::" + chapter2;
+        }
+        if (builtScreenName == null) {
+            builtScreenName = chapter3;
+        } else {
+            builtScreenName += chapter3 == null ? "" : "::" + chapter3;
+        }
+        if (builtScreenName == null) {
+            builtScreenName = name;
+        } else {
+            builtScreenName += name == null ? "" : "::" + name;
+        }
+
+        TechnicalContext.setScreenName(builtScreenName);
+        CrashDetectionHandler.setCrashLastScreen(builtScreenName);
+    }
+
+
     Screen(Tracker tracker) {
         super(tracker);
+        builtScreenName = "";
     }
 
     @Override
