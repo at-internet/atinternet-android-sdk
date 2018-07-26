@@ -176,15 +176,14 @@ public class DynamicScreen extends AbstractScreen {
     }
 
     @Override
-    void setEvent() {
-        super.setEvent();
+    void setParams() {
+        super.setParams();
 
         if (screenId.length() > 255) {
             screenId = "";
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "screenId too long, replaced by empty value");
         }
 
-        tracker.setParam(Hit.HitParam.DynamicScreenId.stringValue(), screenId);
         String value = chapter1;
 
         if (value == null) {
@@ -199,8 +198,12 @@ public class DynamicScreen extends AbstractScreen {
             value += chapter3 == null ? "" : "::" + chapter3;
         }
 
-        tracker.setParam(Hit.HitParam.DynamicScreenValue.stringValue(), value, new ParamOption().setEncode(true))
+        tracker.setParam(Hit.HitParam.DynamicScreenId.stringValue(), screenId)
+                .setParam(Hit.HitParam.DynamicScreenValue.stringValue(), value, new ParamOption().setEncode(true))
                 .setParam(Hit.HitParam.DynamicScreenDate.stringValue(), new SimpleDateFormat(UPDATE_FORMAT, Locale.getDefault()).format(update))
-                .Event().set("screen", action.stringValue(), name);
+                .setParam(Hit.HitParam.Screen.stringValue(), name,
+                        new ParamOption().setRelativePosition(ParamOption.RelativePosition.after)
+                                .setRelativeParameterKey(Hit.HitParam.UserId.stringValue())
+                                .setEncode(true));
     }
 }

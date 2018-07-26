@@ -66,8 +66,8 @@ public class PublisherTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventImpressionTest() {
-        publisher.setCampaignId("[pub]").setEvent();
+    public void setParamsImpressionTest() {
+        publisher.setCampaignId("[pub]").setParams();
 
         assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -80,9 +80,9 @@ public class PublisherTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventWithCustomObjectsTest() {
+    public void setParamsWithCustomObjectsTest() {
         publisher.setCampaignId("[pub]").CustomObjects().add("{\"test\":\"value\"}");
-        publisher.setEvent();
+        publisher.setParams();
 
         assertEquals(3, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -98,8 +98,8 @@ public class PublisherTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTouchTest() {
-        publisher.setCampaignId("[pub]").setGeneralPlacement("[pub2]").setAction(OnAppAd.Action.Touch).setEvent();
+    public void setParamsTouchTest() {
+        publisher.setCampaignId("[pub]").setGeneralPlacement("[pub2]").setAction(OnAppAd.Action.Touch).setParams();
 
         assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -113,9 +113,9 @@ public class PublisherTest extends AbstractTestClass {
 
     @Test
     public void multiplesValuesTest() {
-        new Publisher(tracker).setCampaignId("[pub]").setEvent();
-        new Publisher(tracker).setCampaignId("[pub1]").setEvent();
-        new Publisher(tracker).setCampaignId("[pub2]").setEvent();
+        new Publisher(tracker).setCampaignId("[pub]").setParams();
+        new Publisher(tracker).setCampaignId("[pub1]").setParams();
+        new Publisher(tracker).setCampaignId("[pub2]").setParams();
 
         assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());

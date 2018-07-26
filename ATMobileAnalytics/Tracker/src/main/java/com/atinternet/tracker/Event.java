@@ -22,53 +22,52 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-class Event {
+public class Event {
 
-    /**
-     * Tracker instance
-     */
-    private final Tracker tracker;
+    private String action;
+    protected Map<String, Object> data;
 
-    /**
-     * Constructor
-     *
-     * @param tracker Tracker
-     */
-    Event(Tracker tracker) {
-        this.tracker = tracker;
+    public Event(String action) {
+        this.action = action;
+        data = new HashMap<>();
+    }
+
+    protected String getAction() {
+        return action;
+    }
+
+    protected Map<String, Object> getData() {
+        return data;
     }
 
     /**
-     * Set a generic event
+     * Set Data
      *
-     * @param category String
-     * @param action   String
-     * @param label    String
-     * @return Tracker
+     * @param data Map
+     * @return Event
      */
-    Tracker set(String category, String action, String label) {
-        return set(category, action, label, new JSONObject().toString());
+    public Event setData(Map<String, Object> data) {
+        this.data = data;
+        return this;
     }
 
     /**
-     * Set a generic event
+     * Set Action
      *
-     * @param category String
-     * @param action   String
-     * @param label    String
-     * @param value    String
-     * @return Tracker
+     * @param action String
+     * @return Event
      */
-    Tracker set(String category, String action, String label, String value) {
-        ParamOption appendWithEncoding = new ParamOption().setAppend(true).setEncode(true);
-        ParamOption afterIdWithEncoding = new ParamOption().setRelativePosition(ParamOption.RelativePosition.after)
-                .setRelativeParameterKey(Hit.HitParam.UserId.stringValue()).setEncode(true);
+    public Event setAction(String action) {
+        this.action = action;
+        return this;
+    }
 
-        return tracker.setParam(Hit.HitParam.HitType.stringValue(), category)
-                .setParam(Hit.HitParam.Action.stringValue(), action)
-                .setParam(Hit.HitParam.Screen.stringValue(), label, afterIdWithEncoding)
-                .setParam(Hit.HitParam.JSON.stringValue(), value, appendWithEncoding);
+    protected List<Event> getAdditionalEvents() {
+        return new ArrayList<>();
     }
 }

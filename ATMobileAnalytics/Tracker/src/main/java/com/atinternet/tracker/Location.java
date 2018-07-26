@@ -81,7 +81,7 @@ public class Location extends ScreenInfo {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         DecimalFormat format = new DecimalFormat(DECIMAL_FORMAT);
         tracker.setParam(Hit.HitParam.GPSLatitude.stringValue(), format.format(latitude).replace(",", "."))
                 .setParam(Hit.HitParam.GPSLongitude.stringValue(), format.format(longitude).replace(",", "."));

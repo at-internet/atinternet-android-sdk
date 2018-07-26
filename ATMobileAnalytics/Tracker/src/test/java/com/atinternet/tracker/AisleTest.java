@@ -38,8 +38,8 @@ public class AisleTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTest() {
-        aisle.setLevel1("level1").setLevel2("level2").setLevel4("level4").setEvent();
+    public void setParamsTest() {
+        aisle.setLevel1("level1").setLevel2("level2").setLevel4("level4").setParams();
 
         assertEquals(1, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());

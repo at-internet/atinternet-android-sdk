@@ -30,6 +30,7 @@ public class SelfPromotionImpression extends SelfPromotion {
     SelfPromotionImpression(Tracker tracker) {
         super(tracker);
         action = Action.View;
+        fromScreen = true;
     }
 
     /**

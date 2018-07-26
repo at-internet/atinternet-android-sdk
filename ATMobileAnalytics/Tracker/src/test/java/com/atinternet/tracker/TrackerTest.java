@@ -379,9 +379,9 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void EventTest() {
-        Event event = tracker.Event();
-        assertNotNull(tracker.Event());
-        assertEquals(tracker.Event(), event);
+        Events events = tracker.Events();
+        assertNotNull(tracker.Events());
+        assertEquals(tracker.Events(), events);
     }
 
     @Test

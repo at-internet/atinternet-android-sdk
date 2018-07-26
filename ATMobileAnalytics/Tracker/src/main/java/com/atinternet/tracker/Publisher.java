@@ -31,7 +31,6 @@ import java.util.LinkedHashMap;
  */
 public class Publisher extends OnAppAd {
     private static final String PUBLISHER_FORMAT = "PUB-%1$s-%2$s-%3$s-%4$s-%5$s-%6$s-%7$s-%8$s";
-    private static final String SCREEN = "screen";
     private static final String AD_TRACKING = "AT";
 
     private String campaignId;
@@ -242,7 +241,7 @@ public class Publisher extends OnAppAd {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         String publisher = String.format(PUBLISHER_FORMAT,
                 campaignId,
                 creation != null ? creation : "",
@@ -253,15 +252,7 @@ public class Publisher extends OnAppAd {
                 advertiserId != null ? advertiserId : "",
                 url != null ? url : "");
 
-        Buffer buffer = tracker.getBuffer();
-        String currentType = "";
-        if (buffer.getVolatileParams().containsKey(Hit.HitParam.HitType.stringValue())) {
-            currentType = buffer.getVolatileParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
-        } else if (buffer.getPersistentParams().containsKey(Hit.HitParam.HitType.stringValue())) {
-            currentType = buffer.getPersistentParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
-        }
-
-        if (!currentType.equals(SCREEN) && !currentType.equals(AD_TRACKING)) {
+        if (!fromScreen) {
             tracker.setParam(Hit.HitParam.HitType.stringValue(), AD_TRACKING);
         }
 
@@ -279,7 +270,7 @@ public class Publisher extends OnAppAd {
 
         if (customObjectsMap != null) {
             for (CustomObject co : customObjectsMap.values()) {
-                co.setEvent();
+                co.setParams();
             }
         }
 

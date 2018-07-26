@@ -31,7 +31,6 @@ import java.util.LinkedHashMap;
  */
 public class SelfPromotion extends OnAppAd {
     private static final String SELF_PROMOTION_FORMAT = "INT-%1$s-%2$s||%3$s";
-    private static final String SCREEN = "screen";
     private static final String AD_TRACKING = "AT";
 
     private int adId;
@@ -137,22 +136,13 @@ public class SelfPromotion extends OnAppAd {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         String selfPromotion = String.format(SELF_PROMOTION_FORMAT,
                 adId,
                 format != null ? format : "",
                 productId != null ? productId : "");
 
-        Buffer buffer = tracker.getBuffer();
-
-        String currentType = "";
-        if (buffer.getVolatileParams().containsKey(Hit.HitParam.HitType.stringValue())) {
-            currentType = buffer.getVolatileParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
-        } else if (buffer.getPersistentParams().containsKey(Hit.HitParam.HitType.stringValue())) {
-            currentType = buffer.getPersistentParams().get(Hit.HitParam.HitType.stringValue()).getValues().get(0).execute();
-        }
-
-        if (!currentType.equals(SCREEN) && !currentType.equals(AD_TRACKING)) {
+        if (!fromScreen) {
             tracker.setParam(Hit.HitParam.HitType.stringValue(), AD_TRACKING);
         }
 
@@ -170,7 +160,7 @@ public class SelfPromotion extends OnAppAd {
 
         if (customObjectsMap != null) {
             for (CustomObject co : customObjectsMap.values()) {
-                co.setEvent();
+                co.setParams();
             }
         }
 

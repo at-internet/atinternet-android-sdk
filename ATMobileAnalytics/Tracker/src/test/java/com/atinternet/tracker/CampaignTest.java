@@ -56,11 +56,11 @@ public class CampaignTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventWithoutRemanenceTest() {
+    public void setParamsWithoutRemanenceTest() {
         assertNull(Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
         campaign.setCampaignId("campaign")
-                .setEvent();
+                .setParams();
 
         assertEquals(1, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -72,7 +72,7 @@ public class CampaignTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventWithRemanenceTest() {
+    public void setParamsWithRemanenceTest() {
         Configuration conf = tracker.getConfiguration();
         conf.put("campaignLastPersistence", false);
         tracker = new Tracker(RuntimeEnvironment.application, conf);
@@ -83,7 +83,7 @@ public class CampaignTest extends AbstractTestClass {
         assertEquals("campaign", Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
 
         campaign.setCampaignId("test")
-                .setEvent();
+                .setParams();
         assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 

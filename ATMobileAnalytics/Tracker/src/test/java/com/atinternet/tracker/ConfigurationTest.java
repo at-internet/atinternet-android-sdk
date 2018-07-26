@@ -63,7 +63,7 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(false, defaultConfiguration.get("campaignLastPersistence"));
         assertEquals(30, defaultConfiguration.get("campaignLifetime"));
         assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
-        assertEquals("prod", defaultConfiguration.get("atEnv"));
+        assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
     }
 
     @Test
@@ -99,6 +99,6 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(false, defaultConfiguration.get("campaignLastPersistence"));
         assertEquals(30, defaultConfiguration.get("campaignLifetime"));
         assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
-        assertEquals("prod", defaultConfiguration.get("atEnv"));
+        assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
     }
 }

@@ -117,54 +117,36 @@ public class ScreenTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTest() {
-        screen.setName("name").setChapter3("chapter3").setEvent();
+    public void setParamsTest() {
+        screen.setName("name").setChapter3("chapter3").setParams();
 
-        assertEquals(4, buffer.getVolatileParams().size());
+        assertEquals(1, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
-
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventOnlyChaptersTest() {
-        screen.setChapter1("chapter1").setChapter3("chapter3").setEvent();
+    public void setParamsOnlyChaptersTest() {
+        screen.setChapter1("chapter1").setChapter3("chapter3").setParams();
 
-        assertEquals(4, buffer.getVolatileParams().size());
+        assertEquals(1, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
-
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter1::chapter3::", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithCustomVarsTest() {
+    public void setParamsWithCustomVarsTest() {
         screen.setName("name").setChapter3("chapter3");
 
         screen.CustomVars().add(1, "test", CustomVar.CustomVarType.Screen);
         screen.CustomVars().add(1, "test", CustomVar.CustomVarType.App);
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(6, buffer.getVolatileParams().size());
+        assertEquals(3, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("f1").getValues().size());
@@ -173,21 +155,12 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("x1").getValues().size());
         assertEquals("test", buffer.getVolatileParams().get("x1").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithCustomObjectsTest() {
+    public void setParamsWithCustomObjectsTest() {
         screen.setName("name").setChapter3("chapter3");
         CustomObject co = screen.CustomObjects().add(new HashMap<String, Object>() {{
             put("key", "value");
@@ -195,32 +168,25 @@ public class ScreenTest extends AbstractTestClass {
 
         assertNotNull(co.getId());
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(4, buffer.getVolatileParams().size());
+        assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
-
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
 
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
 
-        assertEquals(2, buffer.getVolatileParams().get("stc").getValues().size());
+        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
         assertEquals("{\"key\":\"value\"}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(1).execute());
     }
 
     @Test
-    public void setEventWithLocation() {
+    public void setParamsWithLocation() {
         screen.setName("name").setChapter3("chapter3").Location(1, 1);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(6, buffer.getVolatileParams().size());
+        assertEquals(3, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("gy").getValues().size());
@@ -229,84 +195,55 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("gx").getValues().size());
         assertEquals("1.00", buffer.getVolatileParams().get("gx").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
-
     }
 
     @Test
-    public void setEventWithCustomTreeStructure() {
+    public void setParamsWithCustomTreeStructure() {
         screen.setName("name").setChapter3("chapter3");
         screen.CustomTreeStructure(4);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("ptype").getValues().size());
         assertEquals("4-0-0", buffer.getVolatileParams().get("ptype").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
-
     }
 
     @Test
-    public void setEventWithAisle() {
+    public void setParamsWithAisle() {
         screen.setName("name").setChapter3("chapter3");
         screen.Aisle("level1");
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("aisl").getValues().size());
         assertEquals("level1", buffer.getVolatileParams().get("aisl").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithCartTest() {
+    public void setParamsWithCartTest() {
         Cart c = tracker.Cart().set("1");
         c.Products().add("_product");
 
         screen.setName("name").setChapter3("chapter3");
         screen.setCart(c);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(4, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("tp").getValues().size());
@@ -318,28 +255,18 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("pdt1").getValues().size());
         assertEquals("_product", buffer.getVolatileParams().get("pdt1").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
-
     }
 
     @Test
-    public void setEventWithInternalSearch() {
+    public void setParamsWithInternalSearch() {
         screen.setName("name").setChapter3("chapter3");
         screen.InternalSearch("searchLabel", 1);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(6, buffer.getVolatileParams().size());
+        assertEquals(3, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("mc").getValues().size());
@@ -348,55 +275,37 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("np").getValues().size());
         assertEquals("1", buffer.getVolatileParams().get("np").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithCampaign() {
+    public void setParamsWithCampaign() {
         screen.setName("name").setChapter3("chapter3");
         screen.Campaign("camp");
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("xto").getValues().size());
         assertEquals("camp", buffer.getVolatileParams().get("xto").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithPublishers() {
+    public void setParamsWithPublishers() {
         screen.setName("name").setChapter3("chapter3")
                 .Publishers().add("campaign").setAction(OnAppAd.Action.Touch);
         screen.Publishers().add("campaign2").setAction(OnAppAd.Action.Touch);
         screen.Publishers().add("campaign3").setAction(OnAppAd.Action.Touch);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
 
@@ -405,28 +314,19 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals("PUB-campaign2-------", buffer.getVolatileParams().get("ati").getValues().get(1).execute());
         assertEquals("PUB-campaign3-------", buffer.getVolatileParams().get("ati").getValues().get(2).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithSelfPromotions() {
+    public void setParamsWithSelfPromotions() {
         screen.setName("name").setChapter3("chapter3")
                 .SelfPromotions().add(9).setAction(OnAppAd.Action.Touch);
         screen.SelfPromotions().add(8).setAction(OnAppAd.Action.Touch);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(5, buffer.getVolatileParams().size());
+        assertEquals(2, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
 
@@ -434,27 +334,18 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals("INT-9-||", buffer.getVolatileParams().get("ati").getValues().get(0).execute());
         assertEquals("INT-8-||", buffer.getVolatileParams().get("ati").getValues().get(1).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithOrder() {
+    public void setParamsWithOrder() {
         screen.setName("name").setChapter3("chapter3");
         screen.Order("oid", 1.);
 
-        screen.setEvent();
+        screen.setParams();
 
-        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(4, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("cmd").getValues().size());
@@ -466,16 +357,7 @@ public class ScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("newcus").getValues().size());
         assertEquals("0", buffer.getVolatileParams().get("newcus").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("chapter3::name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("stc").getValues().size());
-        assertEquals("{}", buffer.getVolatileParams().get("stc").getValues().get(0).execute());
     }
 }

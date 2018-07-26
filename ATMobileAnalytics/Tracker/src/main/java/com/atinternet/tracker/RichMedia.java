@@ -311,7 +311,7 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         ParamOption encode = new ParamOption().setEncode(true);
 
         tracker.setParam(Hit.HitParam.HitType.stringValue(), mediaType)

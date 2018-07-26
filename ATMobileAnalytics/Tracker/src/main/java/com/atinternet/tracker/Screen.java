@@ -136,8 +136,11 @@ public class Screen extends AbstractScreen {
     }
 
     @Override
-    void setEvent() {
-        super.setEvent();
-        tracker.Event().set("screen", action.stringValue(), builtScreenName);
+    void setParams() {
+        super.setParams();
+        tracker.setParam(Hit.HitParam.Screen.stringValue(), builtScreenName,
+                new ParamOption().setRelativePosition(ParamOption.RelativePosition.after)
+                        .setRelativeParameterKey(Hit.HitParam.UserId.stringValue())
+                        .setEncode(true));
     }
 }

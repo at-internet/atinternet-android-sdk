@@ -145,8 +145,8 @@ public class Medium extends RichMedia {
     }
 
     @Override
-    void setEvent() {
-        super.setEvent();
+    void setParams() {
+        super.setParams();
 
         if (duration > MAX_DURATION) {
             duration = MAX_DURATION;

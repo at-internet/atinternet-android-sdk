@@ -101,7 +101,7 @@ public class CustomTreeStructure extends ScreenInfo {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         tracker.setParam(Hit.HitParam.CustomTreeStructure.stringValue(), String.format(CUSTOM_TREE_FORMAT, category1, category2, category3));
     }
 }

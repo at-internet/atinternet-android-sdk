@@ -221,7 +221,7 @@ public class Order extends BusinessObject {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
 
         ParamOption encode = new ParamOption().setEncode(true);
 

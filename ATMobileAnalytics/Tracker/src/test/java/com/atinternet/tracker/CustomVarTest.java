@@ -63,8 +63,8 @@ public class CustomVarTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTest() {
-        customVar.setValue("test").setEvent();
+    public void setParamsTest() {
+        customVar.setValue("test").setParams();
         assertEquals(1, buffer.getVolatileParams().size());
         assertEquals("x1", buffer.getVolatileParams().get("x1").getKey());
         assertEquals("test", buffer.getVolatileParams().get("x1").getValues().get(0).execute());

@@ -99,7 +99,7 @@ public class Tracker {
 
     private Screens screens;
     private Gestures gestures;
-    private Event event;
+    private Events events;
     private Context context;
     private NuggAds nuggAds;
     private Offline offline;
@@ -118,6 +118,8 @@ public class Tracker {
     private CustomTreeStructures customTreeStructures;
     private Products products;
     private MediaPlayers mediaPlayers;
+
+    private ECommerce eCommerce;
 
     Buffer getBuffer() {
         return buffer;
@@ -249,7 +251,6 @@ public class Tracker {
 
     private void refreshConfigurationDependencies() {
         String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
-        String offlineMode = String.valueOf(configuration.get(TrackerConfigurationKeys.OFFLINE_MODE));
         boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
 
         if (!TextUtils.isEmpty(identifierKey)) {
@@ -376,16 +377,18 @@ public class Tracker {
         return gestures;
     }
 
-    /**
-     * Get Event instance
-     *
-     * @return Event
-     */
-    Event Event() {
-        if (event == null) {
-            event = new Event(this);
+    public Events Events() {
+        if (events == null) {
+            events = new Events(this);
         }
-        return event;
+        return events;
+    }
+
+    public ECommerce ECommerce() {
+        if (eCommerce == null) {
+            eCommerce = new ECommerce(this);
+        }
+        return eCommerce;
     }
 
     /**

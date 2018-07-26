@@ -107,7 +107,7 @@ public class CustomVar extends ScreenInfo {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         varId = varId < 1 ? 1 : varId;
         tracker.setParam(customVarType.stringValue() + varId, value, new ParamOption().setEncode(true));
     }

@@ -162,7 +162,7 @@ public class Aisle extends ScreenInfo {
 
 
     @Override
-    void setEvent() {
+    void setParams() {
         String value = level1;
 
         if (value == null) {
