@@ -281,7 +281,7 @@ public abstract class RichMedia extends BusinessObject {
 
 
             if (isEmbedded && webDomain != null) {
-                tracker.setParam("m9", webDomain);
+                tracker.setParam("m9", webDomain, encode);
             }
 
             String sn = TechnicalContext.getScreenName();
