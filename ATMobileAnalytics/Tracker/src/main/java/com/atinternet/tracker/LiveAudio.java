@@ -30,29 +30,121 @@ public class LiveAudio extends RichMedia {
     LiveAudio(MediaPlayer player) {
         super(player);
         broadcastMode = BroadcastMode.Live;
-        type = "audio";
+        mediaType = "audio";
     }
 
     /**
-     * Set a new name
+     * Set a new media label
      *
-     * @param name /
-     * @return LiveAudio instance
+     * @param mediaLabel /
+     * @return the LiveAudio instance
+     * @deprecated please use setMediaLabel(String) instead
      */
-    public LiveAudio setName(String name) {
-        this.name = name;
+    @Deprecated
+    public LiveAudio setName(String mediaLabel) {
+        return setMediaLabel(mediaLabel);
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the LiveAudio instance
+     * @deprecated please use setTheme1(String) instead
+     */
+    @Deprecated
+    public LiveAudio setChapter1(String mediaTheme1) {
+        return setMediaTheme1(mediaTheme1);
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the LiveAudio instance
+     * @deprecated please use setTheme2(String) instead
+     */
+    @Deprecated
+    public LiveAudio setChapter2(String mediaTheme2) {
+        return setMediaTheme2(mediaTheme2);
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the LiveAudio instance
+     * @deprecated please use setTheme3(String) instead
+     */
+    @Deprecated
+    public LiveAudio setChapter3(String mediaTheme3) {
+        return setMediaTheme3(mediaTheme3);
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaLabel(String mediaLabel) {
+        this.mediaLabel = mediaLabel;
+        return this;
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaTheme1(String mediaTheme1) {
+        this.mediaTheme1 = mediaTheme1;
+        return this;
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaTheme2(String mediaTheme2) {
+        this.mediaTheme2 = mediaTheme2;
+        return this;
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaTheme3(String mediaTheme3) {
+        this.mediaTheme3 = mediaTheme3;
         return this;
     }
 
     /**
      * Set a new level2
      *
-     * @param level2 /
+     * @param mediaLevel2 /
+     * @return LiveAudio instance
+     * @deprecated please use setMediaLevel2(int) instead
+     */
+    @Deprecated
+    public LiveAudio setLevel2(int mediaLevel2) {
+        return setMediaLevel2(mediaLevel2);
+    }
+
+    /**
+     * Set a new media level2
+     *
+     * @param mediaLevel2 /
      * @return LiveAudio instance
      */
-    public LiveAudio setLevel2(int level2) {
-        this.level2 = level2;
-
+    public LiveAudio setMediaLevel2(int mediaLevel2) {
+        this.mediaLevel2 = mediaLevel2;
         return this;
     }
 
@@ -77,39 +169,6 @@ public class LiveAudio extends RichMedia {
     public LiveAudio setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
-        return this;
-    }
-
-    /**
-     * Set a new first chapter
-     *
-     * @param chapter1 /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setChapter1(String chapter1) {
-        this.chapter1 = chapter1;
-        return this;
-    }
-
-    /**
-     * Set a new second chapter
-     *
-     * @param chapter2 /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setChapter2(String chapter2) {
-        this.chapter2 = chapter2;
-        return this;
-    }
-
-    /**
-     * Set a new third chapter
-     *
-     * @param chapter3 /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setChapter3(String chapter3) {
-        this.chapter3 = chapter3;
         return this;
     }
 

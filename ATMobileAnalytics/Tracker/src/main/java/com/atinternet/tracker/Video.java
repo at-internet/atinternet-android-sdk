@@ -32,7 +32,7 @@ public class Video extends RichMedia {
     Video(MediaPlayer player) {
         super(player);
         broadcastMode = BroadcastMode.Clip;
-        type = "video";
+        mediaType = "video";
     }
 
     /**
@@ -57,25 +57,117 @@ public class Video extends RichMedia {
     }
 
     /**
-     * Set an new name
+     * Set a new media label
      *
-     * @param name /
-     * @return Video instance
+     * @param mediaLabel /
+     * @return the Video instance
+     * @deprecated please use setMediaLabel(String) instead
      */
-    public Video setName(String name) {
-        this.name = name;
+    @Deprecated
+    public Video setName(String mediaLabel) {
+        return setMediaLabel(mediaLabel);
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the Video instance
+     * @deprecated please use setMediaTheme1(String) instead
+     */
+    @Deprecated
+    public Video setChapter1(String mediaTheme1) {
+        return setMediaTheme1(mediaTheme1);
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the Video instance
+     * @deprecated please use setMediaTheme2(String) instead
+     */
+    @Deprecated
+    public Video setChapter2(String mediaTheme2) {
+        return setMediaTheme2(mediaTheme2);
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the Video instance
+     * @deprecated please use setMediaTheme3(String) instead
+     */
+    @Deprecated
+    public Video setChapter3(String mediaTheme3) {
+        return setMediaTheme3(mediaTheme3);
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the Video instance
+     */
+    public Video setMediaLabel(String mediaLabel) {
+        this.mediaLabel = mediaLabel;
+        return this;
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the Video instance
+     */
+    public Video setMediaTheme1(String mediaTheme1) {
+        this.mediaTheme1 = mediaTheme1;
+        return this;
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the Video instance
+     */
+    public Video setMediaTheme2(String mediaTheme2) {
+        this.mediaTheme2 = mediaTheme2;
+        return this;
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the Video instance
+     */
+    public Video setMediaTheme3(String mediaTheme3) {
+        this.mediaTheme3 = mediaTheme3;
         return this;
     }
 
     /**
      * Set a new level 2
      *
-     * @param level2 /
+     * @param mediaLevel2 /
+     * @return Video instance
+     * @deprecated please use setMediaLevel2(int) instead
+     */
+    @Deprecated
+    public Video setLevel2(int mediaLevel2) {
+        return setMediaLevel2(mediaLevel2);
+    }
+
+    /**
+     * Set a new media level 2
+     *
+     * @param mediaLevel2 /
      * @return Video instance
      */
-    public Video setLevel2(int level2) {
-        this.level2 = level2;
-
+    public Video setMediaLevel2(int mediaLevel2) {
+        this.mediaLevel2 = mediaLevel2;
         return this;
     }
 
@@ -100,39 +192,6 @@ public class Video extends RichMedia {
     public Video setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
-        return this;
-    }
-
-    /**
-     * Set a new first chapter
-     *
-     * @param chapter1 /
-     * @return Video instance
-     */
-    public Video setChapter1(String chapter1) {
-        this.chapter1 = chapter1;
-        return this;
-    }
-
-    /**
-     * Set a new second chapter
-     *
-     * @param chapter2 /
-     * @return Video instance
-     */
-    public Video setChapter2(String chapter2) {
-        this.chapter2 = chapter2;
-        return this;
-    }
-
-    /**
-     * Set a new third chapter
-     *
-     * @param chapter3 /
-     * @return Video instance
-     */
-    public Video setChapter3(String chapter3) {
-        this.chapter3 = chapter3;
         return this;
     }
 

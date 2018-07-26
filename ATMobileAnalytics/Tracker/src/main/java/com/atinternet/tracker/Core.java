@@ -932,13 +932,6 @@ class Dispatcher {
         }
 
         if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
-            String sn = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Screen.stringValue()));
-            TechnicalContext.setScreenName(sn);
-            CrashDetectionHandler.setCrashLastScreen(sn);
-
-            String level2 = Tool.appendParameterValues(tracker.getBuffer().getVolatileParams().get(Hit.HitParam.Level2.stringValue()));
-            TechnicalContext.setLevel2((!TextUtils.isEmpty(level2)) ? Integer.parseInt(level2) : 0);
-
             SharedPreferences preferences = Tracker.getPreferences();
             if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
                 final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
@@ -962,10 +955,14 @@ class Dispatcher {
         setIdentifiedVisitorInfos();
 
 
-        ParamOption appendWithEncoding = new ParamOption().setAppend(true).setEncode(true).setRelativePosition(ParamOption.RelativePosition.last);
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), appendWithEncoding);
+        ParamOption stcOptions = new ParamOption()
+                .setAppend(true)
+                .setEncode(true)
+                .setType(ParamOption.Type.JSON)
+                .setRelativePosition(ParamOption.RelativePosition.last);
+        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
         if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), appendWithEncoding);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), stcOptions);
         }
 
         final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
@@ -1064,6 +1061,11 @@ class TechnicalContext {
     private static String screenName = "";
     private static int level2 = 0;
 
+    static void resetScreenContext() {
+        screenName = null;
+        level2 = 0;
+    }
+
     static void setScreenName(String sn) {
         screenName = sn;
     }
@@ -1088,7 +1090,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.9.1";
+            return "2.9.2";
         }
     };
 

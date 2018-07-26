@@ -44,14 +44,7 @@ public class DynamicScreens extends Helper {
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update) {
-        DynamicScreen dynamicScreen = new DynamicScreen(tracker)
-                .setScreenId(screenId)
-                .setName(name)
-                .setUpdate(update);
-
-        tracker.getBusinessObjects().put(dynamicScreen.getId(), dynamicScreen);
-
-        return dynamicScreen;
+        return add(String.valueOf(screenId), name, update);
     }
 
     /**
@@ -85,7 +78,7 @@ public class DynamicScreens extends Helper {
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1) {
-        return add(screenId, name, update).setChapter1(chapter1);
+        return add(String.valueOf(screenId), name, update).setChapter1(chapter1);
     }
 
     /**
@@ -114,7 +107,7 @@ public class DynamicScreens extends Helper {
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1, String chapter2) {
-        return add(screenId, name, update, chapter1).setChapter2(chapter2);
+        return add(String.valueOf(screenId), name, update, chapter1).setChapter2(chapter2);
     }
 
     /**
@@ -145,7 +138,7 @@ public class DynamicScreens extends Helper {
      */
     @Deprecated
     public DynamicScreen add(int screenId, String name, Date update, String chapter1, String chapter2, String chapter3) {
-        return add(screenId, name, update, chapter1, chapter2).setChapter3(chapter3);
+        return add(String.valueOf(screenId), name, update, chapter1, chapter2).setChapter3(chapter3);
     }
 
     /**

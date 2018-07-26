@@ -56,8 +56,7 @@ public abstract class SmartFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @android.support.annotation.Nullable ViewGroup container, @android.support.annotation.Nullable Bundle savedInstanceState) {
-        TechnicalContext.setScreenName(null);
-        TechnicalContext.setLevel2(0);
+        TechnicalContext.resetScreenContext();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

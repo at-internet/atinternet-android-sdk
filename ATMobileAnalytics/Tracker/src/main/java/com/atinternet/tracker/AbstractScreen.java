@@ -48,6 +48,7 @@ public abstract class AbstractScreen extends BusinessObject {
     protected String chapter1;
     protected String chapter2;
     protected String chapter3;
+
     protected Action action;
     boolean isBasketScreen;
     int level2;

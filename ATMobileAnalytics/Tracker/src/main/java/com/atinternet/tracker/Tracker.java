@@ -1305,8 +1305,7 @@ public class Tracker {
      * Reset Screen context to prevent bad link between screen and gesture
      */
     public void resetScreenContext() {
-        TechnicalContext.setScreenName(null);
-        TechnicalContext.setLevel2(0);
+        TechnicalContext.resetScreenContext();
     }
 
     /**

@@ -23,7 +23,6 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseIntArray;
 
 import java.util.concurrent.Executors;
@@ -86,16 +85,17 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     private final MediaPlayer mediaPlayer;
+    ScheduledExecutorService scheduler;
+    private int currentRefreshDurationsSparseArrayIndex, delay, playTimestamp, elapsedTime;
+    private ScheduledFuture refreshHandler;
+    private SparseIntArray refreshDurationsSparseIntArray;
 
+    String mediaLabel, mediaTheme1, mediaTheme2, mediaTheme3, mediaType, webDomain;
+    int mediaLevel2;
     BroadcastMode broadcastMode;
     Action action;
     boolean isBuffering, isEmbedded;
-    String name, chapter1, chapter2, type, chapter3, webDomain;
-    int level2, currentRefreshDurationsSparseArrayIndex, delay, playTimestamp, elapsedTime;
 
-    ScheduledExecutorService scheduler;
-    ScheduledFuture refreshHandler;
-    SparseIntArray refreshDurationsSparseIntArray;
 
     MediaPlayer getPlayer() {
         return mediaPlayer;
@@ -109,15 +109,15 @@ public abstract class RichMedia extends BusinessObject {
         return broadcastMode;
     }
 
-    String getType() {
-        return type;
+    String getMediaType() {
+        return mediaType;
     }
 
     RichMedia(MediaPlayer player) {
         super(player.getTracker());
         mediaPlayer = player;
-        name = "";
-        level2 = -1;
+        mediaLabel = "";
+        mediaLevel2 = -1;
         playTimestamp = -1;
         elapsedTime = 0;
         currentRefreshDurationsSparseArrayIndex = 0;
@@ -136,9 +136,20 @@ public abstract class RichMedia extends BusinessObject {
      * Get level 2
      *
      * @return the level 2
+     * @deprecated please use getMediaLevel2() instead
      */
+    @Deprecated
     public int getLevel2() {
-        return level2;
+        return getMediaLevel2();
+    }
+
+    /**
+     * Get media level 2
+     *
+     * @return the media level 2
+     */
+    public int getMediaLevel2() {
+        return mediaLevel2;
     }
 
     /**
@@ -163,36 +174,80 @@ public abstract class RichMedia extends BusinessObject {
      * Get media name
      *
      * @return the media name
+     * @deprecated please use getMediaLabel() instead
      */
+    @Deprecated
     public String getName() {
-        return name;
+        return getMediaLabel();
     }
 
     /**
      * Get first chapter
      *
      * @return the first chapter
+     * @deprecated please use getMediaTheme1() instead
      */
+    @Deprecated
     public String getChapter1() {
-        return chapter1;
+        return getMediaTheme1();
     }
 
     /**
      * Get second chapter
      *
      * @return the second chapter
+     * @deprecated please use getMediaTheme2() instead
      */
+    @Deprecated
     public String getChapter2() {
-        return chapter2;
+        return getMediaTheme2();
     }
 
     /**
      * Get third chapter
      *
      * @return the third chapter
+     * @deprecated please use getMediaTheme3() instead
      */
+    @Deprecated
     public String getChapter3() {
-        return chapter3;
+        return getMediaTheme3();
+    }
+
+    /**
+     * Get media label
+     *
+     * @return the media label
+     */
+    public String getMediaLabel() {
+        return mediaLabel;
+    }
+
+    /**
+     * Get first theme
+     *
+     * @return the first theme
+     */
+    public String getMediaTheme1() {
+        return mediaTheme1;
+    }
+
+    /**
+     * Get second theme
+     *
+     * @return the second theme
+     */
+    public String getMediaTheme2() {
+        return mediaTheme2;
+    }
+
+    /**
+     * Get third theme
+     *
+     * @return the third theme
+     */
+    public String getMediaTheme3() {
+        return mediaTheme3;
     }
 
     /**
@@ -208,15 +263,15 @@ public abstract class RichMedia extends BusinessObject {
     void setEvent() {
         ParamOption encode = new ParamOption().setEncode(true);
 
-        tracker.setParam(Hit.HitParam.HitType.stringValue(), type)
-                .setParam(Hit.HitParam.Screen.stringValue(), buildMediaName(), encode)
+        tracker.setParam(Hit.HitParam.HitType.stringValue(), mediaType)
+                .setParam(Hit.HitParam.Screen.stringValue(), buildMediaLabel(), encode)
                 .setParam("a", action.stringValue())
                 .setParam("m6", broadcastMode.stringValue())
                 .setParam("plyr", mediaPlayer.getPlayerId())
                 .setParam("m5", isEmbedded ? "ext" : "int");
 
-        if (level2 > 0) {
-            tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
+        if (mediaLevel2 > 0) {
+            tracker.setParam(Hit.HitParam.Level2.stringValue(), mediaLevel2);
         }
 
         if (action == RichMedia.Action.Play) {
@@ -226,19 +281,17 @@ public abstract class RichMedia extends BusinessObject {
 
 
             if (isEmbedded && webDomain != null) {
-                tracker.setParam("m9", webDomain);
+                tracker.setParam("m9", webDomain, encode);
             }
 
-            if (!isEmbedded) {
-                String sn = TechnicalContext.getScreenName();
-                if (!TextUtils.isEmpty(sn)) {
-                    tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), sn, encode);
-                }
+            String sn = TechnicalContext.getScreenName();
+            if (!TextUtils.isEmpty(sn)) {
+                tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), sn, encode);
+            }
 
-                int lvl2 = TechnicalContext.getLevel2();
-                if (lvl2 > 0) {
-                    tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), lvl2);
-                }
+            int lvl2 = TechnicalContext.getLevel2();
+            if (lvl2 > 0) {
+                tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), lvl2);
             }
         }
     }
@@ -332,7 +385,6 @@ public abstract class RichMedia extends BusinessObject {
                 delay = (nextStartedMinute - startedMinute) * 60;
             } else {
                 delay = nextStartedMinute * 60 - elapsedTime;
-                Log.d("ATDEBUG", "Delay : " + delay);
             }
 
             scheduler.schedule(new Runnable() {
@@ -362,8 +414,6 @@ public abstract class RichMedia extends BusinessObject {
     public void sendPause() {
         action = RichMedia.Action.Pause;
         elapsedTime += ((int) (System.currentTimeMillis() / 1000) - playTimestamp);
-        Log.d("ATDEBUG", "elapsedTime : " + elapsedTime);
-
         if (scheduler != null) {
             scheduler.shutdownNow();
         }
@@ -399,11 +449,11 @@ public abstract class RichMedia extends BusinessObject {
         tracker.getDispatcher().dispatch(this);
     }
 
-    private String buildMediaName() {
-        String mediaName = chapter1 == null ? "" : chapter1 + "::";
-        mediaName = chapter2 == null ? mediaName : mediaName + chapter2 + "::";
-        mediaName = chapter3 == null ? mediaName : mediaName + chapter3 + "::";
+    private String buildMediaLabel() {
+        String mediaLabel = mediaTheme1 == null ? "" : mediaTheme1 + "::";
+        mediaLabel = mediaTheme2 == null ? mediaLabel : mediaLabel + mediaTheme2 + "::";
+        mediaLabel = mediaTheme3 == null ? mediaLabel : mediaLabel + mediaTheme3 + "::";
 
-        return mediaName + name;
+        return mediaLabel + this.mediaLabel;
     }
 }

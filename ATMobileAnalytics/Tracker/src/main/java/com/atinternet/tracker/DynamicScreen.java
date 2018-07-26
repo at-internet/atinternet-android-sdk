@@ -63,8 +63,7 @@ public class DynamicScreen extends AbstractScreen {
      */
     @Deprecated
     public DynamicScreen setScreenId(int screenId) {
-        this.screenId = String.valueOf(screenId);
-        return this;
+        return setScreenId(String.valueOf(screenId));
     }
 
     /**
@@ -130,7 +129,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setName(String name) {
         this.name = name;
-
         return this;
     }
 
@@ -154,7 +152,6 @@ public class DynamicScreen extends AbstractScreen {
      */
     public DynamicScreen setLevel2(int level2) {
         this.level2 = level2;
-
         return this;
     }
 

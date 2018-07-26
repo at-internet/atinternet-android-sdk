@@ -30,29 +30,120 @@ public class LiveVideo extends RichMedia {
     LiveVideo(MediaPlayer player) {
         super(player);
         broadcastMode = BroadcastMode.Live;
-        type = "video";
+        mediaType = "video";
     }
 
     /**
-     * Set a new name
+     * Set a new media label
      *
-     * @param name /
-     * @return LiveVideo instance
+     * @param mediaLabel /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaLabel(String) instead
      */
-    public LiveVideo setName(String name) {
-        this.name = name;
+    @Deprecated
+    public LiveVideo setName(String mediaLabel) {
+        return setMediaLabel(mediaLabel);
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaTheme1(String) instead
+     */
+    @Deprecated
+    public LiveVideo setChapter1(String mediaTheme1) {
+        return setMediaTheme1(mediaTheme1);
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaTheme2(String) instead
+     */
+    @Deprecated
+    public LiveVideo setChapter2(String mediaTheme2) {
+        return setMediaTheme2(mediaTheme2);
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaTheme3(String) instead
+     */
+    @Deprecated
+    public LiveVideo setChapter3(String mediaTheme3) {
+        return setMediaTheme3(mediaTheme3);
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the LiveVideo instance
+     */
+    public LiveVideo setMediaLabel(String mediaLabel) {
+        this.mediaLabel = mediaLabel;
         return this;
     }
 
     /**
-     * Set a new level2
+     * Set a new first media theme
      *
-     * @param level2 /
+     * @param mediaTheme1 /
+     * @return the LiveVideo instance
+     */
+    public LiveVideo setMediaTheme1(String mediaTheme1) {
+        this.mediaTheme1 = mediaTheme1;
+        return this;
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the LiveVideo instance
+     */
+    public LiveVideo setMediaTheme2(String mediaTheme2) {
+        this.mediaTheme2 = mediaTheme2;
+        return this;
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the LiveVideo instance
+     */
+    public LiveVideo setMediaTheme3(String mediaTheme3) {
+        this.mediaTheme3 = mediaTheme3;
+        return this;
+    }
+
+    /**
+     * Set a new media level2
+     *
+     * @param mediaLevel2 /
      * @return LiveVideo instance
      */
-    public LiveVideo setLevel2(int level2) {
-        this.level2 = level2;
+    @Deprecated
+    public LiveVideo setLevel2(int mediaLevel2) {
+        return setMediaLevel2(mediaLevel2);
+    }
 
+    /**
+     * Set a new media level2
+     *
+     * @param mediaLevel2 /
+     * @return LiveVideo instance
+     */
+    public LiveVideo setMediaLevel2(int mediaLevel2) {
+        this.mediaLevel2 = mediaLevel2;
         return this;
     }
 
@@ -77,39 +168,6 @@ public class LiveVideo extends RichMedia {
     public LiveVideo setEmbedded(boolean isEmbedded) {
         this.isEmbedded = isEmbedded;
 
-        return this;
-    }
-
-    /**
-     * Set a new first chapter
-     *
-     * @param chapter1 /
-     * @return LiveVideo instance
-     */
-    public LiveVideo setChapter1(String chapter1) {
-        this.chapter1 = chapter1;
-        return this;
-    }
-
-    /**
-     * Set a new second chapter
-     *
-     * @param chapter2 /
-     * @return LiveVideo instance
-     */
-    public LiveVideo setChapter2(String chapter2) {
-        this.chapter2 = chapter2;
-        return this;
-    }
-
-    /**
-     * Set a new third chapter
-     *
-     * @param chapter3 /
-     * @return LiveVideo instance
-     */
-    public LiveVideo setChapter3(String chapter3) {
-        this.chapter3 = chapter3;
         return this;
     }
 
