@@ -511,7 +511,7 @@ class Builder implements Runnable {
 
         // Envoi du(des) hit(s) construit(s)
         for (String url : urls) {
-            new Sender(tracker, new Hit(url), false, oltParameter).send(true);
+            new Sender(tracker, new Hit(url), false, oltParameter).send(tracker.getOfflineMode() != Tracker.OfflineMode.never);
         }
     }
 
@@ -712,69 +712,76 @@ class Sender implements Runnable {
 
     private void send(final Hit hit) {
 
-        if (tracker.getOfflineMode() == Tracker.OfflineMode.always && !forceSendOfflineHits) {
-            saveHitDatabase(hit);
-        }
-        // Si pas de connexion
-        else if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
-            // Si le hit ne provient pas du offline
-            if (tracker.getOfflineMode() != Tracker.OfflineMode.never && !hit.isOffline()) {
-                saveHitDatabase(hit);
-            }
-        } else {
-            HttpURLConnection connection = null;
-            try {
-                // Execution de la requête
-                URL url = new URL(hit.getUrl());
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setReadTimeout(TIMEOUT);
-                connection.setConnectTimeout(TIMEOUT);
-                connection.connect();
+        switch (tracker.getOfflineMode()) {
+            case always:
+                if (!forceSendOfflineHits) {
+                    saveHitDatabase(hit);
+                }
+                break;
+            case required:
+                // Si pas de connexion
+                if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
+                    // Si le hit ne provient pas du offline
+                    if (!hit.isOffline()) {
+                        saveHitDatabase(hit);
+                    }
+                    break;
+                }
+            default:
+                HttpURLConnection connection = null;
+                try {
+                    // Execution de la requête
+                    URL url = new URL(hit.getUrl());
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setReadTimeout(TIMEOUT);
+                    connection.setConnectTimeout(TIMEOUT);
+                    connection.connect();
 
-                int statusCode = connection.getResponseCode();
-                final String message = connection.getResponseMessage();
+                    int statusCode = connection.getResponseCode();
+                    final String message = connection.getResponseMessage();
 
-                // Le hit n'a pas pu être envoyé
-                if (statusCode != 200) {
-                    if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
+                    // Le hit n'a pas pu être envoyé
+                    if (statusCode != 200) {
+                        if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
+                            if (!hit.isOffline()) {
+                                saveHitDatabase(hit);
+                            } else {
+                                updateRetryCount(hit);
+                            }
+                        }
+                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
+                        updateDebugger(message, "error48", false);
+                    }
+                    // Le hit a été envoyé
+                    else {
+                        // Si le hit provient du stockage, on le supprime de la base
+                        if (hit.isOffline()) {
+                            storage.deleteHit(hit.getUrl());
+                        }
+                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
+                        updateDebugger(hit.getUrl(), "sent48", true);
+                    }
+                } catch (final Exception e) {
+                    updateDebugger(e.getMessage(), "error48", false);
+                    // Si une erreur est survenue au moment de la récupération du pixel de marquage mais que le hit est bien envoyé
+                    if (checkExceptionServerReceiveData(e)) {
+                        // Si il s'agissait d'un hit offline, on le supprime
+                        if (hit.isOffline()) {
+                            storage.deleteHit(hit.getUrl());
+                        }
+                    } else if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
                         if (!hit.isOffline()) {
                             saveHitDatabase(hit);
                         } else {
                             updateRetryCount(hit);
                         }
                     }
-                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
-                    updateDebugger(message, "error48", false);
-                }
-                // Le hit a été envoyé
-                else {
-                    // Si le hit provient du stockage, on le supprime de la base
-                    if (hit.isOffline()) {
-                        storage.deleteHit(hit.getUrl());
-                    }
-                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
-                    updateDebugger(hit.getUrl(), "sent48", true);
-                }
-            } catch (final Exception e) {
-                updateDebugger(e.getMessage(), "error48", false);
-                // Si une erreur est survenue au moment de la récupération du pixel de marquage mais que le hit est bien envoyé
-                if (checkExceptionServerReceiveData(e)) {
-                    // Si il s'agissait d'un hit offline, on le supprime
-                    if (hit.isOffline()) {
-                        storage.deleteHit(hit.getUrl());
-                    }
-                } else if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
-                    if (!hit.isOffline()) {
-                        saveHitDatabase(hit);
-                    } else {
-                        updateRetryCount(hit);
+                } finally {
+                    if (connection != null) {
+                        connection.disconnect();
                     }
                 }
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
+                break;
         }
     }
 
@@ -1090,7 +1097,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.9.2";
+            return "2.9.3";
         }
     };
 
@@ -1496,10 +1503,10 @@ class Tool {
         switch (offlineMode) {
             case "always":
                 return Tracker.OfflineMode.always;
-            case "never":
-                return Tracker.OfflineMode.never;
-            default:
+            case "required":
                 return Tracker.OfflineMode.required;
+            default:
+                return Tracker.OfflineMode.never;
         }
     }
 

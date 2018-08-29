@@ -105,7 +105,7 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("identifier", "androidId")
                         .put("enableCrashDetection", true)
                         .put("plugins", "")
-                        .put("storage", "required")
+                        .put("storage", "never")
                         .put("hashUserId", false)
                         .put("persistIdentifiedVisitor", true)
                         .put("token", "")

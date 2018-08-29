@@ -1,13 +1,13 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "type": "core",
   "config": {
     "storage": {
       "title": "Geode_Tag_SDK_Config_Title_storage",
       "description": "Geode_Tag_SDK_Config_Description_storage",
-      "defaultValue": "required",
+      "defaultValue": "never",
       "type": "string",
       "public": true,
       "global": true

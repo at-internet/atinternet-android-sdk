@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.sendHit).setOnClickListener(this);
 
         tracker = ATInternet.getInstance().getDefaultTracker();
-        tracker.setOfflineMode(Tracker.OfflineMode.always, null, true);
+        tracker.setOfflineMode(Tracker.OfflineMode.required, null, true);
         tracker.setDefaultListener();
         tracker.setSiteId(552987, null, true);
         tracker.setLog("logp", null, true);
