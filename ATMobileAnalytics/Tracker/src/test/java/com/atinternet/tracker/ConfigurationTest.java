@@ -50,7 +50,7 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals("", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("", defaultConfiguration.get("site"));
-        assertEquals("required", defaultConfiguration.get("storage"));
+        assertEquals("never", defaultConfiguration.get("storage"));
         assertEquals("", defaultConfiguration.get("plugins"));
         assertEquals("xiti.com", defaultConfiguration.get("domain"));
         assertEquals("androidId", defaultConfiguration.get("identifier"));
@@ -86,7 +86,7 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals("logtest", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("123456", defaultConfiguration.get("site"));
-        assertEquals("required", defaultConfiguration.get("storage"));
+        assertEquals("never", defaultConfiguration.get("storage"));
         assertEquals("", defaultConfiguration.get("plugins"));
         assertEquals("test.com", defaultConfiguration.get("domain"));
         assertEquals("androidId", defaultConfiguration.get("identifier"));

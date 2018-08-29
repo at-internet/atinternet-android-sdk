@@ -49,7 +49,7 @@ public abstract class AbstractTestClass {
             put("identifier", "androidId");
             put("enableCrashDetection", true);
             put("plugins", "");
-            put("storage", "required");
+            put("storage", "never");
             put("hashUserId", false);
             put("token", "tokenTest");
             put("persistIdentifiedVisitor", true);

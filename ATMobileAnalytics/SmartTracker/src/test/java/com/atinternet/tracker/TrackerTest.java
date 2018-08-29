@@ -149,7 +149,7 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void getOfflineModeTest() {
-        assertEquals(OfflineMode.required, tracker.getOfflineMode());
+        assertEquals(OfflineMode.never, tracker.getOfflineMode());
     }
 
     @Test
@@ -157,7 +157,7 @@ public class TrackerTest extends AbstractTestClass {
         Random r = new Random();
         boolean rBoolean = r.nextBoolean();
 
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "required");
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "never");
         tracker.setOfflineMode(OfflineMode.always, rBoolean ? callback : null);
         Thread.sleep(DURATION_SLEEP);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
@@ -289,7 +289,7 @@ public class TrackerTest extends AbstractTestClass {
 
     @Test
     public void setOfflineModeSyncTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "required");
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "never");
         tracker.setOfflineMode(OfflineMode.always, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
     }
