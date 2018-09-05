@@ -27,8 +27,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -176,8 +179,31 @@ class App {
         if (icon == null) {
             icon = getDefaultIconDrawable(c);
         }
-        BitmapDrawable bitDw = ((BitmapDrawable) icon);
-        Bitmap bitmap = bitDw.getBitmap();
+
+        Bitmap bitmap = null;
+        if (icon instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) icon).getBitmap();
+        } else if (Build.VERSION.SDK_INT >= 26 && icon instanceof AdaptiveIconDrawable) {
+            AdaptiveIconDrawable aid = ((AdaptiveIconDrawable) icon);
+            Drawable backgroundDr = aid.getBackground();
+            Drawable foregroundDr = aid.getForeground();
+
+            Drawable[] drr = new Drawable[2];
+            drr[0] = backgroundDr;
+            drr[1] = foregroundDr;
+
+            LayerDrawable layerDrawable = new LayerDrawable(drr);
+
+            bitmap = Bitmap.createBitmap(layerDrawable.getIntrinsicWidth(), layerDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            layerDrawable.draw(canvas);
+        }
+
+        if (bitmap == null) {
+            return "";
+        }
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
