@@ -27,21 +27,10 @@ package com.atinternet.tracker;
  */
 public class Audio extends RichMedia {
 
-    private int duration;
-
     Audio(MediaPlayer player) {
         super(player);
         broadcastMode = BroadcastMode.Clip;
         mediaType = "audio";
-    }
-
-    /**
-     * Get the duration
-     *
-     * @return the duration
-     */
-    public int getDuration() {
-        return duration;
     }
 
     /**
@@ -54,6 +43,131 @@ public class Audio extends RichMedia {
         this.duration = duration;
 
         return this;
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the Audio instance
+     */
+    public Audio setMediaLabel(String mediaLabel) {
+        this.mediaLabel = mediaLabel;
+        return this;
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the Audio instance
+     */
+    public Audio setMediaTheme1(String mediaTheme1) {
+        this.mediaTheme1 = mediaTheme1;
+        return this;
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the Audio instance
+     */
+    public Audio setMediaTheme2(String mediaTheme2) {
+        this.mediaTheme2 = mediaTheme2;
+        return this;
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the Audio instance
+     */
+    public Audio setMediaTheme3(String mediaTheme3) {
+        this.mediaTheme3 = mediaTheme3;
+        return this;
+    }
+
+    /**
+     * Set a media level 2
+     *
+     * @param mediaLevel2 /
+     * @return the Audio instance
+     */
+    public Audio setMediaLevel2(int mediaLevel2) {
+        this.mediaLevel2 = mediaLevel2;
+        return this;
+    }
+
+    /**
+     * Change boolean "isEmbedded" value
+     *
+     * @param isEmbedded /
+     * @return the Audio instance
+     */
+    public Audio setEmbedded(boolean isEmbedded) {
+        this.isEmbedded = isEmbedded;
+
+        return this;
+    }
+
+    /**
+     * Set a new linked content
+     *
+     * @param linkedContent /
+     * @return the Audio instance
+     */
+    public Audio setLinkedContent(String linkedContent) {
+        this.linkedContent = linkedContent;
+        return this;
+    }
+
+    @Override
+    void setEvent() {
+        super.setEvent();
+
+        if (duration > MAX_DURATION) {
+            duration = MAX_DURATION;
+        }
+
+        tracker.setParam(Hit.HitParam.MediaDuration.stringValue(), duration);
+    }
+
+    /**
+     * Change boolean "isBuffering" value
+     *
+     * @param isBuffering /
+     * @return the Audio instance
+     * @deprecated useless property, buffering is set when send called
+     */
+    @Deprecated
+    public Audio setBuffering(boolean isBuffering) {
+        return this;
+    }
+
+    /**
+     * Set a new action
+     *
+     * @param action /
+     * @return the Audio instance
+     * @deprecated useless property, action is set when send called
+     */
+    @Deprecated
+    public Audio setAction(Action action) {
+        return this;
+    }
+
+    /**
+     * Set a mediaLevel2 level 2
+     *
+     * @param mediaLevel2 /
+     * @return the Audio instance
+     * @deprecated please use setMediaLevel2(int) instead
+     */
+    @Deprecated
+    public Audio setLevel2(int mediaLevel2) {
+        return setMediaLevel2(mediaLevel2);
     }
 
     /**
@@ -102,130 +216,5 @@ public class Audio extends RichMedia {
     @Deprecated
     public Audio setChapter3(String mediaTheme3) {
         return setMediaTheme3(mediaTheme3);
-    }
-
-    /**
-     * Set a new media label
-     *
-     * @param mediaLabel /
-     * @return the Audio instance
-     */
-    public Audio setMediaLabel(String mediaLabel) {
-        this.mediaLabel = mediaLabel;
-        return this;
-    }
-
-    /**
-     * Set a new first media theme
-     *
-     * @param mediaTheme1 /
-     * @return the Audio instance
-     */
-    public Audio setMediaTheme1(String mediaTheme1) {
-        this.mediaTheme1 = mediaTheme1;
-        return this;
-    }
-
-    /**
-     * Set a new second media theme
-     *
-     * @param mediaTheme2 /
-     * @return the Audio instance
-     */
-    public Audio setMediaTheme2(String mediaTheme2) {
-        this.mediaTheme2 = mediaTheme2;
-        return this;
-    }
-
-    /**
-     * Set a new third media theme
-     *
-     * @param mediaTheme3 /
-     * @return the Audio instance
-     */
-    public Audio setMediaTheme3(String mediaTheme3) {
-        this.mediaTheme3 = mediaTheme3;
-        return this;
-    }
-
-    /**
-     * Set a mediaLevel2 level 2
-     *
-     * @param mediaLevel2 /
-     * @return the Audio instance
-     * @deprecated please use setMediaLevel2(int) instead
-     */
-    @Deprecated
-    public Audio setLevel2(int mediaLevel2) {
-        return setMediaLevel2(mediaLevel2);
-    }
-
-    /**
-     * Set a media level 2
-     *
-     * @param mediaLevel2 /
-     * @return the Audio instance
-     */
-    public Audio setMediaLevel2(int mediaLevel2) {
-        this.mediaLevel2 = mediaLevel2;
-        return this;
-    }
-
-    /**
-     * Change boolean "isBuffering" value
-     *
-     * @param isBuffering /
-     * @return the Audio instance
-     */
-    public Audio setBuffering(boolean isBuffering) {
-        this.isBuffering = isBuffering;
-
-        return this;
-    }
-
-    /**
-     * Change boolean "isEmbedded" value
-     *
-     * @param isEmbedded /
-     * @return the Audio instance
-     */
-    public Audio setEmbedded(boolean isEmbedded) {
-        this.isEmbedded = isEmbedded;
-
-        return this;
-    }
-
-    /**
-     * Set a new action
-     *
-     * @param action /
-     * @return the Audio instance
-     */
-    public Audio setAction(Action action) {
-        this.action = action;
-
-        return this;
-    }
-
-    /**
-     * Set a new web domain
-     *
-     * @param webDomain /
-     * @return the Audio instance
-     */
-    public Audio setWebDomain(String webDomain) {
-        this.webDomain = webDomain;
-        return this;
-    }
-
-    @Override
-    void setEvent() {
-        super.setEvent();
-
-        if (duration > MAX_DURATION) {
-            duration = MAX_DURATION;
-        }
-
-        tracker.setParam(Hit.HitParam.MediaDuration.stringValue(), duration);
     }
 }

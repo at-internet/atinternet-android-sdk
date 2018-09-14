@@ -38,6 +38,95 @@ public class LiveAudio extends RichMedia {
      *
      * @param mediaLabel /
      * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaLabel(String mediaLabel) {
+        this.mediaLabel = mediaLabel;
+        return this;
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaTheme1(String mediaTheme1) {
+        this.mediaTheme1 = mediaTheme1;
+        return this;
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaTheme2(String mediaTheme2) {
+        this.mediaTheme2 = mediaTheme2;
+        return this;
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setMediaTheme3(String mediaTheme3) {
+        this.mediaTheme3 = mediaTheme3;
+        return this;
+    }
+
+    /**
+     * Set a new media level2
+     *
+     * @param mediaLevel2 /
+     * @return LiveAudio instance
+     */
+    public LiveAudio setMediaLevel2(int mediaLevel2) {
+        this.mediaLevel2 = mediaLevel2;
+        return this;
+    }
+
+    /**
+     * Change boolean "isEmbedded" value
+     *
+     * @param isEmbedded /
+     * @return LiveAudio instance
+     */
+    public LiveAudio setEmbedded(boolean isEmbedded) {
+        this.isEmbedded = isEmbedded;
+
+        return this;
+    }
+
+    /**
+     * Set a new webdomain
+     *
+     * @param webDomain /
+     * @return LiveAudio instance
+     */
+    public LiveAudio setWebDomain(String webDomain) {
+        this.webDomain = webDomain;
+        return this;
+    }
+
+    /**
+     * Set a new linked content
+     *
+     * @param linkedContent /
+     * @return the LiveAudio instance
+     */
+    public LiveAudio setLinkedContent(String linkedContent) {
+        this.linkedContent = linkedContent;
+        return this;
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the LiveAudio instance
      * @deprecated please use setMediaLabel(String) instead
      */
     @Deprecated
@@ -82,46 +171,26 @@ public class LiveAudio extends RichMedia {
     }
 
     /**
-     * Set a new media label
+     * Set a new action
      *
-     * @param mediaLabel /
-     * @return the LiveAudio instance
+     * @param action /
+     * @return LiveAudio instance
+     * @deprecated useless property, action is set when send called
      */
-    public LiveAudio setMediaLabel(String mediaLabel) {
-        this.mediaLabel = mediaLabel;
+    @Deprecated
+    public LiveAudio setAction(Action action) {
         return this;
     }
 
     /**
-     * Set a new first media theme
+     * Change boolean "isBuffering" value
      *
-     * @param mediaTheme1 /
-     * @return the LiveAudio instance
+     * @param isBuffering /
+     * @return LiveAudio instance
+     * @deprecated useless property, buffering is set when send called
      */
-    public LiveAudio setMediaTheme1(String mediaTheme1) {
-        this.mediaTheme1 = mediaTheme1;
-        return this;
-    }
-
-    /**
-     * Set a new second media theme
-     *
-     * @param mediaTheme2 /
-     * @return the LiveAudio instance
-     */
-    public LiveAudio setMediaTheme2(String mediaTheme2) {
-        this.mediaTheme2 = mediaTheme2;
-        return this;
-    }
-
-    /**
-     * Set a new third media theme
-     *
-     * @param mediaTheme3 /
-     * @return the LiveAudio instance
-     */
-    public LiveAudio setMediaTheme3(String mediaTheme3) {
-        this.mediaTheme3 = mediaTheme3;
+    @Deprecated
+    public LiveAudio setBuffering(boolean isBuffering) {
         return this;
     }
 
@@ -135,63 +204,5 @@ public class LiveAudio extends RichMedia {
     @Deprecated
     public LiveAudio setLevel2(int mediaLevel2) {
         return setMediaLevel2(mediaLevel2);
-    }
-
-    /**
-     * Set a new media level2
-     *
-     * @param mediaLevel2 /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setMediaLevel2(int mediaLevel2) {
-        this.mediaLevel2 = mediaLevel2;
-        return this;
-    }
-
-    /**
-     * Change boolean "isBuffering" value
-     *
-     * @param isBuffering /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setBuffering(boolean isBuffering) {
-        this.isBuffering = isBuffering;
-
-        return this;
-    }
-
-    /**
-     * Change boolean "isEmbedded" value
-     *
-     * @param isEmbedded /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setEmbedded(boolean isEmbedded) {
-        this.isEmbedded = isEmbedded;
-
-        return this;
-    }
-
-    /**
-     * Set a new action
-     *
-     * @param action /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setAction(Action action) {
-        this.action = action;
-
-        return this;
-    }
-
-    /**
-     * Set a new webdomain
-     *
-     * @param webDomain /
-     * @return LiveAudio instance
-     */
-    public LiveAudio setWebDomain(String webDomain) {
-        this.webDomain = webDomain;
-        return this;
     }
 }

@@ -33,6 +33,8 @@ public class MediaPlayer {
     private Audios audios;
     private LiveVideos liveVideos;
     private LiveAudios liveAudios;
+    private Media media;
+    private LiveMedia liveMedia;
 
     Tracker getTracker() {
         return tracker;
@@ -41,6 +43,30 @@ public class MediaPlayer {
     MediaPlayer(Tracker tracker) {
         this.tracker = tracker;
         playerId = 1;
+    }
+
+    /**
+     * Get Media instance
+     *
+     * @return the Media instance
+     */
+    public Media Media() {
+        if (media == null) {
+            media = new Media(this);
+        }
+        return media;
+    }
+
+    /**
+     * Get LiveMedia instance
+     *
+     * @return the LiveMedia instance
+     */
+    public LiveMedia LiveMedia() {
+        if (liveMedia == null) {
+            liveMedia = new LiveMedia(this);
+        }
+        return liveMedia;
     }
 
     /**

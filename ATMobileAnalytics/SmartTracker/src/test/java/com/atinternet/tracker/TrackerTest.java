@@ -50,7 +50,7 @@ import static org.junit.Assert.assertFalse;
 @SuppressWarnings("unchecked")
 public class TrackerTest extends AbstractTestClass {
 
-    private static final int DURATION_SLEEP = 600;
+    private static final int DURATION_SLEEP = 3000;
 
     private final String key = "KEY";
     private SetConfigCallback callback;
@@ -89,7 +89,7 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void getUserIdSyncTest() throws InterruptedException {
+    public void getUserIdSyncTest() {
         assertNull(tracker.getUserIdSync());
         tracker.setParam("idclient", "test");
         Builder builder = new Builder(tracker);
@@ -252,7 +252,7 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void setConfigSyncTest() throws Exception {
+    public void setConfigSyncTest() {
         assertFalse(tracker.getConfiguration().containsKey("key"));
         tracker.setConfig("key", "value", null, true);
         assertTrue(tracker.getConfiguration().containsKey("key"));
@@ -260,42 +260,42 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void setLogSyncTest() throws Exception {
+    public void setLogSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logp");
         tracker.setLog("logtest", null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest");
     }
 
     @Test
-    public void setSecuredLogSyncTest() throws Exception {
+    public void setSecuredLogSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logs");
         tracker.setSecuredLog("logstest", null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest");
     }
 
     @Test
-    public void setDomainSyncTest() throws Exception {
+    public void setDomainSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "xiti.com");
         tracker.setDomain("domain", null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain");
     }
 
     @Test
-    public void setSiteIdSyncTest() throws Exception {
+    public void setSiteIdSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 552987);
         tracker.setSiteId(2, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 2);
     }
 
     @Test
-    public void setOfflineModeSyncTest() throws Exception {
+    public void setOfflineModeSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "never");
         tracker.setOfflineMode(OfflineMode.always, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
     }
 
     @Test
-    public void setPluginsSyncTest() throws Exception {
+    public void setPluginsSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
         tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
             add(Tracker.PluginKey.nuggad);
@@ -306,14 +306,14 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void setSecureSyncTest() throws Exception {
+    public void setSecureSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
         tracker.setSecureModeEnabled(true, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), true);
     }
 
     @Test
-    public void setIdentifierSyncTest() throws Exception {
+    public void setIdentifierSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "androidId");
         tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
@@ -322,49 +322,49 @@ public class TrackerTest extends AbstractTestClass {
     }
 
     @Test
-    public void setHashUserIdModeSyncTest() throws Exception {
+    public void setHashUserIdModeSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), false);
         tracker.setHashUserIdEnabled(true, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), true);
     }
 
     @Test
-    public void setPixelPathSyncTest() throws Exception {
+    public void setPixelPathSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/hit.xiti");
         tracker.setPixelPath("/test.xiti", null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti");
     }
 
     @Test
-    public void setPersistIdentifiedVisitorSyncTest() throws Exception {
+    public void setPersistIdentifiedVisitorSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), true);
         tracker.setPersistentIdentifiedVisitorEnabled(false, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), false);
     }
 
     @Test
-    public void setCrashDetectionSyncTest() throws Exception {
+    public void setCrashDetectionSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), true);
         tracker.setCrashDetectionEnabled(false, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), false);
     }
 
     @Test
-    public void setCampaignLastPersistenceSyncTest() throws Exception {
+    public void setCampaignLastPersistenceSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), false);
         tracker.setCampaignLastPersistenceEnabled(true, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), true);
     }
 
     @Test
-    public void setCampaigLifetimeSyncTest() throws Exception {
+    public void setCampaigLifetimeSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 30);
         tracker.setCampaignLifetime(2, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 2);
     }
 
     @Test
-    public void setSessionBackgroundDurationSyncTest() throws Exception {
+    public void setSessionBackgroundDurationSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
         tracker.setSessionBackgroundDuration(2, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 2);

@@ -52,6 +52,7 @@ public class AudioTest extends AbstractTestClass {
 
     @Test
     public void setEventPlayTest() {
+        tracker.setParam("a", RichMedia.Action.Play.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Play)
                 .setLevel2(4)
@@ -119,6 +120,7 @@ public class AudioTest extends AbstractTestClass {
 
     @Test
     public void setEventRefreshTest() {
+        tracker.setParam("a", RichMedia.Action.Refresh.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Refresh)
                 .setMediaLevel2(4)
@@ -154,6 +156,7 @@ public class AudioTest extends AbstractTestClass {
 
     @Test
     public void setEventPauseTest() {
+        tracker.setParam("a", RichMedia.Action.Pause.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Pause)
                 .setMediaLevel2(4)
@@ -189,6 +192,7 @@ public class AudioTest extends AbstractTestClass {
 
     @Test
     public void setEventStopTest() {
+        tracker.setParam("a", RichMedia.Action.Stop.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Stop)
                 .setMediaLevel2(4)

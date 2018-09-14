@@ -29,71 +29,73 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
-public class MediaPlayerTest extends AbstractTestClass {
+public class MediaTest extends AbstractTestClass {
 
-    private MediaPlayer mediaPlayer;
+    private Media media;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        mediaPlayer = new MediaPlayer(tracker);
+        MediaPlayer player = new MediaPlayer(tracker);
+        media = new Media(player);
     }
 
     @Test
     public void initTest() {
-        assertEquals(1, mediaPlayer.getPlayerId());
+        assertTrue(true);
     }
 
     @Test
-    public void multiInstanceTest() {
-        assertNotSame(mediaPlayer, new MediaPlayer(tracker));
+    public void addOneTest() {
+        media.add("name", "type", 89);
+        assertEquals(1, media.list.size());
     }
 
     @Test
-    public void getVideosTest() {
-        Videos videos = mediaPlayer.Videos();
-        assertNotNull(mediaPlayer.Videos());
-        assertSame(videos, mediaPlayer.Videos());
+    public void addTwoTest() {
+        media.add("name", "chapter1", "type", 89);
+        assertEquals(1, media.list.size());
     }
 
     @Test
-    public void getAudiosTest() {
-        Audios audios = mediaPlayer.Audios();
-        assertNotNull(mediaPlayer.Audios());
-        assertSame(audios, mediaPlayer.Audios());
+    public void addThreeTest() {
+        media.add("name", "chapter1", "chapter2", "type", 89);
+        assertEquals(1, media.list.size());
     }
 
     @Test
-    public void getLiveVideosTest() {
-        LiveVideos liveVideos = mediaPlayer.LiveVideos();
-        assertNotNull(mediaPlayer.LiveVideos());
-        assertSame(liveVideos, mediaPlayer.LiveVideos());
+    public void addFourTest() {
+        media.add("name", "chapter1", "chapter2", "chapter3", "type", 89);
+        assertEquals(1, media.list.size());
     }
 
     @Test
-    public void getLiveAudiosTest() {
-        LiveAudios liveAudios = mediaPlayer.LiveAudios();
-        assertNotNull(mediaPlayer.LiveAudios());
-        assertSame(liveAudios, mediaPlayer.LiveAudios());
+    public void removeTest() {
+        Medium m1 = media.add("name", "type", 89);
+        Medium m2 = media.add("other", "type", 89);
+        media.add("lv3", "type", 89);
+        assertEquals(3, media.list.size());
+
+        media.remove("name");
+        assertEquals(2, media.list.size());
+        assertFalse(media.list.contains(m1));
+        assertTrue(media.list.contains(m2));
     }
 
     @Test
-    public void getMediaTest() {
-        Media media = mediaPlayer.Media();
-        assertNotNull(mediaPlayer.Media());
-        assertSame(media, mediaPlayer.Media());
-    }
+    public void removeAllTest() {
+        media.add("name", "type", 89);
+        media.add("toto", "type", 89);
+        media.add("titi", "type", 89);
+        assertEquals(3, media.list.size());
 
-    @Test
-    public void getLiveMediaTest() {
-        LiveMedia liveMedia = mediaPlayer.LiveMedia();
-        assertNotNull(mediaPlayer.LiveMedia());
-        assertSame(liveMedia, mediaPlayer.LiveMedia());
+        media.removeAll();
+        assertEquals(0, media.list.size());
+
     }
 }

@@ -38,54 +38,6 @@ public class LiveVideo extends RichMedia {
      *
      * @param mediaLabel /
      * @return the LiveVideo instance
-     * @deprecated please use setMediaLabel(String) instead
-     */
-    @Deprecated
-    public LiveVideo setName(String mediaLabel) {
-        return setMediaLabel(mediaLabel);
-    }
-
-    /**
-     * Set a new first media theme
-     *
-     * @param mediaTheme1 /
-     * @return the LiveVideo instance
-     * @deprecated please use setMediaTheme1(String) instead
-     */
-    @Deprecated
-    public LiveVideo setChapter1(String mediaTheme1) {
-        return setMediaTheme1(mediaTheme1);
-    }
-
-    /**
-     * Set a new second media theme
-     *
-     * @param mediaTheme2 /
-     * @return the LiveVideo instance
-     * @deprecated please use setMediaTheme2(String) instead
-     */
-    @Deprecated
-    public LiveVideo setChapter2(String mediaTheme2) {
-        return setMediaTheme2(mediaTheme2);
-    }
-
-    /**
-     * Set a new third media theme
-     *
-     * @param mediaTheme3 /
-     * @return the LiveVideo instance
-     * @deprecated please use setMediaTheme3(String) instead
-     */
-    @Deprecated
-    public LiveVideo setChapter3(String mediaTheme3) {
-        return setMediaTheme3(mediaTheme3);
-    }
-
-    /**
-     * Set a new media label
-     *
-     * @param mediaLabel /
-     * @return the LiveVideo instance
      */
     public LiveVideo setMediaLabel(String mediaLabel) {
         this.mediaLabel = mediaLabel;
@@ -131,31 +83,8 @@ public class LiveVideo extends RichMedia {
      * @param mediaLevel2 /
      * @return LiveVideo instance
      */
-    @Deprecated
-    public LiveVideo setLevel2(int mediaLevel2) {
-        return setMediaLevel2(mediaLevel2);
-    }
-
-    /**
-     * Set a new media level2
-     *
-     * @param mediaLevel2 /
-     * @return LiveVideo instance
-     */
     public LiveVideo setMediaLevel2(int mediaLevel2) {
         this.mediaLevel2 = mediaLevel2;
-        return this;
-    }
-
-    /**
-     * Change boolean "isBuffering" value
-     *
-     * @param isBuffering /
-     * @return LiveVideo instance
-     */
-    public LiveVideo setBuffering(boolean isBuffering) {
-        this.isBuffering = isBuffering;
-
         return this;
     }
 
@@ -172,18 +101,6 @@ public class LiveVideo extends RichMedia {
     }
 
     /**
-     * Set a new action
-     *
-     * @param action /
-     * @return LiveVideo instance
-     */
-    public LiveVideo setAction(Action action) {
-        this.action = action;
-
-        return this;
-    }
-
-    /**
      * Set a new webdomain
      *
      * @param webDomain /
@@ -192,5 +109,99 @@ public class LiveVideo extends RichMedia {
     public LiveVideo setWebDomain(String webDomain) {
         this.webDomain = webDomain;
         return this;
+    }
+
+    /**
+     * Set a new linked content
+     *
+     * @param linkedContent /
+     * @return the LiveVideo instance
+     */
+    public LiveVideo setLinkedContent(String linkedContent) {
+        this.linkedContent = linkedContent;
+        return this;
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaLabel(String) instead
+     */
+    @Deprecated
+    public LiveVideo setName(String mediaLabel) {
+        return setMediaLabel(mediaLabel);
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaTheme1(String) instead
+     */
+    @Deprecated
+    public LiveVideo setChapter1(String mediaTheme1) {
+        return setMediaTheme1(mediaTheme1);
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaTheme2(String) instead
+     */
+    @Deprecated
+    public LiveVideo setChapter2(String mediaTheme2) {
+        return setMediaTheme2(mediaTheme2);
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the LiveVideo instance
+     * @deprecated please use setMediaTheme3(String) instead
+     */
+    @Deprecated
+    public LiveVideo setChapter3(String mediaTheme3) {
+        return setMediaTheme3(mediaTheme3);
+    }
+
+    /**
+     * Set a new action
+     *
+     * @param action /
+     * @return LiveVideo instance
+     * @deprecated useless property, action is set when send called
+     */
+    @Deprecated
+    public LiveVideo setAction(Action action) {
+        return this;
+    }
+
+    /**
+     * Change boolean "isBuffering" value
+     *
+     * @param isBuffering /
+     * @return LiveVideo instance
+     * @deprecated useless property, buffering is set when send called
+     */
+    @Deprecated
+    public LiveVideo setBuffering(boolean isBuffering) {
+        return this;
+    }
+
+    /**
+     * Set a new media level2
+     *
+     * @param mediaLevel2 /
+     * @return LiveVideo instance
+     */
+    @Deprecated
+    public LiveVideo setLevel2(int mediaLevel2) {
+        return setMediaLevel2(mediaLevel2);
     }
 }

@@ -54,7 +54,6 @@ public class LiveVideoTest extends AbstractTestClass {
         assertEquals("", liveVideo.getName());
         assertEquals("", liveVideo.getMediaLabel());
         assertEquals("video", liveVideo.getMediaType());
-        assertNull(liveVideo.getAction());
         assertNull(liveVideo.getWebDomain());
         assertEquals(RichMedia.BroadcastMode.Live, liveVideo.getBroadcastMode());
         assertFalse(liveVideo.isBuffering());
@@ -68,6 +67,7 @@ public class LiveVideoTest extends AbstractTestClass {
 
     @Test
     public void setEventPlayTest() {
+        tracker.setParam("a", RichMedia.Action.Play.stringValue());
         liveVideo.setAction(RichMedia.Action.Play)
                 .setName("name")
                 .setLevel2(9)
@@ -131,6 +131,7 @@ public class LiveVideoTest extends AbstractTestClass {
 
     @Test
     public void setEventRefreshTest() {
+        tracker.setParam("a", RichMedia.Action.Refresh.stringValue());
         liveVideo.setAction(RichMedia.Action.Refresh)
                 .setMediaLabel("name")
                 .setMediaLevel2(9)
@@ -164,10 +165,12 @@ public class LiveVideoTest extends AbstractTestClass {
 
     @Test
     public void setEventPauseTest() {
+        tracker.setParam("a", RichMedia.Action.Pause.stringValue());
         liveVideo.setAction(RichMedia.Action.Pause)
                 .setMediaLabel("name")
                 .setMediaLevel2(9)
                 .setMediaTheme1("chapter1")
+                .setLinkedContent("content")
                 .setEvent();
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -196,6 +199,7 @@ public class LiveVideoTest extends AbstractTestClass {
 
     @Test
     public void setEventStopTest() {
+        tracker.setParam("a", RichMedia.Action.Stop.stringValue());
         liveVideo.setAction(RichMedia.Action.Stop)
                 .setMediaLabel("name")
                 .setMediaLevel2(9)
