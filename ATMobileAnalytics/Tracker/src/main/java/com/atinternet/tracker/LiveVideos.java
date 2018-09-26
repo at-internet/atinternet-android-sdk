@@ -102,10 +102,7 @@ public class LiveVideos {
     public void remove(String mediaLabel) {
         int index = searchLiveVideoIndexByMediaLabel(mediaLabel);
         if (index > -1) {
-            if (list.get(index).scheduler != null && !list.get(index).scheduler.isShutdown()) {
-                list.get(index).sendStop();
-            }
-            list.remove(index);
+            list.remove(index).sendStop();
         }
     }
 

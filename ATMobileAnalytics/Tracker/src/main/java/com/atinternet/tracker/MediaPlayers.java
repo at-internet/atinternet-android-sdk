@@ -76,30 +76,12 @@ public class MediaPlayers extends Helper {
     public void remove(int playerId) {
         MediaPlayer player = players.remove(playerId);
         if (player != null) {
-            for (Video video : player.Videos().list) {
-                if (video.scheduler != null && !video.scheduler.isShutdown()) {
-                    video.sendStop();
-                }
-            }
             player.Videos().removeAll();
-            for (LiveVideo liveVideo : player.LiveVideos().list) {
-                if (liveVideo.scheduler != null && !liveVideo.scheduler.isShutdown()) {
-                    liveVideo.sendStop();
-                }
-            }
             player.LiveVideos().removeAll();
-            for (Audio audio : player.Audios().list) {
-                if (audio.scheduler != null && !audio.scheduler.isShutdown()) {
-                    audio.sendStop();
-                }
-            }
             player.Audios().removeAll();
-            for (LiveAudio liveAudio : player.LiveAudios().list) {
-                if (liveAudio.scheduler != null && !liveAudio.scheduler.isShutdown()) {
-                    liveAudio.sendStop();
-                }
-            }
             player.LiveAudios().removeAll();
+            player.Media().removeAll();
+            player.LiveMedia().removeAll();
         }
     }
 

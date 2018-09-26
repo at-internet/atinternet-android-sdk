@@ -27,21 +27,10 @@ package com.atinternet.tracker;
  */
 public class Video extends RichMedia {
 
-    private int duration;
-
     Video(MediaPlayer player) {
         super(player);
         broadcastMode = BroadcastMode.Clip;
         mediaType = "video";
-    }
-
-    /**
-     * Get duration
-     *
-     * @return the duration
-     */
-    public int getDuration() {
-        return duration;
     }
 
     /**
@@ -54,6 +43,142 @@ public class Video extends RichMedia {
         this.duration = duration;
 
         return this;
+    }
+
+    /**
+     * Set a new media label
+     *
+     * @param mediaLabel /
+     * @return the Video instance
+     */
+    public Video setMediaLabel(String mediaLabel) {
+        this.mediaLabel = mediaLabel;
+        return this;
+    }
+
+    /**
+     * Set a new first media theme
+     *
+     * @param mediaTheme1 /
+     * @return the Video instance
+     */
+    public Video setMediaTheme1(String mediaTheme1) {
+        this.mediaTheme1 = mediaTheme1;
+        return this;
+    }
+
+    /**
+     * Set a new second media theme
+     *
+     * @param mediaTheme2 /
+     * @return the Video instance
+     */
+    public Video setMediaTheme2(String mediaTheme2) {
+        this.mediaTheme2 = mediaTheme2;
+        return this;
+    }
+
+    /**
+     * Set a new third media theme
+     *
+     * @param mediaTheme3 /
+     * @return the Video instance
+     */
+    public Video setMediaTheme3(String mediaTheme3) {
+        this.mediaTheme3 = mediaTheme3;
+        return this;
+    }
+
+    /**
+     * Set a new media level 2
+     *
+     * @param mediaLevel2 /
+     * @return Video instance
+     */
+    public Video setMediaLevel2(int mediaLevel2) {
+        this.mediaLevel2 = mediaLevel2;
+        return this;
+    }
+
+    /**
+     * Set a new webdomain
+     *
+     * @param webDomain /
+     * @return Video instance
+     */
+    public Video setWebDomain(String webDomain) {
+        this.webDomain = webDomain;
+        return this;
+    }
+
+    /**
+     * Change boolean "isEmbedded" value
+     *
+     * @param isEmbedded /
+     * @return Video instance
+     */
+    public Video setEmbedded(boolean isEmbedded) {
+        this.isEmbedded = isEmbedded;
+
+        return this;
+    }
+
+    /**
+     * Set a new linked content
+     *
+     * @param linkedContent /
+     * @return the Video instance
+     */
+    public Video setLinkedContent(String linkedContent) {
+        this.linkedContent = linkedContent;
+        return this;
+    }
+
+    @Override
+    void setEvent() {
+        super.setEvent();
+
+        if (duration > MAX_DURATION) {
+            duration = MAX_DURATION;
+        }
+
+        tracker.setParam(Hit.HitParam.MediaDuration.stringValue(), duration);
+    }
+
+    /**
+     * Change boolean "isBuffering" value
+     *
+     * @param isBuffering /
+     * @return Video instance
+     * @deprecated useless property, buffering is set when send called
+     */
+    @Deprecated
+    public Video setBuffering(boolean isBuffering) {
+        return this;
+    }
+
+    /**
+     * Set a new action
+     *
+     * @param action /
+     * @return Video instance
+     * @deprecated useless property, action is set when send called
+     */
+    @Deprecated
+    public Video setAction(Action action) {
+        return this;
+    }
+
+    /**
+     * Set a new level 2
+     *
+     * @param mediaLevel2 /
+     * @return Video instance
+     * @deprecated please use setMediaLevel2(int) instead
+     */
+    @Deprecated
+    public Video setLevel2(int mediaLevel2) {
+        return setMediaLevel2(mediaLevel2);
     }
 
     /**
@@ -102,129 +227,5 @@ public class Video extends RichMedia {
     @Deprecated
     public Video setChapter3(String mediaTheme3) {
         return setMediaTheme3(mediaTheme3);
-    }
-
-    /**
-     * Set a new media label
-     *
-     * @param mediaLabel /
-     * @return the Video instance
-     */
-    public Video setMediaLabel(String mediaLabel) {
-        this.mediaLabel = mediaLabel;
-        return this;
-    }
-
-    /**
-     * Set a new first media theme
-     *
-     * @param mediaTheme1 /
-     * @return the Video instance
-     */
-    public Video setMediaTheme1(String mediaTheme1) {
-        this.mediaTheme1 = mediaTheme1;
-        return this;
-    }
-
-    /**
-     * Set a new second media theme
-     *
-     * @param mediaTheme2 /
-     * @return the Video instance
-     */
-    public Video setMediaTheme2(String mediaTheme2) {
-        this.mediaTheme2 = mediaTheme2;
-        return this;
-    }
-
-    /**
-     * Set a new third media theme
-     *
-     * @param mediaTheme3 /
-     * @return the Video instance
-     */
-    public Video setMediaTheme3(String mediaTheme3) {
-        this.mediaTheme3 = mediaTheme3;
-        return this;
-    }
-
-    /**
-     * Set a new level 2
-     *
-     * @param mediaLevel2 /
-     * @return Video instance
-     * @deprecated please use setMediaLevel2(int) instead
-     */
-    @Deprecated
-    public Video setLevel2(int mediaLevel2) {
-        return setMediaLevel2(mediaLevel2);
-    }
-
-    /**
-     * Set a new media level 2
-     *
-     * @param mediaLevel2 /
-     * @return Video instance
-     */
-    public Video setMediaLevel2(int mediaLevel2) {
-        this.mediaLevel2 = mediaLevel2;
-        return this;
-    }
-
-    /**
-     * Change boolean "isBuffering" value
-     *
-     * @param isBuffering /
-     * @return Video instance
-     */
-    public Video setBuffering(boolean isBuffering) {
-        this.isBuffering = isBuffering;
-
-        return this;
-    }
-
-    /**
-     * Change boolean "isEmbedded" value
-     *
-     * @param isEmbedded /
-     * @return Video instance
-     */
-    public Video setEmbedded(boolean isEmbedded) {
-        this.isEmbedded = isEmbedded;
-
-        return this;
-    }
-
-    /**
-     * Set a new action
-     *
-     * @param action /
-     * @return Video instance
-     */
-    public Video setAction(Action action) {
-        this.action = action;
-
-        return this;
-    }
-
-    /**
-     * Set a new webdomain
-     *
-     * @param webDomain /
-     * @return Video instance
-     */
-    public Video setWebDomain(String webDomain) {
-        this.webDomain = webDomain;
-        return this;
-    }
-
-    @Override
-    void setEvent() {
-        super.setEvent();
-
-        if (duration > MAX_DURATION) {
-            duration = MAX_DURATION;
-        }
-        tracker.setParam(Hit.HitParam.MediaDuration.stringValue(), duration);
     }
 }

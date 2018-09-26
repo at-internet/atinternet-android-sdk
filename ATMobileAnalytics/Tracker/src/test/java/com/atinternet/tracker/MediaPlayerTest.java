@@ -82,4 +82,18 @@ public class MediaPlayerTest extends AbstractTestClass {
         assertNotNull(mediaPlayer.LiveAudios());
         assertSame(liveAudios, mediaPlayer.LiveAudios());
     }
+
+    @Test
+    public void getMediaTest() {
+        Media media = mediaPlayer.Media();
+        assertNotNull(mediaPlayer.Media());
+        assertSame(media, mediaPlayer.Media());
+    }
+
+    @Test
+    public void getLiveMediaTest() {
+        LiveMedia liveMedia = mediaPlayer.LiveMedia();
+        assertNotNull(mediaPlayer.LiveMedia());
+        assertSame(liveMedia, mediaPlayer.LiveMedia());
+    }
 }

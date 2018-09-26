@@ -54,7 +54,6 @@ public class LiveAudioTest extends AbstractTestClass {
         assertEquals("", liveAudio.getName());
         assertEquals("", liveAudio.getMediaLabel());
         assertEquals("audio", liveAudio.getMediaType());
-        assertNull(liveAudio.getAction());
         assertNull(liveAudio.getWebDomain());
         assertEquals(RichMedia.BroadcastMode.Live, liveAudio.getBroadcastMode());
         assertFalse(liveAudio.isBuffering());
@@ -68,6 +67,7 @@ public class LiveAudioTest extends AbstractTestClass {
 
     @Test
     public void setEventPlayTest() {
+        tracker.setParam("a", RichMedia.Action.Play.stringValue());
         liveAudio.setAction(RichMedia.Action.Play)
                 .setName("name")
                 .setLevel2(9)
@@ -131,6 +131,7 @@ public class LiveAudioTest extends AbstractTestClass {
 
     @Test
     public void setEventRefreshTest() {
+        tracker.setParam("a", RichMedia.Action.Refresh.stringValue());
         liveAudio.setAction(RichMedia.Action.Refresh)
                 .setMediaLabel("name")
                 .setMediaLevel2(9)
@@ -164,6 +165,7 @@ public class LiveAudioTest extends AbstractTestClass {
 
     @Test
     public void setEventPauseTest() {
+        tracker.setParam("a", RichMedia.Action.Pause.stringValue());
         liveAudio.setAction(RichMedia.Action.Pause)
                 .setMediaLabel("name")
                 .setMediaLevel2(9)
@@ -196,6 +198,7 @@ public class LiveAudioTest extends AbstractTestClass {
 
     @Test
     public void setEventStopTest() {
+        tracker.setParam("a", RichMedia.Action.Stop.stringValue());
         liveAudio.setAction(RichMedia.Action.Stop)
                 .setMediaLabel("name")
                 .setMediaLevel2(9)

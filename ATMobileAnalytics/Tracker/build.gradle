@@ -5,7 +5,7 @@ apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.1'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
@@ -26,7 +26,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.9.4"
+version = "2.10.0"
 
 install {
     repositories.mavenInstaller {
