@@ -308,8 +308,11 @@ public class Hit {
                 String[] parameterComponents = hitComponents[i].split("=");
 
                 if (parameterComponents[0].equals(HitParam.HitType.stringValue())) {
-                    type = Lists.getProcessedTypes().get(parameterComponents[1]);
-                    break;
+                    HitType t = Lists.getProcessedTypes().get(parameterComponents[1]);
+                    if (t != null) {
+                        type = t;
+                        break;
+                    }
                 }
 
                 if (parameterComponents[0].equals("clic") || parameterComponents[0].equals(HitParam.Touch.stringValue())) {

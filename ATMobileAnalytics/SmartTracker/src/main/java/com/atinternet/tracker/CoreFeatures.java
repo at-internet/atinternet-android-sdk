@@ -41,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
@@ -401,6 +402,31 @@ class LifeCycle {
                 return "";
             }
         };
+    }
+
+    static Map<String, Object> getMetricsMap(final SharedPreferences preferences) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        Map<String, Object> map = new LinkedHashMap<>();
+
+        // fs
+        map.put("fs", preferences.getBoolean(FIRST_SESSION, false) ? 1 : 0);
+
+        // fsau
+        map.put("fsau", preferences.getBoolean(FIRST_SESSION_AFTER_UPDATE, false) ? 1 : 0);
+
+        if (!TextUtils.isEmpty(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, ""))) {
+            map.put("scsu", preferences.getInt(SESSION_COUNT_SINCE_UPDATE, 0));
+            map.put("fsdau", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, simpleDateFormat.format(new Date()))));
+            map.put("dsu", preferences.getInt(DAYS_SINCE_UPDATE, 0));
+        }
+
+        map.put("sc", preferences.getInt(SESSION_COUNT, 0));
+        map.put("fsd", Integer.parseInt(preferences.getString(FIRST_SESSION_DATE, simpleDateFormat.format(new Date()))));
+        map.put("dsls", preferences.getInt(DAYS_SINCE_LAST_SESSION, 0));
+        map.put("dsfs", preferences.getInt(DAYS_SINCE_FIRST_SESSION, 0));
+        map.put("sessionId", sessionId);
+
+        return map;
     }
 }
 
