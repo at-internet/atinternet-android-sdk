@@ -841,7 +841,7 @@ class Sender implements Runnable {
     void saveHitDatabase(final Hit hit) {
         final String url = storage.saveHit(hit.getUrl(), System.currentTimeMillis(), oltParameter);
         if (!TextUtils.isEmpty(url)) {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SAVE, hit.getUrl());
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SAVE, url);
             updateDebugger(url, "save48", true);
         } else {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Hit could not be saved : " + hit.getUrl());
