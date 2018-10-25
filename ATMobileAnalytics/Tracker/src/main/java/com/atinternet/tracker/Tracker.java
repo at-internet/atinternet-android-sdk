@@ -1416,4 +1416,12 @@ public class Tracker {
             dispatcher.dispatch();
         }
     }
+
+    /***
+     * Get lifecycle metrics computed by SDK
+     * @return Map
+     */
+    public Map<String, Object> getLifecycleMetrics() {
+        return LifeCycle.getMetricsMap(getPreferences());
+    }
 }

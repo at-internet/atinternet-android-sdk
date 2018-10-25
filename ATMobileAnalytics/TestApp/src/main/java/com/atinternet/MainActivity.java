@@ -8,6 +8,7 @@ import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.MediaPlayer;
 import com.atinternet.tracker.MediaPlayers;
 import com.atinternet.tracker.RichMedia;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,6 +39,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tracker.setDefaultListener();
         tracker.setSiteId(552987, null, true);
         tracker.setLog("logp", null, true);
+
+        Screen s = tracker.Screens().add("monQQ");
+        s.Campaign("bite");
+        s.sendView();
+
+        tracker.Screens().add("2").sendView();
+
         players = tracker.Players();
         MediaPlayer player = players.add();
         media = player.Media().add("Media", "animation", 56).setLinkedContent("test");
