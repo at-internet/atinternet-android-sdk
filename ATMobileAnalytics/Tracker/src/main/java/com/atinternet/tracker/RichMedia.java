@@ -320,7 +320,7 @@ public abstract class RichMedia extends BusinessObject {
                 .setParam("plyr", mediaPlayer.getPlayerId())
                 .setParam("m5", isEmbedded ? "ext" : "int");
 
-        if (mediaLevel2 > 0) {
+        if (mediaLevel2 >= 0) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), mediaLevel2);
         }
     }
@@ -483,7 +483,7 @@ public abstract class RichMedia extends BusinessObject {
         }
 
         int lvl2 = TechnicalContext.getLevel2();
-        if (lvl2 > 0) {
+        if (lvl2 >= 0) {
             tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), lvl2);
         }
         if (linkedContent != null) {

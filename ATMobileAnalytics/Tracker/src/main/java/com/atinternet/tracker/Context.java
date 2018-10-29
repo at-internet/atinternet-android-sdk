@@ -45,7 +45,7 @@ public class Context {
     private final Tracker tracker;
 
     // Tracker level2
-    private int level2 = 0;
+    private int level2 = -1;
 
     // Tracker background mode
     private BackgroundMode backgroundMode = null;

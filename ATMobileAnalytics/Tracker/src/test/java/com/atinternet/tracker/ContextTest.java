@@ -46,7 +46,7 @@ public class ContextTest extends AbstractTestClass {
     @Test
     public void initGlobalTest() {
         assertNull(context.getBackgroundMode());
-        assertEquals(0, context.getLevel2());
+        assertEquals(-1, context.getLevel2());
     }
 
     @Test

@@ -272,7 +272,7 @@ public class Publisher extends OnAppAd {
             }
 
             int lvl2 = TechnicalContext.getLevel2();
-            if (lvl2 > 0) {
+            if (lvl2 >= 0) {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), lvl2);
             }
         }

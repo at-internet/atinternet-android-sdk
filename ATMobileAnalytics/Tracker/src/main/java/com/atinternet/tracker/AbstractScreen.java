@@ -327,7 +327,7 @@ public abstract class AbstractScreen extends BusinessObject {
 
     @Override
     void setEvent() {
-        if (level2 > 0) {
+        if (level2 >= 0) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
 

@@ -316,11 +316,11 @@ public class Gesture extends BusinessObject {
         }
 
         int lvl2 = TechnicalContext.getLevel2();
-        if (lvl2 > 0) {
+        if (lvl2 >= 0) {
             tracker.setParam(Hit.HitParam.TouchLevel2.stringValue(), lvl2);
         }
 
-        if (level2 > 0) {
+        if (level2 >= 0) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
 
