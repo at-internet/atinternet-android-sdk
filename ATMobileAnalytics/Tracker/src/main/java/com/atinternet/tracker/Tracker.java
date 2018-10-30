@@ -1400,17 +1400,18 @@ public class Tracker {
             }
 
             dispatchObjects(onAppAds, customObjs);
-
             dispatchObjects(productsObjects, customObjs);
 
-            if (!customObjs.isEmpty() || !screenObjects.isEmpty() || !internalSearchObjects.isEmpty()) {
+            if (!customObjs.isEmpty() || !screenObjects.isEmpty() || !internalSearchObjects.isEmpty() || !salesTrackerObjects.isEmpty()) {
                 customObjs.addAll(screenObjects);
                 customObjs.addAll(internalSearchObjects);
+                customObjs.addAll(salesTrackerObjects);
                 dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
 
                 customObjs.clear();
                 screenObjects.clear();
                 internalSearchObjects.clear();
+                salesTrackerObjects.clear();
             }
         } else {
             dispatcher.dispatch();

@@ -1066,11 +1066,11 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
 class TechnicalContext {
 
     private static String screenName = "";
-    private static int level2 = 0;
+    private static int level2 = -1;
 
     static void resetScreenContext() {
         screenName = null;
-        level2 = 0;
+        level2 = -1;
     }
 
     static void setScreenName(String sn) {
@@ -1097,7 +1097,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.10.1";
+            return "2.10.2";
         }
     };
 

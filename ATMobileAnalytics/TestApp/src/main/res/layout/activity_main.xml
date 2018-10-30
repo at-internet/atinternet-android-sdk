@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.atinternet.MainActivity">
 
     <ScrollView
@@ -20,72 +20,6 @@
             android:orientation="vertical">
             <!-- Content here -->
 
-
-            <Button
-                android:id="@+id/sendPlayWithoutRefresh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Play without refresh" />
-
-            <Button
-                android:id="@+id/sendPlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Play" />
-
-            <Button
-                android:id="@+id/sendPause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Pause" />
-
-            <Button
-                android:id="@+id/sendResume"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Resume" />
-
-            <Button
-                android:id="@+id/sendMove"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Move" />
-
-            <Button
-                android:id="@+id/sendShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Share" />
-
-            <Button
-                android:id="@+id/sendEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Email" />
-
-            <Button
-                android:id="@+id/sendFavor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Favor" />
-
-            <Button
-                android:id="@+id/sendDownload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Download" />
-
-            <Button
-                android:id="@+id/sendInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Info" />
-
-            <Button
-                android:id="@+id/sendStop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Stop" />
 
         </LinearLayout>
     </ScrollView>

@@ -1,1 +1,1 @@
-include ':TestApp', ':Tracker', ':SmartTracker'
+include ':TestApp', ':Tracker'
