@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -50,6 +51,11 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
      * Key representing if the app crashed or not
      */
     private static final String CRASH_DETECTION = "CrashDetection";
+
+    /**
+     * Key representing if the crash informations has been got
+     */
+    private static final String CRASH_RECOVERY_INFO = "CrashRecoveryInfo";
 
     /**
      * Key representing the last track screen before crash
@@ -79,7 +85,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
     /**
      * Shared preferences
      */
-    private static SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     /**
      * Last Track Screen
@@ -114,6 +120,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
         String exceptionName = (throwable.getCause() != null) ? throwable.getCause().getClass().getName() : throwable.getClass().getName();
 
         preferences.edit().putBoolean(CRASH_DETECTION, true)
+                .putBoolean(CRASH_RECOVERY_INFO, false)
                 .putString(CRASH_LAST_SCREEN, lastScreen != null ? lastScreen : "")
                 .putString(CRASH_CLASS_CAUSE, className)
                 .putString(CRASH_EXCEPTION_NAME, exceptionName != null ? exceptionName : "")
@@ -126,22 +133,22 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
      *
      * @return Closure
      */
-    static Closure getCrashInformation() {
+    static Closure getCrashInformation(final SharedPreferences preferences) {
         return new Closure() {
             @Override
             public String execute() {
-                boolean hasCrashed = preferences.getBoolean(CRASH_DETECTION, false);
-                if (hasCrashed) {
-                    LinkedHashMap<String, String> map = new LinkedHashMap<>();
-                    map.put("lastscreen", preferences.getString(CRASH_LAST_SCREEN, ""));
-                    map.put("classname", preferences.getString(CRASH_CLASS_CAUSE, ""));
-                    map.put("error", preferences.getString(CRASH_EXCEPTION_NAME, ""));
-                    preferences.edit().putBoolean(CRASH_DETECTION, false).apply();
-                    try {
-                        return new JSONObject().put("crash", new JSONObject(map)).toString();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                if (!preferences.getBoolean(CRASH_DETECTION, false)) {
+                    return new JSONObject().toString();
+                }
+                LinkedHashMap<String, String> map = new LinkedHashMap<>();
+                map.put("lastscreen", preferences.getString(CRASH_LAST_SCREEN, ""));
+                map.put("classname", preferences.getString(CRASH_CLASS_CAUSE, ""));
+                map.put("error", preferences.getString(CRASH_EXCEPTION_NAME, ""));
+                preferences.edit().putBoolean(CRASH_DETECTION, false).apply();
+                try {
+                    return new JSONObject().put("crash", new JSONObject(map)).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 return new JSONObject().toString();
             }
@@ -161,6 +168,18 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
             }
         }
         return "";
+    }
+
+    static Map<String, String> getCrashInformations(SharedPreferences prefs) {
+        Map<String, String> map = new HashMap<>();
+        if (prefs.getBoolean(CRASH_RECOVERY_INFO, true)) {
+            return map;
+        }
+        map.put("lastscreen", prefs.getString(CRASH_LAST_SCREEN, ""));
+        map.put("classname", prefs.getString(CRASH_CLASS_CAUSE, ""));
+        map.put("error", prefs.getString(CRASH_EXCEPTION_NAME, ""));
+        prefs.edit().putBoolean(CRASH_RECOVERY_INFO, true).apply();
+        return map;
     }
 }
 

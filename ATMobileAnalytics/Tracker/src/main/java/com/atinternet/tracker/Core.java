@@ -969,7 +969,7 @@ class Dispatcher {
                 .setRelativePosition(ParamOption.RelativePosition.last);
         tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
         if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), stcOptions);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
         }
 
         final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
@@ -1097,7 +1097,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.10.2";
+            return "2.10.3";
         }
     };
 
