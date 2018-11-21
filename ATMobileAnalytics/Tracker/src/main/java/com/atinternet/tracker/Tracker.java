@@ -1428,4 +1428,12 @@ public class Tracker {
     public Map<String, Object> getLifecycleMetrics() {
         return LifeCycle.getMetricsMap(getPreferences());
     }
+
+    /***
+     * Get crash informations saved
+     * @return Map
+     */
+    public Map<String, String> getCrashInformations() {
+        return CrashDetectionHandler.getCrashInformations(getPreferences());
+    }
 }

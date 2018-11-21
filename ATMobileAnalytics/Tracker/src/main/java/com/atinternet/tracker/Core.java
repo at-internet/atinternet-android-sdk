@@ -966,7 +966,7 @@ class Dispatcher {
                 .setRelativePosition(ParamOption.RelativePosition.last);
         tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
         if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), stcOptions);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
         }
 
         final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
@@ -1541,10 +1541,7 @@ class Tool {
 
         try {
             JSONObject obj = new JSONObject(s);
-            if (obj.toString().equals(s)) {
-                return true;
-            }
-            return false;
+            return obj.toString().equals(cleanJSONString(s));
         } catch (JSONException e) {
             return false;
         }
@@ -1555,13 +1552,19 @@ class Tool {
 
         try {
             JSONArray array = new JSONArray(s);
-            if (array.toString().equals(s)) {
-                return true;
-            }
-            return false;
+            return array.toString().equals(cleanJSONString(s));
         } catch (JSONException e) {
             return false;
         }
+    }
+
+    private static String cleanJSONString(String jsonStr) {
+        return jsonStr.replace("\n", "")
+                .replace("\t", "")
+                .replace("\b", "")
+                .replace("\f", "")
+                .replace(" ", "")
+                .replace("\r", "");
     }
 
     static Map<String, Object> toMap(JSONObject jsonObject) {

@@ -2,6 +2,7 @@ package com.atinternet;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
@@ -20,7 +21,9 @@ import com.atinternet.tracker.ecommerce.objectproperties.Product;
 import com.atinternet.tracker.ecommerce.RemoveProduct;
 import com.atinternet.tracker.ecommerce.UpdateCart;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.custom).setOnClickListener(this);
+        findViewById(R.id.crash).setOnClickListener(this);
         findViewById(R.id.displayProduct).setOnClickListener(this);
         findViewById(R.id.displayList).setOnClickListener(this);
         findViewById(R.id.clickProduct).setOnClickListener(this);
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         productData3.put("key", "value");
 
         switch (v.getId()) {
+            case R.id.crash:
+                List l = new ArrayList();
+                l.get(0);
+                break;
             case R.id.custom:
                 tracker.Events().add("pageLoad", new HashMap<String, Object>() {{
                     put("s:name", "pageName");

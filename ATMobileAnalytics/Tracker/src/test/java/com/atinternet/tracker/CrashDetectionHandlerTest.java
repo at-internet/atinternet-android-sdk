@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.json.JSONException;
@@ -64,7 +65,7 @@ public class CrashDetectionHandlerTest extends AbstractTestClass {
         preferences.edit().putString("CrashClassCause", "Class").apply();
         preferences.edit().putString("CrashExceptionName", Throwable.class.getName()).apply();
 
-        JSONObject json = new JSONObject(CrashDetectionHandler.getCrashInformation().execute());
+        JSONObject json = new JSONObject(CrashDetectionHandler.getCrashInformation(RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE)).execute());
 
         assertNotNull(json.getJSONObject("crash"));
         assertEquals(json.getJSONObject("crash").get("lastscreen"), "LastScreen");
