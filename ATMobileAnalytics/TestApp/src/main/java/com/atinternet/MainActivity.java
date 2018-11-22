@@ -2,7 +2,6 @@ package com.atinternet;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
@@ -16,10 +15,10 @@ import com.atinternet.tracker.ecommerce.DisplayList;
 import com.atinternet.tracker.ecommerce.DisplayPageProduct;
 import com.atinternet.tracker.ecommerce.DisplayProduct;
 import com.atinternet.tracker.ecommerce.PaymentCheckout;
-import com.atinternet.tracker.ecommerce.TransactionConfirmation;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
 import com.atinternet.tracker.ecommerce.RemoveProduct;
+import com.atinternet.tracker.ecommerce.TransactionConfirmation;
 import com.atinternet.tracker.ecommerce.UpdateCart;
+import com.atinternet.tracker.ecommerce.objectproperties.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
