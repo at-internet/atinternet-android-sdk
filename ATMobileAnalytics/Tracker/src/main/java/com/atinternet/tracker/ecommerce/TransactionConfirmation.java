@@ -92,11 +92,11 @@ public class TransactionConfirmation extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart);
-        data.put("payment", payment);
-        data.put("customer", customer);
-        data.put("shipping", shipping);
-        data.put("transaction", transaction);
+        data.put("cart", cart.getAll());
+        data.put("payment", payment.getAll());
+        data.put("customer", customer.getAll());
+        data.put("shipping", shipping.getAll());
+        data.put("transaction", transaction.getAll());
         data.put("a:s:promotionalCode", promotionalCodes);
         return super.getData();
     }
@@ -107,15 +107,15 @@ public class TransactionConfirmation extends EcommerceEvent {
         java.util.List<Event> generatedEvents = super.getAdditionalEvents();
 
         CartConfirmation cc = new CartConfirmation(screen);
-        cc.Transaction().set(transaction);
-        cc.Cart().set(cart);
+        cc.Transaction().setAll(transaction.getAll());
+        cc.Cart().setAll(cart.getAll());
         generatedEvents.add(cc);
 
         for (Product p : products) {
             ProductPurchased pp = new ProductPurchased(screen);
-            pp.Cart().put("id", String.valueOf(cart.get("s:id")));
-            pp.Transaction().put("id", String.valueOf(transaction.get("s:id")));
-            pp.Product().set(p);
+            pp.Cart().set("id", String.valueOf(cart.get("s:id")));
+            pp.Transaction().set("id", String.valueOf(transaction.get("s:id")));
+            pp.Product().setAll(p.getAll());
             generatedEvents.add(pp);
         }
 
@@ -134,10 +134,10 @@ public class TransactionConfirmation extends EcommerceEvent {
 
             com.atinternet.tracker.Cart stCart = tracker.Cart().set(String.valueOf(cart.get("s:id")));
             for (Product p : products) {
-                /// SALES TRACKER
                 String stProductId;
-                if (p.containsKey("s:name")) {
-                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(p.get("s:name")));
+                Object name = p.get("s:name");
+                if (name != null) {
+                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {
                     stProductId = String.valueOf(p.get("s:id"));
                 }

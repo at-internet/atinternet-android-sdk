@@ -42,7 +42,7 @@ public class DisplayProduct extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("product", product);
+        data.put("product", product.getAll());
         return super.getData();
     }
 }

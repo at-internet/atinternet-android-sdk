@@ -23,10 +23,8 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 import com.atinternet.tracker.ecommerce.AddProducts;
-import com.atinternet.tracker.ecommerce.ClickProducts;
 import com.atinternet.tracker.ecommerce.DeliveryCheckouts;
 import com.atinternet.tracker.ecommerce.DisplayCarts;
-import com.atinternet.tracker.ecommerce.DisplayLists;
 import com.atinternet.tracker.ecommerce.DisplayPageProducts;
 import com.atinternet.tracker.ecommerce.DisplayProducts;
 import com.atinternet.tracker.ecommerce.PaymentCheckouts;
@@ -40,8 +38,6 @@ public class ECommerce {
     private Events events;
 
     private DisplayProducts displayProducts;
-    private DisplayLists displayLists;
-    private ClickProducts clickProducts;
     private DisplayPageProducts displayPageProducts;
     private AddProducts addProducts;
     private RemoveProducts removeProducts;
@@ -76,28 +72,6 @@ public class ECommerce {
             displayProducts = new DisplayProducts(events);
         }
         return displayProducts;
-    }
-
-    /***
-     * Create DisplayLists helper
-     * @return DisplayLists
-     */
-    public DisplayLists DisplayLists() {
-        if (displayLists == null) {
-            displayLists = new DisplayLists(events);
-        }
-        return displayLists;
-    }
-
-    /***
-     * Create ClickProducts helper
-     * @return ClickProducts
-     */
-    public ClickProducts ClickProducts() {
-        if (clickProducts == null) {
-            clickProducts = new ClickProducts(events);
-        }
-        return clickProducts;
     }
 
     /***

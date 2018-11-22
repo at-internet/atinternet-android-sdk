@@ -29,10 +29,10 @@ public class Shipping extends RequiredPropertiesDataObject {
     public Shipping() {
         super();
         /// STRING
-        propertiesPrefixMap.put("delivery", "s");
+        propertiesPrefix.put("delivery", "s");
 
         /// FLOAT
-        propertiesPrefixMap.put("costTaxIncluded", "f");
-        propertiesPrefixMap.put("costTaxFree", "f");
+        propertiesPrefix.put("costTaxIncluded", "f");
+        propertiesPrefix.put("costTaxFree", "f");
     }
 }

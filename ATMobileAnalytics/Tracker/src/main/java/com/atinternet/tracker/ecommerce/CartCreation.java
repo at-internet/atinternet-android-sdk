@@ -42,7 +42,7 @@ public class CartCreation extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart);
+        data.put("cart", cart.getAll());
         return super.getData();
     }
 }

@@ -2,16 +2,15 @@ package com.atinternet;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.ecommerce.AddProduct;
-import com.atinternet.tracker.ecommerce.ClickProduct;
 import com.atinternet.tracker.ecommerce.DeliveryCheckout;
 import com.atinternet.tracker.ecommerce.DisplayCart;
-import com.atinternet.tracker.ecommerce.DisplayList;
 import com.atinternet.tracker.ecommerce.DisplayPageProduct;
 import com.atinternet.tracker.ecommerce.DisplayProduct;
 import com.atinternet.tracker.ecommerce.PaymentCheckout;
@@ -37,10 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.custom).setOnClickListener(this);
         findViewById(R.id.crash).setOnClickListener(this);
         findViewById(R.id.displayProduct).setOnClickListener(this);
-        findViewById(R.id.displayList).setOnClickListener(this);
-        findViewById(R.id.clickProduct).setOnClickListener(this);
         findViewById(R.id.displayPageProduct).setOnClickListener(this);
         findViewById(R.id.addProduct).setOnClickListener(this);
+        findViewById(R.id.addProductAndCartCreation).setOnClickListener(this);
         findViewById(R.id.removeProduct).setOnClickListener(this);
         findViewById(R.id.displayCart).setOnClickListener(this);
         findViewById(R.id.updateCart).setOnClickListener(this);
@@ -60,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("t3", "v");
         }});
         tracker.dispatch();
-        //tracker.setSecureModeEnabled(true, null, true);
+
+        Log.d("ATTestApp", tracker.getCrashInformations().toString());
+        Log.d("ATTestApp", tracker.getCrashInformations().toString());
         tracker.ECommerce().setAutoSalesTrackerEnabled(true, null, true);
     }
 
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.displayProduct:
                 DisplayProduct dp = tracker.ECommerce().DisplayProducts().add(s);
-                dp.Product().set(new HashMap<String, Object>() {{
+                dp.Product().setAll(new HashMap<String, Object>() {{
                     put("id", "7");
                     put("variant", "1");
                     put("name", "Robe en mousseline imprimée");
@@ -117,34 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("category6", "Robes d'été");
                     put("position", 1);
                     put("list", "specialproducts");
-                }});
-                tracker.dispatch();
-                break;
-            case R.id.displayList:
-                DisplayList dl = tracker.ECommerce().DisplayLists().add(s);
-                dl.List().put("name", "specialproducts");
-                tracker.dispatch();
-                break;
-            case R.id.clickProduct:
-                ClickProduct cp = tracker.ECommerce().ClickProducts().add(s);
-                cp.Product().set(new HashMap<String, Object>() {{
-                    put("id", "1");
-                    put("variant", "1");
-                    put("name", "T-shirt délavé à manches courtes");
-                    put("brand", "Fashion Manufacturer");
-                    put("discount", 0);
-                    put("priceTaxIncluded", 19.81);
-                    put("priceTaxFree", 16.51);
-                    put("currency", "EUR");
-                    put("stock", 1);
-                    put("category1", "Accueil");
-                    put("category2", "Femmes");
-                    put("category3", "Tops");
-                    put("category4", "T-shirts");
-                    put("category5", "T-shirts");
-                    put("category6", "T-shirts");
-                    put("position", 1);
-                    put("list", "mainproducts");
                 }});
                 tracker.dispatch();
                 break;
@@ -188,10 +160,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }}));
                 tracker.dispatch();
                 break;
-            case R.id.addProduct:
-                AddProduct ap = tracker.ECommerce().AddProducts().add(s);
-                ap.Cart().put("id", "34");
-                ap.Product().set(new HashMap<String, Object>() {{
+            case R.id.addProductAndCartCreation:
+                AddProduct apWcc = tracker.ECommerce().AddProducts().add(s);
+                apWcc.Cart().set("id", "34");
+                apWcc.Product().setAll(new HashMap<String, Object>() {{
                     put("id", "3");
                     put("variant", "1");
                     put("name", "Robe imprimée");
@@ -203,7 +175,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("stock", 1);
                     put("quantity", 1);
                     put("position", 1);
-                    put("cart.creation", true);
+                    put("cartcreation", true);
+                    put("category1", "Accueil");
+                    put("category2", "Femmes");
+                    put("category3", "Robes");
+                    put("category4", "Robes décontractées");
+                    put("category5", "Robes décontractées");
+                    put("category6", "Robes décontractées");
+                    put("list", "product");
+                }});
+                tracker.dispatch();
+            case R.id.addProduct:
+                AddProduct ap = tracker.ECommerce().AddProducts().add(s);
+                ap.Cart().set("id", "34");
+                ap.Product().setAll(new HashMap<String, Object>() {{
+                    put("id", "3");
+                    put("variant", "1");
+                    put("name", "Robe imprimée");
+                    put("brand", "Fashion Manufacturer");
+                    put("discount", 0);
+                    put("priceTaxIncluded", 31.2);
+                    put("priceTaxFree", 26);
+                    put("currency", "EUR");
+                    put("stock", 1);
+                    put("quantity", 1);
+                    put("position", 1);
                     put("category1", "Accueil");
                     put("category2", "Femmes");
                     put("category3", "Robes");
@@ -216,8 +212,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.removeProduct:
                 RemoveProduct rp = tracker.ECommerce().RemoveProducts().add(s);
-                rp.Cart().put("id", "34");
-                rp.Product().set(new HashMap<String, Object>() {{
+                rp.Cart().set("id", "34");
+                rp.Product().setAll(new HashMap<String, Object>() {{
                     put("id", "4");
                     put("variant", "1");
                     put("name", "Robe imprimée");
@@ -241,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.displayCart:
                 DisplayCart dc = tracker.ECommerce().DisplayCarts().add(s);
-                dc.Cart().set(new HashMap<String, Object>() {{
+                dc.Cart().setAll(new HashMap<String, Object>() {{
                     put("id", "53");
                     put("turnoverTaxFree", 456.2);
                     put("turnoverTaxIncluded", 549);
@@ -257,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.updateCart:
                 UpdateCart uc = tracker.ECommerce().UpdateCarts().add(s);
-                uc.Cart().set(new HashMap<String, Object>() {{
+                uc.Cart().setAll(new HashMap<String, Object>() {{
                     put("id", "34");
                     put("turnoverTaxFree", 52);
                     put("turnoverTaxIncluded", 62.4);
@@ -269,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.deliveryCheckout:
                 DeliveryCheckout dch = tracker.ECommerce().DeliveryCheckouts().add(s);
-                dch.Cart().set(new HashMap<String, Object>() {{
+                dch.Cart().setAll(new HashMap<String, Object>() {{
                     put("id", "34");
                     put("turnoverTaxFree", 34);
                     put("turnoverTaxIncluded", 40.8);
@@ -277,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("quantity", 1);
                     put("currency", "EUR");
                 }});
-                dch.Shipping().set(new HashMap<String, Object>() {{
+                dch.Shipping().setAll(new HashMap<String, Object>() {{
                     put("costTaxFree", 7);
                     put("costTaxIncluded", 8.4);
                     put("delivery", "My carrier");
@@ -286,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.paymentCheckout:
                 PaymentCheckout pc = tracker.ECommerce().PaymentCheckouts().add(s);
-                pc.Cart().set(new HashMap<String, Object>() {{
+                pc.Cart().setAll(new HashMap<String, Object>() {{
                     put("id", "34");
                     put("turnoverTaxFree", 34);
                     put("turnoverTaxIncluded", 40.8);
@@ -294,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("quantity", 1);
                     put("currency", "EUR");
                 }});
-                pc.Shipping().set(new HashMap<String, Object>() {{
+                pc.Shipping().setAll(new HashMap<String, Object>() {{
                     put("costTaxFree", 7);
                     put("costTaxIncluded", 8.4);
                     put("delivery", "My carrier");
@@ -305,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 TransactionConfirmation tc = tracker.ECommerce().TransactionConfirmations().add(s);
                 tc.PromotionalCodes().add("DQQYRZSJ");
                 tc.PromotionalCodes().add("UN1ENE27");
-                tc.Cart().set(new HashMap<String, Object>() {{
+                tc.Cart().setAll(new HashMap<String, Object>() {{
                     put("id", "34");
                     put("creation", 1514973161);
                     put("turnoverTaxFree", 34);
@@ -314,14 +310,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("quantity", 1);
                     put("currency", "EUR");
                 }});
-                tc.Customer().put("new", 0);
-                tc.Payment().put("mode", "Chèque");
-                tc.Shipping().set(new HashMap<String, Object>() {{
+                tc.Customer().set("new", 0);
+                tc.Payment().set("mode", "Chèque");
+                tc.Shipping().setAll(new HashMap<String, Object>() {{
                     put("costTaxFree", 7);
                     put("costTaxIncluded", 8.4);
                     put("delivery", "My carrier");
                 }});
-                tc.Transaction().put("id", "27");
+                tc.Transaction().set("id", "27");
                 tc.Products().add(new Product(new HashMap<String, Object>() {{
                     put("id", "2");
                     put("name", "Chemisier");

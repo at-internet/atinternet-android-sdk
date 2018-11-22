@@ -53,8 +53,8 @@ public class AddProduct extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("product", product);
-        data.put("cart", cart);
+        data.put("product", product.getAll());
+        data.put("cart", cart.getAll());
         return super.getData();
     }
 
@@ -62,16 +62,16 @@ public class AddProduct extends EcommerceEvent {
     protected List<Event> getAdditionalEvents() {
         List<Event> generatedEvents = super.getAdditionalEvents();
 
-        if (Utility.parseBooleanFromString(String.valueOf(product.get("b:cart.creation")))) {
+        if (Utility.parseBooleanFromString(String.valueOf(product.get("b:cartcreation")))) {
             CartCreation cc = new CartCreation(screen);
             Cart ccc = cc.Cart();
             int quantity = Utility.parseIntFromString(String.valueOf(product.get("n:quantity")));
-            ccc.put("id", String.valueOf(cart.get("s:id")));
-            ccc.put("currency", String.valueOf(product.get("s:currency")));
-            ccc.put("turnoverTaxIncluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxIncluded"))) * quantity);
-            ccc.put("turnoverTaxFree", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxFree"))) * quantity);
-            ccc.put("quantity", quantity);
-            ccc.put("nbDistinctProduct", 1);
+            ccc.set("id", String.valueOf(cart.get("s:id")));
+            ccc.set("currency", String.valueOf(product.get("s:currency")));
+            ccc.set("turnoverTaxIncluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxIncluded"))) * quantity);
+            ccc.set("turnoverTaxFree", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxFree"))) * quantity);
+            ccc.set("quantity", quantity);
+            ccc.set("nbDistinctProduct", 1);
             generatedEvents.add(cc);
         }
 

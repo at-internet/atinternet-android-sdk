@@ -50,8 +50,8 @@ public class RemoveProduct extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("product", product);
-        data.put("cart", cart);
+        data.put("product", product.getAll());
+        data.put("cart", cart.getAll());
         return super.getData();
     }
 }

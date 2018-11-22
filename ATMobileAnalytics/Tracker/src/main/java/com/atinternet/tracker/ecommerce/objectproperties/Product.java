@@ -9,37 +9,35 @@ public class Product extends RequiredPropertiesDataObject {
     public Product() {
         super();
         /// STRING
-        propertiesPrefixMap.put("id", "s");
-        propertiesPrefixMap.put("name", "s");
-        propertiesPrefixMap.put("brand", "s");
-        propertiesPrefixMap.put("currency", "s");
-        propertiesPrefixMap.put("variant", "s");
-        propertiesPrefixMap.put("category1", "s");
-        propertiesPrefixMap.put("category2", "s");
-        propertiesPrefixMap.put("category3", "s");
-        propertiesPrefixMap.put("category4", "s");
-        propertiesPrefixMap.put("category5", "s");
-        propertiesPrefixMap.put("category6", "s");
-        propertiesPrefixMap.put("list", "s");
+        propertiesPrefix.put("id", "s");
+        propertiesPrefix.put("name", "s");
+        propertiesPrefix.put("brand", "s");
+        propertiesPrefix.put("currency", "s");
+        propertiesPrefix.put("variant", "s");
+        propertiesPrefix.put("category1", "s");
+        propertiesPrefix.put("category2", "s");
+        propertiesPrefix.put("category3", "s");
+        propertiesPrefix.put("category4", "s");
+        propertiesPrefix.put("category5", "s");
+        propertiesPrefix.put("category6", "s");
+        propertiesPrefix.put("list", "s");
 
         /// BOOLEAN
-        propertiesPrefixMap.put("discount", "b");
-        propertiesPrefixMap.put("stock", "b");
-        propertiesPrefixMap.put("cart.creation", "b");
+        propertiesPrefix.put("discount", "b");
+        propertiesPrefix.put("stock", "b");
+        propertiesPrefix.put("cartcreation", "b");
 
         /// FLOAT
-        propertiesPrefixMap.put("priceTaxIncluded", "f");
-        propertiesPrefixMap.put("priceTaxFree", "f");
+        propertiesPrefix.put("priceTaxIncluded", "f");
+        propertiesPrefix.put("priceTaxFree", "f");
 
         /// LONG
-        propertiesPrefixMap.put("position", "n");
-        propertiesPrefixMap.put("quantity", "n");
+        propertiesPrefix.put("position", "n");
+        propertiesPrefix.put("quantity", "n");
     }
 
     public Product(Map<String, Object> obj) {
         this();
-        for (Entry<String, Object> entry : obj.entrySet()) {
-            super.put(entry.getKey(), entry.getValue());
-        }
+        setAll(obj);
     }
 }

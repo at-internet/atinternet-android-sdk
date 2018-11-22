@@ -29,6 +29,6 @@ public class Payment extends RequiredPropertiesDataObject {
     public Payment() {
         super();
         /// STRING
-        propertiesPrefixMap.put("mode", "s");
+        propertiesPrefix.put("mode", "s");
     }
 }

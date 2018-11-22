@@ -69,7 +69,7 @@ public class DisplayPageProduct extends EcommerceEvent {
             if (level2Obj.size() != 0) {
                 dp.data.put("level2", level2Obj);
             }
-            dp.data.put("product", p);
+            dp.data.put("product", p.getAll());
             generatedEvents.add(dp);
         }
 
@@ -77,8 +77,9 @@ public class DisplayPageProduct extends EcommerceEvent {
             for (Product p : products) {
                 /// SALES TRACKER
                 String stProductId;
-                if (p.containsKey("s:name")) {
-                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(p.get("s:name")));
+                Object name = p.get("s:name");
+                if (name != null) {
+                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {
                     stProductId = String.valueOf(p.get("s:id"));
                 }

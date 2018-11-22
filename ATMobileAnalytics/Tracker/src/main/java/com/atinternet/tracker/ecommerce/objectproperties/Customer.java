@@ -23,14 +23,11 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce.objectproperties;
 
 import com.atinternet.tracker.RequiredPropertiesDataObject;
-import com.atinternet.tracker.Order;
-
-import java.util.Map;
 
 public class Customer extends RequiredPropertiesDataObject {
 
     public Customer() {
         super();
-        propertiesPrefixMap.put("new", "b");
+        propertiesPrefix.put("new", "b");
     }
 }

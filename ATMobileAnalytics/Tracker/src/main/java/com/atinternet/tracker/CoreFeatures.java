@@ -77,10 +77,10 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
      */
     private final Thread.UncaughtExceptionHandler defaultHandler;
 
-    /**
-     * Context
+    /***
+     * Package name
      */
-    private final Context context;
+    private final String packageName;
 
     /**
      * Shared preferences
@@ -105,13 +105,13 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
     /**
      * Default constructor
      *
-     * @param context        Context
+     * @param packageName    String
      * @param defaultHandler Thread.UncaughtExceptionHandler
      */
-    CrashDetectionHandler(Context context, Thread.UncaughtExceptionHandler defaultHandler) {
+    CrashDetectionHandler(String packageName, SharedPreferences prefs, Thread.UncaughtExceptionHandler defaultHandler) {
         this.defaultHandler = defaultHandler;
-        this.context = context;
-        preferences = context.getApplicationContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
+        this.preferences = prefs;
+        this.packageName = packageName;
     }
 
     @Override
@@ -124,7 +124,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
                 .putString(CRASH_LAST_SCREEN, lastScreen != null ? lastScreen : "")
                 .putString(CRASH_CLASS_CAUSE, className)
                 .putString(CRASH_EXCEPTION_NAME, exceptionName != null ? exceptionName : "")
-                .apply();
+                .commit();
         defaultHandler.uncaughtException(thread, throwable);
     }
 
@@ -163,7 +163,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
      */
     private String getClassNameException(Throwable t) {
         for (StackTraceElement element : t.getStackTrace()) {
-            if (element.getClassName().contains(context.getApplicationContext().getPackageName())) {
+            if (element.getClassName().contains(packageName)) {
                 return element.getClassName();
             }
         }

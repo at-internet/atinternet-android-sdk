@@ -29,6 +29,6 @@ public class Transaction extends RequiredPropertiesDataObject {
     public Transaction() {
         super();
         /// STRING
-        propertiesPrefixMap.put("id", "s");
+        propertiesPrefix.put("id", "s");
     }
 }

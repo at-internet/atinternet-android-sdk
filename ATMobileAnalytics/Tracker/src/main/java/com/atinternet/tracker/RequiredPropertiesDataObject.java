@@ -25,55 +25,66 @@ package com.atinternet.tracker;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class RequiredPropertiesDataObject extends HashMap<String, Object> {
+public abstract class RequiredPropertiesDataObject {
 
-    protected final Map<String, String> propertiesPrefixMap;
+    protected final Map<String, Object> properties;
+    protected final Map<String, String> propertiesPrefix;
 
     protected RequiredPropertiesDataObject() {
-        propertiesPrefixMap = new HashMap<>();
+        properties = new HashMap<>();
+        propertiesPrefix = new HashMap<>();
     }
 
     /***
-     * Override base method to set prefix if key are known
+     * Get all properties set
+     * @return Map
+     */
+    public Map<String, Object> getAll() {
+        return properties;
+    }
+
+    /***
+     * Get a property
      * @param key String
-     * @param value Object
      * @return Object
      */
-    @Override
-    public Object put(String key, Object value) {
-        String prefix = propertiesPrefixMap.get(key);
+    public Object get(String key) {
+        return properties.get(key);
+    }
+
+    /***
+     * Set a property with prefix if needed
+     * @param key String
+     * @param value Object
+     * @return RequiredPropertiesDataObject instance
+     */
+    public RequiredPropertiesDataObject set(String key, Object value) {
+        String prefix = propertiesPrefix.get(key);
 
         if (prefix != null) {
-            key = String.format("%s:%s", prefix, key);
+            properties.put(String.format("%s:%s", prefix, key), value);
+        } else {
+            properties.put(key, value);
         }
-        return super.put(key, value);
+        return this;
     }
 
     /***
-     * Override base method to check if properties are known and add prefix key
-     * @param m Map
+     * Set all properties with prefix if needed
+     * @param obj Map
+     * @return RequiredPropertiesDataObject instance
      */
-    @Override
-    public void putAll(Map<? extends String, ?> m) {
-        Map<String, Object> result = new HashMap<>();
-
-        for (Entry<? extends String, ?> entry : m.entrySet()) {
+    public RequiredPropertiesDataObject setAll(Map<String, Object> obj) {
+        for (Map.Entry<String, Object> entry : obj.entrySet()) {
             String entryKey = entry.getKey();
-            String prefix = propertiesPrefixMap.get(entryKey);
+            String prefix = propertiesPrefix.get(entryKey);
 
             if (prefix != null) {
-                entryKey = String.format("%s:%s", prefix, entryKey);
+                properties.put(String.format("%s:%s", prefix, entryKey), entry.getValue());
+            } else {
+                properties.put(entryKey, entry.getValue());
             }
-            result.put(entryKey, entry.getValue());
         }
-        super.putAll(result);
-    }
-
-    /***
-     * Alias to putAll
-     * @param obj Map
-     */
-    public void set(Map<String, Object> obj) {
-        putAll(obj);
+        return this;
     }
 }

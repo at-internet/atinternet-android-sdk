@@ -33,19 +33,6 @@
             android:text="displayProduct" />
 
         <Button
-            android:id="@+id/displayList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="displayList" />
-
-
-        <Button
-            android:id="@+id/clickProduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="clickProduct" />
-
-        <Button
             android:id="@+id/displayPageProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +43,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="addProduct" />
+
+        <Button
+            android:id="@+id/addProductAndCartCreation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="addProductAndCartCreation" />
 
         <Button
             android:id="@+id/removeProduct"

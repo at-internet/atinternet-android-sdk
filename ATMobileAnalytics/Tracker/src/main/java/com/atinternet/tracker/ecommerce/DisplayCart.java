@@ -58,7 +58,7 @@ public class DisplayCart extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart);
+        data.put("cart", cart.getAll());
         return super.getData();
     }
 
@@ -70,8 +70,9 @@ public class DisplayCart extends EcommerceEvent {
 
             for (Product p : products) {
                 String stProductId;
-                if (p.containsKey("s:name")) {
-                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(p.get("s:name")));
+                Object name = p.get("s:name");
+                if (name != null) {
+                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {
                     stProductId = String.valueOf(p.get("s:id"));
                 }

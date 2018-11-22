@@ -164,7 +164,7 @@ public class Tracker {
             buffer = new Buffer(this);
             dispatcher = new Dispatcher(this);
             if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get(), defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
             }
             getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
 
@@ -259,7 +259,7 @@ public class Tracker {
 
         if (enableCrashDetectionHandler) {
             if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get(), defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
             }
         } else {
             if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {

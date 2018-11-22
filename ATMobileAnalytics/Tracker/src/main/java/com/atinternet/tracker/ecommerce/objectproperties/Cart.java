@@ -29,18 +29,18 @@ public class Cart extends RequiredPropertiesDataObject {
     public Cart() {
         super();
         /// STRING
-        propertiesPrefixMap.put("id", "s");
-        propertiesPrefixMap.put("currency", "s");
+        propertiesPrefix.put("id", "s");
+        propertiesPrefix.put("currency", "s");
 
         /// DATE
-        propertiesPrefixMap.put("creation", "d");
+        propertiesPrefix.put("creation_utc", "d");
 
         /// FLOAT
-        propertiesPrefixMap.put("turnoverTaxIncluded", "f");
-        propertiesPrefixMap.put("turnoverTaxFree", "f");
+        propertiesPrefix.put("turnoverTaxIncluded", "f");
+        propertiesPrefix.put("turnoverTaxFree", "f");
 
         /// LONG
-        propertiesPrefixMap.put("quantity", "n");
-        propertiesPrefixMap.put("nbDistinctProduct", "n");
+        propertiesPrefix.put("quantity", "n");
+        propertiesPrefix.put("nbDistinctProduct", "n");
     }
 }

@@ -58,9 +58,9 @@ public class ProductPurchased extends EcommerceEvent {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart);
-        data.put("transaction", transaction);
-        data.put("product", product);
+        data.put("cart", cart.getAll());
+        data.put("transaction", transaction.getAll());
+        data.put("product", product.getAll());
         return super.getData();
     }
 }
