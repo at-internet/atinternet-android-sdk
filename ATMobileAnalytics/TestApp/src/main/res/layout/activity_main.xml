@@ -27,6 +27,12 @@
             android:text="crash" />
 
         <Button
+            android:id="@+id/mvTesting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mvTesting" />
+
+        <Button
             android:id="@+id/displayProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

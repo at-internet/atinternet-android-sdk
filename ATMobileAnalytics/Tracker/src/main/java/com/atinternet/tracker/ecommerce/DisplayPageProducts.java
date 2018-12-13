@@ -23,7 +23,6 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
-import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 public class DisplayPageProducts extends EventsHelper {
@@ -35,8 +34,8 @@ public class DisplayPageProducts extends EventsHelper {
         this.tracker = tracker;
     }
 
-    public DisplayPageProduct add(Screen screen) {
-        DisplayPageProduct dpp = new DisplayPageProduct(tracker, screen);
+    public DisplayPageProduct add() {
+        DisplayPageProduct dpp = new DisplayPageProduct(tracker);
         events.add(dpp);
         return dpp;
     }

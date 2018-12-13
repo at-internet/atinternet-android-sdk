@@ -22,21 +22,22 @@ SOFTWARE.
  */
 package com.atinternet.tracker.ecommerce;
 
+import com.atinternet.tracker.Event;
 import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
 import java.util.Map;
 
-public class DisplayProduct extends EcommerceEvent {
+public class DisplayProduct extends Event {
 
-    private Product product;
+    private ECommerceProduct product;
 
-    DisplayProduct(Screen screen) {
-        super("product.display", screen);
-        product = new Product();
+    DisplayProduct() {
+        super("product.display");
+        product = new ECommerceProduct();
     }
 
-    public Product Product() {
+    public ECommerceProduct Product() {
         return product;
     }
 

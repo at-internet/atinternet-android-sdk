@@ -24,11 +24,15 @@ package com.atinternet.tracker.ecommerce.objectproperties;
 
 import com.atinternet.tracker.RequiredPropertiesDataObject;
 
-public class Transaction extends RequiredPropertiesDataObject {
+public class ECommerceShipping extends RequiredPropertiesDataObject {
 
-    public Transaction() {
+    public ECommerceShipping() {
         super();
         /// STRING
-        propertiesPrefix.put("id", "s");
+        propertiesPrefix.put("delivery", "s");
+
+        /// FLOAT
+        propertiesPrefix.put("costTaxIncluded", "f");
+        propertiesPrefix.put("costTaxFree", "f");
     }
 }

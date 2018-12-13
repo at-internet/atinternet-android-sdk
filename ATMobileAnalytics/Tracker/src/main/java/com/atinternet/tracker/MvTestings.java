@@ -20,30 +20,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce;
+package com.atinternet.tracker;
 
-import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+/**
+ * Wrapper class to manage Order instances
+ */
+public class MvTestings extends Helper {
 
-import java.util.Map;
-
-public class CartCreation extends Event {
-
-    private ECommerceCart cart;
-
-    public CartCreation() {
-        super("cart.creation");
-        cart = new ECommerceCart();
+    MvTestings(Tracker tracker) {
+        super(tracker);
     }
 
-    public ECommerceCart Cart() {
-        return cart;
-    }
+    /**
+     * Add an mvtesting
+     *
+     * @param test     String
+     * @param waveId   int
+     * @param creation String
+     * @return a new MvTesting instance
+     */
+    public MvTesting add(String test, int waveId, String creation) {
+        MvTesting mvTesting = new MvTesting(tracker)
+                .setTest(test)
+                .setWaveId(waveId)
+                .setCreation(creation);
+        tracker.getBusinessObjects().put(mvTesting.getId(), mvTesting);
 
-    @Override
-    protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        return super.getData();
+        return mvTesting;
     }
 }

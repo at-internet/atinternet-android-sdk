@@ -38,10 +38,6 @@ public class Order extends BusinessObject {
     private OrderCustomVars customVariables;
     private boolean confirmationRequired;
 
-    OrderCustomVars getCustomVariables() {
-        return customVariables;
-    }
-
     Order(Tracker tracker) {
         super(tracker);
         orderId = "";

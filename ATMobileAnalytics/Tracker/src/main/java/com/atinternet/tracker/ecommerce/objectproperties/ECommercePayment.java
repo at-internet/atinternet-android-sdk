@@ -24,9 +24,9 @@ package com.atinternet.tracker.ecommerce.objectproperties;
 
 import com.atinternet.tracker.RequiredPropertiesDataObject;
 
-public class Payment extends RequiredPropertiesDataObject {
+public class ECommercePayment extends RequiredPropertiesDataObject {
 
-    public Payment() {
+    public ECommercePayment() {
         super();
         /// STRING
         propertiesPrefix.put("mode", "s");

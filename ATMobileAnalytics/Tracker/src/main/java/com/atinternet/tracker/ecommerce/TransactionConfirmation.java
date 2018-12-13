@@ -27,42 +27,44 @@ import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
-import com.atinternet.tracker.ecommerce.objectproperties.Cart;
-import com.atinternet.tracker.ecommerce.objectproperties.Customer;
-import com.atinternet.tracker.ecommerce.objectproperties.Payment;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
-import com.atinternet.tracker.ecommerce.objectproperties.Shipping;
-import com.atinternet.tracker.ecommerce.objectproperties.Transaction;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCustomer;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommercePayment;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceShipping;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceTransaction;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class TransactionConfirmation extends EcommerceEvent {
+public class TransactionConfirmation extends Event {
 
     private Tracker tracker;
+    private Screen screen;
 
-    private Cart cart;
+    private ECommerceCart cart;
     private java.util.List<String> promotionalCodes;
-    private Transaction transaction;
-    private Shipping shipping;
-    private Payment payment;
-    private Customer customer;
-    private java.util.List<Product> products;
+    private ECommerceTransaction transaction;
+    private ECommerceShipping shipping;
+    private ECommercePayment payment;
+    private ECommerceCustomer customer;
+    private java.util.List<ECommerceProduct> products;
 
 
     TransactionConfirmation(Tracker tracker, Screen screen) {
-        super("transaction.confirmation", screen);
+        super("transaction.confirmation");
         this.tracker = tracker;
-        cart = new Cart();
+        this.screen = screen;
+        cart = new ECommerceCart();
         promotionalCodes = new ArrayList<>();
-        transaction = new Transaction();
-        shipping = new Shipping();
-        payment = new Payment();
-        customer = new Customer();
+        transaction = new ECommerceTransaction();
+        shipping = new ECommerceShipping();
+        payment = new ECommercePayment();
+        customer = new ECommerceCustomer();
         products = new ArrayList<>();
     }
 
-    public Cart Cart() {
+    public ECommerceCart Cart() {
         return cart;
     }
 
@@ -70,23 +72,23 @@ public class TransactionConfirmation extends EcommerceEvent {
         return promotionalCodes;
     }
 
-    public Transaction Transaction() {
+    public ECommerceTransaction Transaction() {
         return transaction;
     }
 
-    public Shipping Shipping() {
+    public ECommerceShipping Shipping() {
         return shipping;
     }
 
-    public Payment Payment() {
+    public ECommercePayment Payment() {
         return payment;
     }
 
-    public Customer Customer() {
+    public ECommerceCustomer Customer() {
         return customer;
     }
 
-    public java.util.List<Product> Products() {
+    public java.util.List<ECommerceProduct> Products() {
         return products;
     }
 
@@ -106,13 +108,13 @@ public class TransactionConfirmation extends EcommerceEvent {
         /// SALES INSIGHTS
         java.util.List<Event> generatedEvents = super.getAdditionalEvents();
 
-        CartConfirmation cc = new CartConfirmation(screen);
+        CartConfirmation cc = new CartConfirmation();
         cc.Transaction().setAll(transaction.getAll());
         cc.Cart().setAll(cart.getAll());
         generatedEvents.add(cc);
 
-        for (Product p : products) {
-            ProductPurchased pp = new ProductPurchased(screen);
+        for (ECommerceProduct p : products) {
+            ProductPurchased pp = new ProductPurchased();
             pp.Cart().set("id", String.valueOf(cart.get("s:id")));
             pp.Transaction().set("id", String.valueOf(transaction.get("s:id")));
             pp.Product().setAll(p.getAll());
@@ -120,7 +122,7 @@ public class TransactionConfirmation extends EcommerceEvent {
         }
 
         /// SALES TRACKER
-        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+        if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
             double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxIncluded"))),
                     turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxFree")));
 
@@ -133,7 +135,7 @@ public class TransactionConfirmation extends EcommerceEvent {
                     .Discount().setPromotionalCode(Utility.stringJoin('|', codes));
 
             com.atinternet.tracker.Cart stCart = tracker.Cart().set(String.valueOf(cart.get("s:id")));
-            for (Product p : products) {
+            for (ECommerceProduct p : products) {
                 String stProductId;
                 Object name = p.get("s:name");
                 if (name != null) {

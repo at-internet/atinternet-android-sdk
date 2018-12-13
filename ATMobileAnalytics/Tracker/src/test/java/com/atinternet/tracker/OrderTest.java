@@ -53,7 +53,6 @@ public class OrderTest extends AbstractTestClass {
         assertEquals(-1, order.getStatus());
         assertEquals(-1, order.getPaymentMethod());
         assertFalse(order.isNewCustomer());
-        assertNull(order.getCustomVariables());
         assertFalse(order.isConfirmationRequired());
     }
 

@@ -23,7 +23,6 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
-import com.atinternet.tracker.Screen;
 
 public class RemoveProducts extends EventsHelper {
 
@@ -31,8 +30,8 @@ public class RemoveProducts extends EventsHelper {
         super(events);
     }
 
-    public RemoveProduct add(Screen screen) {
-        RemoveProduct rp = new RemoveProduct(screen);
+    public RemoveProduct add() {
+        RemoveProduct rp = new RemoveProduct();
         events.add(rp);
         return rp;
     }

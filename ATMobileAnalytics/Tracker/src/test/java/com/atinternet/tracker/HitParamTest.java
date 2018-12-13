@@ -35,7 +35,7 @@ public class HitParamTest extends AbstractTestClass {
 
     @Test
     public void stringValueTest() {
-        int length = 37;
+        int length = 38;
         int i = 0;
         assertEquals(length, Hit.HitParam.values().length);
 
@@ -112,6 +112,8 @@ public class HitParamTest extends AbstractTestClass {
         assertEquals("s2rich", Hit.HitParam.RichMediaLevel2.stringValue());
         i++;
         assertEquals("prich", Hit.HitParam.RichMediaScreen.stringValue());
+        i++;
+        assertEquals("abmvc", Hit.HitParam.MvTestingTest.stringValue());
         i++;
 
         assertEquals(length, i);

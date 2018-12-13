@@ -77,7 +77,7 @@ public class Events extends BusinessObject {
                 Map<String, Object> data = e.getData();
                 if (data.size() != 0) {
                     eventsArray.put(new JSONObject()
-                            .put("action", e.getAction())
+                            .put("type", e.getType())
                             .put("data", new JSONObject(data)));
                 }
 
@@ -85,7 +85,7 @@ public class Events extends BusinessObject {
 
                 for (Event ev : additionalEvents) {
                     eventsArray.put(new JSONObject()
-                            .put("action", ev.getAction())
+                            .put("type", ev.getType())
                             .put("data", new JSONObject(ev.getData())));
                 }
             }

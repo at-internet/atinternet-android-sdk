@@ -20,30 +20,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce;
+package com.atinternet.tracker;
 
-import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import java.util.ArrayList;
 
-import java.util.Map;
+/**
+ * Adds custom variables to an order
+ */
+public class MvTestingCustomVars extends ArrayList<MvTestingCustomVar> {
 
-public class CartCreation extends Event {
+    /**
+     * Add a mvtesting custom var
+     *
+     * @param variable String
+     * @param version  String
+     * @return MVTestingCustomVars: the same instance
+     */
+    public MvTestingCustomVars add(String variable, String version) {
+        super.add(new MvTestingCustomVar(variable, version));
+        return this;
+    }
+}
 
-    private ECommerceCart cart;
+class MvTestingCustomVar {
 
-    public CartCreation() {
-        super("cart.creation");
-        cart = new ECommerceCart();
+    private final String variable, version;
+
+    String getVariable() {
+        return variable;
     }
 
-    public ECommerceCart Cart() {
-        return cart;
+    String getVersion() {
+        return version;
     }
 
-    @Override
-    protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        return super.getData();
+    MvTestingCustomVar(String variable, String version) {
+        this.variable = variable;
+        this.version = version;
     }
 }

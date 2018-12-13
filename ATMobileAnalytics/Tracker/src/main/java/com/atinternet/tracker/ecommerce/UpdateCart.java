@@ -22,21 +22,21 @@ SOFTWARE.
  */
 package com.atinternet.tracker.ecommerce;
 
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.Cart;
+import com.atinternet.tracker.Event;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
 
 import java.util.Map;
 
-public class UpdateCart extends EcommerceEvent {
+public class UpdateCart extends Event {
 
-    private Cart cart;
+    private ECommerceCart cart;
 
-    UpdateCart(Screen screen) {
-        super("cart.update", screen);
-        cart = new Cart();
+    UpdateCart() {
+        super("cart.update");
+        cart = new ECommerceCart();
     }
 
-    public Cart Cart() {
+    public ECommerceCart Cart() {
         return cart;
     }
 

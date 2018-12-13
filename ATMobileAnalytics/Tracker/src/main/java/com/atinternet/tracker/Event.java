@@ -29,16 +29,16 @@ import java.util.Map;
 
 public class Event {
 
-    private String action;
+    private String type;
     protected Map<String, Object> data;
 
-    public Event(String action) {
-        this.action = action;
+    public Event(String type) {
+        this.type = type;
         data = new HashMap<>();
     }
 
-    protected String getAction() {
-        return action;
+    protected String getType() {
+        return type;
     }
 
     protected Map<String, Object> getData() {
@@ -59,11 +59,11 @@ public class Event {
     /**
      * Set Action
      *
-     * @param action String
+     * @param type String
      * @return Event
      */
-    public Event setAction(String action) {
-        this.action = action;
+    public Event setType(String type) {
+        this.type = type;
         return this;
     }
 

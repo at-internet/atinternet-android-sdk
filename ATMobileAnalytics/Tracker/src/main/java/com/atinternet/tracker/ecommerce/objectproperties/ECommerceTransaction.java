@@ -20,30 +20,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce;
+package com.atinternet.tracker.ecommerce.objectproperties;
 
-import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.RequiredPropertiesDataObject;
 
-import java.util.Map;
+public class ECommerceTransaction extends RequiredPropertiesDataObject {
 
-public class CartCreation extends Event {
-
-    private ECommerceCart cart;
-
-    public CartCreation() {
-        super("cart.creation");
-        cart = new ECommerceCart();
-    }
-
-    public ECommerceCart Cart() {
-        return cart;
-    }
-
-    @Override
-    protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        return super.getData();
+    public ECommerceTransaction() {
+        super();
+        /// STRING
+        propertiesPrefix.put("id", "s");
     }
 }

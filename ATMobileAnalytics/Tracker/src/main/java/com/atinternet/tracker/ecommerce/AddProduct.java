@@ -25,29 +25,29 @@ package com.atinternet.tracker.ecommerce;
 import com.atinternet.tracker.Event;
 import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Utility;
-import com.atinternet.tracker.ecommerce.objectproperties.Cart;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
 import java.util.List;
 import java.util.Map;
 
-public class AddProduct extends EcommerceEvent {
+public class AddProduct extends Event {
 
-    private Product product;
-    private Cart cart;
+    private ECommerceProduct product;
+    private ECommerceCart cart;
 
-    AddProduct(Screen screen) {
-        super("product.add_to_cart", screen);
-        cart = new Cart();
-        product = new Product();
+    AddProduct() {
+        super("product.add_to_cart");
+        cart = new ECommerceCart();
+        product = new ECommerceProduct();
     }
 
-    public Product Product() {
+    public ECommerceProduct Product() {
         return product;
     }
 
 
-    public Cart Cart() {
+    public ECommerceCart Cart() {
         return cart;
     }
 
@@ -63,8 +63,8 @@ public class AddProduct extends EcommerceEvent {
         List<Event> generatedEvents = super.getAdditionalEvents();
 
         if (Utility.parseBooleanFromString(String.valueOf(product.get("b:cartcreation")))) {
-            CartCreation cc = new CartCreation(screen);
-            Cart ccc = cc.Cart();
+            CartCreation cc = new CartCreation();
+            ECommerceCart ccc = cc.Cart();
             int quantity = Utility.parseIntFromString(String.valueOf(product.get("n:quantity")));
             ccc.set("id", String.valueOf(cart.get("s:id")));
             ccc.set("currency", String.valueOf(product.get("s:currency")));

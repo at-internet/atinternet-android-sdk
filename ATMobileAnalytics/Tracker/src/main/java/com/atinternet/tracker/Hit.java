@@ -183,7 +183,11 @@ public class Hit {
         /**
          * RichMedia screen parameter key
          */
-        RichMediaScreen("prich");
+        RichMediaScreen("prich"),
+        /**
+         * MvTesting test
+         */
+        MvTestingTest("abmvc");
 
         private final String str;
 

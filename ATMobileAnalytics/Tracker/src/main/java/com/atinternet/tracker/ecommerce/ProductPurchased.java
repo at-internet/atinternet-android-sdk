@@ -22,37 +22,37 @@ SOFTWARE.
  */
 package com.atinternet.tracker.ecommerce;
 
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.Cart;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
-import com.atinternet.tracker.ecommerce.objectproperties.Transaction;
+import com.atinternet.tracker.Event;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceTransaction;
 
 import java.util.Map;
 
-public class ProductPurchased extends EcommerceEvent {
+public class ProductPurchased extends Event {
 
-    private Cart cart;
-    private Transaction transaction;
-    private Product product;
+    private ECommerceCart cart;
+    private ECommerceTransaction transaction;
+    private ECommerceProduct product;
 
-    public ProductPurchased(Screen screen) {
-        super("product.purchased", screen);
-        cart = new Cart();
-        transaction = new Transaction();
-        product = new Product();
+    public ProductPurchased() {
+        super("product.purchased");
+        cart = new ECommerceCart();
+        transaction = new ECommerceTransaction();
+        product = new ECommerceProduct();
     }
 
-    public Cart Cart() {
+    public ECommerceCart Cart() {
         return cart;
     }
 
 
-    public Transaction Transaction() {
+    public ECommerceTransaction Transaction() {
         return transaction;
     }
 
 
-    public Product Product() {
+    public ECommerceProduct Product() {
         return product;
     }
 
