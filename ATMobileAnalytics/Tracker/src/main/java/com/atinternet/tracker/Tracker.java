@@ -118,7 +118,7 @@ public class Tracker {
     private CustomTreeStructures customTreeStructures;
     private Products products;
     private MediaPlayers mediaPlayers;
-
+    private MvTestings mvTestings;
     private ECommerce eCommerce;
 
     Buffer getBuffer() {
@@ -615,6 +615,18 @@ public class Tracker {
             orders = new Orders(this);
         }
         return orders;
+    }
+
+    /**
+     * Get MvTestings instance
+     *
+     * @return MvTestings instance
+     */
+    public MvTestings MvTestings() {
+        if (mvTestings == null) {
+            mvTestings = new MvTestings(this);
+        }
+        return mvTestings;
     }
 
     /**

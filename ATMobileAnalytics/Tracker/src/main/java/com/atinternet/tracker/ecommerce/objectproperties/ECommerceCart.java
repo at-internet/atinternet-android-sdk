@@ -24,10 +24,23 @@ package com.atinternet.tracker.ecommerce.objectproperties;
 
 import com.atinternet.tracker.RequiredPropertiesDataObject;
 
-public class Customer extends RequiredPropertiesDataObject {
+public class ECommerceCart extends RequiredPropertiesDataObject {
 
-    public Customer() {
+    public ECommerceCart() {
         super();
-        propertiesPrefix.put("new", "b");
+        /// STRING
+        propertiesPrefix.put("id", "s");
+        propertiesPrefix.put("currency", "s");
+
+        /// DATE
+        propertiesPrefix.put("creation_utc", "d");
+
+        /// FLOAT
+        propertiesPrefix.put("turnoverTaxIncluded", "f");
+        propertiesPrefix.put("turnoverTaxFree", "f");
+
+        /// LONG
+        propertiesPrefix.put("quantity", "n");
+        propertiesPrefix.put("nbDistinctProduct", "n");
     }
 }

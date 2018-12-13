@@ -23,28 +23,27 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DisplayPageProduct extends EcommerceEvent {
+public class DisplayPageProduct extends Event {
 
-    private java.util.List<Product> products;
+    private java.util.List<ECommerceProduct> products;
     private Tracker tracker;
 
-    DisplayPageProduct(Tracker tracker, Screen screen) {
-        super("product.page_display", screen);
+    DisplayPageProduct(Tracker tracker) {
+        super("product.page_display");
         products = new ArrayList<>();
         this.tracker = tracker;
     }
 
-    public java.util.List<Product> Products() {
+    public java.util.List<ECommerceProduct> Products() {
         return products;
     }
 
@@ -57,24 +56,15 @@ public class DisplayPageProduct extends EcommerceEvent {
     protected java.util.List<Event> getAdditionalEvents() {
         List<Event> generatedEvents = super.getAdditionalEvents();
 
-        Map<String, Object> screenObj = parseScreenNameForEvent(screen);
-        Map<String, Object> level2Obj = parseLevel2ForEvent(screen);
-
-        for (Product p : products) {
+        for (ECommerceProduct p : products) {
             /// SALES INSIGHTS
-            DisplayPageProduct dp = new DisplayPageProduct(tracker, screen);
-            if (screenObj.size() != 0) {
-                dp.data.put("page", screenObj);
-            }
-            if (level2Obj.size() != 0) {
-                dp.data.put("level2", level2Obj);
-            }
+            DisplayPageProduct dp = new DisplayPageProduct(tracker);
             dp.data.put("product", p.getAll());
             generatedEvents.add(dp);
         }
 
         if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
-            for (Product p : products) {
+            for (ECommerceProduct p : products) {
                 /// SALES TRACKER
                 String stProductId;
                 Object name = p.get("s:name");

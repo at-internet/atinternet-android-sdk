@@ -27,32 +27,34 @@ import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
-import com.atinternet.tracker.ecommerce.objectproperties.Cart;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DisplayCart extends EcommerceEvent {
+public class DisplayCart extends Event {
 
-    private java.util.List<Product> products;
-    private Cart cart;
+    private java.util.List<ECommerceProduct> products;
+    private ECommerceCart cart;
 
     private Tracker tracker;
+    private Screen screen;
 
     DisplayCart(Tracker tracker, Screen screen) {
-        super("cart.display", screen);
-        cart = new Cart();
+        super("cart.display");
+        cart = new ECommerceCart();
         products = new ArrayList<>();
         this.tracker = tracker;
+        this.screen = screen;
     }
 
-    public Cart Cart() {
+    public ECommerceCart Cart() {
         return cart;
     }
 
-    public java.util.List<Product> Products() {
+    public java.util.List<ECommerceProduct> Products() {
         return products;
     }
 
@@ -65,10 +67,10 @@ public class DisplayCart extends EcommerceEvent {
     @Override
     protected List<Event> getAdditionalEvents() {
         /// SALES TRACKER
-        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+        if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
             com.atinternet.tracker.Cart stCart = tracker.Cart().set(String.valueOf(cart.get("s:id")));
 
-            for (Product p : products) {
+            for (ECommerceProduct p : products) {
                 String stProductId;
                 Object name = p.get("s:name");
                 if (name != null) {

@@ -34,7 +34,6 @@ import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import static com.atinternet.tracker.Tracker.OfflineMode;
 import static com.atinternet.tracker.Tracker.doNotTrackEnabled;
@@ -49,8 +48,6 @@ import static org.junit.Assert.assertFalse;
 @RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("unchecked")
 public class TrackerTest extends AbstractTestClass {
-
-    private static final int DURATION_SLEEP = 3000;
 
     private final String key = "KEY";
     private SetConfigCallback callback;
@@ -104,151 +101,6 @@ public class TrackerTest extends AbstractTestClass {
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("opt-out", tracker.getUserIdSync());
 
-    }
-
-    @Test
-    public void setConfigTest() throws Exception {
-        assertFalse(tracker.getConfiguration().containsKey("key"));
-        tracker.setConfig("key", "value", callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertTrue(tracker.getConfiguration().containsKey("key"));
-        assertEquals(tracker.getConfiguration().get("key"), "value");
-    }
-
-    @Test
-    public void setLogTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logp");
-        tracker.setLog("logtest", callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG), "logtest");
-    }
-
-    @Test
-    public void setSecuredLogTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logs");
-        tracker.setSecuredLog("logstest", callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.LOG_SSL), "logstest");
-    }
-
-    @Test
-    public void setDomainTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "xiti.com");
-        tracker.setDomain("domain", callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.DOMAIN), "domain");
-    }
-
-    @Test
-    public void setSiteIdTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 552987);
-        tracker.setSiteId(1, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SITE), 1);
-    }
-
-    @Test
-    public void getOfflineModeTest() {
-        assertEquals(OfflineMode.never, tracker.getOfflineMode());
-    }
-
-    @Test
-    public void setOfflineModeTest() throws Exception {
-        Random r = new Random();
-        boolean rBoolean = r.nextBoolean();
-
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "never");
-        tracker.setOfflineMode(OfflineMode.always, rBoolean ? callback : null);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.OFFLINE_MODE), "always");
-    }
-
-    @Test
-    public void setPluginsTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
-        tracker.setPlugins(new ArrayList<Tracker.PluginKey>() {{
-            add(Tracker.PluginKey.nuggad);
-        }}, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), Tracker.PluginKey.nuggad.toString());
-        tracker.setPlugins(null, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PLUGINS), "");
-    }
-
-    @Test
-    public void setSecureTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
-        tracker.setSecureModeEnabled(true, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), true);
-    }
-
-    @Test
-    public void setIdentifierTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "androidId");
-        tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
-        tracker.setIdentifierType(Tracker.IdentifierType.UUID, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "UUID");
-    }
-
-    @Test
-    public void setHashUserIdModeTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), false);
-        tracker.setHashUserIdEnabled(true, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.HASH_USER_ID), true);
-    }
-
-    @Test
-    public void setPixelPathTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/hit.xiti");
-        tracker.setPixelPath("/test.xiti", callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PIXEL_PATH), "/test.xiti");
-    }
-
-    @Test
-    public void setPersistIdentifiedVisitorTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), true);
-        tracker.setPersistentIdentifiedVisitorEnabled(false, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR), false);
-    }
-
-    @Test
-    public void setCrashDetectionTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), true);
-        tracker.setCrashDetectionEnabled(false, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION), false);
-    }
-
-    @Test
-    public void setCampaignLastPersistenceTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), false);
-        tracker.setCampaignLastPersistenceEnabled(true, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE), true);
-    }
-
-    @Test
-    public void setCampaigLifetimeTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 30);
-        tracker.setCampaignLifetime(3, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME), 3);
-    }
-
-    @Test
-    public void setSessionBackgroundDurationTest() throws Exception {
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
-        tracker.setSessionBackgroundDuration(2, callback);
-        Thread.sleep(DURATION_SLEEP);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 2);
     }
 
     @Test

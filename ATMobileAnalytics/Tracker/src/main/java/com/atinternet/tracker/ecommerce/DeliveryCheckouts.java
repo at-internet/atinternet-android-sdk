@@ -23,7 +23,6 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
-import com.atinternet.tracker.Screen;
 
 public class DeliveryCheckouts extends EventsHelper {
 
@@ -31,8 +30,8 @@ public class DeliveryCheckouts extends EventsHelper {
         super(events);
     }
 
-    public DeliveryCheckout add(Screen screen) {
-        DeliveryCheckout dc = new DeliveryCheckout(screen);
+    public DeliveryCheckout add() {
+        DeliveryCheckout dc = new DeliveryCheckout();
         events.add(dc);
         return dc;
     }

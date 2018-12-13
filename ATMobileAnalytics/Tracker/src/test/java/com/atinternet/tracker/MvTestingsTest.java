@@ -20,27 +20,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce.objectproperties;
+package com.atinternet.tracker;
 
-import com.atinternet.tracker.RequiredPropertiesDataObject;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
-public class Cart extends RequiredPropertiesDataObject {
+import static org.junit.Assert.assertEquals;
 
-    public Cart() {
-        super();
-        /// STRING
-        propertiesPrefix.put("id", "s");
-        propertiesPrefix.put("currency", "s");
+@Config(sdk = 21)
+@RunWith(RobolectricTestRunner.class)
+public class MvTestingsTest extends AbstractTestClass {
 
-        /// DATE
-        propertiesPrefix.put("creation_utc", "d");
+    private MvTestings mvTestings;
 
-        /// FLOAT
-        propertiesPrefix.put("turnoverTaxIncluded", "f");
-        propertiesPrefix.put("turnoverTaxFree", "f");
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        mvTestings = new MvTestings(tracker);
+    }
 
-        /// LONG
-        propertiesPrefix.put("quantity", "n");
-        propertiesPrefix.put("nbDistinctProduct", "n");
+    @Test
+    public void addTest() {
+        mvTestings.add("test", 1, "creation");
+        assertEquals(1, tracker.getBusinessObjects().size());
     }
 }

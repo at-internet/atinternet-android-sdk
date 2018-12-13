@@ -4,9 +4,9 @@ import com.atinternet.tracker.RequiredPropertiesDataObject;
 
 import java.util.Map;
 
-public class Product extends RequiredPropertiesDataObject {
+public class ECommerceProduct extends RequiredPropertiesDataObject {
 
-    public Product() {
+    public ECommerceProduct() {
         super();
         /// STRING
         propertiesPrefix.put("id", "s");
@@ -36,7 +36,7 @@ public class Product extends RequiredPropertiesDataObject {
         propertiesPrefix.put("quantity", "n");
     }
 
-    public Product(Map<String, Object> obj) {
+    public ECommerceProduct(Map<String, Object> obj) {
         this();
         setAll(obj);
     }

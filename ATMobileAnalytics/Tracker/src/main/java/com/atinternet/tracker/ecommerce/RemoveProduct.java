@@ -22,29 +22,29 @@ SOFTWARE.
  */
 package com.atinternet.tracker.ecommerce;
 
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.ecommerce.objectproperties.Cart;
-import com.atinternet.tracker.ecommerce.objectproperties.Product;
+import com.atinternet.tracker.Event;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
 import java.util.Map;
 
-public class RemoveProduct extends EcommerceEvent {
+public class RemoveProduct extends Event {
 
-    private Product product;
-    private Cart cart;
+    private ECommerceProduct product;
+    private ECommerceCart cart;
 
-    RemoveProduct(Screen screen) {
-        super("product.remove_from_cart", screen);
-        cart = new Cart();
-        product = new Product();
+    RemoveProduct() {
+        super("product.remove_from_cart");
+        cart = new ECommerceCart();
+        product = new ECommerceProduct();
     }
 
-    public Product Product() {
+    public ECommerceProduct Product() {
         return product;
     }
 
 
-    public Cart Cart() {
+    public ECommerceCart Cart() {
         return cart;
     }
 

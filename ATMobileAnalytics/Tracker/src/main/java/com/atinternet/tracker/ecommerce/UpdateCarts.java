@@ -23,7 +23,6 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
-import com.atinternet.tracker.Screen;
 
 public class UpdateCarts extends EventsHelper {
 
@@ -31,8 +30,8 @@ public class UpdateCarts extends EventsHelper {
         super(events);
     }
 
-    public UpdateCart add(Screen screen) {
-        UpdateCart uc = new UpdateCart(screen);
+    public UpdateCart add() {
+        UpdateCart uc = new UpdateCart();
         events.add(uc);
         return uc;
     }

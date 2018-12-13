@@ -31,8 +31,8 @@ public class DisplayProducts extends EventsHelper {
         super(events);
     }
 
-    public DisplayProduct add(Screen screen) {
-        DisplayProduct dp = new DisplayProduct(screen);
+    public DisplayProduct add() {
+        DisplayProduct dp = new DisplayProduct();
         events.add(dp);
         return dp;
     }

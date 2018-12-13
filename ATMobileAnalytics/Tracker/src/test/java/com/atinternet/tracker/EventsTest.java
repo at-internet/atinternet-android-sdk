@@ -65,7 +65,7 @@ public class EventsTest extends AbstractTestClass {
 
         JSONObject event = events.getJSONObject(0);
         assertEquals(2, event.length());
-        assertEquals("act", event.getString("action"));
+        assertEquals("act", event.getString("type"));
 
         JSONObject data = event.getJSONObject("data");
         assertEquals(1, data.length());
@@ -84,7 +84,7 @@ public class EventsTest extends AbstractTestClass {
         e.setData(new HashMap<String, Object>() {{
             put("test2", "value");
         }});
-        e.setAction("actionn");
+        e.setType("actionn");
 
         events.setParams();
 
@@ -98,7 +98,7 @@ public class EventsTest extends AbstractTestClass {
 
         JSONObject event = events.getJSONObject(0);
         assertEquals(2, event.length());
-        assertEquals("actionn", event.getString("action"));
+        assertEquals("actionn", event.getString("type"));
 
         JSONObject data = event.getJSONObject("data");
         assertEquals(1, data.length());
