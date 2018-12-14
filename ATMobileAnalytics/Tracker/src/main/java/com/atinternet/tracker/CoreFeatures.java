@@ -170,7 +170,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
         return "";
     }
 
-    static Map<String, String> getCrashInformations(SharedPreferences prefs) {
+    static Map<String, String> getCrashInfo(SharedPreferences prefs) {
         Map<String, String> map = new HashMap<>();
         if (prefs.getBoolean(CRASH_RECOVERY_INFO, true)) {
             return map;

@@ -1445,7 +1445,7 @@ public class Tracker {
      * Get crash informations saved
      * @return Map
      */
-    public Map<String, String> getCrashInformations() {
-        return CrashDetectionHandler.getCrashInformations(getPreferences());
+    public Map<String, String> getCrashInformation() {
+        return CrashDetectionHandler.getCrashInfo(getPreferences());
     }
 }

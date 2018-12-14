@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tracker.setLog("logp", null, true);
         tracker.setSecuredLog("logs", null, true);
 
-        Log.d("ATTestApp", tracker.getCrashInformations().toString());
-        Log.d("ATTestApp", tracker.getCrashInformations().toString());
+        Log.d("ATTestApp", tracker.getCrashInformation().toString());
+        Log.d("ATTestApp", tracker.getCrashInformation().toString());
         tracker.ECommerce().setAutoSalesTrackerEnabled(true, null, true);
     }
 
