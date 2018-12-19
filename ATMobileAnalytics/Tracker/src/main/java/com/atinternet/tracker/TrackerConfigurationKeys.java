@@ -136,6 +136,11 @@ public class TrackerConfigurationKeys {
     public static final String AUTO_SALES_TRACKER = "autoSalesTracker";
 
     /**
+     * Constant for collect domain configuration (events only)
+     */
+    public static final String COLLECT_DOMAIN = "collectDomain";
+
+    /**
      * Constant for download SDK source
      */
     static final String DOWNLOAD_SOURCE = "downloadSource";
