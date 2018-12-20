@@ -46,7 +46,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
     @Test
     public void getDefaultConfigurationTest() {
-        assertEquals(17, defaultConfiguration.size());
+        assertEquals(18, defaultConfiguration.size());
         assertEquals("", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("", defaultConfiguration.get("site"));
@@ -64,6 +64,7 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(30, defaultConfiguration.get("campaignLifetime"));
         assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
         assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
+        assertEquals("", defaultConfiguration.get("collectDomain"));
     }
 
     @Test
@@ -82,7 +83,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
         defaultConfiguration = new Configuration(dictionary);
 
-        assertEquals(17, defaultConfiguration.size());
+        assertEquals(18, defaultConfiguration.size());
         assertEquals("logtest", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("123456", defaultConfiguration.get("site"));
@@ -100,5 +101,6 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(30, defaultConfiguration.get("campaignLifetime"));
         assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
         assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
+        assertEquals("", defaultConfiguration.get("collectDomain"));
     }
 }

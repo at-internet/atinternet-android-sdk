@@ -108,6 +108,13 @@ public class Cart extends BusinessObject {
         return this;
     }
 
+    /***
+     * Send cart info
+     */
+    public void send(){
+        tracker.getDispatcher().dispatch(this);
+    }
+
     @Override
     void setParams() {
         if (cartId != null) {

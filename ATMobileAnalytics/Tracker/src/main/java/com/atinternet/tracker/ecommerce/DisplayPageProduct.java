@@ -23,87 +23,27 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.TrackerConfigurationKeys;
-import com.atinternet.tracker.Utility;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class DisplayPageProduct extends Event {
 
-    private java.util.List<ECommerceProduct> products;
-    private Tracker tracker;
+    private ECommerceProduct product;
 
-    DisplayPageProduct(Tracker tracker) {
+    DisplayPageProduct() {
         super("product.page_display");
-        products = new ArrayList<>();
-        this.tracker = tracker;
+        product = new ECommerceProduct();
     }
 
-    public java.util.List<ECommerceProduct> Products() {
-        return products;
+    public ECommerceProduct Product() {
+        return product;
     }
 
     @Override
     protected Map<String, Object> getData() {
-        return data;
-    }
-
-    @Override
-    protected java.util.List<Event> getAdditionalEvents() {
-        List<Event> generatedEvents = super.getAdditionalEvents();
-
-        for (ECommerceProduct p : products) {
-            /// SALES INSIGHTS
-            DisplayPageProduct dp = new DisplayPageProduct(tracker);
-            dp.data.put("product", p.getAll());
-            generatedEvents.add(dp);
-        }
-
-        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
-            for (ECommerceProduct p : products) {
-                /// SALES TRACKER
-                String stProductId;
-                Object name = p.get("s:name");
-                if (name != null) {
-                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
-                } else {
-                    stProductId = String.valueOf(p.get("s:id"));
-                }
-                com.atinternet.tracker.Product stProduct = tracker.Products().add(stProductId);
-
-                Object stCategory = p.get("s:category1");
-                if (stCategory != null) {
-                    stProduct.setCategory1(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category2");
-                if (stCategory != null) {
-                    stProduct.setCategory2(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category3");
-                if (stCategory != null) {
-                    stProduct.setCategory3(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category4");
-                if (stCategory != null) {
-                    stProduct.setCategory4(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category5");
-                if (stCategory != null) {
-                    stProduct.setCategory5(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category6");
-                if (stCategory != null) {
-                    stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
-                }
-            }
-            tracker.Products().sendViews();
-        }
-
-
-        return generatedEvents;
+        data.put("product", product.getAll());
+        return super.getData();
     }
 }

@@ -20,7 +20,6 @@ public class ECommerceProduct extends RequiredPropertiesDataObject {
         propertiesPrefix.put("category4", "s");
         propertiesPrefix.put("category5", "s");
         propertiesPrefix.put("category6", "s");
-        propertiesPrefix.put("list", "s");
 
         /// BOOLEAN
         propertiesPrefix.put("discount", "b");
@@ -32,7 +31,6 @@ public class ECommerceProduct extends RequiredPropertiesDataObject {
         propertiesPrefix.put("priceTaxFree", "f");
 
         /// LONG
-        propertiesPrefix.put("position", "n");
         propertiesPrefix.put("quantity", "n");
     }
 

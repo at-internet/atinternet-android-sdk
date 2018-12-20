@@ -23,19 +23,15 @@ SOFTWARE.
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
-import com.atinternet.tracker.Tracker;
 
 public class DisplayPageProducts extends EventsHelper {
 
-    private Tracker tracker;
-
-    public DisplayPageProducts(Events events, Tracker tracker) {
+    public DisplayPageProducts(Events events) {
         super(events);
-        this.tracker = tracker;
     }
 
     public DisplayPageProduct add() {
-        DisplayPageProduct dpp = new DisplayPageProduct(tracker);
+        DisplayPageProduct dpp = new DisplayPageProduct();
         events.add(dpp);
         return dpp;
     }

@@ -25,8 +25,8 @@ package com.atinternet.tracker;
 import com.atinternet.tracker.ecommerce.AddProducts;
 import com.atinternet.tracker.ecommerce.DeliveryCheckouts;
 import com.atinternet.tracker.ecommerce.DisplayCarts;
-import com.atinternet.tracker.ecommerce.DisplayPageProducts;
 import com.atinternet.tracker.ecommerce.DisplayProducts;
+import com.atinternet.tracker.ecommerce.DisplayPageProducts;
 import com.atinternet.tracker.ecommerce.PaymentCheckouts;
 import com.atinternet.tracker.ecommerce.RemoveProducts;
 import com.atinternet.tracker.ecommerce.TransactionConfirmations;
@@ -37,8 +37,8 @@ public class ECommerce {
     private Tracker tracker;
     private Events events;
 
-    private DisplayProducts displayProducts;
     private DisplayPageProducts displayPageProducts;
+    private DisplayProducts displayProducts;
     private AddProducts addProducts;
     private RemoveProducts removeProducts;
     private DisplayCarts displayCarts;
@@ -63,15 +63,15 @@ public class ECommerce {
         tracker.setConfig(TrackerConfigurationKeys.AUTO_SALES_TRACKER, enabled, setConfigCallback, sync);
     }
 
-    /***
-     * Create DisplayProducts helper
-     * @return DisplayProducts
+    /**
+     * Set a new collect domain
+     *
+     * @param domain            String
+     * @param setConfigCallback Callback called when the operation has been done
+     * @param sync              (optional) perform the operation synchronously (default: false)
      */
-    public DisplayProducts DisplayProducts() {
-        if (displayProducts == null) {
-            displayProducts = new DisplayProducts(events);
-        }
-        return displayProducts;
+    public void setCollectDomain(String domain, SetConfigCallback setConfigCallback, boolean... sync) {
+        tracker.setConfig(TrackerConfigurationKeys.COLLECT_DOMAIN, domain, setConfigCallback, sync);
     }
 
     /***
@@ -80,9 +80,20 @@ public class ECommerce {
      */
     public DisplayPageProducts DisplayPageProducts() {
         if (displayPageProducts == null) {
-            displayPageProducts = new DisplayPageProducts(events, tracker);
+            displayPageProducts = new DisplayPageProducts(events);
         }
         return displayPageProducts;
+    }
+
+    /***
+     * Create DisplayProducts helper
+     * @return DisplayProducts
+     */
+    public DisplayProducts DisplayProducts() {
+        if (displayProducts == null) {
+            displayProducts = new DisplayProducts(events, tracker);
+        }
+        return displayProducts;
     }
 
     /***
