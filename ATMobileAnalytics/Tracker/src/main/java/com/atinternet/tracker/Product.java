@@ -71,7 +71,7 @@ public class Product extends BusinessObject {
         return customObjectsMap;
     }
 
-    Product(Tracker tracker) {
+    public Product(Tracker tracker) {
         super(tracker);
         action = Action.View;
         productId = "";
@@ -378,12 +378,12 @@ public class Product extends BusinessObject {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         tracker.setParam(Hit.HitParam.HitType.stringValue(), "pdt");
 
         if (customObjectsMap != null) {
             for (CustomObject co : customObjectsMap.values()) {
-                co.setEvent();
+                co.setParams();
             }
         }
 

@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.10.2",
+  "version": "2.11.0",
   "type": "core",
   "config": {
     "storage": {
@@ -154,6 +154,14 @@
       "defaultValue": "prod",
       "type": "string",
       "public": false,
+      "global": true
+    },
+    "collectDomain": {
+      "title": "Geode_Tag_SDK_Config_Title_collectDomain",
+      "description": "Geode_Tag_SDK_Config_Description_collectDomain",
+      "defaultValue": "",
+      "type": "string",
+      "public": true,
       "global": true
     }
   }

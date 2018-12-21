@@ -284,8 +284,10 @@ class Builder implements Runnable {
     private static final String PERCENT_VALUE = "%";
     private static final String MH_PARAMETER_FORMAT = "%1$s-%2$s-%3$s";
     private static final String MHID_FORMAT = "%02d%02d%02d%d";
+    private static final String[] MH_PARAMS_ALL_PARTS = new String[]{"idclient", "col"};
     private static final String OPT_OUT = "opt-out";
     private static final String MHERR = "mherr";
+
     private static final int REFCONFIGCHUNKS = 4;
     private static final int MH_PARAMETER_MAX_LENGTH = 30;
     private static final int MHERR_PARAMETER_LENGTH = 8;
@@ -353,151 +355,167 @@ class Builder implements Runnable {
     }
 
     Object[] build() {
-        ArrayList<String> prepareHitsList = new ArrayList<>();
         ArrayList<String> hitsList = new ArrayList<>();
-        Integer countSplitHits = 1;
-        int indexError = -1;
-
-        StringBuilder queryString = new StringBuilder();
 
         String configStr = buildConfiguration();
-        String idClient = "";
+        String oltParameter = Tool.getTimeStamp().execute();
 
+        if (TextUtils.isEmpty(configStr)) {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "Empty configuration", TrackerListener.HitStatus.Failed);
+            return new Object[]{hitsList, oltParameter};
+        }
+
+        ArrayList<String> prepareHitsList = new ArrayList<>();
+        int countSplitHits = 1;
+        int indexError = -1;
+        StringBuilder queryString = new StringBuilder();
+        String mhCommonQueryContent;
 
         // Calcul pour connaitre la longueur maximum du hit
-        String oltParameter = Tool.getTimeStamp().execute();
         int maxLengthAvailable = HIT_MAX_LENGTH - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
-        maxLengthAvailable -= idClient.length();
+        LinkedHashMap<String, Pair<String, String>> dictionary = prepareQuery();
+        Set<String> keySet = dictionary.keySet();
 
-        LinkedHashMap<String, Pair<String, String>> dictionary;
-        if (!TextUtils.isEmpty(configStr)) {
-            dictionary = prepareQuery();
-            Set<String> keySet = dictionary.keySet();
-
-            if (dictionary.get(Hit.HitParam.UserId.stringValue()) != null) {
-                idClient = dictionary.get(Hit.HitParam.UserId.stringValue()).first;
-                maxLengthAvailable -= idClient.length();
+        /// Surcharge du domain pour les events
+        if (keySet.contains("col")) {
+            String collectDomain = String.valueOf(configuration.get(TrackerConfigurationKeys.COLLECT_DOMAIN));
+            if (TextUtils.isEmpty(collectDomain)){
+                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "invalid collect domain", TrackerListener.HitStatus.Failed);
+                return new Object[]{hitsList, oltParameter};
             }
-
-            // Outerloop est un label de référence si jamais une boucle doit être interrompue
-            outerloop:
-
-            for (String parameterKey : keySet) {
-                String value = dictionary.get(parameterKey).first;
-                String separator = dictionary.get(parameterKey).second;
-
-
-                // Si la valeur du paramètre est trop grande
-                if (value.length() > maxLengthAvailable) {
-
-                    // Si le paramètre est découpable
-                    if (Lists.getSliceReadyParams().contains(parameterKey)) {
-
-                        // Récupération du séparateur, de la clé et la valeur du paramètre courant
-                        String[] currentParameterString = value.split("=");
-                        String currentKey = currentParameterString[0] + "=";
-                        String currentValue = currentParameterString[1];
-
-                        // On découpe la valeur du paramètre sur son séparateur
-                        String[] valuesList = currentValue.split(separator);
-
-                        for (int i = 0; i < valuesList.length; i++) {
-                            String currentSplitValue = valuesList[i];
-
-                            // Si la valeur courante est trop grande
-                            if (currentSplitValue.length() > maxLengthAvailable) {
-                                // Erreur : Valeur trop longue non découpable
-                                indexError = countSplitHits;
-                                queryString.append(currentKey);
-                                int currentMaxLength = maxLengthAvailable - (MHERR_PARAMETER_LENGTH + queryString.length());
-
-                                // On cherche la position du dernier % afin d'éviter les exceptions au moment de la découpe brutale
-                                String splitError = currentSplitValue.substring(0, currentMaxLength);
-                                int lastIndexOfPercent = splitError.lastIndexOf(PERCENT_VALUE);
-
-                                if ((lastIndexOfPercent > currentMaxLength - 5) && (lastIndexOfPercent < currentMaxLength)) {
-                                    queryString.append(splitError.substring(0, lastIndexOfPercent));
-                                } else {
-                                    queryString.append(splitError);
-                                }
-                                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: Param " + parameterKey + " value still too long after slicing");
-
-                                // On retourne à l'endroit du code où se trouve outerloop
-                                break outerloop;
-                            }
-                            // Sinon si le hit déjà construit + la valeur courante est trop grand
-                            else if (queryString.length() + currentSplitValue.length() > maxLengthAvailable) {
-                                // On créé un nouveau tronçon
-                                countSplitHits++;
-                                prepareHitsList.add(queryString.toString());
-                                queryString = new StringBuilder()
-                                        .append(idClient)
-                                        .append(currentKey)
-                                        .append(i == 0 ? currentSplitValue : separator + currentSplitValue);
-                            }
-                            // Sinon, on continue la construction normalement
-                            else {
-                                queryString.append(i == 0 ? currentKey + currentSplitValue : separator + currentSplitValue);
-                            }
-                        }
-                    } else {
-                        // Erreur : le paramètre n'est pas découpable
-                        indexError = countSplitHits;
-                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: parameter " + parameterKey + " value not allowed to be sliced");
-                        break;
-                    }
-                }
-                // Sinon, si le hit est trop grand, on le découpe entre deux paramètres
-                else if (queryString.length() + value.length() > maxLengthAvailable) {
-                    countSplitHits++;
-                    prepareHitsList.add(queryString.toString());
-                    queryString = new StringBuilder()
-                            .append(idClient)
-                            .append(value);
-                }
-                //Sinon, on ne découpe pas
-                else {
-                    queryString.append(value);
-                }
+            boolean isSecure = (Boolean) configuration.get(TrackerConfigurationKeys.SECURE);
+            if (isSecure) {
+                configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL)), collectDomain);
+            } else {
+                configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG)), collectDomain);
             }
-
-            // Si un seul hit est construit
-            if (countSplitHits == 1) {
-                if (indexError == countSplitHits) {
-                    hitsList.add(configStr + makeSubQuery(MHERR, "1") + queryString);
-                } else {
-                    hitsList.add(configStr + queryString);
-                }
-            }
-            // Sinon, si le nombre de tronçons > 999, erreur
-            else if (countSplitHits > HIT_MAX_COUNT) {
-                hitsList.add(configStr + makeSubQuery(MHERR, "1") + queryString);
-                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: too much hit parts");
-            }
-            // Sinon, on ajoute les hits construits à la liste de hits à envoyer
-            else {
-                prepareHitsList.add(queryString.toString());
-                String mhID = mhIdSuffixGenerator();
-                for (int i = 0; i < countSplitHits; i++) {
-                    String countSplitHitsString = countSplitHits.toString();
-                    String mhParameter = makeSubQuery("mh", String.format(MH_PARAMETER_FORMAT, Tool.formatNumberLength(Integer.toString(i + 1), countSplitHitsString.length()), countSplitHitsString, mhID));
-                    if (indexError == (i + 1)) {
-                        hitsList.add(configStr + mhParameter + makeSubQuery(MHERR, "1") + prepareHitsList.get(i));
-                    } else {
-                        hitsList.add(configStr + mhParameter + prepareHitsList.get(i));
-                    }
-                }
-            }
-            if (tracker.getListener() != null) {
-                StringBuilder message = new StringBuilder();
-                for (String hit : hitsList) {
-                    message.append(hit).append('\n');
-                }
-                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, message.toString(), TrackerListener.HitStatus.Success);
-            }
-        } else {
-            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "Empty configuration", TrackerListener.HitStatus.Failed);
         }
+
+        StringBuilder mhCommonQueryContentSb = new StringBuilder();
+        for (String paramKey : MH_PARAMS_ALL_PARTS) {
+            Pair<String, String> pair = dictionary.remove(paramKey);
+            if (pair != null) {
+                mhCommonQueryContentSb.append(pair.first);
+            }
+        }
+        maxLengthAvailable -= mhCommonQueryContentSb.length();
+        mhCommonQueryContent = mhCommonQueryContentSb.toString();
+        queryString.append(mhCommonQueryContent);
+
+        // Outerloop est un label de référence si jamais une boucle doit être interrompue
+        outerloop:
+
+        for (String parameterKey : keySet) {
+            String value = dictionary.get(parameterKey).first;
+            String separator = dictionary.get(parameterKey).second;
+
+
+            // Si la valeur du paramètre est trop grande
+            if (value.length() > maxLengthAvailable) {
+
+                // Si le paramètre n'est pas découpable
+                if (!Lists.getSliceReadyParams().contains(parameterKey)) {
+                    // Erreur : le paramètre n'est pas découpable
+                    indexError = countSplitHits;
+                    Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: parameter " + parameterKey + " value not allowed to be sliced");
+                    break;
+                }
+
+                // Récupération du séparateur, de la clé et la valeur du paramètre courant
+                String[] currentParameterString = value.split("=");
+                String currentKey = currentParameterString[0] + "=";
+                String currentValue = currentParameterString[1];
+
+                // On découpe la valeur du paramètre sur son séparateur
+                String[] valuesList = currentValue.split(separator);
+
+                for (int i = 0; i < valuesList.length; i++) {
+                    String currentSplitValue = valuesList[i];
+
+                    // Si la valeur courante est trop grande
+                    if (currentSplitValue.length() > maxLengthAvailable) {
+                        // Erreur : Valeur trop longue non découpable
+                        indexError = countSplitHits;
+                        queryString.append(currentKey);
+                        int currentMaxLength = maxLengthAvailable - (MHERR_PARAMETER_LENGTH + queryString.length());
+
+                        // On cherche la position du dernier % afin d'éviter les exceptions au moment de la découpe brutale
+                        String splitError = currentSplitValue.substring(0, currentMaxLength);
+                        int lastIndexOfPercent = splitError.lastIndexOf(PERCENT_VALUE);
+
+                        if ((lastIndexOfPercent > currentMaxLength - 5) && (lastIndexOfPercent < currentMaxLength)) {
+                            queryString.append(splitError.substring(0, lastIndexOfPercent));
+                        } else {
+                            queryString.append(splitError);
+                        }
+                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: Param " + parameterKey + " value still too long after slicing");
+
+                        // On retourne à l'endroit du code où se trouve outerloop
+                        break outerloop;
+                    }
+                    // Sinon si le hit déjà construit + la valeur courante est trop grand
+                    else if (queryString.length() + currentSplitValue.length() > maxLengthAvailable) {
+                        // On créé un nouveau tronçon
+                        countSplitHits++;
+                        prepareHitsList.add(queryString.toString());
+                        queryString = new StringBuilder()
+                                .append(mhCommonQueryContent)
+                                .append(currentKey)
+                                .append(i == 0 ? currentSplitValue : separator + currentSplitValue);
+                    }
+                    // Sinon, on continue la construction normalement
+                    else {
+                        queryString.append(i == 0 ? currentKey + currentSplitValue : separator + currentSplitValue);
+                    }
+                }
+            }
+            // Sinon, si le hit est trop grand, on le découpe entre deux paramètres
+            else if (queryString.length() + value.length() > maxLengthAvailable) {
+                countSplitHits++;
+                prepareHitsList.add(queryString.toString());
+                queryString = new StringBuilder()
+                        .append(mhCommonQueryContent)
+                        .append(value);
+            }
+            //Sinon, on ne découpe pas
+            else {
+                queryString.append(value);
+            }
+        }
+
+        // Si un seul hit est construit
+        if (countSplitHits == 1) {
+            if (indexError == countSplitHits) {
+                hitsList.add(configStr + makeSubQuery(MHERR, "1") + queryString);
+            } else {
+                hitsList.add(configStr + queryString);
+            }
+        }
+        // Sinon, si le nombre de tronçons > 999, erreur
+        else if (countSplitHits > HIT_MAX_COUNT) {
+            hitsList.add(configStr + makeSubQuery(MHERR, "1") + queryString);
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Multihits: too much hit parts");
+        }
+        // Sinon, on ajoute les hits construits à la liste de hits à envoyer
+        else {
+            prepareHitsList.add(queryString.toString());
+            String mhID = mhIdSuffixGenerator();
+            String countSplitHitsString = String.valueOf(countSplitHits);
+            for (int i = 0; i < countSplitHits; i++) {
+                String mhParameter = makeSubQuery("mh", String.format(MH_PARAMETER_FORMAT, Tool.formatNumberLength(Integer.toString(i + 1), countSplitHitsString.length()), countSplitHitsString, mhID));
+                if (indexError == (i + 1)) {
+                    hitsList.add(configStr + mhParameter + makeSubQuery(MHERR, "1") + prepareHitsList.get(i));
+                } else {
+                    hitsList.add(configStr + mhParameter + prepareHitsList.get(i));
+                }
+            }
+        }
+
+        StringBuilder message = new StringBuilder();
+        for (String hit : hitsList) {
+            message.append(hit).append('\n');
+        }
+        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, message.toString(), TrackerListener.HitStatus.Success);
 
         return new Object[]{hitsList, oltParameter};
     }
@@ -527,16 +545,21 @@ class Builder implements Runnable {
             Param param = entry.getValue();
             ParamOption options = param.getOptions();
 
-            if (options != null) {
-                if (options.getRelativePosition() == ParamOption.RelativePosition.first) {
-                    firstParamKey = entry.getKey();
-                } else if (options.getRelativePosition() == ParamOption.RelativePosition.last) {
-                    lastParamKey = entry.getKey();
-                } else {
-                    params.add(param);
-                }
-            } else {
+            if (options == null) {
                 params.add(param);
+                continue;
+            }
+
+            switch (options.getRelativePosition()) {
+                case first:
+                    firstParamKey = entry.getKey();
+                    break;
+                case last:
+                    lastParamKey = entry.getKey();
+                    break;
+                default:
+                    params.add(param);
+                    break;
             }
         }
 
@@ -575,111 +598,103 @@ class Builder implements Runnable {
 
         // PREPARE
         for (final Param p : params) {
-            List<Closure> paramValues = new ArrayList<>();
-            paramValues.addAll(p.getValues());
+            List<Closure> paramValues = new ArrayList<>(p.getValues());
 
             String strValue = paramValues.remove(0).execute();
-            if (strValue != null) {
+            if (strValue == null) {
+                continue;
+            }
 
-                if (p.getOptions() != null) {
-                    if (p.getOptions().getType() == ParamOption.Type.JSON) {
-                        try {
-                            Map result = new HashMap();
-                            result.putAll(Tool.toMap(new JSONObject(strValue)));
+            ParamOption options = p.getOptions();
+            if (options != null) {
+                try {
+                    switch (options.getType()) {
+                        case JSON:
+                            Map map = new HashMap(Tool.toMap(new JSONObject(strValue)));
                             for (Closure closureValue : paramValues) {
                                 String appendValue = closureValue.execute();
                                 if (Tool.isJSON(appendValue)) {
-                                    result.putAll(Tool.toMap(new JSONObject(appendValue)));
+                                    map.putAll(Tool.toMap(new JSONObject(appendValue)));
                                 } else {
                                     Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Couldn't append value to a JSONObject");
                                 }
                             }
-                            strValue = new JSONObject(result).toString();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else if (p.getOptions().getType() == ParamOption.Type.ARRAY) {
-                        try {
-                            List result = new ArrayList();
+                            strValue = new JSONObject(map).toString();
+                            break;
+                        case ARRAY:
+                            List array = new ArrayList();
                             JSONArray valArray = new JSONArray(strValue);
                             for (int i = 0; i < valArray.length(); i++) {
-                                result.add(valArray.get(i));
+                                array.add(valArray.get(i));
                             }
                             for (Closure closureValue : paramValues) {
                                 String appendValue = closureValue.execute();
                                 if (Tool.isArray(appendValue)) {
                                     valArray = new JSONArray(appendValue);
                                     for (int i = 0; i < valArray.length(); i++) {
-                                        result.add(valArray.get(i));
+                                        array.add(valArray.get(i));
                                     }
                                 } else {
-                                    result.add(appendValue);
+                                    array.add(appendValue);
                                 }
                             }
-                            strValue = result.toString();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        // NOT JSON
-                        StringBuilder strBuilder = new StringBuilder(strValue);
-                        for (Closure closureValue : paramValues) {
-                            strBuilder.append(p.getOptions().getSeparator())
-                                    .append(closureValue.execute());
-                        }
-                        strValue = strBuilder.toString();
+                            strValue = array.toString();
+                            break;
+                        default:
+                            // NOT JSON
+                            StringBuilder strBuilder = new StringBuilder(strValue);
+                            for (Closure closureValue : paramValues) {
+                                strBuilder.append(p.getOptions().getSeparator())
+                                        .append(closureValue.execute());
+                            }
+                            strValue = strBuilder.toString();
+                            break;
                     }
-                } else {
-                    // NOT JSON
-                    StringBuilder strBuilder = new StringBuilder(strValue);
-                    for (Closure closureValue : paramValues) {
-                        strBuilder.append(',')
-                                .append(closureValue.execute());
-                    }
-                    strValue = strBuilder.toString();
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
                 }
-
-                String key = p.getKey();
-
-                if (key.equals(Hit.HitParam.UserId.stringValue())) {
-                    if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
-                        strValue = OPT_OUT;
-                    } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
-                        strValue = Tool.SHA256(strValue);
-                    }
-                    tracker.setInternalUserId(strValue);
-                } else if (key.equals(Hit.HitParam.Referrer.stringValue())) {
-                    strValue = strValue.replace("&", "$")
-                            .replaceAll("[<>]", "");
+            } else {
+                // NOT JSON
+                StringBuilder strBuilder = new StringBuilder(strValue);
+                for (Closure closureValue : paramValues) {
+                    strBuilder.append(',')
+                            .append(closureValue.execute());
                 }
-
-                String separator = ",";
-                if (p.getOptions() != null) {
-                    separator = p.getOptions().getSeparator();
-                    if (p.getOptions().isEncode()) {
-                        strValue = Tool.percentEncode(strValue);
-                        separator = Tool.percentEncode(separator);
-                    }
-                }
-
-                formattedParameters.put(key, new Pair<>(makeSubQuery(key, strValue), separator));
+                strValue = strBuilder.toString();
             }
 
+            String key = p.getKey();
+
+            if (key.equals(Hit.HitParam.UserId.stringValue())) {
+                if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
+                    strValue = OPT_OUT;
+                } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
+                    strValue = Tool.SHA256(strValue);
+                }
+                tracker.setInternalUserId(strValue);
+            } else if (key.equals(Hit.HitParam.Referrer.stringValue())) {
+                strValue = strValue.replace("&", "$")
+                        .replaceAll("[<>]", "");
+            }
+
+            String separator = ",";
+            if (options != null) {
+                separator = options.getSeparator();
+                if (options.isEncode()) {
+                    strValue = Tool.percentEncode(strValue);
+                    separator = Tool.percentEncode(separator);
+                }
+            }
+
+            formattedParameters.put(key, new Pair<>(makeSubQuery(key, strValue), separator));
         }
         return formattedParameters;
     }
 
     private String mhIdSuffixGenerator() {
-        Random random = new Random();
-        int randId = random.nextInt(9000000) + 1000000;
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
-
-        return String.format(Locale.getDefault(), MHID_FORMAT, hour, minute, second, randId);
+        return String.format(Locale.getDefault(), MHID_FORMAT, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), new Random().nextInt(9000000) + 1000000);
     }
 
     String makeSubQuery(String key, String value) {
@@ -861,7 +876,7 @@ class Sender implements Runnable {
 
     private void updateDebugger(final String message, final String type, final boolean isHit) {
         if (Debugger.getContext() != null) {
-            ((Activity) Debugger.getContext()).runOnUiThread(new Runnable() {
+            Tool.runOnMainThread((Activity) Debugger.getContext(), new Runnable() {
                 @Override
                 public void run() {
                     Debugger.getDebuggerEvents().add(0, new Debugger.DebuggerEvent(message, type, isHit));
@@ -885,11 +900,10 @@ class Dispatcher {
     void dispatch(BusinessObject... businessObjects) {
         ArrayList<BusinessObject> trackerObjects;
         for (BusinessObject businessObject : businessObjects) {
-            businessObject.setEvent();
+            businessObject.setParams();
 
             if (businessObject instanceof AbstractScreen) {
-                trackerObjects = new ArrayList<>();
-                trackerObjects.addAll(tracker.getBusinessObjects().values());
+                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
 
                 boolean hasOrder = false;
 
@@ -904,22 +918,21 @@ class Dispatcher {
                             hasOrder = true;
                         }
 
-                        object.setEvent();
+                        object.setParams();
                         tracker.getBusinessObjects().remove(object.getId());
                     }
                 }
 
                 if (tracker.Cart().getCartId() != null && (((Screen) businessObject).isBasketScreen() || hasOrder)) {
-                    tracker.Cart().setEvent();
+                    tracker.Cart().setParams();
                 }
             } else if (businessObject instanceof Gesture) {
-                trackerObjects = new ArrayList<>();
-                trackerObjects.addAll(tracker.getBusinessObjects().values());
+                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
 
                 if (((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
                     for (BusinessObject object : trackerObjects) {
                         if ((object instanceof InternalSearch) && object.getTimestamp() < businessObject.getTimestamp()) {
-                            object.setEvent();
+                            object.setParams();
                             tracker.getBusinessObjects().remove(object.getId());
                         }
                     }
@@ -927,12 +940,11 @@ class Dispatcher {
             }
 
             tracker.getBusinessObjects().remove(businessObject.getId());
-            trackerObjects = new ArrayList<>();
-            trackerObjects.addAll(tracker.getBusinessObjects().values());
+            trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
 
             for (BusinessObject object : trackerObjects) {
                 if ((object instanceof CustomObject || object instanceof NuggAd) && object.getTimestamp() < businessObject.getTimestamp()) {
-                    object.setEvent();
+                    object.setParams();
                     tracker.getBusinessObjects().remove(object.getId());
                 }
             }
@@ -969,7 +981,7 @@ class Dispatcher {
                 .setRelativePosition(ParamOption.RelativePosition.last);
         tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
         if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(), stcOptions);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
         }
 
         final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
@@ -1097,7 +1109,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.10.2";
+            return "2.11.0";
         }
     };
 
@@ -1117,38 +1129,41 @@ class TechnicalContext {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(android.content.Context.TELEPHONY_SERVICE);
-
-        if (networkInfo != null) {
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                return ConnectionType.WIFI;
-            } else {
-                switch (telephonyManager.getNetworkType()) {
-                    case TelephonyManager.NETWORK_TYPE_GPRS:
-                        return ConnectionType.GPRS;
-                    case TelephonyManager.NETWORK_TYPE_EDGE:
-                        return ConnectionType.EDGE;
-                    case TelephonyManager.NETWORK_TYPE_1xRTT:
-                        return ConnectionType.TWOG;
-                    case TelephonyManager.NETWORK_TYPE_CDMA:
-                    case TelephonyManager.NETWORK_TYPE_UMTS:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                        return ConnectionType.THREEG;
-                    case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    case TelephonyManager.NETWORK_TYPE_HSUPA:
-                        return ConnectionType.THREEGPLUS;
-                    case TelephonyManager.NETWORK_TYPE_HSPAP:
-                    case TelephonyManager.NETWORK_TYPE_LTE:
-                        return ConnectionType.FOURG;
-                    default:
-                        return ConnectionType.UNKNOWN;
-                }
-            }
-        } else {
+        if (networkInfo == null) {
             return ConnectionType.OFFLINE;
+        }
+
+        if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+            return ConnectionType.WIFI;
+        }
+
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(android.content.Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) {
+            return ConnectionType.UNKNOWN;
+        }
+
+        switch (telephonyManager.getNetworkType()) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+                return ConnectionType.GPRS;
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+                return ConnectionType.EDGE;
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+                return ConnectionType.TWOG;
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                return ConnectionType.THREEG;
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+                return ConnectionType.THREEGPLUS;
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return ConnectionType.FOURG;
+            default:
+                return ConnectionType.UNKNOWN;
         }
     }
 
@@ -1339,9 +1354,8 @@ class TechnicalContext {
                 Object dls = tracker.getConfiguration().get(TrackerConfigurationKeys.DOWNLOAD_SOURCE);
                 if (dls != null) {
                     return String.valueOf(dls);
-                } else {
-                    return "ext";
                 }
+                return "ext";
             }
         };
     }
@@ -1400,10 +1414,6 @@ class Tool {
 
     enum CallbackType {
         FIRST_LAUNCH, BUILD, SEND, PARTNER, WARNING, SAVE, ERROR
-    }
-
-    static String upperCaseFirstLetter(String s) {
-        return String.valueOf(s.charAt(0)).toUpperCase() + s.substring(1);
     }
 
     static String percentEncode(String s) {
@@ -1468,19 +1478,6 @@ class Tool {
         return result.toString();
     }
 
-    static ArrayList<Pair<Param, Integer>> findParametersWithPosition(String key, ArrayList<Param> parameters) {
-        ArrayList<Pair<Param, Integer>> params = new ArrayList<>();
-        int index = 0;
-        for (Param p : parameters) {
-            if (p.getKey().equals(key)) {
-                params.add(new Pair<>(p, index));
-            }
-            index++;
-        }
-
-        return params;
-    }
-
     static Closure getTimeStamp() {
         return new Closure() {
             @Override
@@ -1542,10 +1539,6 @@ class Tool {
         return (int) TimeUnit.DAYS.convert((latestTimeMillis - oldestTimeMillis), TimeUnit.MILLISECONDS);
     }
 
-    static int getMinutesBetweenTimes(long latestTimeMillis, long oldestTimeMillis) {
-        return (int) TimeUnit.MINUTES.convert((latestTimeMillis - oldestTimeMillis), TimeUnit.MILLISECONDS);
-    }
-
     static int getSecondsBetweenTimes(long latestTimeMillis, long oldestTimeMillis) {
         return (int) TimeUnit.SECONDS.convert((latestTimeMillis - oldestTimeMillis), TimeUnit.MILLISECONDS);
     }
@@ -1562,8 +1555,8 @@ class Tool {
         if (s == null) return false;
 
         try {
-            new JSONObject(s);
-            return true;
+            JSONObject obj = new JSONObject(s);
+            return obj.toString().equals(cleanJSONString(s));
         } catch (JSONException e) {
             return false;
         }
@@ -1573,11 +1566,20 @@ class Tool {
         if (s == null) return false;
 
         try {
-            new JSONArray(s);
-            return true;
+            JSONArray array = new JSONArray(s);
+            return array.toString().equals(cleanJSONString(s));
         } catch (JSONException e) {
             return false;
         }
+    }
+
+    private static String cleanJSONString(String jsonStr) {
+        return jsonStr.replace("\n", "")
+                .replace("\t", "")
+                .replace("\b", "")
+                .replace("\f", "")
+                .replace(" ", "")
+                .replace("\r", "");
     }
 
     static Map<String, Object> toMap(JSONObject jsonObject) {
@@ -1595,15 +1597,6 @@ class Tool {
             map.put(key, value);
         }
         return map;
-    }
-
-    static Param findParameter(String key, LinkedHashMap<String, Param> volatiles, LinkedHashMap<String, Param> persistents) {
-        if (volatiles.containsKey(key)) {
-            return volatiles.get(key);
-        } else if (persistents.containsKey(key)) {
-            return persistents.get(key);
-        }
-        return null;
     }
 
     static SparseIntArray sortSparseIntArrayByKey(SparseIntArray arr) {
@@ -1891,14 +1884,14 @@ class Storage extends SQLiteOpenHelper {
     }
 
     void removeOldOfflineHits(int storageDuration) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, -storageDuration);
-        long maxOldDate = cal.getTime().getTime();
         SQLiteDatabase db = getWritableDatabase();
         if (db == null) {
             return;
         }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, -storageDuration);
+        long maxOldDate = cal.getTime().getTime();
         db.delete(HITS_STORAGE_TABLE, DATE + " < " + maxOldDate, null);
         db.close();
     }
@@ -2038,6 +2031,7 @@ class Lists {
         set.add("atc");
         set.add("pdtl");
         set.add("stc");
+        set.add("events");
         return set;
     }
 }

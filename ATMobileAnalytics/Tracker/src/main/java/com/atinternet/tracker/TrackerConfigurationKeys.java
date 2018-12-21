@@ -96,11 +96,6 @@ public class TrackerConfigurationKeys {
     public static final String SITE = "site";
 
     /**
-     * Constant for token configuration
-     */
-    public static final String TOKEN = "autoTrackerToken";
-
-    /**
      * Constant for pixel path configuration
      */
     public static final String PIXEL_PATH = "pixelPath";
@@ -134,6 +129,16 @@ public class TrackerConfigurationKeys {
      * Constant for session duration
      */
     public static final String SESSION_BACKGROUND_DURATION = "sessionBackgroundDuration";
+
+    /**
+     * Constant for enable auto SalesTracker (Sales insight)
+     */
+    public static final String AUTO_SALES_TRACKER = "autoSalesTracker";
+
+    /**
+     * Constant for collect domain configuration (events only)
+     */
+    public static final String COLLECT_DOMAIN = "collectDomain";
 
     /**
      * Constant for download SDK source

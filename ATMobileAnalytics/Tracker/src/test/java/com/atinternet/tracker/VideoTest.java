@@ -74,7 +74,7 @@ public class VideoTest extends AbstractTestClass {
                 .setLevel2(4)
                 .setName("name")
                 .setChapter1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -107,7 +107,7 @@ public class VideoTest extends AbstractTestClass {
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
                 .setLinkedContent("content")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -143,7 +143,7 @@ public class VideoTest extends AbstractTestClass {
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -179,7 +179,7 @@ public class VideoTest extends AbstractTestClass {
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -215,7 +215,7 @@ public class VideoTest extends AbstractTestClass {
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());

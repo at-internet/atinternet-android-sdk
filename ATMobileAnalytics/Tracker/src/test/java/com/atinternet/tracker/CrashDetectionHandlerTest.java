@@ -22,6 +22,7 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.json.JSONException;
@@ -37,7 +38,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class CrashDetectionHandlerTest extends AbstractTestClass {
 
@@ -47,13 +48,14 @@ public class CrashDetectionHandlerTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        crashDetectionHandler = new CrashDetectionHandler(RuntimeEnvironment.application, Thread.getDefaultUncaughtExceptionHandler());
         preferences = RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        crashDetectionHandler = new CrashDetectionHandler(RuntimeEnvironment.application.getPackageName(), preferences, Thread.getDefaultUncaughtExceptionHandler());
     }
 
     @Test
     public void multiInstanceTest() {
-        CrashDetectionHandler crashDetectionHandler = new CrashDetectionHandler(RuntimeEnvironment.application, Thread.getDefaultUncaughtExceptionHandler());
+        ;
+        CrashDetectionHandler crashDetectionHandler = new CrashDetectionHandler(RuntimeEnvironment.application.getPackageName(), preferences, Thread.getDefaultUncaughtExceptionHandler());
         assertNotSame(this.crashDetectionHandler, crashDetectionHandler);
     }
 
@@ -64,7 +66,7 @@ public class CrashDetectionHandlerTest extends AbstractTestClass {
         preferences.edit().putString("CrashClassCause", "Class").apply();
         preferences.edit().putString("CrashExceptionName", Throwable.class.getName()).apply();
 
-        JSONObject json = new JSONObject(CrashDetectionHandler.getCrashInformation().execute());
+        JSONObject json = new JSONObject(CrashDetectionHandler.getCrashInformation(RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE)).execute());
 
         assertNotNull(json.getJSONObject("crash"));
         assertEquals(json.getJSONObject("crash").get("lastscreen"), "LastScreen");

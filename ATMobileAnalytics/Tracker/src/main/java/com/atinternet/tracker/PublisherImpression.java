@@ -30,6 +30,7 @@ public class PublisherImpression extends Publisher {
     PublisherImpression(Tracker tracker) {
         super(tracker);
         action = Action.View;
+        fromScreen = true;
     }
 
     /**

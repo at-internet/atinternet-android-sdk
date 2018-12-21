@@ -74,7 +74,7 @@ public class CustomObject extends BusinessObject {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         tracker.setParam(Hit.HitParam.JSON.stringValue(), value, new ParamOption().setAppend(true).setEncode(true).setPersistent(isPersistent).setType(ParamOption.Type.JSON));
     }
 }

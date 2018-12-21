@@ -97,6 +97,7 @@ public class ListsTest extends AbstractTestClass {
         assertTrue(sliceReadyParameter.contains("atc"));
         assertTrue(sliceReadyParameter.contains("pdtl"));
         assertTrue(sliceReadyParameter.contains("stc"));
-        assertEquals(4, sliceReadyParameter.size());
+        assertTrue(sliceReadyParameter.contains("events"));
+        assertEquals(5, sliceReadyParameter.size());
     }
 }

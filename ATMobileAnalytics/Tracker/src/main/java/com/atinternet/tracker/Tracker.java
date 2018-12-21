@@ -99,7 +99,7 @@ public class Tracker {
 
     private Screens screens;
     private Gestures gestures;
-    private Event event;
+    private Events events;
     private Context context;
     private NuggAds nuggAds;
     private Offline offline;
@@ -118,6 +118,8 @@ public class Tracker {
     private CustomTreeStructures customTreeStructures;
     private Products products;
     private MediaPlayers mediaPlayers;
+    private MvTestings mvTestings;
+    private ECommerce eCommerce;
 
     Buffer getBuffer() {
         return buffer;
@@ -162,7 +164,7 @@ public class Tracker {
             buffer = new Buffer(this);
             dispatcher = new Dispatcher(this);
             if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get(), defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
             }
             getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
 
@@ -249,7 +251,6 @@ public class Tracker {
 
     private void refreshConfigurationDependencies() {
         String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
-        String offlineMode = String.valueOf(configuration.get(TrackerConfigurationKeys.OFFLINE_MODE));
         boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
 
         if (!TextUtils.isEmpty(identifierKey)) {
@@ -258,7 +259,7 @@ public class Tracker {
 
         if (enableCrashDetectionHandler) {
             if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get(), defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
             }
         } else {
             if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {
@@ -376,16 +377,18 @@ public class Tracker {
         return gestures;
     }
 
-    /**
-     * Get Event instance
-     *
-     * @return Event
-     */
-    Event Event() {
-        if (event == null) {
-            event = new Event(this);
+    public Events Events() {
+        if (events == null) {
+            events = new Events(this);
         }
-        return event;
+        return events;
+    }
+
+    public ECommerce ECommerce() {
+        if (eCommerce == null) {
+            eCommerce = new ECommerce(this);
+        }
+        return eCommerce;
     }
 
     /**
@@ -612,6 +615,18 @@ public class Tracker {
             orders = new Orders(this);
         }
         return orders;
+    }
+
+    /**
+     * Get MvTestings instance
+     *
+     * @return MvTestings instance
+     */
+    public MvTestings MvTestings() {
+        if (mvTestings == null) {
+            mvTestings = new MvTestings(this);
+        }
+        return mvTestings;
     }
 
     /**
@@ -1424,5 +1439,13 @@ public class Tracker {
      */
     public Map<String, Object> getLifecycleMetrics() {
         return LifeCycle.getMetricsMap(getPreferences());
+    }
+
+    /***
+     * Get crash informations saved
+     * @return Map
+     */
+    public Map<String, String> getCrashInformation() {
+        return CrashDetectionHandler.getCrashInfo(getPreferences());
     }
 }

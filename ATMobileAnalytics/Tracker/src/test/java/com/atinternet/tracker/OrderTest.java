@@ -53,7 +53,6 @@ public class OrderTest extends AbstractTestClass {
         assertEquals(-1, order.getStatus());
         assertEquals(-1, order.getPaymentMethod());
         assertFalse(order.isNewCustomer());
-        assertNull(order.getCustomVariables());
         assertFalse(order.isConfirmationRequired());
     }
 
@@ -84,9 +83,9 @@ public class OrderTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTest() {
+    public void setParamsTest() {
         order.Amount().set(34.6, 6.7, 8).CustomVars().add(4, "test");
-        order.setEvent();
+        order.setParams();
 
         assertEquals(6, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());

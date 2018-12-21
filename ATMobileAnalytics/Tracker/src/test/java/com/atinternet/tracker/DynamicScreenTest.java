@@ -61,11 +61,11 @@ public class DynamicScreenTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTest() {
+    public void setParamsTest() {
         Date date = new Date();
-        dynamicScreen.setScreenId("test").setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
+        dynamicScreen.setScreenId("test").setName("name").setChapter1("chapter1").setUpdate(date).setParams();
 
-        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(4, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("pid").getValues().size());
@@ -77,26 +77,20 @@ public class DynamicScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("pidt").getValues().size());
         assertEquals(new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(date), buffer.getVolatileParams().get("pidt").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithTooLongScreenIdTest() {
+    public void setParamsWithTooLongScreenIdTest() {
         Date date = new Date();
         StringBuilder id = new StringBuilder();
         for (int i = 0; i < 256; i++) {
             id.append(i);
         }
-        dynamicScreen.setScreenId(id.toString()).setName("name").setChapter1("chapter1").setUpdate(date).setEvent();
+        dynamicScreen.setScreenId(id.toString()).setName("name").setChapter1("chapter1").setUpdate(date).setParams();
 
-        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(4, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("pid").getValues().size());
@@ -108,22 +102,16 @@ public class DynamicScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("pidt").getValues().size());
         assertEquals(new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(date), buffer.getVolatileParams().get("pidt").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
     }
 
     @Test
-    public void setEventWithChapter2Test() {
+    public void setParamsWithChapter2Test() {
         Date date = new Date();
-        dynamicScreen.setScreenId("test").setName("name").setChapter1("chap1").setChapter2("chap2").setUpdate(date).setEvent();
+        dynamicScreen.setScreenId("test").setName("name").setChapter1("chap1").setChapter2("chap2").setUpdate(date).setParams();
 
-        assertEquals(7, buffer.getVolatileParams().size());
+        assertEquals(4, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("pid").getValues().size());
@@ -135,14 +123,7 @@ public class DynamicScreenTest extends AbstractTestClass {
         assertEquals(1, buffer.getVolatileParams().get("pidt").getValues().size());
         assertEquals(new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(date), buffer.getVolatileParams().get("pidt").getValues().get(0).execute());
 
-        assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
-        assertEquals("screen", buffer.getVolatileParams().get("type").getValues().get(0).execute());
-
-        assertEquals(1, buffer.getVolatileParams().get("action").getValues().size());
-        assertEquals("view", buffer.getVolatileParams().get("action").getValues().get(0).execute());
-
         assertEquals(1, buffer.getVolatileParams().get("p").getValues().size());
         assertEquals("name", buffer.getVolatileParams().get("p").getValues().get(0).execute());
-
     }
 }

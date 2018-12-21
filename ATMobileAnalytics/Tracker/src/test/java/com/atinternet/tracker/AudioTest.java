@@ -51,14 +51,14 @@ public class AudioTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventPlayTest() {
+    public void setParamsPlayTest() {
         tracker.setParam("a", RichMedia.Action.Play.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Play)
                 .setLevel2(4)
                 .setName("name")
                 .setChapter1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -90,7 +90,7 @@ public class AudioTest extends AbstractTestClass {
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -119,14 +119,14 @@ public class AudioTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventRefreshTest() {
+    public void setParamsRefreshTest() {
         tracker.setParam("a", RichMedia.Action.Refresh.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Refresh)
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -155,14 +155,14 @@ public class AudioTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventPauseTest() {
+    public void setParamsPauseTest() {
         tracker.setParam("a", RichMedia.Action.Pause.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Pause)
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());
@@ -191,14 +191,14 @@ public class AudioTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventStopTest() {
+    public void setParamsStopTest() {
         tracker.setParam("a", RichMedia.Action.Stop.stringValue());
         audio.setDuration(56)
                 .setAction(RichMedia.Action.Stop)
                 .setMediaLevel2(4)
                 .setMediaLabel("name")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("type").getValues().size());

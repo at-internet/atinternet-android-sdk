@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class RichMedia extends BusinessObject {
 
     static final int MAX_DURATION = 86400;
-    private final SparseIntArray DEFAULT_SPARSE_ARRAY;
+    private final SparseIntArray DEFAULT_SPARSE_ARRAY = new SparseIntArray();
     private final Runnable refreshRunnable = new Runnable() {
         @Override
         public void run() {
@@ -113,12 +113,12 @@ public abstract class RichMedia extends BusinessObject {
         playTimestamp = -1;
         elapsedTime = 0;
         currentRefreshDurationsSparseArrayIndex = 0;
-        DEFAULT_SPARSE_ARRAY = new SparseIntArray();
         DEFAULT_SPARSE_ARRAY.append(0, 5);
         DEFAULT_SPARSE_ARRAY.append(1, 15);
         DEFAULT_SPARSE_ARRAY.append(5, 30);
         DEFAULT_SPARSE_ARRAY.append(10, 60);
 
+        refreshDurationsSparseIntArray = DEFAULT_SPARSE_ARRAY;
         isEmbedded = false;
         webDomain = null;
         linkedContent = null;
@@ -311,7 +311,7 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         ParamOption encode = new ParamOption().setEncode(true);
 
         tracker.setParam(Hit.HitParam.HitType.stringValue(), mediaType)
@@ -342,7 +342,6 @@ public abstract class RichMedia extends BusinessObject {
         currentRefreshDurationsSparseArrayIndex = 0;
         elapsedTime = 0;
         playTimestamp = -1;
-        refreshDurationsSparseIntArray = DEFAULT_SPARSE_ARRAY;
         processSendPlayWithRefresh();
     }
 
@@ -431,15 +430,19 @@ public abstract class RichMedia extends BusinessObject {
 
         playTimestamp = (int) (System.currentTimeMillis() / 1000);
 
-        /// Démarrage du refresh avec le premier intervalle
+        int refreshSparseArraySize = refreshDurationsSparseIntArray.size();
+
+        if (currentRefreshDurationsSparseArrayIndex < 0) {
+            currentRefreshDurationsSparseArrayIndex = 0;
+        } else if (currentRefreshDurationsSparseArrayIndex > refreshSparseArraySize - 1) {
+            currentRefreshDurationsSparseArrayIndex = refreshSparseArraySize - 1;
+        }
+
         int rd = refreshDurationsSparseIntArray.valueAt(currentRefreshDurationsSparseArrayIndex);
         refreshHandler = scheduler.scheduleWithFixedDelay(refreshRunnable, rd, rd, TimeUnit.SECONDS);
 
-        /// Process pour la mise en place du changement d'intervalle dynamique
-        /// Si il y a une autre définition d'intervalle
         if (currentRefreshDurationsSparseArrayIndex < refreshDurationsSparseIntArray.size() - 1) {
 
-            /// Calcul du délai avant de procéder au changement de durée de refresh
             int startedMinute = refreshDurationsSparseIntArray.keyAt(currentRefreshDurationsSparseArrayIndex);
             int nextStartedMinute = refreshDurationsSparseIntArray.keyAt(currentRefreshDurationsSparseArrayIndex + 1);
             if (elapsedTime == 0) {
@@ -453,6 +456,15 @@ public abstract class RichMedia extends BusinessObject {
                 public void run() {
                     currentRefreshDurationsSparseArrayIndex++;
                     refreshHandler.cancel(false);
+
+                    int refreshSparseArraySize = refreshDurationsSparseIntArray.size();
+
+                    if (currentRefreshDurationsSparseArrayIndex < 0) {
+                        currentRefreshDurationsSparseArrayIndex = 0;
+                    } else if (currentRefreshDurationsSparseArrayIndex > refreshSparseArraySize - 1) {
+                        currentRefreshDurationsSparseArrayIndex = refreshSparseArraySize - 1;
+                    }
+
                     int rd = refreshDurationsSparseIntArray.valueAt(currentRefreshDurationsSparseArrayIndex);
                     refreshHandler = scheduler.scheduleWithFixedDelay(refreshRunnable, 0, rd, TimeUnit.SECONDS);
 

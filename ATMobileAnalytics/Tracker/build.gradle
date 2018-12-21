@@ -26,7 +26,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.10.2"
+version = "2.11.0"
 
 install {
     repositories.mavenInstaller {
@@ -69,7 +69,7 @@ bintray {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.google.android.gms:play-services-ads:17.0.0'
+    compileOnly 'com.google.android.gms:play-services-ads:17.1.2'
     testImplementation 'org.robolectric:robolectric:3.3.2'
     testImplementation 'junit:junit:4.12'
 }
@@ -142,7 +142,7 @@ task createBuildFile {
 }
 
 jacoco {
-    toolVersion = "0.7.1.201405082137"
+    toolVersion = "0.8.1"
 }
 
 def coverageSourceDirs = [
@@ -155,12 +155,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testReleaseUnitTest") {
     description = "Generate Jacoco coverage reports"
 
     classDirectories = fileTree(
-            dir: project.rootDir.absolutePath + '/Tracker/build/intermediates/classes/release/com/atinternet/tracker',
-            excludes: ['**/R.class',
-                       '**/R$*.class',
-                       '**/*$ViewInjector*.*',
-                       '**/BuildConfig.*',
-                       '**/Manifest*.*']
+            dir: project.rootDir.absolutePath + '/Tracker/build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/com/atinternet/tracker/',
     )
 
     additionalSourceDirs = files(coverageSourceDirs)

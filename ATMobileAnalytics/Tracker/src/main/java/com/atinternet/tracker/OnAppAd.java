@@ -28,6 +28,7 @@ package com.atinternet.tracker;
 public abstract class OnAppAd extends BusinessObject {
 
     Action action;
+    boolean fromScreen;
 
     /**
      * Enum with different advertisement type

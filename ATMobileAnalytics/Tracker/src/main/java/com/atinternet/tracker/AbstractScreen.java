@@ -326,7 +326,7 @@ public abstract class AbstractScreen extends BusinessObject {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         if (level2 >= 0) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
@@ -336,54 +336,54 @@ public abstract class AbstractScreen extends BusinessObject {
         }
 
         if (location != null) {
-            location.setEvent();
+            location.setParams();
         }
 
         if (campaign != null) {
-            campaign.setEvent();
+            campaign.setParams();
         }
 
         if (internalSearch != null) {
-            internalSearch.setEvent();
+            internalSearch.setParams();
         }
 
         if (aisle != null) {
-            aisle.setEvent();
+            aisle.setParams();
         }
 
         if (cart != null) {
-            cart.setEvent();
+            cart.setParams();
         }
 
         if (order != null) {
-            order.setEvent();
+            order.setParams();
         }
 
         if (customTreeStructure != null) {
-            customTreeStructure.setEvent();
+            customTreeStructure.setParams();
         }
 
         if (customObjectsMap != null) {
             for (CustomObject co : customObjectsMap.values()) {
-                co.setEvent();
+                co.setParams();
             }
         }
 
         if (customVarsMap != null) {
             for (CustomVar cv : customVarsMap.values()) {
-                cv.setEvent();
+                cv.setParams();
             }
         }
 
         if (selfPromotionImpressionsMap != null) {
             for (SelfPromotionImpression spi : selfPromotionImpressionsMap.values()) {
-                spi.setEvent();
+                spi.setParams();
             }
         }
 
         if (publisherImpressionsMap != null) {
             for (PublisherImpression pi : publisherImpressionsMap.values()) {
-                pi.setEvent();
+                pi.setParams();
             }
         }
     }

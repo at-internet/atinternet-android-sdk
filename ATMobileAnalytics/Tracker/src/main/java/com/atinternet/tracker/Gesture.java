@@ -309,7 +309,7 @@ public class Gesture extends BusinessObject {
 
 
     @Override
-    void setEvent() {
+    void setParams() {
         String sn = TechnicalContext.getScreenName();
         if (!TextUtils.isEmpty(sn)) {
             tracker.setParam(Hit.HitParam.TouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
@@ -326,7 +326,7 @@ public class Gesture extends BusinessObject {
 
         if (internalSearch != null) {
             action = Action.InternalSearch;
-            internalSearch.setEvent();
+            internalSearch.setParams();
         }
 
         String value = chapter1;
@@ -349,11 +349,15 @@ public class Gesture extends BusinessObject {
 
         if (customObjectsMap != null) {
             for (CustomObject co : customObjectsMap.values()) {
-                co.setEvent();
+                co.setParams();
             }
         }
 
         tracker.setParam(Hit.HitParam.Touch.stringValue(), action.stringValue())
-                .Event().set("click", action.stringValue(), value);
+                .setParam(Hit.HitParam.HitType.stringValue(), "click")
+                .setParam(Hit.HitParam.Screen.stringValue(), value,
+                        new ParamOption().setRelativePosition(ParamOption.RelativePosition.after)
+                                .setRelativeParameterKey(Hit.HitParam.UserId.stringValue())
+                                .setEncode(true));
     }
 }

@@ -55,7 +55,7 @@ public class CartTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventTest() {
+    public void setParamsTest() {
         cart.setCartId("76")
                 .Products().add("pdtid")
                 .setCategory1("cat")
@@ -67,7 +67,7 @@ public class CartTest extends AbstractTestClass {
                 .setPromotionalCode("promo")
                 .setUnitPriceTaxIncluded(7.0);
 
-        cart.setEvent();
+        cart.setParams();
         assertEquals(8, buffer.getVolatileParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("idcart").getValues().size());

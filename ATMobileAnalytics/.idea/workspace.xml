@@ -6,8 +6,9 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="ATINTERNET" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -16,8 +17,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd833247-8517-4f03-afee-79792ecf406b" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracker/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestApp/TestApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TestApp/TestApp.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/Tracker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/Tracker.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/core.manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/core.manifest.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,50 +38,52 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ATMobileAnalytics" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ATMobileAnalytics" type="f1a62948:ProjectNode" />
+                <item name=":Tracker" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ATMobileAnalytics" type="f1a62948:ProjectNode" />
+                <item name=":Tracker" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ATMobileAnalytics" type="f1a62948:ProjectNode" />
+                <item name=":Tracker" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ATMobileAnalytics" type="f1a62948:ProjectNode" />
+                <item name=":Tracker" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Core.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="1099" column="26" selection-start-line="1099" selection-start-column="26" selection-end-line="1099" selection-end-column="26" />
-              <folding>
-                <element signature="e#44605#44606#0" expanded="true" />
-                <element signature="e#44632#44633#0" expanded="true" />
-                <element signature="e#44904#45016#0" expanded="true" />
-                <element signature="e#45015#45016#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="core.manifest.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Gesture.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Gesture.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="322" column="21" selection-start-line="322" selection-start-column="21" selection-end-line="322" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="17" column="62" selection-start-line="17" selection-start-column="62" selection-end-line="17" selection-end-column="62" />
+            <state relative-caret-position="555">
+              <caret line="59" selection-start-line="59" selection-end-line="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -85,69 +91,62 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SmartTracker/build.gradle">
+      <file leaf-file-name="ConfigurationTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="28" column="30" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
+            <state relative-caret-position="1080">
+              <caret line="102" column="27" selection-start-line="102" selection-start-column="27" selection-end-line="102" selection-end-column="27" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
+      <file leaf-file-name="RichMedia.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/RichMedia.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="95" column="60" selection-start-line="95" selection-start-column="60" selection-end-line="95" selection-end-column="60" />
+            <state relative-caret-position="324">
+              <caret line="445" column="110" selection-start-line="445" selection-start-column="110" selection-end-line="445" selection-end-column="110" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Publisher.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publisher.java">
+      <file leaf-file-name="core.manifest.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="275" column="58" selection-start-line="275" selection-start-column="58" selection-end-line="275" selection-end-column="58" />
+            <state relative-caret-position="324">
+              <caret line="165" column="5" selection-start-line="165" selection-start-column="5" selection-end-line="165" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/settings.gradle">
+      <file leaf-file-name="Core.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ContextTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ContextTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="65" column="65" selection-start-line="65" selection-start-column="65" selection-end-line="65" selection-end-column="65" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Context.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Context.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="75" column="24" selection-start-line="75" selection-start-column="24" selection-end-line="75" selection-end-column="24" />
+            <state relative-caret-position="11805">
+              <caret line="1601" column="26" selection-start-line="1601" selection-start-column="26" selection-end-line="1601" selection-end-column="26" />
+              <folding>
+                <element signature="class#Sender#0" />
+                <element signature="class#Dispatcher#0" />
+                <element signature="class#TrackerQueue#0" />
+                <element signature="class#TechnicalContext#0" />
+                <element signature="class#Storage#0" />
+                <element signature="class#Lists#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>name</find>
-      <find>bname</find>
-      <find>DAYS_SINCE_UPDATE</find>
-      <find>+=</find>
-      <find>DynamicScreenId</find>
       <find>required</find>
       <find>2.9</find>
       <find>2.9.2</find>
@@ -160,13 +159,31 @@
       <find>getHitTy</find>
       <find>&quot;s2</find>
       <find>Level2</find>
+      <find>crashDe</find>
       <find>2.10</find>
+      <find>getLastC</find>
+      <find>setPa</find>
+      <find>jacocoTestReport</find>
+      <find>send</find>
+      <find>.put</find>
+      <find>cart.creation</find>
+      <find>processSendPlayWithRefresh</find>
+      <find>cart.</find>
+      <find>setEncode(true)</find>
+      <find>persistentWithEncoding</find>
+      <find>encode</find>
+      <find>context</find>
+      <find>getcra</find>
+      <find>lis</find>
+      <find>list&quot;</find>
+      <find>position&quot;</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker</dir>
       <dir>$PROJECT_DIR$</dir>
       <dir>$PROJECT_DIR$/SmartTracker</dir>
       <dir>$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker</dir>
+      <dir>$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce</dir>
       <dir>$PROJECT_DIR$/Tracker</dir>
     </dirStrings>
   </component>
@@ -259,6 +276,10 @@
                 <option name="name" value="reportSourceSetTransformAndroidTestDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="javadocJar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks using Device Providers and Test Servers." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="deviceCheck" />
@@ -349,6 +370,10 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="processReleaseUnitTestJavaRes" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="javadoc" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1203,797 +1228,6 @@
               <ExternalTaskPojo>
                 <option name="description" value="Displays the properties of root project 'ATMobileAnalytics'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="properties" />
-              </ExternalTaskPojo>
-            </list>
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/SmartTracker">
-          <value>
-            <list>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="createDelivery" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the sub-projects of project ':SmartTracker'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="projects" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageReleaseResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeReleaseConsumerProguardFiles" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="validateSigningDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithSyncJniLibsForRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleReleaseUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformClassesAndResourcesWithPrepareIntermediateJarsForRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processReleaseJavaRes" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs lint on the Debug build." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="lintDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportBuildArtifactsRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleDebugUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the configuration model of project ':SmartTracker'. [incubating]" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="model" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the tasks runnable from project ':SmartTracker'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="tasks" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugUnitTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformClassesAndResourcesWithPrepareIntermediateJarsForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageReleaseRenderscript" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="bundleDebugAndroidTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javadocJar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformAndroidTestDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs all device checks using Device Providers and Test Servers." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="deviceCheck" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithIntermediateJniLibsForRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays all dependencies declared in project ':SmartTracker'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="dependencies" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs lint on all variants." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="lint" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseNdk" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugUnitTestAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformTestDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugJavaWithJavac" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Installs the 'archives' artifacts into the local Maven repository." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="install" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mainApkListPersistenceDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles and tests this project and all projects it depends on." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="buildNeeded" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugAndroidTestBuildConfig" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processDebugUnitTestJavaRes" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Run unit tests for the release build." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="testReleaseUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Deletes the build cache directory." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="cleanBuildCache" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleDefault" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAndroidTestShaders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugShaders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAndroidTestJavaWithJavac" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the components produced by project ':SmartTracker'. [incubating]" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="components" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformMain" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseRenderscript" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles all Debug builds." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processDebugAndroidTestManifest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugUnitTestJavaWithJavac" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="createBuildFile" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformResourcesWithMergeJavaResForReleaseUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="preDebugAndroidTestBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Extracts Android annotations for the debug variant into the archive file" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="extractDebugAnnotations" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processDebugAndroidTestJavaRes" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles a bundle containing the library in debug." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="bundleDebugAar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javadoc" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processReleaseUnitTestJavaRes" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportBuildArtifactsDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javaPreCompileDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="splitsDiscoveryTaskDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformClassesAndResourcesWithSyncLibJarsForRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseShaders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeReleaseResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithIntermediateJniLibsForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugAndroidTestSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformClassesAndResourcesWithSyncLibJarsForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="checkReleaseManifest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javaPreCompileDebugUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="verifyReleaseResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageDebugResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithSyncJniLibsForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAndroidTestSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeReleaseJniLibFolders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="prepareLintJar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Installs and runs instrumentation tests using all Device Providers." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="deviceAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugAndroidTestAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processReleaseManifest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Uninstalls the android (on device) tests for the Debug build." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="uninstallDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the insight into a specific dependency in project ':SmartTracker'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="dependencyInsight" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Generate Jacoco coverage reports" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="jacocoTestReport" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="preReleaseBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles all variants of all applications and secondary packages." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assemble" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="createFullJarDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseRFile" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays a help message." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="help" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformTestRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseUnitTestSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseUnitTestAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Installs the android (on device) tests for the Debug build." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="installDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageReleaseAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformClassesWithDexBuilderForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javaPreCompileReleaseUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="createMockableJar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javaPreCompileRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="splitsDiscoveryTaskRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs all device checks on currently connected devices." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="connectedCheck" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Installs and runs the tests for debug on connected devices." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="connectedDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Uninstall all applications." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="uninstallAll" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithMergeJniLibsForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles all the Test applications." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageDebugAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processDebugAndroidTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs lint on all variants and applies any safe suggestions to the source code." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="lintFix" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Extracts Android annotations for the release variant into the archive file" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="extractReleaseAnnotations" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAidl" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Publishes artifacts to bintray.com." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="bintrayUpload" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="preDebugUnitTestBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileLint" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugAndroidTestResValues" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithMergeJniLibsForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeReleaseShaders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="sourcesJar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the Android dependencies of the project." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="androidDependencies" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAndroidTestNdk" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugUnitTestSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformNativeLibsWithMergeJniLibsForRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformDexArchiveWithExternalLibsDexMergerForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugAndroidTestJniLibFolders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="extractProguardFiles" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processDebugJavaRes" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="consumeConfigAttr" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugAndroidTestAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseJavaWithJavac" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformResourcesWithMergeJavaResForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Run unit tests for all variants." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="test" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugNdk" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugAndroidTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseUnitTestSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="preReleaseUnitTestBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseUnitTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugResValues" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs all checks." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="check" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="javaPreCompileDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Run unit tests for the debug build." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="testDebugUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Installs and runs instrumentation tests for all flavors on connected devices." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="connectedAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="reportSourceSetTransformTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="preBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformResourcesWithMergeJavaResForRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseUnitTestJavaWithJavac" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugShaders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformResourcesWithMergeJavaResForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileReleaseAidl" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugRFile" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs lint on the Release build." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="lintRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles and tests this project and all projects that depend on it." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="buildDependents" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles a bundle containing the library in release." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="bundleReleaseAar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformDexArchiveWithDexMergerForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the dependent components of components in project ':SmartTracker'. [incubating]" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="dependentComponents" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays all buildscript dependencies declared in project ':SmartTracker'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="buildEnvironment" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="checkDebugManifest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugJniLibFolders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prints out all the source sets defined in this project." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="sourceSets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="transformResourcesWithMergeJavaResForDebugUnitTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeReleaseAssets" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="createFullJarRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugUnitTestSources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugRenderscript" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageDebugRenderscript" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseBuildConfig" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the signing info for each variant." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="signingReport" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAndroidTestAidl" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugAndroidTestShaders" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Deletes the build directory." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="clean" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="preDebugBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugBuildConfig" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles and tests this project." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="build" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles all Release builds." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="assembleRelease" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="resolveConfigAttr" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="mergeDebugConsumerProguardFiles" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="compileDebugAndroidTestRenderscript" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateDebugAndroidTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="processDebugManifest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="packageDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
-                <option name="name" value="generateReleaseResValues" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the properties of project ':SmartTracker'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/SmartTracker" />
                 <option name="name" value="properties" />
               </ExternalTaskPojo>
             </list>
@@ -2949,6 +2183,10 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="javadocJar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="reportSourceSetTransformAndroidTestDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
@@ -3089,6 +2327,10 @@
                 <option name="description" value="Assembles a bundle containing the library in debug." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
                 <option name="name" value="bundleDebugAar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
+                <option name="name" value="javadoc" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/Tracker" />
@@ -4728,64 +3970,64 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Audio.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/LiveVideos.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Audios.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Video.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Videos.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/LiveAudioTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/LiveVideoTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/AudiosTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Screens.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/VideoTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/AudioTest.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/SmartFragment.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/DynamicScreens.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Screen.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/DynamicScreen.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/AbstractScreen.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/DynamicScreen.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/DynamicScreens.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Screen.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/AbstractTestClass.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Configuration.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/TrackerTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/AbstractTestClass.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/SmartObjects.java" />
-        <option value="$PROJECT_DIR$/TestApp/build.gradle" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Order.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/OrderTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MVTesting.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MVTestingCustomVars.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTestingCustomVars.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Hit.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/CoreFeatures.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Tracker.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Hit.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/build.gradle" />
-        <option value="$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Core.java" />
-        <option value="$PROJECT_DIR$/SmartTracker/core.manifest.json" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/AbstractScreen.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Context.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Gesture.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publisher.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/RichMedia.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/SelfPromotion.java" />
-        <option value="$PROJECT_DIR$/settings.gradle" />
-        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ContextTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTestings.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/MvTesttingTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/MvTestingTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/MvTestingsTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/HitParamTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/EcommerceEvent.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/AddProduct.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/AddProducts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/CartConfirmation.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/CartCreation.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DeliveryCheckout.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DeliveryCheckouts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/PaymentCheckout.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/PaymentCheckouts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/ProductPurchased.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/RemoveProduct.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/RemoveProducts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/TransactionConfirmation.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/UpdateCart.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/UpdateCarts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Event.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Events.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/EventsTest.java" />
         <option value="$PROJECT_DIR$/TestApp/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTesting.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayPProducts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayPageProduct.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayPProduct.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayProduct.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Cart.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/objectproperties/ECommerceProduct.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayCarts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayCart.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayProducts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayPageProducts.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ECommerce.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java" />
+        <option value="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" />
         <option value="$PROJECT_DIR$/Tracker/core.manifest.json" />
-        <option value="$PROJECT_DIR$/Tracker/build.gradle" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
-    <option name="width" value="1680" />
-    <option name="height" value="950" />
+    <option name="width" value="1440" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -4793,20 +4035,14 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
               <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="SmartTracker" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
@@ -4848,83 +4084,43 @@
               <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="tracker" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="tracker" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="DEBUGGABLE_DEVICE" value="huawei-jsn_l21-MUE4C18918007170" />
+    <property name="DEBUGGABLE_PROCESS" value="com.atinternet" />
+    <property name="DEBUGGER_ID" value="Auto" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="android.project.structure.last.selected" value="SDK Location" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="device.picker.selection" value="Nexus_5X_API_28" />
+    <property name="device.picker.selection" value="MUE4C18918007170" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="options.lastSelected" value="gradle.compiler" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.atinternet.tracker" />
+      <recent name="com.atinternet.tracker.ecommerce.objectproperties" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -4938,7 +4134,53 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Android App.TestApp">
+    <configuration name="HitParamTest.stringValueTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Tracker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.atinternet.tracker.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.atinternet.tracker" />
+      <option name="MAIN_CLASS_NAME" value="com.atinternet.tracker.HitParamTest" />
+      <option name="METHOD_NAME" value="stringValueTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration name="ToolTest.parseJSONTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Tracker" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.atinternet.tracker.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.atinternet.tracker" />
+      <option name="MAIN_CLASS_NAME" value="com.atinternet.tracker.ToolTest" />
+      <option name="METHOD_NAME" value="parseJSONTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -5101,6 +4343,17 @@
     <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
     </configuration>
+    <list>
+      <item itemvalue="Android App.TestApp" />
+      <item itemvalue="Android JUnit.ToolTest.parseJSONTest" />
+      <item itemvalue="Android JUnit.HitParamTest.stringValueTest" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Android JUnit.HitParamTest.stringValueTest" />
+        <item itemvalue="Android JUnit.ToolTest.parseJSONTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -5115,41 +4368,73 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 39m 48s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 41m 08s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 42m 17s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 42m 37s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 44m 36s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 45m 22s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 46m 42s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 48m 12s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ToolTest_parseJSONTest - 2018.11.21 at 14h 48m 28s.xml">
+      <configuration name="ToolTest.parseJSONTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="HitParamTest_stringValueTest - 2018.12.13 at 14h 42m 10s.xml">
+      <configuration name="HitParamTest.stringValueTest" configurationId="AndroidJUnit" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="950" extended-state="6" />
+    <frame x="0" y="47" width="1440" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info anchor="bottom" id="Android Profiler" order="7" />
+      <window_info anchor="bottom" id="Android Profiler" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50061053" side_tool="true" weight="0.32771084" />
-      <window_info anchor="right" id="Preview" order="8" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32941177" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4993895" weight="0.3698795" />
-      <window_info anchor="bottom" id="Logcat" order="7" sideWeight="0.4993895" weight="0.32972324" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4993895" weight="0.22647059" />
+      <window_info anchor="bottom" id="Logcat" order="7" sideWeight="0.4993895" visible="true" weight="0.41029412" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2857143" />
-      <window_info active="true" anchor="bottom" id="Build" order="7" visible="true" weight="0.33734939" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.31590182" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21459228" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.33529413" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" id="Assistant" order="4" weight="0.32967034" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Preview" order="8" weight="0.28061768" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.31323528" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -5157,25 +4442,41 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java</url>
-          <line>1314</line>
-          <properties />
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java</url>
-          <line>1328</line>
-          <properties />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="9" />
+      <option name="time" value="40" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>context.getApplicationContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>tracker.getCrashInformations()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>obj.toString()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cleanJSONString(s)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cleanJSONString(obj.toString())</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>tracker.getLastCrashInformations()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>tracker.getLifecycleMetrics()</expression-string>
         <language-id>JAVA</language-id>
@@ -5189,302 +4490,172 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/DynamicScreens.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/OrderTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1755">
-          <caret line="140" column="43" selection-start-line="140" selection-start-column="43" selection-end-line="140" selection-end-column="43" />
+        <state relative-caret-position="137">
+          <caret line="53" column="39" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Screen.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTestingCustomVars.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="39" column="20" lean-forward="true" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
+        <state relative-caret-position="159">
+          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/AbstractScreen.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/MvTestingTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="330" column="30" selection-start-line="330" selection-start-column="9" selection-end-line="330" selection-end-column="30" />
+        <state relative-caret-position="224">
+          <caret line="72" column="39" selection-start-line="72" selection-start-column="39" selection-end-line="72" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/DynamicScreen.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/MvTestingsTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="159" column="41" selection-start-line="159" selection-start-column="41" selection-end-line="159" selection-end-column="41" />
+        <state relative-caret-position="300">
+          <caret line="47" column="55" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/DynamicScreens.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/HitParamTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="140" column="42" selection-start-line="140" selection-start-column="42" selection-end-line="140" selection-end-column="42" />
+        <state relative-caret-position="1350">
+          <caret line="116" column="12" selection-start-line="116" selection-start-column="12" selection-end-line="116" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Screen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="60" column="16" lean-forward="true" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/AbstractTestClass.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="107" column="46" selection-start-line="107" selection-start-column="46" selection-end-line="107" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="52" column="27" selection-start-line="52" selection-start-column="27" selection-end-line="52" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/ToolTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="51" column="25" selection-start-line="51" selection-start-column="25" selection-end-line="51" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/test/java/com/atinternet/tracker/TrackerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="522" column="56" selection-start-line="522" selection-start-column="56" selection-end-line="522" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/AbstractTestClass.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="107" column="46" selection-start-line="107" selection-start-column="46" selection-end-line="107" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ToolTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="51" column="64" selection-start-line="51" selection-start-column="64" selection-end-line="51" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/EcommerceEvent.java" />
     <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1695">
-          <caret line="159" column="98" selection-start-line="159" selection-start-column="98" selection-end-line="159" selection-end-column="98" />
+        <state relative-caret-position="315">
+          <caret line="114" column="34" selection-start-line="114" selection-start-column="34" selection-end-line="114" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/AddProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="870">
-          <caret line="88" column="27" selection-start-line="88" selection-start-column="27" selection-end-line="88" selection-end-column="27" />
+        <state relative-caret-position="168">
+          <caret line="65" column="47" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/NuggAds.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/AddProducts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+        <state relative-caret-position="135">
+          <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Offline.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/CartConfirmation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="106" column="24" lean-forward="true" selection-start-line="106" selection-start-column="24" selection-end-line="106" selection-end-column="24" />
+        <state relative-caret-position="165">
+          <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.properties" />
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/SmartObjects.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/CartCreation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="198" column="54" selection-start-line="198" selection-start-column="54" selection-end-line="198" selection-end-column="54" />
+        <state relative-caret-position="150">
+          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/LiveAudio.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DeliveryCheckout.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
+        <state relative-caret-position="165">
+          <caret line="37" column="29" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/LiveAudioTest.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DeliveryCheckouts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="202" column="25" selection-start-line="202" selection-start-column="25" selection-end-line="202" selection-end-column="25" />
+        <state relative-caret-position="135">
+          <caret line="32" column="32" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CustomVars.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/EventsHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        <state relative-caret-position="75">
+          <caret line="26" column="15" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Debugger.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/PaymentCheckout.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="602" column="33" selection-start-line="602" selection-start-column="33" selection-end-line="602" selection-end-column="33" />
+        <state relative-caret-position="150">
+          <caret line="35" column="20" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publishers.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/PaymentCheckouts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="55" column="68" selection-start-line="55" selection-start-column="68" selection-end-line="55" selection-end-column="68" />
+        <state relative-caret-position="135">
+          <caret line="32" column="31" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/build.gradle">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/ProductPurchased.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
-          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
+          <caret line="38" column="33" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Campaign.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/RemoveProduct.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="66" column="81" selection-start-line="66" selection-start-column="63" selection-end-line="66" selection-end-column="81" />
+        <state relative-caret-position="150">
+          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/DynamicScreen.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/RemoveProducts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2385">
-          <caret line="188" selection-start-line="188" selection-end-line="188" />
+        <state relative-caret-position="150">
+          <caret line="33" column="45" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/TransactionConfirmation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="429" column="5" lean-forward="true" selection-start-line="406" selection-start-column="4" selection-end-line="429" selection-end-column="5" />
+        <state relative-caret-position="213">
+          <caret line="132" column="83" selection-start-line="132" selection-start-column="83" selection-end-line="132" selection-end-column="83" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/CoreFeatures.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/TransactionConfirmations.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="429" column="5" selection-start-line="429" selection-start-column="5" selection-end-line="429" selection-end-column="5" />
+        <state relative-caret-position="75">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Tracker.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/UpdateCart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="1408" column="67" selection-start-line="1408" selection-start-column="67" selection-end-line="1408" selection-end-column="67" />
+        <state relative-caret-position="135">
+          <caret line="33" column="15" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Hit.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/UpdateCarts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="310" column="44" selection-start-line="310" selection-start-column="44" selection-end-line="310" selection-end-column="44" />
+        <state relative-caret-position="135">
+          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker/Core.java">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Events.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="1155" column="26" selection-start-line="1155" selection-start-column="26" selection-end-line="1155" selection-end-column="26" />
+        <state relative-caret-position="690">
+          <caret line="75" selection-start-line="75" selection-end-line="75" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/core.manifest.json">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/EventsTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Order.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2906">
-          <caret line="35" column="30" lean-forward="true" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20010">
-          <caret line="1390" column="54" selection-start-line="1390" selection-start-column="54" selection-end-line="1390" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Hit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="189" column="8" selection-start-line="189" selection-start-column="8" selection-end-line="189" selection-end-column="8" />
-          <folding>
-            <element signature="e#5191#5192#0" expanded="true" />
-            <element signature="e#5224#5225#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/AbstractScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="329" column="21" selection-start-line="329" selection-start-column="21" selection-end-line="329" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Gesture.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="322" column="21" selection-start-line="322" selection-start-column="21" selection-end-line="322" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/RichMedia.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="485" column="19" selection-start-line="485" selection-start-column="19" selection-end-line="485" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/SelfPromotion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="160" column="41" selection-start-line="160" selection-start-column="41" selection-end-line="160" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ContextTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="65" column="65" selection-start-line="65" selection-start-column="65" selection-end-line="65" selection-end-column="65" />
+        <state relative-caret-position="1185">
+          <caret line="111" selection-start-line="111" selection-end-line="111" />
         </state>
       </provider>
     </entry>
@@ -5493,66 +4664,202 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+        <state relative-caret-position="480">
+          <caret line="32" column="35" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publishers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/PublisherImpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publisher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="275" column="58" selection-start-line="275" selection-start-column="58" selection-end-line="275" selection-end-column="58" />
+        <state relative-caret-position="3135">
+          <caret line="248" column="45" selection-start-line="248" selection-start-column="45" selection-end-line="248" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Order.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3615">
+          <caret line="274" column="62" selection-start-line="274" selection-start-column="62" selection-end-line="274" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTesting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1290">
+          <caret line="113" column="5" selection-start-line="113" selection-start-column="5" selection-end-line="113" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1920">
+          <caret line="172" column="43" selection-start-line="172" selection-start-column="31" selection-end-line="172" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20865">
+          <caret line="1447" column="54" selection-start-line="1447" selection-start-column="54" selection-end-line="1447" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="34" column="11" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Gesture.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3369">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Cart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="114" column="37" lean-forward="true" selection-start-line="114" selection-start-column="37" selection-end-line="114" selection-end-column="37" />
+          <folding>
+            <element signature="e#3105#3106#0" expanded="true" />
+            <element signature="e#3159#3160#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/objectproperties/ECommerceProduct.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="33" column="46" selection-start-line="33" selection-start-column="46" selection-end-line="33" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayCarts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="36" column="18" lean-forward="true" selection-start-line="36" selection-start-column="18" selection-end-line="36" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayPageProduct.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayProducts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="39" column="16" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="140" column="45" selection-start-line="140" selection-start-column="31" selection-end-line="140" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayPageProducts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+          <folding>
+            <element signature="e#1399#1400#0" expanded="true" />
+            <element signature="e#1428#1429#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ECommerce.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="82" column="50" selection-start-line="82" selection-start-column="50" selection-end-line="82" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayCart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="747">
+          <caret line="110" column="9" selection-start-line="110" selection-start-column="9" selection-end-line="110" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/DisplayProduct.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="67" column="33" selection-start-line="67" selection-start-column="33" selection-end-line="67" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="102" column="27" selection-start-line="102" selection-start-column="27" selection-end-line="102" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="115" column="47" selection-start-line="115" selection-start-column="47" selection-end-line="115" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="1099" column="26" selection-start-line="1099" selection-start-column="26" selection-end-line="1099" selection-end-column="26" />
+        <state relative-caret-position="11805">
+          <caret line="1601" column="26" selection-start-line="1601" selection-start-column="26" selection-end-line="1601" selection-end-column="26" />
           <folding>
-            <element signature="e#44605#44606#0" expanded="true" />
-            <element signature="e#44632#44633#0" expanded="true" />
-            <element signature="e#44904#45016#0" expanded="true" />
-            <element signature="e#45015#45016#0" expanded="true" />
+            <element signature="class#Sender#0" />
+            <element signature="class#Dispatcher#0" />
+            <element signature="class#TrackerQueue#0" />
+            <element signature="class#TechnicalContext#0" />
+            <element signature="class#Storage#0" />
+            <element signature="class#Lists#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Context.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="75" column="24" selection-start-line="75" selection-start-column="24" selection-end-line="75" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="17" column="62" selection-start-line="17" selection-start-column="62" selection-end-line="17" selection-end-column="62" />
+        <state relative-caret-position="555">
+          <caret line="59" selection-start-line="59" selection-end-line="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SmartTracker/build.gradle">
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/RichMedia.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="28" column="30" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
+        <state relative-caret-position="324">
+          <caret line="445" column="110" selection-start-line="445" selection-start-column="110" selection-end-line="445" selection-end-column="110" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
+    <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="95" column="60" selection-start-line="95" selection-start-column="60" selection-end-line="95" selection-end-column="60" />
+        <state relative-caret-position="324">
+          <caret line="165" column="5" selection-start-line="165" selection-start-column="5" selection-end-line="165" selection-end-column="5" />
         </state>
       </provider>
     </entry>

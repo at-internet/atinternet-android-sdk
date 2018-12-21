@@ -66,13 +66,13 @@ public class LiveMediumTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventPlayTest() {
+    public void setParamsPlayTest() {
         tracker.setParam("a", RichMedia.Action.Play.stringValue());
         liveMedium.setMediaLabel("name")
                 .setMediaType("med")
                 .setMediaLevel2(9)
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
 
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -100,13 +100,13 @@ public class LiveMediumTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventRefreshTest() {
+    public void setParamsRefreshTest() {
         tracker.setParam("a", RichMedia.Action.Refresh.stringValue());
         liveMedium.setMediaLabel("name")
                 .setMediaLevel2(9)
                 .setMediaType("med")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
 
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
@@ -134,13 +134,13 @@ public class LiveMediumTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventPauseTest() {
+    public void setParamsPauseTest() {
         tracker.setParam("a", RichMedia.Action.Pause.stringValue());
         liveMedium.setMediaLabel("name")
                 .setMediaLevel2(9)
                 .setMediaType("med")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 
@@ -167,13 +167,13 @@ public class LiveMediumTest extends AbstractTestClass {
     }
 
     @Test
-    public void setEventStopTest() {
+    public void setParamsStopTest() {
         tracker.setParam("a", RichMedia.Action.Stop.stringValue());
         liveMedium.setMediaLabel("name")
                 .setMediaLevel2(9)
                 .setMediaType("med")
                 .setMediaTheme1("chapter1")
-                .setEvent();
+                .setParams();
         assertEquals(7, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());
 

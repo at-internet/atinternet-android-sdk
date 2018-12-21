@@ -34,10 +34,10 @@ import static org.junit.Assert.assertEquals;
 public class CustomObjectTest extends AbstractTestClass {
 
     @Test
-    public void setEventTest() {
-        new CustomObject(tracker).setValue("{\"obj\":{\"key\":\"value\"}}").setEvent();
-        new CustomObject(tracker).setValue("{\"key\":\"value\"}").setEvent();
-        new CustomObject(tracker).setValue("{\"key1\":\"value1\"}").setEvent();
+    public void setParamsTest() {
+        new CustomObject(tracker).setValue("{\"obj\":{\"key\":\"value\"}}").setParams();
+        new CustomObject(tracker).setValue("{\"key\":\"value\"}").setParams();
+        new CustomObject(tracker).setValue("{\"key1\":\"value1\"}").setParams();
 
         assertEquals(1, buffer.getVolatileParams().size());
         assertEquals(0, buffer.getPersistentParams().size());

@@ -57,7 +57,7 @@ public class Campaign extends ScreenInfo {
     }
 
     @Override
-    void setEvent() {
+    void setParams() {
         SharedPreferences preferences = Tracker.getPreferences();
         String remanentMarketingCampaign = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
         long campaignDate = preferences.getLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, -1);
