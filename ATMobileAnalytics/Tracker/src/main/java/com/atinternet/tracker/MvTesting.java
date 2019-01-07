@@ -70,7 +70,7 @@ public class MvTesting extends BusinessObject {
      *
      * @return MVTestingVars instance
      */
-    public MvTestingVars Vars() {
+    public MvTestingVars Variables() {
         if (vars == null) {
             vars = new MvTestingVars();
         }

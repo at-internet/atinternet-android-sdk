@@ -58,15 +58,15 @@ public class MvTestingTest extends AbstractTestClass {
 
 
     @Test
-    public void getCustomVarsTest() {
-        MvTestingVars vars = mvTesting.Vars();
-        assertNotNull(mvTesting.Vars());
-        assertEquals(vars, mvTesting.Vars());
+    public void getVariablesTest() {
+        MvTestingVars vars = mvTesting.Variables();
+        assertNotNull(mvTesting.Variables());
+        assertEquals(vars, mvTesting.Variables());
     }
 
     @Test
     public void setParamsTest() {
-        mvTesting.setTest("test").setCreation("creation").setWaveId(1).Vars().add("variable", "version");
+        mvTesting.setTest("test").setCreation("creation").setWaveId(1).Variables().add("variable", "version");
         mvTesting.setParams();
 
         assertEquals(3, buffer.getVolatileParams().size());

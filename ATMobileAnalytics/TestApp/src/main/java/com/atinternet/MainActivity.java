@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.mvTesting:
                 MvTesting mvt = tracker.MvTestings().add("1[My_first_Test]", 1, "2[Version2_page_subscription]");
-                mvt.Vars().add("1[Header]", "2[Grey]");
-                mvt.Vars().add("2[Header]", "4[Black]");
+                mvt.Variables().add("1[Header]", "2[Grey]");
+                mvt.Variables().add("2[Header]", "4[Black]");
                 mvt.send();
                 break;
             case R.id.custom:
