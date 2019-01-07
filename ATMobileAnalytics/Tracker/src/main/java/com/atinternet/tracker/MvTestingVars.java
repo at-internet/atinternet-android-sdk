@@ -25,24 +25,24 @@ package com.atinternet.tracker;
 import java.util.ArrayList;
 
 /**
- * Adds custom variables to an order
+ * Adds variables to a mvtesting
  */
-public class MvTestingCustomVars extends ArrayList<MvTestingCustomVar> {
+public class MvTestingVars extends ArrayList<MvTestingVar> {
 
     /**
-     * Add a mvtesting custom var
+     * Add a mvtesting var
      *
      * @param variable String
      * @param version  String
-     * @return MVTestingCustomVars: the same instance
+     * @return MVTestingVars: the same instance
      */
-    public MvTestingCustomVars add(String variable, String version) {
-        super.add(new MvTestingCustomVar(variable, version));
+    public MvTestingVars add(String variable, String version) {
+        super.add(new MvTestingVar(variable, version));
         return this;
     }
 }
 
-class MvTestingCustomVar {
+class MvTestingVar {
 
     private final String variable, version;
 
@@ -54,7 +54,7 @@ class MvTestingCustomVar {
         return version;
     }
 
-    MvTestingCustomVar(String variable, String version) {
+    MvTestingVar(String variable, String version) {
         this.variable = variable;
         this.version = version;
     }
