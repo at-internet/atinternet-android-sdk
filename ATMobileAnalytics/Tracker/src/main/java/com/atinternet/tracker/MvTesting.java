@@ -29,7 +29,7 @@ public class MvTesting extends BusinessObject {
 
     private String test, creation;
     private int waveId;
-    private MvTestingCustomVars customVars;
+    private MvTestingVars vars;
 
     MvTesting(Tracker tracker) {
         super(tracker);
@@ -66,15 +66,15 @@ public class MvTesting extends BusinessObject {
     }
 
     /**
-     * Get mvtesting custom variables
+     * Get mvtesting variables
      *
-     * @return MVTestingCustomVars instance
+     * @return MVTestingVars instance
      */
-    public MvTestingCustomVars CustomVars() {
-        if (customVars == null) {
-            customVars = new MvTestingCustomVars();
+    public MvTestingVars Variables() {
+        if (vars == null) {
+            vars = new MvTestingVars();
         }
-        return customVars;
+        return vars;
     }
 
     /**
@@ -128,9 +128,9 @@ public class MvTesting extends BusinessObject {
         tracker.setParam(Hit.HitParam.HitType.stringValue(), "mvt")
                 .setParam(Hit.HitParam.MvTestingTest.stringValue(), String.format("%s-%d-%s", test, waveId, creation), encoding);
 
-        if (customVars != null) {
-            for (int i = 0; i < customVars.size(); i++) {
-                MvTestingCustomVar mvtc = customVars.get(i);
+        if (vars != null) {
+            for (int i = 0; i < vars.size(); i++) {
+                MvTestingVar mvtc = vars.get(i);
                 tracker.setParam("abmv" + String.valueOf(i + 1), String.format("%s-%s", mvtc.getVariable(), mvtc.getVersion()), encoding);
             }
         }
