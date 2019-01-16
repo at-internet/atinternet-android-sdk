@@ -150,6 +150,7 @@ class Buffer {
     private final LinkedHashMap<String, Param> volatileParams;
 
     private String identifierKey;
+    private boolean ignoreLimitedAdTracking;
 
     private String os;
     private Closure osClosure;
@@ -179,16 +180,17 @@ class Buffer {
         return volatileParams;
     }
 
-    void setIdentifierKey(String identifierKey) {
+    void setIdentifierKey(String identifierKey, boolean ignoreLimitedAdTracking) {
         volatileParams.remove(Hit.HitParam.UserId.stringValue());
         ParamOption persistent = new ParamOption().setPersistent(true);
-        persistentParams.put(Hit.HitParam.UserId.stringValue(), new Param(Hit.HitParam.UserId.stringValue(), TechnicalContext.getUserId(identifierKey), persistent));
+        persistentParams.put(Hit.HitParam.UserId.stringValue(), new Param(Hit.HitParam.UserId.stringValue(), TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking), persistent));
     }
 
     Buffer(Tracker tracker) {
         persistentParams = new LinkedHashMap<>();
         volatileParams = new LinkedHashMap<>();
         identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER));
+        ignoreLimitedAdTracking = (boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING);
 
         initConstantClosures();
         addContextVariables(tracker);
@@ -215,7 +217,7 @@ class Buffer {
         persistentParams.put("cn", new Param("cn", TechnicalContext.getConnectionType(), persistentWithEncoding));
         persistentParams.put("ts", new Param("ts", Tool.getTimeStamp(), persistent));
         persistentParams.put("dls", new Param("dls", TechnicalContext.getDownloadSource(tracker), persistent));
-        persistentParams.put("idclient", new Param("idclient", TechnicalContext.getUserId(identifierKey), persistent));
+        persistentParams.put("idclient", new Param("idclient", TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking), persistent));
     }
 
     private void initConstantClosures() {
@@ -379,7 +381,7 @@ class Builder implements Runnable {
         /// Surcharge du domain pour les events
         if (keySet.contains("col")) {
             String collectDomain = String.valueOf(configuration.get(TrackerConfigurationKeys.COLLECT_DOMAIN));
-            if (TextUtils.isEmpty(collectDomain)){
+            if (TextUtils.isEmpty(collectDomain)) {
                 Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "invalid collect domain", TrackerListener.HitStatus.Failed);
                 return new Object[]{hitsList, oltParameter};
             }
@@ -1109,7 +1111,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.11.1";
+            return "2.11.2";
         }
     };
 
@@ -1360,7 +1362,7 @@ class TechnicalContext {
         };
     }
 
-    static Closure getUserId(final String identifier) {
+    static Closure getUserId(final String identifier, final boolean ignoreLimitedAdTracking) {
         return new Closure() {
             @SuppressLint("HardwareIds")
             @Override
@@ -1373,12 +1375,7 @@ class TechnicalContext {
                 } else if (identifier.equals(ANDROID_ID_KEY)) {
                     return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
                 } else if (identifier.equals(UUID_KEY)) {
-                    String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
-                    if (uuid == null) {
-                        uuid = UUID.randomUUID().toString();
-                        preferences.edit().putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid).apply();
-                    }
-                    return uuid;
+                    return getIdentifierUUID(preferences);
                 } else {
                     try {
                         com.google.android.gms.ads.identifier.AdvertisingIdClient.Info adInfo = null;
@@ -1387,9 +1384,13 @@ class TechnicalContext {
                             adInfo = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
                             count++;
                         }
+
                         if (adInfo != null && !adInfo.isLimitAdTrackingEnabled()) {
                             return adInfo.getId();
                         } else {
+                            if (ignoreLimitedAdTracking) {
+                                return getIdentifierUUID(preferences);
+                            }
                             return "opt-out";
                         }
                     } catch (Exception e) {
@@ -1399,6 +1400,15 @@ class TechnicalContext {
                 }
             }
         };
+    }
+
+    private static String getIdentifierUUID(SharedPreferences preferences) {
+        String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+            preferences.edit().putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid).apply();
+        }
+        return uuid;
     }
 
     static void optOut(android.content.Context context, boolean enabled) {

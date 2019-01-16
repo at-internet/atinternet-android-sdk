@@ -113,7 +113,8 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("campaignLifetime", 30)
                         .put("sessionBackgroundDuration", 60)
                         .put("autoSalesTracker", false)
-                        .put("collectDomain", "");
+                        .put("collectDomain", "")
+                        .put("ignoreLimitedAdTracking", false);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }

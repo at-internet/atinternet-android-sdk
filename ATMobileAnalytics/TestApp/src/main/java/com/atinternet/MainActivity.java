@@ -49,13 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tracker = ATInternet.getInstance().getDefaultTracker();
         tracker.setDefaultListener();
         tracker.setSiteId(552987, null, true);
+        tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, null, true);
+        tracker.setIgnoreLimitedAdTrackingEnabled(true, null, true);
         tracker.setLog("logp", null, true);
-        tracker.setSecuredLog("logs", null, true);
-
-        Log.d("ATTestApp", tracker.getCrashInformation().toString());
-        Log.d("ATTestApp", tracker.getCrashInformation().toString());
-        tracker.ECommerce().setAutoSalesTrackerEnabled(true, null, true);
-        tracker.ECommerce().setCollectDomain("collect-euw1", null, true);
     }
 
     @Override
