@@ -986,6 +986,10 @@ class Dispatcher {
             tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
         }
 
+        Map<String, String> identification = new HashMap<>();
+        identification.put("idType", String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.IDENTIFIER)));
+        tracker.setParam(Hit.HitParam.JSON.stringValue(), identification, stcOptions);
+
         final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
         if (!TextUtils.isEmpty(referrer)) {
             tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
