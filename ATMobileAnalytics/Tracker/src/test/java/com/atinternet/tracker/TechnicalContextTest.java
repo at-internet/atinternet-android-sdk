@@ -111,7 +111,7 @@ public class TechnicalContextTest extends AbstractTestClass {
 
     @Test
     public void getUUIDTest() {
-        String uuid = TechnicalContext.getUserId("UUID").execute();
-        assertTrue(uuid.equals(TechnicalContext.getUserId("UUID").execute()));
+        String uuid = TechnicalContext.getUserId("UUID", false).execute();
+        assertEquals(uuid, TechnicalContext.getUserId("UUID", false).execute());
     }
 }

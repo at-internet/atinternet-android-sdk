@@ -545,7 +545,7 @@ public class TrackerTest extends AbstractTestClass {
         Builder builder = new Builder(tracker);
         assertFalse(((ArrayList<String>) builder.build()[0]).get(0).contains("&idclient=" + "opt-out"));
         TechnicalContext.optOut(RuntimeEnvironment.application, true);
-        tracker.setParam("idclient", TechnicalContext.getUserId("androidId"));
+        tracker.setParam("idclient", TechnicalContext.getUserId("androidId", false));
         builder = new Builder(tracker);
         String url = ((ArrayList<String>) builder.build()[0]).get(0);
         String[] components = url.split("&idclient=");

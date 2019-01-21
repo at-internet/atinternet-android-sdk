@@ -1,7 +1,7 @@
 {
   "name": "Core",
   "description": "Geode_Tag_Android_Description",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "type": "core",
   "config": {
     "storage": {
@@ -161,6 +161,14 @@
       "description": "Geode_Tag_SDK_Config_Description_collectDomain",
       "defaultValue": "",
       "type": "string",
+      "public": true,
+      "global": true
+    },
+    "ignoreLimitedAdTracking": {
+      "title": "Geode_Tag_SDK_Config_Title_ignoreLimitedAdTracking",
+      "description": "Geode_Tag_SDK_Config_Description_ignoreLimitedAdTracking",
+      "defaultValue": "false",
+      "type": "bool",
       "public": true,
       "global": true
     }

@@ -251,10 +251,11 @@ public class Tracker {
 
     private void refreshConfigurationDependencies() {
         String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
+        boolean ignoreLimitedAdTracking = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING)));
         boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
 
         if (!TextUtils.isEmpty(identifierKey)) {
-            buffer.setIdentifierKey(identifierKey);
+            buffer.setIdentifierKey(identifierKey, ignoreLimitedAdTracking);
         }
 
         if (enableCrashDetectionHandler) {
@@ -319,8 +320,8 @@ public class Tracker {
             @Override
             public void run() {
                 if (callback != null) {
-                    String userID = TechnicalContext.getUserId((String) configuration.get(TrackerConfigurationKeys.IDENTIFIER)).execute();
-                    if ((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !optOutEnabled()) {
+                    String userID = TechnicalContext.getUserId(String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER)), (boolean) configuration.get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING)).execute();
+                    if ((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !TechnicalContext.optOutEnabled(getAppContext())) {
                         callback.receiveUserId(Tool.SHA256(userID));
                     } else {
                         callback.receiveUserId(userID);
@@ -728,6 +729,17 @@ public class Tracker {
         } else {
             setConfig(TrackerConfigurationKeys.IDENTIFIER, identifierType.toString(), setConfigCallback, sync);
         }
+    }
+
+    /**
+     * Enable ignore limited ad tracking
+     *
+     * @param enabled    /
+     * @param setConfigCallback Callback called when the operation has been done
+     * @param sync              (optional) perform the operation synchronously (default: false)
+     */
+    public void setIgnoreLimitedAdTrackingEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
+        setConfig(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING, enabled, setConfigCallback, sync);
     }
 
     /**

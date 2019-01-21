@@ -144,4 +144,9 @@ public class TrackerConfigurationKeys {
      * Constant for download SDK source
      */
     static final String DOWNLOAD_SOURCE = "downloadSource";
+
+    /**
+     * Constant for ignore limited AdTracking
+     */
+    public static final String IGNORE_LIMITED_AD_TRACKING = "ignoreLimitedAdTracking";
 }
