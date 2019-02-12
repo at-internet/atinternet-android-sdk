@@ -200,7 +200,7 @@ public class DynamicScreen extends AbstractScreen {
 
         tracker.setParam(Hit.HitParam.DynamicScreenId.stringValue(), screenId)
                 .setParam(Hit.HitParam.DynamicScreenValue.stringValue(), value, new ParamOption().setEncode(true))
-                .setParam(Hit.HitParam.DynamicScreenDate.stringValue(), new SimpleDateFormat(UPDATE_FORMAT, Locale.getDefault()).format(update))
+                .setParam(Hit.HitParam.DynamicScreenDate.stringValue(), new SimpleDateFormat(UPDATE_FORMAT, Locale.ENGLISH).format(update))
                 .setParam(Hit.HitParam.Screen.stringValue(), name,
                         new ParamOption().setRelativePosition(ParamOption.RelativePosition.after)
                                 .setRelativeParameterKey(Hit.HitParam.UserId.stringValue())

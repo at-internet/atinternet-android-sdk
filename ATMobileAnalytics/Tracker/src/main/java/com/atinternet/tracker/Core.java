@@ -696,7 +696,7 @@ class Builder implements Runnable {
     private String mhIdSuffixGenerator() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        return String.format(Locale.getDefault(), MHID_FORMAT, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), new Random().nextInt(9000000) + 1000000);
+        return String.format(Locale.ENGLISH, MHID_FORMAT, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), new Random().nextInt(9000000) + 1000000);
     }
 
     String makeSubQuery(String key, String value) {
@@ -1115,7 +1115,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.11.2";
+            return "2.11.3";
         }
     };
 
@@ -1265,7 +1265,7 @@ class TechnicalContext {
         return new Closure() {
             @Override
             public String execute() {
-                return new SimpleDateFormat("HH'x'mm'x'ss", Locale.getDefault()).format(new Date());
+                return new SimpleDateFormat("HH'x'mm'x'ss", Locale.ENGLISH).format(new Date());
             }
         };
     }
@@ -1348,7 +1348,7 @@ class TechnicalContext {
                 double y = Math.pow(heightPixels / metrics.ydpi, 2);
 
 
-                return String.format(Locale.getDefault(), "%.1f", Math.sqrt(x + y));
+                return String.format(Locale.ENGLISH, "%.1f", Math.sqrt(x + y));
             }
         };
     }

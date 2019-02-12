@@ -585,7 +585,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                 convertView.setBackgroundColor(Tool.getColor(context, android.R.color.white));
             }
 
-            String timeString = new SimpleDateFormat(HOUR_FORMAT, Locale.getDefault()).format(event.getDate());
+            String timeString = new SimpleDateFormat(HOUR_FORMAT, Locale.ENGLISH).format(event.getDate());
 
             noEventsLayout.setVisibility(View.GONE);
 
@@ -688,8 +688,8 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
                 convertView.setBackgroundColor(Tool.getColor(context, android.R.color.white));
             }
 
-            String hourString = new SimpleDateFormat(HOUR_FORMAT, Locale.getDefault()).format(offlineHit.getDate());
-            String dateString = new SimpleDateFormat(DATE_STRING, Locale.getDefault()).format(offlineHit.getDate());
+            String hourString = new SimpleDateFormat(HOUR_FORMAT, Locale.ENGLISH).format(offlineHit.getDate());
+            String dateString = new SimpleDateFormat(DATE_STRING, Locale.ENGLISH).format(offlineHit.getDate());
 
             noOfflineHitsLayout.setVisibility(View.GONE);
 

@@ -304,7 +304,7 @@ class LifeCycle {
 
             backwardPreferences.edit().putString(AT_FIRST_LAUNCH, null).apply();
         } else {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
             preferences.edit()
                     .putBoolean(FIRST_SESSION, true)
                     .putBoolean(FIRST_SESSION_AFTER_UPDATE, false)
@@ -334,7 +334,7 @@ class LifeCycle {
         /// Do not track
         if (ATInternet.optOutEnabled(Tracker.getAppContext())) return;
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
         try {
             updateFirstSession(preferences);
             // Calcul dsfs
@@ -393,7 +393,7 @@ class LifeCycle {
             @Override
             public String execute() {
                 try {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
                     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
                     // fs
@@ -424,7 +424,7 @@ class LifeCycle {
     }
 
     static Map<String, Object> getMetricsMap(final SharedPreferences preferences) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
         Map<String, Object> map = new LinkedHashMap<>();
 
         // fs
