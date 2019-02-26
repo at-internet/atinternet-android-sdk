@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -45,16 +45,16 @@ public class Publisher extends OnAppAd {
     private LinkedHashMap<String, CustomObject> customObjectsMap;
     private CustomObjects customObjects;
 
+    Publisher(Tracker tracker) {
+        super(tracker);
+        campaignId = "";
+    }
+
     LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
         if (customObjectsMap == null) {
             customObjectsMap = new LinkedHashMap<>();
         }
         return customObjectsMap;
-    }
-
-    Publisher(Tracker tracker) {
-        super(tracker);
-        campaignId = "";
     }
 
     /**
@@ -244,13 +244,13 @@ public class Publisher extends OnAppAd {
     void setParams() {
         String publisher = String.format(PUBLISHER_FORMAT,
                 campaignId,
-                creation != null ? creation : "",
-                variant != null ? variant : "",
-                format != null ? format : "",
-                generalPlacement != null ? generalPlacement : "",
-                detailedPlacement != null ? detailedPlacement : "",
-                advertiserId != null ? advertiserId : "",
-                url != null ? url : "");
+                Utility.getStringOrEmpty(creation),
+                Utility.getStringOrEmpty(variant),
+                Utility.getStringOrEmpty(format),
+                Utility.getStringOrEmpty(generalPlacement),
+                Utility.getStringOrEmpty(detailedPlacement),
+                Utility.getStringOrEmpty(advertiserId),
+                Utility.getStringOrEmpty(url));
 
         if (!fromScreen) {
             tracker.setParam(Hit.HitParam.HitType.stringValue(), AD_TRACKING);

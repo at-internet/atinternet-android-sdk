@@ -29,13 +29,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class ReferrerReceiverTest extends AbstractTestClass {
 
@@ -46,7 +47,7 @@ public class ReferrerReceiverTest extends AbstractTestClass {
     public void setUp() throws Exception {
         super.setUp();
         referrerReceiver = new ReferrerReceiver();
-        preferences = RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        preferences = ApplicationProvider.getApplicationContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
     @Test
@@ -54,7 +55,7 @@ public class ReferrerReceiverTest extends AbstractTestClass {
         Intent intent = new Intent();
         intent.setAction("com.android.vending.INSTALL_REFERRER");
         intent.putExtra("referrer", "test=value&xtor=campaign");
-        referrerReceiver.onReceive(RuntimeEnvironment.application, intent);
+        referrerReceiver.onReceive(ApplicationProvider.getApplicationContext(), intent);
 
         assertEquals("test=value%26xtor=campaign", preferences.getString(TrackerConfigurationKeys.REFERRER, null));
         assertEquals("campaign", preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
@@ -65,7 +66,7 @@ public class ReferrerReceiverTest extends AbstractTestClass {
         Intent intent = new Intent();
         intent.setAction("com.android.vending.INSTALL_REFERRER");
         intent.putExtra("referrer", "test_value_set");
-        referrerReceiver.onReceive(RuntimeEnvironment.application, intent);
+        referrerReceiver.onReceive(ApplicationProvider.getApplicationContext(), intent);
 
         assertEquals("test_value_set", preferences.getString(TrackerConfigurationKeys.REFERRER, null));
         assertNull(preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
@@ -76,7 +77,7 @@ public class ReferrerReceiverTest extends AbstractTestClass {
         Intent intent = new Intent();
         intent.setAction("com.android.vending.INSTALL_REFERRER");
         intent.putExtra("id", "test_value_set");
-        referrerReceiver.onReceive(RuntimeEnvironment.application, intent);
+        referrerReceiver.onReceive(ApplicationProvider.getApplicationContext(), intent);
 
         assertNull(preferences.getString(TrackerConfigurationKeys.REFERRER, null));
         assertNull(preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));

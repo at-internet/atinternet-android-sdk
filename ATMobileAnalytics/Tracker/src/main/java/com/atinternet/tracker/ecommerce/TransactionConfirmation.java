@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker.ecommerce;
 
@@ -35,6 +35,7 @@ import com.atinternet.tracker.ecommerce.objectproperties.ECommerceShipping;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceTransaction;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TransactionConfirmation extends Event {
@@ -43,12 +44,12 @@ public class TransactionConfirmation extends Event {
     private Screen screen;
 
     private ECommerceCart cart;
-    private java.util.List<String> promotionalCodes;
+    private List<String> promotionalCodes;
     private ECommerceTransaction transaction;
     private ECommerceShipping shipping;
     private ECommercePayment payment;
     private ECommerceCustomer customer;
-    private java.util.List<ECommerceProduct> products;
+    private List<ECommerceProduct> products;
 
 
     TransactionConfirmation(Tracker tracker, Screen screen) {
@@ -68,7 +69,7 @@ public class TransactionConfirmation extends Event {
         return cart;
     }
 
-    public java.util.List<String> PromotionalCodes() {
+    public List<String> PromotionalCodes() {
         return promotionalCodes;
     }
 
@@ -88,7 +89,7 @@ public class TransactionConfirmation extends Event {
         return customer;
     }
 
-    public java.util.List<ECommerceProduct> Products() {
+    public List<ECommerceProduct> Products() {
         return products;
     }
 
@@ -104,9 +105,9 @@ public class TransactionConfirmation extends Event {
     }
 
     @Override
-    protected java.util.List<Event> getAdditionalEvents() {
+    protected List<Event> getAdditionalEvents() {
         /// SALES INSIGHTS
-        java.util.List<Event> generatedEvents = super.getAdditionalEvents();
+        List<Event> generatedEvents = super.getAdditionalEvents();
 
         CartConfirmation cc = new CartConfirmation();
         cc.Transaction().setAll(transaction.getAll());
@@ -123,8 +124,8 @@ public class TransactionConfirmation extends Event {
 
         /// SALES TRACKER
         if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
-            double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxIncluded"))),
-                    turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxFree")));
+            double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxIncluded")));
+            double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxFree")));
 
             String[] codes = new String[promotionalCodes.size()];
             promotionalCodes.toArray(codes);

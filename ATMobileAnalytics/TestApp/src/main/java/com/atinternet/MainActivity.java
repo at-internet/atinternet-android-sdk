@@ -2,7 +2,6 @@ package com.atinternet;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
@@ -52,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tracker.setIdentifierType(Tracker.IdentifierType.advertisingId, null, true);
         tracker.setIgnoreLimitedAdTrackingEnabled(true, null, true);
         tracker.setLog("logp", null, true);
+        tracker.ECommerce().setCollectDomain("collect-euw1", null, true);
+        tracker.ECommerce().setAutoSalesTrackerEnabled(true, null, true);
     }
 
     @Override

@@ -23,11 +23,12 @@ SOFTWARE.
 package com.atinternet.tracker;
 
 import org.junit.Before;
-import org.robolectric.RuntimeEnvironment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+
+import androidx.test.core.app.ApplicationProvider;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractTestClass {
@@ -58,7 +59,7 @@ public abstract class AbstractTestClass {
             put("sessionBackgroundDuration", 60);
             put("atEnv", "prod");
         }};
-        tracker = new Tracker(RuntimeEnvironment.application, conf);
+        tracker = new Tracker(ApplicationProvider.getApplicationContext(), conf);
         tracker.resetScreenContext();
 
         buffer = tracker.getBuffer();

@@ -1,28 +1,29 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +42,8 @@ public class Configuration extends LinkedHashMap<String, Object> {
     private static final String PHONE_CONFIGURATION = "phone";
     private static final String TABLET_CONFIGURATION = "tablet";
     private static final String JSON_FILE = "defaultConfiguration.json";
+    private static final int DEFAULT_CAMPAIGN_LIFETIME = 30;
+    private static final int DEFAULT_SESSION_BACKGROUND_DURATION = 60;
 
     Configuration(Context context) {
         JSONObject jsonObject = getDefaultConfiguration(Tool.isTablet(context));
@@ -51,14 +54,13 @@ public class Configuration extends LinkedHashMap<String, Object> {
                 try {
                     put(key, jsonObject.get(key));
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(ATInternet.TAG, e.toString());
                 }
             }
         }
     }
 
     Configuration(HashMap<String, Object> configuration) {
-        clear();
         JSONObject jsonObject = getDefaultConfiguration(false);
         if (jsonObject != null) {
             Iterator<String> iterator = jsonObject.keys();
@@ -67,7 +69,7 @@ public class Configuration extends LinkedHashMap<String, Object> {
                 try {
                     put(key, jsonObject.get(key));
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(ATInternet.TAG, e.toString());
                 }
             }
         }
@@ -110,13 +112,13 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("persistIdentifiedVisitor", true)
                         .put("token", "")
                         .put("campaignLastPersistence", false)
-                        .put("campaignLifetime", 30)
-                        .put("sessionBackgroundDuration", 60)
+                        .put("campaignLifetime", DEFAULT_CAMPAIGN_LIFETIME)
+                        .put("sessionBackgroundDuration", DEFAULT_SESSION_BACKGROUND_DURATION)
                         .put("autoSalesTracker", false)
                         .put("collectDomain", "")
                         .put("ignoreLimitedAdTracking", false);
             } catch (JSONException e1) {
-                e1.printStackTrace();
+                Log.e(ATInternet.TAG, e1.toString());
             }
         }
 
