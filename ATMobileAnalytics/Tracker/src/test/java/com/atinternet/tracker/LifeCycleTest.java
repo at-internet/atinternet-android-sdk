@@ -31,19 +31,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class LifeCycleTest extends AbstractTestClass {
 
@@ -52,7 +53,7 @@ public class LifeCycleTest extends AbstractTestClass {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        preferences = RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
+        preferences = ApplicationProvider.getApplicationContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
         preferences.edit().clear().apply();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         today = sdf.format(new Date());
@@ -66,7 +67,7 @@ public class LifeCycleTest extends AbstractTestClass {
                 .putInt("LaunchCount", 0)
                 .apply();
 
-        SharedPreferences backwardPrefs = RuntimeEnvironment.application.getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
+        SharedPreferences backwardPrefs = ApplicationProvider.getApplicationContext().getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
         backwardPrefs.edit()
                 .putString("ATFirstLaunch", "fsd")
                 .putInt("ATLaunchCount", 6)

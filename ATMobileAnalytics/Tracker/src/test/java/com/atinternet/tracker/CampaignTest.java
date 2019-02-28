@@ -26,8 +26,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -75,7 +76,7 @@ public class CampaignTest extends AbstractTestClass {
     public void setParamsWithRemanenceTest() {
         Configuration conf = tracker.getConfiguration();
         conf.put("campaignLastPersistence", false);
-        tracker = new Tracker(RuntimeEnvironment.application, conf);
+        tracker = new Tracker(ApplicationProvider.getApplicationContext(), conf);
 
         assertNull(Tracker.getPreferences().getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null));
         Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, "campaign").apply();

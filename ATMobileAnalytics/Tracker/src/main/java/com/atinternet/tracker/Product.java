@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -47,34 +47,34 @@ public class Product extends BusinessObject {
     }
 
     private Action action;
-    private String productId = null;
-    private String category1 = null;
-    private String category2 = null;
-    private String category3 = null;
-    private String category4 = null;
-    private String category5 = null;
-    private String category6 = null;
+    private String productId;
+    private String category1;
+    private String category2;
+    private String category3;
+    private String category4;
+    private String category5;
+    private String category6;
     private int quantity = -1;
     private double unitPriceTaxIncluded = -1;
     private double unitPriceTaxFree = -1;
     private double discountTaxIncluded = -1;
     private double discountTaxFree = -1;
-    private String promotionalCode = null;
+    private String promotionalCode;
 
     private LinkedHashMap<String, CustomObject> customObjectsMap;
     private CustomObjects customObjects;
+
+    public Product(Tracker tracker) {
+        super(tracker);
+        action = Action.View;
+        productId = "";
+    }
 
     LinkedHashMap<String, CustomObject> getCustomObjectsMap() {
         if (customObjectsMap == null) {
             customObjectsMap = new LinkedHashMap<>();
         }
         return customObjectsMap;
-    }
-
-    public Product(Tracker tracker) {
-        super(tracker);
-        action = Action.View;
-        productId = "";
     }
 
     /**
@@ -391,12 +391,12 @@ public class Product extends BusinessObject {
     }
 
     String buildProductName() {
-        String productName = category1 == null ? "" : category1 + "::";
-        productName = category2 == null ? productName : productName + category2 + "::";
-        productName = category3 == null ? productName : productName + category3 + "::";
-        productName = category4 == null ? productName : productName + category4 + "::";
-        productName = category5 == null ? productName : productName + category5 + "::";
-        productName = category6 == null ? productName : productName + category6 + "::";
+        String productName = (category1 == null) ? "" : (category1 + "::");
+        productName = (category2 == null) ? productName : (productName + category2 + "::");
+        productName = (category3 == null) ? productName : (productName + category3 + "::");
+        productName = (category4 == null) ? productName : (productName + category4 + "::");
+        productName = (category5 == null) ? productName : (productName + category5 + "::");
+        productName = (category6 == null) ? productName : (productName + category6 + "::");
 
         return productName + productId;
     }

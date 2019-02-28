@@ -29,11 +29,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import static com.atinternet.tracker.Tracker.OfflineMode;
 import static com.atinternet.tracker.Tracker.doNotTrackEnabled;
@@ -69,20 +70,20 @@ public class TrackerTest extends AbstractTestClass {
         new Tracker();
         assertTrue(Tracker.getAppContext() instanceof Application);
 
-        new Tracker(RuntimeEnvironment.application);
+        new Tracker(ApplicationProvider.getApplicationContext());
         assertTrue(Tracker.getAppContext() instanceof Application);
 
         new Tracker(new HashMap<String, Object>());
         assertTrue(Tracker.getAppContext() instanceof Application);
 
-        new Tracker(RuntimeEnvironment.application, new HashMap<String, Object>());
+        new Tracker(ApplicationProvider.getApplicationContext(), new HashMap<String, Object>());
         assertTrue(Tracker.getAppContext() instanceof Application);
     }
 
 
     @Test
     public void getContextTest() {
-        assertEquals(RuntimeEnvironment.application, getAppContext());
+        assertEquals(ApplicationProvider.getApplicationContext(), getAppContext());
     }
 
     @Test
@@ -97,7 +98,7 @@ public class TrackerTest extends AbstractTestClass {
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("8652e6fddc89d1392129e8f5ade37e4288406503e5b73bad51619d6e4f3ce50c", tracker.getUserIdSync());
 
-        TechnicalContext.optOut(RuntimeEnvironment.application, true);
+        TechnicalContext.optOut(ApplicationProvider.getApplicationContext(), true);
         ((ArrayList<String>) builder.build()[0]).get(0);
         assertEquals("opt-out", tracker.getUserIdSync());
 
@@ -544,7 +545,7 @@ public class TrackerTest extends AbstractTestClass {
     public void optOutTest() {
         Builder builder = new Builder(tracker);
         assertFalse(((ArrayList<String>) builder.build()[0]).get(0).contains("&idclient=" + "opt-out"));
-        TechnicalContext.optOut(RuntimeEnvironment.application, true);
+        TechnicalContext.optOut(ApplicationProvider.getApplicationContext(), true);
         tracker.setParam("idclient", TechnicalContext.getUserId("androidId", false));
         builder = new Builder(tracker);
         String url = ((ArrayList<String>) builder.build()[0]).get(0);

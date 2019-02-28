@@ -31,7 +31,7 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-@Config(sdk =21)
+@Config(sdk = 21)
 @RunWith(RobolectricTestRunner.class)
 public class TrackerQueueTest extends AbstractTestClass {
 
@@ -52,7 +52,7 @@ public class TrackerQueueTest extends AbstractTestClass {
     @Test
     public void setEnabledFillQueueFromDatabaseTest() throws NoSuchFieldException, IllegalAccessException {
         TrackerQueue.setEnabledFillQueueFromDatabase(true);
-        boolean result = (Boolean) getAccessibleField(queue, "ENABLED_FILL_QUEUE_FROM_DATABASE");
+        boolean result = (Boolean) getAccessibleField(queue, "enabledFillQueueFromDatabase");
         assertTrue(result);
     }
 }
