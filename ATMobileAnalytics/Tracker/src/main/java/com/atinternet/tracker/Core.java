@@ -908,103 +908,107 @@ class Dispatcher {
     }
 
     void dispatch(BusinessObject... businessObjects) {
-        ArrayList<BusinessObject> trackerObjects;
-        for (BusinessObject businessObject : businessObjects) {
-            businessObject.setParams();
+        try {
+            ArrayList<BusinessObject> trackerObjects;
+            for (BusinessObject businessObject : businessObjects) {
+                businessObject.setParams();
 
-            if (businessObject instanceof AbstractScreen) {
-                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
+                if (businessObject instanceof AbstractScreen) {
+                    trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
 
-                boolean hasOrder = false;
+                    boolean hasOrder = false;
 
-                for (BusinessObject object : trackerObjects) {
-                    if (isScreenCompatible(object) && object.getTimestamp() < businessObject.getTimestamp()) {
-
-                        if (object instanceof Order) {
-                            hasOrder = true;
-                        }
-
-                        object.setParams();
-                        tracker.getBusinessObjects().remove(object.getId());
-                    }
-                }
-
-                if (tracker.Cart().getCartId() != null && (((Screen) businessObject).isBasketScreen() || hasOrder)) {
-                    tracker.Cart().setParams();
-                }
-            } else if (businessObject instanceof Gesture) {
-                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
-
-                if (((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
                     for (BusinessObject object : trackerObjects) {
-                        if ((object instanceof InternalSearch) && object.getTimestamp() < businessObject.getTimestamp()) {
+                        if (isScreenCompatible(object) && object.getTimestamp() < businessObject.getTimestamp()) {
+
+                            if (object instanceof Order) {
+                                hasOrder = true;
+                            }
+
                             object.setParams();
                             tracker.getBusinessObjects().remove(object.getId());
                         }
                     }
-                }
-            }
 
-            tracker.getBusinessObjects().remove(businessObject.getId());
-            trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
-
-            for (BusinessObject object : trackerObjects) {
-                if ((object instanceof CustomObject || object instanceof NuggAd) && object.getTimestamp() < businessObject.getTimestamp()) {
-                    object.setParams();
-                    tracker.getBusinessObjects().remove(object.getId());
-                }
-            }
-        }
-
-        if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
-            SharedPreferences preferences = Tracker.getPreferences();
-            if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
-                final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
-                if (xtor != null) {
-                    ParamOption beforeStcPositionWithEncoding = new ParamOption()
-                            .setRelativePosition(ParamOption.RelativePosition.before)
-                            .setRelativeParameterKey(Hit.HitParam.JSON.stringValue())
-                            .setEncode(true);
-
-                    if (preferences.getBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
-                        tracker.setParam(Hit.HitParam.Source.stringValue(), xtor, beforeStcPositionWithEncoding);
-                        preferences.edit().putBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
-                    } else {
-                        tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), xtor, beforeStcPositionWithEncoding);
+                    if (tracker.Cart().getCartId() != null && (((Screen) businessObject).isBasketScreen() || hasOrder)) {
+                        tracker.Cart().setParams();
                     }
-                    preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
+                } else if (businessObject instanceof Gesture) {
+                    trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
+
+                    if (((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
+                        for (BusinessObject object : trackerObjects) {
+                            if ((object instanceof InternalSearch) && object.getTimestamp() < businessObject.getTimestamp()) {
+                                object.setParams();
+                                tracker.getBusinessObjects().remove(object.getId());
+                            }
+                        }
+                    }
+                }
+
+                tracker.getBusinessObjects().remove(businessObject.getId());
+                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
+
+                for (BusinessObject object : trackerObjects) {
+                    if ((object instanceof CustomObject || object instanceof NuggAd) && object.getTimestamp() < businessObject.getTimestamp()) {
+                        object.setParams();
+                        tracker.getBusinessObjects().remove(object.getId());
+                    }
                 }
             }
+
+            if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
+                SharedPreferences preferences = Tracker.getPreferences();
+                if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
+                    final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
+                    if (xtor != null) {
+                        ParamOption beforeStcPositionWithEncoding = new ParamOption()
+                                .setRelativePosition(ParamOption.RelativePosition.before)
+                                .setRelativeParameterKey(Hit.HitParam.JSON.stringValue())
+                                .setEncode(true);
+
+                        if (preferences.getBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
+                            tracker.setParam(Hit.HitParam.Source.stringValue(), xtor, beforeStcPositionWithEncoding);
+                            preferences.edit().putBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
+                        } else {
+                            tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), xtor, beforeStcPositionWithEncoding);
+                        }
+                        preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
+                    }
+                }
+            }
+
+            setIdentifiedVisitorInfos();
+
+
+            ParamOption stcOptions = new ParamOption()
+                    .setAppend(true)
+                    .setEncode(true)
+                    .setType(ParamOption.Type.JSON)
+                    .setRelativePosition(ParamOption.RelativePosition.last);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
+            if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
+                tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
+            }
+
+            Map<String, String> identification = new HashMap<>();
+            identification.put("idType", String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.IDENTIFIER)));
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), identification, stcOptions);
+
+            final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
+            if (!TextUtils.isEmpty(referrer)) {
+                tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
+                Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
+            }
+
+            Builder builder = new Builder(tracker);
+            tracker.getBuffer().getVolatileParams().clear();
+            TrackerQueue.getInstance().put(builder);
+
+            tracker.Context().setLevel2(tracker.Context().getLevel2());
+        } catch (Exception e) {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.ERROR, e.toString(), TrackerListener.HitStatus.Failed);
         }
-
-        setIdentifiedVisitorInfos();
-
-
-        ParamOption stcOptions = new ParamOption()
-                .setAppend(true)
-                .setEncode(true)
-                .setType(ParamOption.Type.JSON)
-                .setRelativePosition(ParamOption.RelativePosition.last);
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
-        if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
-        }
-
-        Map<String, String> identification = new HashMap<>();
-        identification.put("idType", String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.IDENTIFIER)));
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), identification, stcOptions);
-
-        final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
-        if (!TextUtils.isEmpty(referrer)) {
-            tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
-            Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
-        }
-
-        Builder builder = new Builder(tracker);
-        tracker.getBuffer().getVolatileParams().clear();
-        TrackerQueue.getInstance().put(builder);
-
-        tracker.Context().setLevel2(tracker.Context().getLevel2());
     }
 
     private boolean isScreenCompatible(BusinessObject object) {

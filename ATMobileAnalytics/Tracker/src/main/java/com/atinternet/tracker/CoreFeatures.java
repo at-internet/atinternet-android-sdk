@@ -481,7 +481,6 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        TechnicalContext.resetScreenContext();
         if (savedActivityName == null || activity == null || !activity.getClass().getCanonicalName().equals(savedActivityName)
                 || activity.getTaskId() == savedActivityTaskId) {
             timeInBackground = -1;
