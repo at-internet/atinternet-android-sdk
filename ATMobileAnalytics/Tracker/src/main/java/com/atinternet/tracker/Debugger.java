@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -60,14 +60,14 @@ import java.util.Set;
 /**
  * Class to manage Debugger feature
  */
-public class Debugger extends GestureDetector.SimpleOnGestureListener implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
+public final class Debugger extends GestureDetector.SimpleOnGestureListener implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
 
     private static int viewerVisibility = View.GONE;
     private static int bubbleVisibility = View.VISIBLE;
-    private static final float ALPHA_BACKGROUND = .3f;
-    private static final float DELTA = 100;
+    private static final float ALPHA_BACKGROUND = .3F;
+    private static final double DELTA = 100;
+    private static final boolean ACTIVE = true;
 
-    private static boolean active;
     private static int currentViewVisibleId = -1;
     private static int itemPosition = -1;
     private static final ArrayList<Debugger.DebuggerEvent> debuggerEvents = new ArrayList<>();
@@ -99,12 +99,35 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     private int initialX;
     private int initialY;
-    private float initialTouchX;
-    private float initialTouchY;
+    private double initialTouchX;
+    private double initialTouchY;
     private final int ratio;
 
+    private Debugger(Context ctx, Tracker tr) {
+        context = new WeakReference<>(ctx);
+        remove();
+        if (context.get().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ratio = 7;
+        } else {
+            ratio = 8;
+        }
+        tracker = tr;
+        metrics = new DisplayMetrics();
+
+        ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
+        gestureDetector = new GestureDetector(context.get(), this);
+
+        inflateViews(context.get());
+        addViews();
+
+        debuggerEventListAdapter = new WeakReference<>(new DebuggerEventListAdapter(context.get(), noEventsLayout));
+        debuggerOfflineHitsAdapter = new DebuggerOfflineHitsAdapter(context.get(), tracker, noOfflineHitsLayout);
+        eventListView.setAdapter(debuggerEventListAdapter.get());
+        offlineHitsListView.setAdapter(debuggerOfflineHitsAdapter);
+    }
+
     static boolean isActive() {
-        return active;
+        return ACTIVE;
     }
 
     static int getCurrentViewVisibleId() {
@@ -137,12 +160,12 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
      * @param tracker tracker instance
      */
     public static void create(Context context, Tracker tracker) {
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             windowType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             windowType = WindowManager.LayoutParams.TYPE_PHONE;
         }
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(context)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + context.getPackageName()));
@@ -195,30 +218,6 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
 
     static ArrayList<Debugger.DebuggerEvent> getDebuggerEvents() {
         return debuggerEvents;
-    }
-
-    private Debugger(Context ctx, Tracker tr) {
-        active = true;
-        context = new WeakReference<>(ctx);
-        remove();
-        if (context.get().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ratio = 7;
-        } else {
-            ratio = 8;
-        }
-        tracker = tr;
-        metrics = new DisplayMetrics();
-
-        ((WindowManager) context.get().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
-        gestureDetector = new GestureDetector(context.get(), this);
-
-        inflateViews(context.get());
-        addViews();
-
-        debuggerEventListAdapter = new WeakReference<>(new DebuggerEventListAdapter(context.get(), noEventsLayout));
-        debuggerOfflineHitsAdapter = new DebuggerOfflineHitsAdapter(context.get(), tracker, noOfflineHitsLayout);
-        eventListView.setAdapter(debuggerEventListAdapter.get());
-        offlineHitsListView.setAdapter(debuggerOfflineHitsAdapter);
     }
 
     @Override
@@ -435,7 +434,7 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
     }
 
     private static void setAlphaBackground(boolean hasReduceAlpha, boolean withAnim) {
-        AlphaAnimation animation1 = hasReduceAlpha ? new AlphaAnimation(1.f, ALPHA_BACKGROUND) : new AlphaAnimation(ALPHA_BACKGROUND, 1.f);
+        AlphaAnimation animation1 = hasReduceAlpha ? new AlphaAnimation(1.F, ALPHA_BACKGROUND) : new AlphaAnimation(ALPHA_BACKGROUND, 1.F);
         animation1.setDuration(withAnim ? 500 : 0);
         animation1.setFillAfter(true);
         ((Activity) context.get()).getWindow().getDecorView().findViewById(android.R.id.content).startAnimation(animation1);
@@ -491,6 +490,16 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
         private final boolean isHit;
 
         /**
+         * Default Constructor
+         */
+        DebuggerEvent(String message, String type, boolean isHit) {
+            date = new Date();
+            this.message = message;
+            this.type = type;
+            this.isHit = isHit;
+        }
+
+        /**
          * Get Type
          *
          * @return String
@@ -524,16 +533,6 @@ public class Debugger extends GestureDetector.SimpleOnGestureListener implements
          */
         boolean isHit() {
             return isHit;
-        }
-
-        /**
-         * Default Constructor
-         */
-        DebuggerEvent(String message, String type, boolean isHit) {
-            date = new Date();
-            this.message = message;
-            this.type = type;
-            this.isHit = isHit;
         }
     }
 

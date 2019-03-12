@@ -25,8 +25,9 @@ package com.atinternet.tracker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -105,8 +106,8 @@ public class TechnicalContextTest extends AbstractTestClass {
 
     @Test
     public void optOutTest() {
-        TechnicalContext.optOut(RuntimeEnvironment.application, true);
-        assertTrue(RuntimeEnvironment.application.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false));
+        TechnicalContext.optOut(ApplicationProvider.getApplicationContext(), true);
+        assertTrue(ApplicationProvider.getApplicationContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false));
     }
 
     @Test

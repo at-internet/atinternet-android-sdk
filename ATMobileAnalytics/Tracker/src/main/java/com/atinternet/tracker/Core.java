@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -93,6 +93,23 @@ class Param {
     private List<Closure> values;
     private ParamOption paramOption;
 
+    Param() {
+        key = "";
+        values = new ArrayList<>();
+        paramOption = null;
+    }
+
+    Param(String key, final Closure value) {
+        this();
+        this.key = key;
+        this.values.add(value);
+    }
+
+    Param(String key, Closure value, ParamOption paramOption) {
+        this(key, value);
+        this.paramOption = paramOption;
+    }
+
     String getKey() {
         return key;
     }
@@ -125,23 +142,6 @@ class Param {
     boolean isPersistent() {
         return paramOption != null && paramOption.isPersistent();
     }
-
-    Param() {
-        key = "";
-        values = new ArrayList<>();
-        paramOption = null;
-    }
-
-    Param(String key, final Closure value) {
-        this();
-        this.key = key;
-        this.values.add(value);
-    }
-
-    Param(String key, Closure value, ParamOption paramOption) {
-        this(key, value);
-        this.paramOption = paramOption;
-    }
 }
 
 class Buffer {
@@ -172,6 +172,16 @@ class Buffer {
     private Closure apidClosure;
     private Closure apvrClosure;
 
+    Buffer(Tracker tracker) {
+        persistentParams = new LinkedHashMap<>();
+        volatileParams = new LinkedHashMap<>();
+        identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER));
+        ignoreLimitedAdTracking = (boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING);
+
+        initConstantClosures();
+        addContextVariables(tracker);
+    }
+
     LinkedHashMap<String, Param> getPersistentParams() {
         return persistentParams;
     }
@@ -184,16 +194,6 @@ class Buffer {
         volatileParams.remove(Hit.HitParam.UserId.stringValue());
         ParamOption persistent = new ParamOption().setPersistent(true);
         persistentParams.put(Hit.HitParam.UserId.stringValue(), new Param(Hit.HitParam.UserId.stringValue(), TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking), persistent));
-    }
-
-    Buffer(Tracker tracker) {
-        persistentParams = new LinkedHashMap<>();
-        volatileParams = new LinkedHashMap<>();
-        identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER));
-        ignoreLimitedAdTracking = (boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING);
-
-        initConstantClosures();
-        addContextVariables(tracker);
     }
 
     private void addContextVariables(Tracker tracker) {
@@ -290,6 +290,8 @@ class Builder implements Runnable {
     private static final String OPT_OUT = "opt-out";
     private static final String MHERR = "mherr";
 
+    private static final int MHID_UPPER_LIMIT = 9_000_000;
+    private static final int MHID_LOWER_LIMIT = 1_000_000;
     private static final int REFCONFIGCHUNKS = 4;
     private static final int MH_PARAMETER_MAX_LENGTH = 30;
     private static final int MHERR_PARAMETER_LENGTH = 8;
@@ -312,7 +314,7 @@ class Builder implements Runnable {
         StringBuilder conf = new StringBuilder();
         int hitConfigChunks = 0;
 
-        boolean isSecure = (Boolean) configuration.get(TrackerConfigurationKeys.SECURE);
+        boolean isSecure = (boolean) configuration.get(TrackerConfigurationKeys.SECURE);
         String log = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG));
         String logSecure = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL));
         String domain = String.valueOf(configuration.get(TrackerConfigurationKeys.DOMAIN));
@@ -356,7 +358,7 @@ class Builder implements Runnable {
         return conf.toString();
     }
 
-    Object[] build() {
+    Pair<ArrayList<String>, String> build() {
         ArrayList<String> hitsList = new ArrayList<>();
 
         String configStr = buildConfiguration();
@@ -364,17 +366,10 @@ class Builder implements Runnable {
 
         if (TextUtils.isEmpty(configStr)) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "Empty configuration", TrackerListener.HitStatus.Failed);
-            return new Object[]{hitsList, oltParameter};
+            return new Pair<>(hitsList, oltParameter);
         }
 
-        ArrayList<String> prepareHitsList = new ArrayList<>();
-        int countSplitHits = 1;
-        int indexError = -1;
-        StringBuilder queryString = new StringBuilder();
-        String mhCommonQueryContent;
-
         // Calcul pour connaitre la longueur maximum du hit
-        int maxLengthAvailable = HIT_MAX_LENGTH - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
         LinkedHashMap<String, Pair<String, String>> dictionary = prepareQuery();
         Set<String> keySet = dictionary.keySet();
 
@@ -383,9 +378,9 @@ class Builder implements Runnable {
             String collectDomain = String.valueOf(configuration.get(TrackerConfigurationKeys.COLLECT_DOMAIN));
             if (TextUtils.isEmpty(collectDomain)) {
                 Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "invalid collect domain", TrackerListener.HitStatus.Failed);
-                return new Object[]{hitsList, oltParameter};
+                return new Pair<>(hitsList, oltParameter);
             }
-            boolean isSecure = (Boolean) configuration.get(TrackerConfigurationKeys.SECURE);
+            boolean isSecure = (boolean) configuration.get(TrackerConfigurationKeys.SECURE);
             if (isSecure) {
                 configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL)), collectDomain);
             } else {
@@ -393,7 +388,10 @@ class Builder implements Runnable {
             }
         }
 
+        int maxLengthAvailable = HIT_MAX_LENGTH - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
+        StringBuilder queryString = new StringBuilder();
         StringBuilder mhCommonQueryContentSb = new StringBuilder();
+        String mhCommonQueryContent;
         for (String paramKey : MH_PARAMS_ALL_PARTS) {
             Pair<String, String> pair = dictionary.remove(paramKey);
             if (pair != null) {
@@ -404,6 +402,10 @@ class Builder implements Runnable {
         mhCommonQueryContent = mhCommonQueryContentSb.toString();
         queryString.append(mhCommonQueryContent);
 
+
+        ArrayList<String> prepareHitsList = new ArrayList<>();
+        int countSplitHits = 1;
+        int indexError = -1;
         // Outerloop est un label de référence si jamais une boucle doit être interrompue
         outerloop:
 
@@ -454,33 +456,28 @@ class Builder implements Runnable {
 
                         // On retourne à l'endroit du code où se trouve outerloop
                         break outerloop;
-                    }
-                    // Sinon si le hit déjà construit + la valeur courante est trop grand
-                    else if (queryString.length() + currentSplitValue.length() > maxLengthAvailable) {
-                        // On créé un nouveau tronçon
+                    } else if (queryString.length() + currentSplitValue.length() > maxLengthAvailable) {
+                        // Sinon si le hit déjà construit + la valeur courante est trop grand -> On créé un nouveau tronçon
                         countSplitHits++;
                         prepareHitsList.add(queryString.toString());
                         queryString = new StringBuilder()
                                 .append(mhCommonQueryContent)
                                 .append(currentKey)
-                                .append(i == 0 ? currentSplitValue : separator + currentSplitValue);
-                    }
-                    // Sinon, on continue la construction normalement
-                    else {
-                        queryString.append(i == 0 ? currentKey + currentSplitValue : separator + currentSplitValue);
+                                .append((i == 0) ? currentSplitValue : (separator + currentSplitValue));
+                    } else {
+                        // Sinon, on continue la construction normalement
+                        queryString.append((i == 0) ? (currentKey + currentSplitValue) : (separator + currentSplitValue));
                     }
                 }
-            }
-            // Sinon, si le hit est trop grand, on le découpe entre deux paramètres
-            else if (queryString.length() + value.length() > maxLengthAvailable) {
+            } else if (queryString.length() + value.length() > maxLengthAvailable) {
+                // Sinon, si le hit est trop grand, on le découpe entre deux paramètres
                 countSplitHits++;
                 prepareHitsList.add(queryString.toString());
                 queryString = new StringBuilder()
                         .append(mhCommonQueryContent)
                         .append(value);
-            }
-            //Sinon, on ne découpe pas
-            else {
+            } else {
+                //Sinon, on ne découpe pas
                 queryString.append(value);
             }
         }
@@ -519,15 +516,20 @@ class Builder implements Runnable {
         }
         Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, message.toString(), TrackerListener.HitStatus.Success);
 
-        return new Object[]{hitsList, oltParameter};
+        return new Pair<>(hitsList, oltParameter);
     }
 
     @Override
     public void run() {
         // Récupération des éléments issus du build
-        Object[] buildResult = build();
-        ArrayList<String> urls = (ArrayList<String>) buildResult[0];
-        String oltParameter = (String) buildResult[1];
+        Pair<ArrayList<String>, String> buildResult = build();
+        ArrayList<String> urls = buildResult.first;
+        String oltParameter = buildResult.second;
+
+        if (TechnicalContext.optOutEnabled(Tracker.getAppContext()) && !((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT))) {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "'sendHitWhenOptOut' configuration disabled, hit(s) not sent");
+            return;
+        }
 
         // Envoi du(des) hit(s) construit(s)
         for (String url : urls) {
@@ -653,7 +655,7 @@ class Builder implements Runnable {
                             break;
                     }
                 } catch (JSONException ex) {
-                    ex.printStackTrace();
+                    Log.e(ATInternet.TAG, ex.toString());
                 }
             } else {
                 // NOT JSON
@@ -670,13 +672,14 @@ class Builder implements Runnable {
             if (key.equals(Hit.HitParam.UserId.stringValue())) {
                 if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
                     strValue = OPT_OUT;
-                } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
-                    strValue = Tool.SHA256(strValue);
+                } else if (((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
+                    strValue = Tool.sha256(strValue);
                 }
                 tracker.setInternalUserId(strValue);
             } else if (key.equals(Hit.HitParam.Referrer.stringValue())) {
                 strValue = strValue.replace("&", "$")
-                        .replaceAll("[<>]", "");
+                        .replace("<", "")
+                        .replace(">", "");
             }
 
             String separator = ",";
@@ -693,10 +696,14 @@ class Builder implements Runnable {
         return formattedParameters;
     }
 
-    private String mhIdSuffixGenerator() {
+    private static String mhIdSuffixGenerator() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        return String.format(Locale.ENGLISH, MHID_FORMAT, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), new Random().nextInt(9000000) + 1000000);
+        return String.format(Locale.ENGLISH, MHID_FORMAT,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND),
+                new Random().nextInt(MHID_UPPER_LIMIT) + MHID_LOWER_LIMIT);
     }
 
     String makeSubQuery(String key, String value) {
@@ -708,9 +715,10 @@ class Sender implements Runnable {
 
     private static final int RETRY_COUNT = 3;
     private static final int TIMEOUT = 15000;
+    private static final int STATUS_OK = 200;
     private static final String RECEIVE_FROM_SERVER_ERROR = "recvfrom";
 
-    private static boolean OfflineHitProcessing = false;
+    private static boolean offlineHitProcessing;
 
     private final Tracker tracker;
     private final Storage storage;
@@ -724,81 +732,77 @@ class Sender implements Runnable {
         this.storage = Storage.getInstance(Tracker.getAppContext());
         this.hit = hit;
         this.forceSendOfflineHits = forceSendOfflineHits;
-        this.oltParameter = oltParameter.length > 0 ? oltParameter[0] : "";
+        this.oltParameter = (oltParameter.length > 0) ? oltParameter[0] : "";
     }
 
     private void send(final Hit hit) {
+        /// Mode offline only
+        if (tracker.getOfflineMode() == Tracker.OfflineMode.always &&
+                !forceSendOfflineHits) {
+            saveHitDatabase(hit);
+            return;
+        }
 
-        switch (tracker.getOfflineMode()) {
-            case always:
-                if (!forceSendOfflineHits) {
-                    saveHitDatabase(hit);
-                }
-                break;
-            case required:
-                // Si pas de connexion
-                if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE || (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
-                    // Si le hit ne provient pas du offline
+        // Si pas de connexion
+        if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE ||
+                (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
+            // Si le hit ne provient pas du offline
+            if (!hit.isOffline()) {
+                saveHitDatabase(hit);
+            }
+            return;
+        }
+
+        HttpURLConnection connection = null;
+        try {
+            // Execution de la requête
+            URL url = new URL(hit.getUrl());
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setReadTimeout(TIMEOUT);
+            connection.setConnectTimeout(TIMEOUT);
+            connection.connect();
+
+            int statusCode = connection.getResponseCode();
+            final String message = connection.getResponseMessage();
+
+            // Le hit n'a pas pu être envoyé
+            if (statusCode != STATUS_OK) {
+                if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
                     if (!hit.isOffline()) {
                         saveHitDatabase(hit);
-                    }
-                    break;
-                }
-            default:
-                HttpURLConnection connection = null;
-                try {
-                    // Execution de la requête
-                    URL url = new URL(hit.getUrl());
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setReadTimeout(TIMEOUT);
-                    connection.setConnectTimeout(TIMEOUT);
-                    connection.connect();
-
-                    int statusCode = connection.getResponseCode();
-                    final String message = connection.getResponseMessage();
-
-                    // Le hit n'a pas pu être envoyé
-                    if (statusCode != 200) {
-                        if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
-                            if (!hit.isOffline()) {
-                                saveHitDatabase(hit);
-                            } else {
-                                updateRetryCount(hit);
-                            }
-                        }
-                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
-                        updateDebugger(message, "error48", false);
-                    }
-                    // Le hit a été envoyé
-                    else {
-                        // Si le hit provient du stockage, on le supprime de la base
-                        if (hit.isOffline()) {
-                            storage.deleteHit(hit.getUrl());
-                        }
-                        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
-                        updateDebugger(hit.getUrl(), "sent48", true);
-                    }
-                } catch (final Exception e) {
-                    updateDebugger(e.getMessage(), "error48", false);
-                    // Si une erreur est survenue au moment de la récupération du pixel de marquage mais que le hit est bien envoyé
-                    if (checkExceptionServerReceiveData(e)) {
-                        // Si il s'agissait d'un hit offline, on le supprime
-                        if (hit.isOffline()) {
-                            storage.deleteHit(hit.getUrl());
-                        }
-                    } else if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
-                        if (!hit.isOffline()) {
-                            saveHitDatabase(hit);
-                        } else {
-                            updateRetryCount(hit);
-                        }
-                    }
-                } finally {
-                    if (connection != null) {
-                        connection.disconnect();
+                    } else {
+                        updateRetryCount(hit);
                     }
                 }
-                break;
+                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, message, TrackerListener.HitStatus.Failed);
+                updateDebugger(message, "error48", false);
+            } else {
+                // Si le hit provient du stockage, on le supprime de la base
+                if (hit.isOffline()) {
+                    storage.deleteHit(hit.getUrl());
+                }
+                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
+                updateDebugger(hit.getUrl(), "sent48", true);
+            }
+        } catch (final Exception e) {
+            updateDebugger(e.getMessage(), "error48", false);
+            // Si une erreur est survenue au moment de la récupération du pixel de marquage mais que le hit est bien envoyé
+            if (checkExceptionServerReceiveData(e)) {
+                // Si il s'agissait d'un hit offline, on le supprime
+                if (hit.isOffline()) {
+                    storage.deleteHit(hit.getUrl());
+                }
+            } else if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
+                if (!hit.isOffline()) {
+                    saveHitDatabase(hit);
+                } else {
+                    updateRetryCount(hit);
+                }
+            }
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 
@@ -814,17 +818,14 @@ class Sender implements Runnable {
         send(hit);
     }
 
-    static void sendOfflineHits(Tracker tracker, Storage storage, boolean forceSendOfflineHits, boolean async) {
-        if ((tracker.getOfflineMode() != Tracker.OfflineMode.always || forceSendOfflineHits)
-                && TechnicalContext.getConnection() != TechnicalContext.ConnectionType.OFFLINE
-                && !OfflineHitProcessing && TrackerQueue.getEnabledFillQueueFromDatabase()
-                && storage.getCountOfflineHits() > 0) {
+    static void sendOfflineHits(Tracker tracker, Storage storage, boolean force, boolean async) {
+        if (forceSendOfflineHits(tracker, force) && isNetworkOnline() && isAllowedToProcess()) {
 
             ArrayList<Hit> offlineHits = storage.getOfflineHits();
             if (async) {
                 TrackerQueue.setEnabledFillQueueFromDatabase(false);
                 for (Hit hit : offlineHits) {
-                    Sender sender = new Sender(tracker, hit, forceSendOfflineHits);
+                    Sender sender = new Sender(tracker, hit, force);
                     TrackerQueue.getInstance().put(sender);
                 }
                 TrackerQueue.getInstance().put(new Runnable() {
@@ -834,14 +835,26 @@ class Sender implements Runnable {
                     }
                 });
             } else {
-                OfflineHitProcessing = true;
+                offlineHitProcessing = true;
                 for (Hit hit : offlineHits) {
-                    Sender sender = new Sender(tracker, hit, forceSendOfflineHits);
+                    Sender sender = new Sender(tracker, hit, force);
                     sender.send(false);
                 }
-                OfflineHitProcessing = false;
+                offlineHitProcessing = false;
             }
         }
+    }
+
+    private static boolean forceSendOfflineHits(Tracker tracker, boolean force) {
+        return tracker.getOfflineMode() != Tracker.OfflineMode.always || force;
+    }
+
+    private static boolean isNetworkOnline() {
+        return TechnicalContext.getConnection() != TechnicalContext.ConnectionType.OFFLINE;
+    }
+
+    private static boolean isAllowedToProcess() {
+        return !offlineHitProcessing && TrackerQueue.isEnabledFillQueueFromDatabase();
     }
 
     private void updateRetryCount(Hit hit) {
@@ -864,7 +877,7 @@ class Sender implements Runnable {
         }
     }
 
-    private boolean checkExceptionServerReceiveData(Exception e) {
+    private static boolean checkExceptionServerReceiveData(Exception e) {
         int index = 0;
         do {
             if (e.getStackTrace()[index].getMethodName().equals(RECEIVE_FROM_SERVER_ERROR)) {
@@ -900,158 +913,169 @@ class Dispatcher {
     }
 
     void dispatch(BusinessObject... businessObjects) {
-        ArrayList<BusinessObject> trackerObjects;
-        for (BusinessObject businessObject : businessObjects) {
-            businessObject.setParams();
+        try {
+            ArrayList<BusinessObject> trackerObjects;
+            for (BusinessObject businessObject : businessObjects) {
+                businessObject.setParams();
 
-            if (businessObject instanceof AbstractScreen) {
-                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
+                if (businessObject instanceof AbstractScreen) {
+                    trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
 
-                boolean hasOrder = false;
+                    boolean hasOrder = false;
 
-                for (BusinessObject object : trackerObjects) {
-                    if (((object instanceof OnAppAd && ((OnAppAd) object).getAction() == OnAppAd.Action.View)
-                            || object instanceof Order
-                            || object instanceof InternalSearch
-                            || object instanceof ScreenInfo) &&
-                            object.getTimestamp() < businessObject.getTimestamp()) {
-
-                        if (object instanceof Order) {
-                            hasOrder = true;
-                        }
-
-                        object.setParams();
-                        tracker.getBusinessObjects().remove(object.getId());
-                    }
-                }
-
-                if (tracker.Cart().getCartId() != null && (((Screen) businessObject).isBasketScreen() || hasOrder)) {
-                    tracker.Cart().setParams();
-                }
-            } else if (businessObject instanceof Gesture) {
-                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
-
-                if (((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
                     for (BusinessObject object : trackerObjects) {
-                        if ((object instanceof InternalSearch) && object.getTimestamp() < businessObject.getTimestamp()) {
+                        if (isScreenCompatible(object) && object.getTimestamp() < businessObject.getTimestamp()) {
+
+                            if (object instanceof Order) {
+                                hasOrder = true;
+                            }
+
                             object.setParams();
                             tracker.getBusinessObjects().remove(object.getId());
                         }
                     }
-                }
-            }
 
-            tracker.getBusinessObjects().remove(businessObject.getId());
-            trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
-
-            for (BusinessObject object : trackerObjects) {
-                if ((object instanceof CustomObject || object instanceof NuggAd) && object.getTimestamp() < businessObject.getTimestamp()) {
-                    object.setParams();
-                    tracker.getBusinessObjects().remove(object.getId());
-                }
-            }
-        }
-
-        if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
-            SharedPreferences preferences = Tracker.getPreferences();
-            if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
-                final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
-                if (xtor != null) {
-                    ParamOption beforeStcPositionWithEncoding = new ParamOption()
-                            .setRelativePosition(ParamOption.RelativePosition.before)
-                            .setRelativeParameterKey(Hit.HitParam.JSON.stringValue())
-                            .setEncode(true);
-
-                    if (preferences.getBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
-                        tracker.setParam(Hit.HitParam.Source.stringValue(), xtor, beforeStcPositionWithEncoding);
-                        preferences.edit().putBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
-                    } else {
-                        tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), xtor, beforeStcPositionWithEncoding);
+                    if (tracker.Cart().getCartId() != null && (((Screen) businessObject).isBasketScreen() || hasOrder)) {
+                        tracker.Cart().setParams();
                     }
-                    preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
+                } else if (businessObject instanceof Gesture) {
+                    trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
+
+                    if (((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
+                        for (BusinessObject object : trackerObjects) {
+                            if ((object instanceof InternalSearch) && object.getTimestamp() < businessObject.getTimestamp()) {
+                                object.setParams();
+                                tracker.getBusinessObjects().remove(object.getId());
+                            }
+                        }
+                    }
+                }
+
+                tracker.getBusinessObjects().remove(businessObject.getId());
+                trackerObjects = new ArrayList<>(tracker.getBusinessObjects().values());
+
+                for (BusinessObject object : trackerObjects) {
+                    if ((object instanceof CustomObject || object instanceof NuggAd) && object.getTimestamp() < businessObject.getTimestamp()) {
+                        object.setParams();
+                        tracker.getBusinessObjects().remove(object.getId());
+                    }
                 }
             }
+
+            if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
+                SharedPreferences preferences = Tracker.getPreferences();
+                if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
+                    final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
+                    if (xtor != null) {
+                        ParamOption beforeStcPositionWithEncoding = new ParamOption()
+                                .setRelativePosition(ParamOption.RelativePosition.before)
+                                .setRelativeParameterKey(Hit.HitParam.JSON.stringValue())
+                                .setEncode(true);
+
+                        if (preferences.getBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
+                            tracker.setParam(Hit.HitParam.Source.stringValue(), xtor, beforeStcPositionWithEncoding);
+                            preferences.edit().putBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
+                        } else {
+                            tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), xtor, beforeStcPositionWithEncoding);
+                        }
+                        preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
+                    }
+                }
+            }
+
+            setIdentifiedVisitorInfos();
+
+
+            ParamOption stcOptions = new ParamOption()
+                    .setAppend(true)
+                    .setEncode(true)
+                    .setType(ParamOption.Type.JSON)
+                    .setRelativePosition(ParamOption.RelativePosition.last);
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
+            if ((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
+                tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
+            }
+
+            Map<String, String> identification = new HashMap<>();
+            identification.put("idType", String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.IDENTIFIER)));
+            tracker.setParam(Hit.HitParam.JSON.stringValue(), identification, stcOptions);
+
+            final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
+            if (!TextUtils.isEmpty(referrer)) {
+                tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
+                Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
+            }
+
+            Builder builder = new Builder(tracker);
+            tracker.getBuffer().getVolatileParams().clear();
+            TrackerQueue.getInstance().put(builder);
+
+            tracker.Context().setLevel2(tracker.Context().getLevel2());
+        } catch (Exception e) {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.ERROR, e.toString(), TrackerListener.HitStatus.Failed);
         }
+    }
 
-        setIdentifiedVisitorInfos();
-
-
-        ParamOption stcOptions = new ParamOption()
-                .setAppend(true)
-                .setEncode(true)
-                .setType(ParamOption.Type.JSON)
-                .setRelativePosition(ParamOption.RelativePosition.last);
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
-        if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
-            tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
-        }
-
-        Map<String, String> identification = new HashMap<>();
-        identification.put("idType", String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.IDENTIFIER)));
-        tracker.setParam(Hit.HitParam.JSON.stringValue(), identification, stcOptions);
-
-        final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
-        if (!TextUtils.isEmpty(referrer)) {
-            tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
-            Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
-        }
-
-        Builder builder = new Builder(tracker);
-        tracker.getBuffer().getVolatileParams().clear();
-        TrackerQueue.getInstance().put(builder);
-
-        tracker.Context().setLevel2(tracker.Context().getLevel2());
+    private boolean isScreenCompatible(BusinessObject object) {
+        return ((object instanceof OnAppAd && ((OnAppAd) object).getAction() == OnAppAd.Action.View)
+                || object instanceof Order
+                || object instanceof InternalSearch
+                || object instanceof ScreenInfo);
     }
 
     void setIdentifiedVisitorInfos() {
-        if (Boolean.parseBoolean(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR)))) {
-            ParamOption beforeStcPosition = new ParamOption()
-                    .setRelativePosition(ParamOption.RelativePosition.before)
-                    .setRelativeParameterKey(Hit.HitParam.JSON.stringValue());
+        if (!((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR))) {
+            return;
+        }
+        ParamOption beforeStcPosition = new ParamOption()
+                .setRelativePosition(ParamOption.RelativePosition.before)
+                .setRelativeParameterKey(Hit.HitParam.JSON.stringValue());
 
-            ParamOption beforeStcPositionWithEncoding = new ParamOption()
-                    .setRelativePosition(ParamOption.RelativePosition.before)
-                    .setRelativeParameterKey(Hit.HitParam.JSON.stringValue()).setEncode(true);
+        ParamOption beforeStcPositionWithEncoding = new ParamOption()
+                .setRelativePosition(ParamOption.RelativePosition.before)
+                .setRelativeParameterKey(Hit.HitParam.JSON.stringValue()).setEncode(true);
 
-            String visitorNumericID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
-            String visitorCategory = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
-            String visitorTextID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
-            if (visitorNumericID != null) {
-                tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
-            }
-            if (visitorTextID != null) {
-                tracker.setParam(Hit.HitParam.VisitorIdentifierText.stringValue(), visitorTextID, beforeStcPositionWithEncoding);
-            }
-            if (visitorCategory != null) {
-                tracker.setParam(Hit.HitParam.VisitorCategory.stringValue(), visitorCategory, beforeStcPosition);
-            }
+        String visitorNumericID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
+        String visitorCategory = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
+        String visitorTextID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
+        if (visitorNumericID != null) {
+            tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
+        }
+        if (visitorTextID != null) {
+            tracker.setParam(Hit.HitParam.VisitorIdentifierText.stringValue(), visitorTextID, beforeStcPositionWithEncoding);
+        }
+        if (visitorCategory != null) {
+            tracker.setParam(Hit.HitParam.VisitorCategory.stringValue(), visitorCategory, beforeStcPosition);
         }
     }
 }
 
-class TrackerQueue extends LinkedBlockingQueue<Runnable> {
+final class TrackerQueue extends LinkedBlockingQueue<Runnable> {
 
-    private static boolean ENABLED_FILL_QUEUE_FROM_DATABASE = true;
+    private static boolean enabledFillQueueFromDatabase = true;
     private static TrackerQueue instance;
     private final ScheduledExecutorService scheduledExecutorService;
 
-    static void setEnabledFillQueueFromDatabase(boolean enabled) {
-        ENABLED_FILL_QUEUE_FROM_DATABASE = enabled;
-    }
-
-    static boolean getEnabledFillQueueFromDatabase() {
-        return ENABLED_FILL_QUEUE_FROM_DATABASE;
-    }
-
     private TrackerQueue() {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    }
+
+    static TrackerQueue getInstance() {
+        if (instance == null) {
+            instance = new TrackerQueue();
+            start();
+        }
+        return instance;
+    }
+
+    private static void start() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Runnable runnable;
-                    while ((runnable = take()) != null) {
-                        scheduledExecutorService.execute(runnable);
+                    while ((runnable = instance.take()) != null) {
+                        instance.scheduledExecutorService.execute(runnable);
                     }
                 } catch (InterruptedException e) {
                     Log.e(ATInternet.TAG, e.toString());
@@ -1061,11 +1085,12 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
         }).start();
     }
 
-    static TrackerQueue getInstance() {
-        if (instance == null) {
-            instance = new TrackerQueue();
-        }
-        return instance;
+    static void setEnabledFillQueueFromDatabase(boolean enabled) {
+        enabledFillQueueFromDatabase = enabled;
+    }
+
+    static boolean isEnabledFillQueueFromDatabase() {
+        return enabledFillQueueFromDatabase;
     }
 
     @Override
@@ -1083,8 +1108,29 @@ class TrackerQueue extends LinkedBlockingQueue<Runnable> {
 
 class TechnicalContext {
 
+    private static final int RETRY_GET_ADVERTISING_COUNT = 3;
+    private static final String ANDROID_ID_KEY = "androidId";
+    private static final String UUID_KEY = "UUID";
     private static String screenName = "";
     private static int level2 = -1;
+
+    static final Closure VTAG = new Closure() {
+        @Override
+        public String execute() {
+            return "2.12.0";
+        }
+    };
+
+    static final Closure PTAG = new Closure() {
+        @Override
+        public String execute() {
+            return "Android";
+        }
+    };
+
+    enum ConnectionType {
+        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, WIFI, OFFLINE, UNKNOWN
+    }
 
     static void resetScreenContext() {
         screenName = null;
@@ -1105,29 +1151,6 @@ class TechnicalContext {
 
     static int getLevel2() {
         return level2;
-    }
-
-
-    private static final int RETRY_GET_ADVERTISING_COUNT = 3;
-    private static final String ANDROID_ID_KEY = "androidId";
-    private static final String UUID_KEY = "UUID";
-
-    static final Closure VTAG = new Closure() {
-        @Override
-        public String execute() {
-            return "2.11.3";
-        }
-    };
-
-    static final Closure PTAG = new Closure() {
-        @Override
-        public String execute() {
-            return "Android";
-        }
-    };
-
-    enum ConnectionType {
-        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, WIFI, OFFLINE, UNKNOWN
     }
 
     static ConnectionType getConnection() {
@@ -1207,7 +1230,7 @@ class TechnicalContext {
             public String execute() {
                 android.content.Context context = Tracker.getAppContext();
                 TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(android.content.Context.TELEPHONY_SERVICE);
-                return telephonyManager != null ? telephonyManager.getNetworkOperatorName() : "";
+                return (telephonyManager != null) ? telephonyManager.getNetworkOperatorName() : "";
             }
         };
     }
@@ -1293,7 +1316,7 @@ class TechnicalContext {
                         versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
+                    Log.e(ATInternet.TAG, e.toString());
                 }
                 return String.format("[%s]", versionName);
             }
@@ -1326,13 +1349,10 @@ class TechnicalContext {
                 int heightPixels = metrics.heightPixels;
 
                 try {
-                    // includes window decorations (statusbar bar/menu bar)
-                    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
                         heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
-                    }
-                    // includes window decorations (statusbar bar/menu bar)
-                    if (Build.VERSION.SDK_INT >= 17) {
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         Point realSize = new Point();
                         d.getRealSize(realSize);
 
@@ -1501,7 +1521,7 @@ class Tool {
                 long d = (long) result;
                 String afterZero = Double.toString(result - d);
 
-                return afterZero.length() > 1 ? Long.toString(d) + afterZero.substring(1) : "";
+                return (afterZero.length() > 1) ? (Long.toString(d) + afterZero.substring(1)) : "";
             }
         };
     }
@@ -1566,7 +1586,9 @@ class Tool {
     }
 
     static boolean isJSON(String s) {
-        if (s == null) return false;
+        if (s == null) {
+            return false;
+        }
 
         try {
             JSONObject obj = new JSONObject(s);
@@ -1577,7 +1599,9 @@ class Tool {
     }
 
     static boolean isArray(String s) {
-        if (s == null) return false;
+        if (s == null) {
+            return false;
+        }
 
         try {
             JSONArray array = new JSONArray(s);
@@ -1643,12 +1667,13 @@ class Tool {
     }
 
     static String appendParameterValues(Param param) {
-        boolean isFirst = true;
         StringBuilder result = new StringBuilder();
 
         if (param == null) {
             return result.toString();
         }
+
+        boolean isFirst = true;
         for (Closure closure : param.getValues()) {
             if (isFirst) {
                 result.append(closure.execute());
@@ -1666,7 +1691,7 @@ class Tool {
         return result.toString();
     }
 
-    static String SHA256(String s) {
+    static String sha256(String s) {
         String baseString = "AT" + s;
         StringBuilder sb = new StringBuilder();
         try {
@@ -1699,10 +1724,10 @@ class Tool {
         AlphaAnimation animation;
         if (visible) {
             view.setVisibility(View.VISIBLE);
-            animation = new AlphaAnimation(0.f, 1.f);
+            animation = new AlphaAnimation(0.F, 1.F);
         } else {
             view.setVisibility(View.GONE);
-            animation = new AlphaAnimation(1.f, 0.f);
+            animation = new AlphaAnimation(1.F, 0.F);
         }
         animation.setDuration(400);
         view.startAnimation(animation);
@@ -1712,25 +1737,21 @@ class Tool {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         try {
             URL url = new URL(hit);
-            map.put("ssl", url.getProtocol().equals("http") ? "Off" : "On");
+            map.put("ssl", "http".equals(url.getProtocol()) ? "Off" : "On");
             map.put("log", url.getHost());
             String[] queryComponents = url.getQuery().split("&");
             for (String queryComponent : queryComponents) {
                 String[] elem = queryComponent.split("=");
-                if (elem.length > 1) {
-                    elem[1] = Tool.percentDecode(elem[1]);
-                    if (Tool.isJSON(elem[1])) {
-                        JSONObject json = new JSONObject(elem[1]);
-                        if (elem[0].equals(Hit.HitParam.JSON.stringValue())) {
-                            map.put(elem[0], json.toString(3));
-                        } else {
-                            map.put(elem[0], elem[1]);
-                        }
-                    } else {
-                        map.put(elem[0], elem[1]);
-                    }
-                } else {
+                if (elem.length <= 1) {
                     map.put(elem[0], "");
+                    continue;
+                }
+
+                elem[1] = Tool.percentDecode(elem[1]);
+                if (elem[0].equals(Hit.HitParam.JSON.stringValue())) {
+                    map.put(elem[0], new JSONObject(elem[1]).toString(3));
+                } else {
+                    map.put(elem[0], elem[1]);
                 }
             }
         } catch (Exception e) {
@@ -1759,7 +1780,7 @@ class Tool {
     }
 }
 
-class Storage extends SQLiteOpenHelper {
+final class Storage extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String HITS_STORAGE_TABLE = "StoredOfflineHit";
@@ -1776,35 +1797,34 @@ class Storage extends SQLiteOpenHelper {
                     RETRY + " INTEGER NOT NULL);";
 
 
+    private static final boolean INITIALIZED = true;
     private static Storage instance;
-    private static boolean initialized;
-    private static String DATABASE_PATH;
-
-    static void setDatabasePath(String path) {
-        if (!initialized) {
-            DATABASE_PATH = path;
-        } else {
-            Log.w(ATInternet.TAG, "Changing path when database is already initialized");
-        }
-    }
-
-    static String getDatabasePath() {
-        return DATABASE_PATH;
-    }
+    private static String databasePath;
 
     private Storage(Context context) {
-        super(context, DATABASE_PATH, null, DATABASE_VERSION);
-        initialized = true;
+        super(context, databasePath, null, DATABASE_VERSION);
     }
 
     static Storage getInstance(Context context) {
         if (instance == null) {
-            if (TextUtils.isEmpty(DATABASE_PATH)) {
-                DATABASE_PATH = "TrackerDatabase";
+            if (TextUtils.isEmpty(databasePath)) {
+                databasePath = "TrackerDatabase";
             }
             instance = new Storage(context);
         }
         return instance;
+    }
+
+    static void setDatabasePath(String path) {
+        if (!INITIALIZED) {
+            databasePath = path;
+        } else {
+            Log.w(ATInternet.TAG, "Changing path when database is already INITIALIZED");
+        }
+    }
+
+    static String getDatabasePath() {
+        return databasePath;
     }
 
     @Override
@@ -1849,13 +1869,13 @@ class Storage extends SQLiteOpenHelper {
         for (int i = 1; i < hitComponents.length; i++) {
             String[] parameterComponents = hitComponents[i].split("=");
 
-            if (parameterComponents[0].equals("cn")) {
+            if ("cn".equals(parameterComponents[0])) {
                 newHitBuilder.append("&cn=offline");
             } else {
                 newHitBuilder.append('&').append(hitComponents[i]);
             }
 
-            if (parameterComponents[0].equals("ts") || parameterComponents[0].equals("mh")) {
+            if ("ts".equals(parameterComponents[0]) || "mh".equals(parameterComponents[0])) {
                 newHitBuilder.append("&olt=").append(olt);
             }
         }
@@ -1911,8 +1931,11 @@ class Storage extends SQLiteOpenHelper {
     }
 
     ArrayList<Hit> getOfflineHits() {
-        ArrayList<Hit> hits = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
+        if (db == null) {
+            return null;
+        }
+        ArrayList<Hit> hits = new ArrayList<>();
         Cursor c = db.rawQuery(SELECT_ALL_QUERY + "ORDER BY " + ID + " ASC", null);
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
@@ -1931,6 +1954,9 @@ class Storage extends SQLiteOpenHelper {
 
     Hit getOldestOfflineHit() {
         SQLiteDatabase db = getReadableDatabase();
+        if (db == null) {
+            return null;
+        }
         Cursor c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MIN(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
         if (c != null && c.moveToFirst()) {
             String hit = c.getString(c.getColumnIndex(HIT));
@@ -1989,7 +2015,7 @@ class Storage extends SQLiteOpenHelper {
     }
 }
 
-class Lists {
+final class Lists {
 
     private Lists() {
         throw new IllegalStateException("Private class");

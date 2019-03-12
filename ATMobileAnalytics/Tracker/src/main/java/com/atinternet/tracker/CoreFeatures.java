@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -93,16 +93,6 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
     private static String lastScreen;
 
     /**
-     * Set the last screen name
-     *
-     * @param name String
-     */
-    static void setCrashLastScreen(String name) {
-        lastScreen = name;
-    }
-
-
-    /**
      * Default constructor
      *
      * @param packageName    String
@@ -113,6 +103,17 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
         this.preferences = prefs;
         this.packageName = packageName;
     }
+
+    /**
+     * Set the last screen name
+     *
+     * @param name String
+     */
+
+    static void setCrashLastScreen(String name) {
+        lastScreen = name;
+    }
+
 
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
@@ -183,7 +184,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
     }
 }
 
-class LifeCycle {
+final class LifeCycle {
 
     /**
      * Key representing if it's first launch (backward compat)
@@ -253,7 +254,7 @@ class LifeCycle {
     /**
      * Check whether lifecycle has already been initialized
      */
-    static boolean isInitialized = false;
+    static boolean isInitialized;
 
     /**
      * Session identifier
@@ -332,7 +333,9 @@ class LifeCycle {
 
     static void newSessionInit(SharedPreferences preferences) {
         /// Do not track
-        if (ATInternet.optOutEnabled(Tracker.getAppContext())) return;
+        if (ATInternet.optOutEnabled(Tracker.getAppContext())) {
+            return;
+        }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
         try {
@@ -452,7 +455,8 @@ class LifeCycle {
 @TargetApi(14)
 class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks {
 
-    private static final int DELAY = 300, DELTA = 2;
+    private static final int DELAY = 300;
+    private static final int DELTA = 2;
 
     private long timeInBackground;
     protected final Configuration configuration;
@@ -477,7 +481,6 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        TechnicalContext.resetScreenContext();
         if (savedActivityName == null || activity == null || !activity.getClass().getCanonicalName().equals(savedActivityName)
                 || activity.getTaskId() == savedActivityTaskId) {
             timeInBackground = -1;

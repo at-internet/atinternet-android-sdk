@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class RichMedia extends BusinessObject {
 
     static final int MAX_DURATION = 86400;
-    private final SparseIntArray DEFAULT_SPARSE_ARRAY = new SparseIntArray();
+    private final SparseIntArray defaultSparseArray = new SparseIntArray();
     private final Runnable refreshRunnable = new Runnable() {
         @Override
         public void run() {
@@ -88,19 +88,24 @@ public abstract class RichMedia extends BusinessObject {
 
     private final MediaPlayer mediaPlayer;
     private ScheduledExecutorService scheduler;
-    private int currentRefreshDurationsSparseArrayIndex, delay, playTimestamp, elapsedTime;
+    private int currentRefreshDurationsSparseArrayIndex;
+    private int delay;
+    private int playTimestamp;
+    private int elapsedTime;
     private ScheduledFuture refreshHandler;
     private SparseIntArray refreshDurationsSparseIntArray;
 
-    String mediaLabel, mediaTheme1, mediaTheme2, mediaTheme3, mediaType, webDomain, linkedContent;
-    int mediaLevel2, duration;
+    String mediaLabel;
+    String mediaTheme1;
+    String mediaTheme2;
+    String mediaTheme3;
+    String mediaType;
+    String webDomain;
+    String linkedContent;
+    int mediaLevel2;
+    int duration;
     BroadcastMode broadcastMode;
     boolean isEmbedded;
-
-
-    MediaPlayer getPlayer() {
-        return mediaPlayer;
-    }
 
     RichMedia(MediaPlayer player) {
         super(player.getTracker());
@@ -113,15 +118,19 @@ public abstract class RichMedia extends BusinessObject {
         playTimestamp = -1;
         elapsedTime = 0;
         currentRefreshDurationsSparseArrayIndex = 0;
-        DEFAULT_SPARSE_ARRAY.append(0, 5);
-        DEFAULT_SPARSE_ARRAY.append(1, 15);
-        DEFAULT_SPARSE_ARRAY.append(5, 30);
-        DEFAULT_SPARSE_ARRAY.append(10, 60);
+        defaultSparseArray.append(0, 5);
+        defaultSparseArray.append(1, 15);
+        defaultSparseArray.append(5, 30);
+        defaultSparseArray.append(10, 60);
 
-        refreshDurationsSparseIntArray = DEFAULT_SPARSE_ARRAY;
+        refreshDurationsSparseIntArray = defaultSparseArray;
         isEmbedded = false;
         webDomain = null;
         linkedContent = null;
+    }
+
+    MediaPlayer getPlayer() {
+        return mediaPlayer;
     }
 
     /***
@@ -401,11 +410,11 @@ public abstract class RichMedia extends BusinessObject {
     public void sendPlay(SparseIntArray refreshDurations) {
         /// Verifications des valeurs de refresh
         if (refreshDurations == null) {
-            refreshDurations = DEFAULT_SPARSE_ARRAY;
+            refreshDurations = defaultSparseArray;
         }
         int length = refreshDurations.size();
         if (length == 0) {
-            refreshDurations = DEFAULT_SPARSE_ARRAY;
+            refreshDurations = defaultSparseArray;
         }
         for (int i = 0; i < length; i++) {
             if (refreshDurations.valueAt(i) < 5) {
@@ -589,11 +598,11 @@ public abstract class RichMedia extends BusinessObject {
     }
 
     private String buildMediaLabel() {
-        String mediaLabel = mediaTheme1 == null ? "" : mediaTheme1 + "::";
-        mediaLabel = mediaTheme2 == null ? mediaLabel : mediaLabel + mediaTheme2 + "::";
-        mediaLabel = mediaTheme3 == null ? mediaLabel : mediaLabel + mediaTheme3 + "::";
+        String label = (mediaTheme1 == null) ? "" : (mediaTheme1 + "::");
+        label = (mediaTheme2 == null) ? label : (label + mediaTheme2 + "::");
+        label = (mediaTheme3 == null) ? label : (label + mediaTheme3 + "::");
 
-        return mediaLabel + this.mediaLabel;
+        return label + this.mediaLabel;
     }
 
     /**

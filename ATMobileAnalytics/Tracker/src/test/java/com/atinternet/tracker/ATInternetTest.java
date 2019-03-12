@@ -25,8 +25,9 @@ package com.atinternet.tracker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,7 +43,7 @@ public class ATInternetTest {
 
     @Test
     public void getOtherTracker() {
-        Tracker tracker = ATInternet.getInstance().getTracker(RuntimeEnvironment.application, "test");
-        assertEquals(tracker, ATInternet.getInstance().getTracker(RuntimeEnvironment.application, "test"));
+        Tracker tracker = ATInternet.getInstance().getTracker(ApplicationProvider.getApplicationContext(), "test");
+        assertEquals(tracker, ATInternet.getInstance().getTracker(ApplicationProvider.getApplicationContext(), "test"));
     }
 }

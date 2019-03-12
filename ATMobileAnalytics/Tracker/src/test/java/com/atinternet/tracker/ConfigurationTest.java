@@ -26,10 +26,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.LinkedHashMap;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,12 +42,12 @@ public class ConfigurationTest extends AbstractTestClass {
 
     @Before
     public void setUp() {
-        defaultConfiguration = new Configuration(RuntimeEnvironment.application);
+        defaultConfiguration = new Configuration(ApplicationProvider.getApplicationContext());
     }
 
     @Test
     public void getDefaultConfigurationTest() {
-        assertEquals(19, defaultConfiguration.size());
+        assertEquals(20, defaultConfiguration.size());
         assertEquals("", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("", defaultConfiguration.get("site"));
@@ -66,6 +67,7 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
         assertEquals("", defaultConfiguration.get("collectDomain"));
         assertEquals(false, defaultConfiguration.get("ignoreLimitedAdTracking"));
+        assertEquals(true, defaultConfiguration.get("sendHitWhenOptOut"));
     }
 
     @Test
@@ -84,7 +86,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
         defaultConfiguration = new Configuration(dictionary);
 
-        assertEquals(19, defaultConfiguration.size());
+        assertEquals(20, defaultConfiguration.size());
         assertEquals("logtest", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("123456", defaultConfiguration.get("site"));
@@ -104,5 +106,6 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
         assertEquals("", defaultConfiguration.get("collectDomain"));
         assertEquals(false, defaultConfiguration.get("ignoreLimitedAdTracking"));
+        assertEquals(true, defaultConfiguration.get("sendHitWhenOptOut"));
     }
 }

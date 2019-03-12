@@ -1,24 +1,24 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * This SDK is licensed under the MIT license (MIT)
+ * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.atinternet.tracker;
 
@@ -85,7 +85,7 @@ public class Tracker {
         nuggad
     }
 
-    private static boolean isTrackerActivityLifeCycleEnabled = false;
+    private static boolean isTrackerActivityLifeCycleEnabled;
 
     private static WeakReference<android.content.Context> appContext;
 
@@ -120,6 +120,74 @@ public class Tracker {
     private MediaPlayers mediaPlayers;
     private MvTestings mvTestings;
     private ECommerce eCommerce;
+
+    /**
+     * Initialisation with default configuration
+     */
+    public Tracker() {
+        try {
+            android.content.Context ctx = ((Application) Class.forName("android.app.ActivityThread")
+                    .getMethod("currentApplication").invoke(null, (Object[]) null));
+            appContext = new WeakReference<>(ctx);
+            configuration = new Configuration(appContext.get());
+            initTracker();
+            if (!LifeCycle.isInitialized) {
+                LifeCycle.initLifeCycle(appContext.get());
+            }
+        } catch (Exception e) {
+            Log.e(ATInternet.TAG, e.toString());
+        }
+    }
+
+    /**
+     * Initialisation with default configuration
+     *
+     * @param context the current Activity context
+     */
+    public Tracker(android.content.Context context) {
+        appContext = new WeakReference<>(context.getApplicationContext());
+        configuration = new Configuration(appContext.get());
+        initTracker();
+        if (!LifeCycle.isInitialized) {
+            LifeCycle.initLifeCycle(appContext.get());
+        }
+    }
+
+    /**
+     * Initialisation with a custom configuration
+     *
+     * @param configuration map that contains new keys/values see TrackerConfigurationKeys
+     */
+    public Tracker(final HashMap<String, Object> configuration) {
+        android.content.Context context;
+        try {
+            context = ((Application) Class.forName("android.app.ActivityThread")
+                    .getMethod("currentApplication").invoke(null, (Object[]) null));
+            appContext = new WeakReference<>(context);
+            this.configuration = new Configuration(configuration);
+            initTracker();
+            if (!LifeCycle.isInitialized) {
+                LifeCycle.initLifeCycle(appContext.get());
+            }
+        } catch (Exception e) {
+            Log.e(ATInternet.TAG, e.toString());
+        }
+    }
+
+    /**
+     * Initialisation with a custom configuration
+     *
+     * @param context       the current Activity context
+     * @param configuration map that contains new keys/values see TrackerConfigurationKeys
+     */
+    public Tracker(android.content.Context context, final HashMap<String, Object> configuration) {
+        appContext = new WeakReference<>(context.getApplicationContext());
+        this.configuration = new Configuration(configuration);
+        initTracker();
+        if (!LifeCycle.isInitialized) {
+            LifeCycle.initLifeCycle(appContext.get());
+        }
+    }
 
     Buffer getBuffer() {
         return buffer;
@@ -163,7 +231,7 @@ public class Tracker {
             defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
             buffer = new Buffer(this);
             dispatcher = new Dispatcher(this);
-            if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+            if ((boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
                 Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
             }
             getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
@@ -322,7 +390,7 @@ public class Tracker {
                 if (callback != null) {
                     String userID = TechnicalContext.getUserId(String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER)), (boolean) configuration.get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING)).execute();
                     if ((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !TechnicalContext.optOutEnabled(getAppContext())) {
-                        callback.receiveUserId(Tool.SHA256(userID));
+                        callback.receiveUserId(Tool.sha256(userID));
                     } else {
                         callback.receiveUserId(userID);
                     }
@@ -734,12 +802,23 @@ public class Tracker {
     /**
      * Enable ignore limited ad tracking
      *
-     * @param enabled    /
+     * @param enabled           /
      * @param setConfigCallback Callback called when the operation has been done
      * @param sync              (optional) perform the operation synchronously (default: false)
      */
     public void setIgnoreLimitedAdTrackingEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
         setConfig(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING, enabled, setConfigCallback, sync);
+    }
+
+    /**
+     * Enable send hit when opt out
+     *
+     * @param enabled           /
+     * @param setConfigCallback Callback called when the operation has been done
+     * @param sync              (optional) perform the operation synchronously (default: false)
+     */
+    public void setSendHitWhenOptOutEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
+        setConfig(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT, enabled, setConfigCallback, sync);
     }
 
     /**
@@ -1002,74 +1081,6 @@ public class Tracker {
             listener.trackerNeedsFirstLaunchApproval("Tracker First Launch");
         }
         return this;
-    }
-
-    /**
-     * Initialisation with default configuration
-     */
-    public Tracker() {
-        try {
-            android.content.Context ctx = ((Application) Class.forName("android.app.ActivityThread")
-                    .getMethod("currentApplication").invoke(null, (Object[]) null));
-            appContext = new WeakReference<>(ctx);
-            configuration = new Configuration(appContext.get());
-            initTracker();
-            if (!LifeCycle.isInitialized) {
-                LifeCycle.initLifeCycle(appContext.get());
-            }
-        } catch (Exception e) {
-            Log.e(ATInternet.TAG, e.toString());
-        }
-    }
-
-    /**
-     * Initialisation with default configuration
-     *
-     * @param context the current Activity context
-     */
-    public Tracker(android.content.Context context) {
-        appContext = new WeakReference<>(context.getApplicationContext());
-        configuration = new Configuration(appContext.get());
-        initTracker();
-        if (!LifeCycle.isInitialized) {
-            LifeCycle.initLifeCycle(appContext.get());
-        }
-    }
-
-    /**
-     * Initialisation with a custom configuration
-     *
-     * @param configuration map that contains new keys/values see TrackerConfigurationKeys
-     */
-    public Tracker(final HashMap<String, Object> configuration) {
-        android.content.Context context;
-        try {
-            context = ((Application) Class.forName("android.app.ActivityThread")
-                    .getMethod("currentApplication").invoke(null, (Object[]) null));
-            appContext = new WeakReference<>(context);
-            this.configuration = new Configuration(configuration);
-            initTracker();
-            if (!LifeCycle.isInitialized) {
-                LifeCycle.initLifeCycle(appContext.get());
-            }
-        } catch (Exception e) {
-            Log.e(ATInternet.TAG, e.toString());
-        }
-    }
-
-    /**
-     * Initialisation with a custom configuration
-     *
-     * @param context       the current Activity context
-     * @param configuration map that contains new keys/values see TrackerConfigurationKeys
-     */
-    public Tracker(android.content.Context context, final HashMap<String, Object> configuration) {
-        appContext = new WeakReference<>(context.getApplicationContext());
-        this.configuration = new Configuration(configuration);
-        initTracker();
-        if (!LifeCycle.isInitialized) {
-            LifeCycle.initLifeCycle(appContext.get());
-        }
     }
 
     /**
@@ -1339,110 +1350,115 @@ public class Tracker {
      * Sends all tracking objects added
      */
     public void dispatch() {
-        if (businessObjects.size() > 0) {
-            ArrayList<BusinessObject> onAppAds = new ArrayList<>();
-            ArrayList<BusinessObject> customObjs = new ArrayList<>();
-
-            ArrayList<BusinessObject> objects = new ArrayList<>();
-            objects.addAll(businessObjects.values());
-
-            ArrayList<BusinessObject> screenObjects = new ArrayList<>();
-            ArrayList<BusinessObject> salesTrackerObjects = new ArrayList<>();
-            ArrayList<BusinessObject> internalSearchObjects = new ArrayList<>();
-            ArrayList<BusinessObject> productsObjects = new ArrayList<>();
-
-            for (BusinessObject businessObject : objects) {
-
-                if (!(businessObject instanceof Product)) {
-                    dispatchObjects(productsObjects, customObjs);
-                }
-
-                // Dispatch onAppAds before sending other object
-                if (!(businessObject instanceof OnAppAd || businessObject instanceof ScreenInfo || businessObject instanceof AbstractScreen || businessObject instanceof InternalSearch || businessObject instanceof Cart || businessObject instanceof Order)
-                        || (businessObject instanceof OnAppAd && ((OnAppAd) businessObject).getAction() == OnAppAd.Action.Touch)) {
-                    dispatchObjects(onAppAds, customObjs);
-                }
-
-                if (businessObject instanceof OnAppAd) {
-                    OnAppAd ad = (OnAppAd) businessObject;
-                    if (ad.getAction() == OnAppAd.Action.View) {
-                        onAppAds.add(ad);
-                    } else {
-                        customObjs.add(businessObject);
-                        dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
-                        customObjs.clear();
-                    }
-                } else if (businessObject instanceof CustomObject || businessObject instanceof NuggAd) {
-                    customObjs.add(businessObject);
-                } else if (businessObject instanceof ScreenInfo) {
-                    screenObjects.add(businessObject);
-                } else if (businessObject instanceof InternalSearch) {
-                    internalSearchObjects.add(businessObject);
-                } else if (businessObject instanceof Product) {
-                    productsObjects.add(businessObject);
-                } else if (businessObject instanceof Order || businessObject instanceof Cart) {
-                    salesTrackerObjects.add(businessObject);
-                } else if (businessObject instanceof AbstractScreen) {
-                    onAppAds.addAll(customObjs);
-                    onAppAds.addAll(screenObjects);
-                    onAppAds.addAll(internalSearchObjects);
-
-                    //Sales tracker
-                    ArrayList<BusinessObject> ordersObjects = new ArrayList<>();
-                    Cart crt = null;
-
-                    for (BusinessObject obj : salesTrackerObjects) {
-                        if (obj instanceof Cart) {
-                            crt = (Cart) obj;
-                        } else {
-                            ordersObjects.add(obj);
-                        }
-                    }
-
-                    if (crt != null && (((AbstractScreen) businessObject).isBasketScreen() || !ordersObjects.isEmpty())) {
-                        onAppAds.add(crt);
-                    }
-
-                    onAppAds.addAll(ordersObjects);
-                    onAppAds.add(businessObject);
-                    dispatcher.dispatch((BusinessObject[]) onAppAds.toArray(new BusinessObject[onAppAds.size()]));
-
-                    screenObjects.clear();
-                    salesTrackerObjects.clear();
-                    internalSearchObjects.clear();
-                    onAppAds.clear();
-                    customObjs.clear();
-                } else {
-                    if (businessObject instanceof Gesture && ((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
-                        onAppAds.addAll(internalSearchObjects);
-                        internalSearchObjects.clear();
-                    }
-                    onAppAds.addAll(customObjs);
-                    onAppAds.add(businessObject);
-                    dispatcher.dispatch((BusinessObject[]) onAppAds.toArray(new BusinessObject[onAppAds.size()]));
-
-                    onAppAds.clear();
-                    customObjs.clear();
-                }
-            }
-
-            dispatchObjects(onAppAds, customObjs);
-            dispatchObjects(productsObjects, customObjs);
-
-            if (!customObjs.isEmpty() || !screenObjects.isEmpty() || !internalSearchObjects.isEmpty() || !salesTrackerObjects.isEmpty()) {
-                customObjs.addAll(screenObjects);
-                customObjs.addAll(internalSearchObjects);
-                customObjs.addAll(salesTrackerObjects);
-                dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
-
-                customObjs.clear();
-                screenObjects.clear();
-                internalSearchObjects.clear();
-                salesTrackerObjects.clear();
-            }
-        } else {
+        if (businessObjects.size() == 0) {
             dispatcher.dispatch();
+            return;
         }
+        ArrayList<BusinessObject> onAppAds = new ArrayList<>();
+        ArrayList<BusinessObject> customObjs = new ArrayList<>();
+
+        ArrayList<BusinessObject> objects = new ArrayList<>();
+        objects.addAll(businessObjects.values());
+
+        ArrayList<BusinessObject> screenObjects = new ArrayList<>();
+        ArrayList<BusinessObject> salesTrackerObjects = new ArrayList<>();
+        ArrayList<BusinessObject> internalSearchObjects = new ArrayList<>();
+        ArrayList<BusinessObject> productsObjects = new ArrayList<>();
+
+        for (BusinessObject businessObject : objects) {
+
+            if (!(businessObject instanceof Product)) {
+                dispatchObjects(productsObjects, customObjs);
+            }
+
+            // Dispatch onAppAds before sending other object
+            if (!isScreenCompatible(businessObject) || (businessObject instanceof OnAppAd && ((OnAppAd) businessObject).getAction() == OnAppAd.Action.Touch)) {
+                dispatchObjects(onAppAds, customObjs);
+            }
+
+            if (businessObject instanceof OnAppAd) {
+                OnAppAd ad = (OnAppAd) businessObject;
+                if (ad.getAction() == OnAppAd.Action.View) {
+                    onAppAds.add(ad);
+                } else {
+                    customObjs.add(businessObject);
+                    dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
+                    customObjs.clear();
+                }
+            } else if (businessObject instanceof CustomObject || businessObject instanceof NuggAd) {
+                customObjs.add(businessObject);
+            } else if (businessObject instanceof ScreenInfo) {
+                screenObjects.add(businessObject);
+            } else if (businessObject instanceof InternalSearch) {
+                internalSearchObjects.add(businessObject);
+            } else if (businessObject instanceof Product) {
+                productsObjects.add(businessObject);
+            } else if (businessObject instanceof Order || businessObject instanceof Cart) {
+                salesTrackerObjects.add(businessObject);
+            } else if (businessObject instanceof AbstractScreen) {
+                onAppAds.addAll(customObjs);
+                onAppAds.addAll(screenObjects);
+                onAppAds.addAll(internalSearchObjects);
+
+                //Sales tracker
+                ArrayList<BusinessObject> ordersObjects = new ArrayList<>();
+                Cart crt = null;
+
+                for (BusinessObject obj : salesTrackerObjects) {
+                    if (obj instanceof Cart) {
+                        crt = (Cart) obj;
+                    } else {
+                        ordersObjects.add(obj);
+                    }
+                }
+
+                if (crt != null && (((AbstractScreen) businessObject).isBasketScreen() || !ordersObjects.isEmpty())) {
+                    onAppAds.add(crt);
+                }
+
+                onAppAds.addAll(ordersObjects);
+                onAppAds.add(businessObject);
+                dispatcher.dispatch((BusinessObject[]) onAppAds.toArray(new BusinessObject[onAppAds.size()]));
+
+                screenObjects.clear();
+                salesTrackerObjects.clear();
+                internalSearchObjects.clear();
+                onAppAds.clear();
+                customObjs.clear();
+            } else {
+                if (businessObject instanceof Gesture && ((Gesture) businessObject).getAction() == Gesture.Action.InternalSearch) {
+                    onAppAds.addAll(internalSearchObjects);
+                    internalSearchObjects.clear();
+                }
+                onAppAds.addAll(customObjs);
+                onAppAds.add(businessObject);
+                dispatcher.dispatch((BusinessObject[]) onAppAds.toArray(new BusinessObject[onAppAds.size()]));
+
+                onAppAds.clear();
+                customObjs.clear();
+            }
+        }
+
+        dispatchObjects(onAppAds, customObjs);
+        dispatchObjects(productsObjects, customObjs);
+
+        if (customObjs.isEmpty() && screenObjects.isEmpty() && internalSearchObjects.isEmpty() && salesTrackerObjects.isEmpty()) {
+            return;
+        }
+
+        customObjs.addAll(screenObjects);
+        customObjs.addAll(internalSearchObjects);
+        customObjs.addAll(salesTrackerObjects);
+        dispatcher.dispatch((BusinessObject[]) customObjs.toArray(new BusinessObject[customObjs.size()]));
+
+        customObjs.clear();
+        screenObjects.clear();
+        internalSearchObjects.clear();
+        salesTrackerObjects.clear();
+    }
+
+    private boolean isScreenCompatible(BusinessObject businessObject) {
+        return businessObject instanceof OnAppAd || businessObject instanceof ScreenInfo || businessObject instanceof AbstractScreen || businessObject instanceof InternalSearch || businessObject instanceof Cart || businessObject instanceof Order;
     }
 
     /***

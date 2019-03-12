@@ -20,11 +20,5 @@
             android:layout_height="wrap_content"
             android:text="first Action" />
 
-        <Button
-            android:id="@+id/goToSecondScreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Go to second screen" />
-
     </LinearLayout>
 </ScrollView>
