@@ -52,7 +52,7 @@ public class TrackerQueueTest extends AbstractTestClass {
     @Test
     public void setEnabledFillQueueFromDatabaseTest() throws NoSuchFieldException, IllegalAccessException {
         TrackerQueue.setEnabledFillQueueFromDatabase(true);
-        boolean result = (Boolean) getAccessibleField(queue, "enabledFillQueueFromDatabase");
+        boolean result = (boolean) getAccessibleField(queue, "enabledFillQueueFromDatabase");
         assertTrue(result);
     }
 }

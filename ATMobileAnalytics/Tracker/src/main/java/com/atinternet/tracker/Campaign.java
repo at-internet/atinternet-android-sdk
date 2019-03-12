@@ -79,7 +79,7 @@ public class Campaign extends ScreenInfo {
                     .apply();
         }
 
-        if (((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE)) || remanentMarketingCampaign == null) {
+        if (((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE)) || remanentMarketingCampaign == null) {
             preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
                     .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
                     .apply();

@@ -231,7 +231,7 @@ public class Tracker {
             defaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
             buffer = new Buffer(this);
             dispatcher = new Dispatcher(this);
-            if ((Boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
+            if ((boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
                 Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
             }
             getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
@@ -808,6 +808,17 @@ public class Tracker {
      */
     public void setIgnoreLimitedAdTrackingEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
         setConfig(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING, enabled, setConfigCallback, sync);
+    }
+
+    /**
+     * Enable send hit when opt out
+     *
+     * @param enabled           /
+     * @param setConfigCallback Callback called when the operation has been done
+     * @param sync              (optional) perform the operation synchronously (default: false)
+     */
+    public void setSendHitWhenOptOutEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
+        setConfig(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT, enabled, setConfigCallback, sync);
     }
 
     /**

@@ -65,7 +65,7 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().put("test", new Param("test", closureValue(Tool.convertToString(array, null))));
         builder = new Builder(tracker);
 
-        ArrayList<String> hits = (ArrayList<String>) builder.build()[0];
+        ArrayList<String> hits = builder.build().first;
         String hit = hits.get(0);
 
         assertTrue(hit.contains("mherr=1"));
@@ -81,7 +81,7 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().put("stc", new Param("stc", closureValue(sb.toString())));
         builder = new Builder(tracker);
 
-        ArrayList<String> hits = (ArrayList<String>) builder.build()[0];
+        ArrayList<String> hits = builder.build().first;
         assertEquals(1, hits.size());
         String hit = hits.get(0);
         assertTrue(hit.contains("mherr=1"));
@@ -103,7 +103,7 @@ public class BuilderTest extends AbstractTestClass {
         buffer.getVolatileParams().put("stc", new Param("stc", closureValue(Tool.convertToString(array, "|")), options));
         builder = new Builder(tracker);
 
-        ArrayList<String> hits = (ArrayList<String>) builder.build()[0];
+        ArrayList<String> hits = builder.build().first;
         assertEquals(5, hits.size());
         assertFalse(hits.get(0).contains("mherr=1"));
         assertFalse(hits.get(1).contains("mherr=1"));
@@ -127,7 +127,7 @@ public class BuilderTest extends AbstractTestClass {
         }
         builder = new Builder(tracker);
 
-        ArrayList<String> hits = (ArrayList<String>) builder.build()[0];
+        ArrayList<String> hits = builder.build().first;
         assertEquals(5, hits.size());
         assertFalse(hits.get(0).contains("mherr=1"));
         assertFalse(hits.get(1).contains("mherr=1"));
@@ -323,7 +323,7 @@ public class BuilderTest extends AbstractTestClass {
                     }});
                 }}, new ParamOption().setAppend(true));
         builder = new Builder(tracker);
-        ArrayList<String> hits = (ArrayList<String>) builder.build()[0];
+        ArrayList<String> hits = builder.build().first;
         assertEquals(1, hits.size());
 
         assertEquals("http://logp.xiti.com/hit.xiti?s=552987&p=page--page2&array=[{\"test\":\"value\"}]&test=value&stc={\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\",\"obj\":{\"subkey\":\"subvalue\"}}", hits.get(0));

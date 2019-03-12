@@ -37,7 +37,6 @@ import java.util.HashMap;
 import androidx.test.core.app.ApplicationProvider;
 
 import static com.atinternet.tracker.Tracker.OfflineMode;
-import static com.atinternet.tracker.Tracker.doNotTrackEnabled;
 import static com.atinternet.tracker.Tracker.getAppContext;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -91,15 +90,15 @@ public class TrackerTest extends AbstractTestClass {
         assertNull(tracker.getUserIdSync());
         tracker.setParam("idclient", "test");
         Builder builder = new Builder(tracker);
-        ((ArrayList<String>) builder.build()[0]).get(0);
+        builder.build().first.get(0);
         assertEquals("test", tracker.getUserIdSync());
 
         tracker.setHashUserIdEnabled(true, null, true);
-        ((ArrayList<String>) builder.build()[0]).get(0);
+        builder.build().first.get(0);
         assertEquals("8652e6fddc89d1392129e8f5ade37e4288406503e5b73bad51619d6e4f3ce50c", tracker.getUserIdSync());
 
         TechnicalContext.optOut(ApplicationProvider.getApplicationContext(), true);
-        ((ArrayList<String>) builder.build()[0]).get(0);
+        builder.build().first.get(0);
         assertEquals("opt-out", tracker.getUserIdSync());
 
     }
@@ -221,6 +220,20 @@ public class TrackerTest extends AbstractTestClass {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 60);
         tracker.setSessionBackgroundDuration(2, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION), 2);
+    }
+
+    @Test
+    public void setIgnoreLimitedAdTrackingEnabledSyncTest() {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING), false);
+        tracker.setIgnoreLimitedAdTrackingEnabled(true, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING), true);
+    }
+
+    @Test
+    public void setSendHitWhenOptOutEnabledSyncTest() {
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT), true);
+        tracker.setSendHitWhenOptOutEnabled(false, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT), false);
     }
 
     @Test
@@ -544,11 +557,11 @@ public class TrackerTest extends AbstractTestClass {
     @Test
     public void optOutTest() {
         Builder builder = new Builder(tracker);
-        assertFalse(((ArrayList<String>) builder.build()[0]).get(0).contains("&idclient=" + "opt-out"));
+        assertFalse(builder.build().first.get(0).contains("&idclient=" + "opt-out"));
         TechnicalContext.optOut(ApplicationProvider.getApplicationContext(), true);
         tracker.setParam("idclient", TechnicalContext.getUserId("androidId", false));
         builder = new Builder(tracker);
-        String url = ((ArrayList<String>) builder.build()[0]).get(0);
+        String url = builder.build().first.get(0);
         String[] components = url.split("&idclient=");
         assertEquals("opt-out", components[1].split("&")[0]);
     }
@@ -557,13 +570,8 @@ public class TrackerTest extends AbstractTestClass {
     public void emptyParameterTest() {
         tracker.setParam("test", "");
         Builder builder = new Builder(tracker);
-        String url = ((ArrayList<String>) builder.build()[0]).get(0);
+        String url = builder.build().first.get(0);
 
         assertTrue(url.contains("&test="));
-    }
-
-    @Test
-    public void doNotTrackEnabledTest() {
-        assertFalse(doNotTrackEnabled());
     }
 }

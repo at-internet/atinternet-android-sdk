@@ -116,7 +116,8 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("sessionBackgroundDuration", DEFAULT_SESSION_BACKGROUND_DURATION)
                         .put("autoSalesTracker", false)
                         .put("collectDomain", "")
-                        .put("ignoreLimitedAdTracking", false);
+                        .put("ignoreLimitedAdTracking", false)
+                        .put("sendHitWhenOptOut", true);
             } catch (JSONException e1) {
                 Log.e(ATInternet.TAG, e1.toString());
             }

@@ -314,7 +314,7 @@ class Builder implements Runnable {
         StringBuilder conf = new StringBuilder();
         int hitConfigChunks = 0;
 
-        boolean isSecure = (Boolean) configuration.get(TrackerConfigurationKeys.SECURE);
+        boolean isSecure = (boolean) configuration.get(TrackerConfigurationKeys.SECURE);
         String log = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG));
         String logSecure = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL));
         String domain = String.valueOf(configuration.get(TrackerConfigurationKeys.DOMAIN));
@@ -358,7 +358,7 @@ class Builder implements Runnable {
         return conf.toString();
     }
 
-    Object[] build() {
+    Pair<ArrayList<String>, String> build() {
         ArrayList<String> hitsList = new ArrayList<>();
 
         String configStr = buildConfiguration();
@@ -366,7 +366,7 @@ class Builder implements Runnable {
 
         if (TextUtils.isEmpty(configStr)) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "Empty configuration", TrackerListener.HitStatus.Failed);
-            return new Object[]{hitsList, oltParameter};
+            return new Pair<>(hitsList, oltParameter);
         }
 
         // Calcul pour connaitre la longueur maximum du hit
@@ -378,9 +378,9 @@ class Builder implements Runnable {
             String collectDomain = String.valueOf(configuration.get(TrackerConfigurationKeys.COLLECT_DOMAIN));
             if (TextUtils.isEmpty(collectDomain)) {
                 Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "invalid collect domain", TrackerListener.HitStatus.Failed);
-                return new Object[]{hitsList, oltParameter};
+                return new Pair<>(hitsList, oltParameter);
             }
-            boolean isSecure = (Boolean) configuration.get(TrackerConfigurationKeys.SECURE);
+            boolean isSecure = (boolean) configuration.get(TrackerConfigurationKeys.SECURE);
             if (isSecure) {
                 configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL)), collectDomain);
             } else {
@@ -516,15 +516,20 @@ class Builder implements Runnable {
         }
         Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, message.toString(), TrackerListener.HitStatus.Success);
 
-        return new Object[]{hitsList, oltParameter};
+        return new Pair<>(hitsList, oltParameter);
     }
 
     @Override
     public void run() {
         // Récupération des éléments issus du build
-        Object[] buildResult = build();
-        ArrayList<String> urls = (ArrayList<String>) buildResult[0];
-        String oltParameter = (String) buildResult[1];
+        Pair<ArrayList<String>, String> buildResult = build();
+        ArrayList<String> urls = buildResult.first;
+        String oltParameter = buildResult.second;
+
+        if (TechnicalContext.optOutEnabled(Tracker.getAppContext()) && !((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT))) {
+            Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "'sendHitWhenOptOut' configuration disabled, hit(s) not sent");
+            return;
+        }
 
         // Envoi du(des) hit(s) construit(s)
         for (String url : urls) {
@@ -667,7 +672,7 @@ class Builder implements Runnable {
             if (key.equals(Hit.HitParam.UserId.stringValue())) {
                 if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
                     strValue = OPT_OUT;
-                } else if (((Boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
+                } else if (((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
                     strValue = Tool.sha256(strValue);
                 }
                 tracker.setInternalUserId(strValue);
@@ -987,7 +992,7 @@ class Dispatcher {
                     .setType(ParamOption.Type.JSON)
                     .setRelativePosition(ParamOption.RelativePosition.last);
             tracker.setParam(Hit.HitParam.JSON.stringValue(), LifeCycle.getMetrics(Tracker.getPreferences()), stcOptions);
-            if ((Boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
+            if ((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)) {
                 tracker.setParam(Hit.HitParam.JSON.stringValue(), CrashDetectionHandler.getCrashInformation(Tracker.getPreferences()), stcOptions);
             }
 
@@ -1019,27 +1024,28 @@ class Dispatcher {
     }
 
     void setIdentifiedVisitorInfos() {
-        if (Boolean.parseBoolean(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR)))) {
-            ParamOption beforeStcPosition = new ParamOption()
-                    .setRelativePosition(ParamOption.RelativePosition.before)
-                    .setRelativeParameterKey(Hit.HitParam.JSON.stringValue());
+        if (!((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR))) {
+            return;
+        }
+        ParamOption beforeStcPosition = new ParamOption()
+                .setRelativePosition(ParamOption.RelativePosition.before)
+                .setRelativeParameterKey(Hit.HitParam.JSON.stringValue());
 
-            ParamOption beforeStcPositionWithEncoding = new ParamOption()
-                    .setRelativePosition(ParamOption.RelativePosition.before)
-                    .setRelativeParameterKey(Hit.HitParam.JSON.stringValue()).setEncode(true);
+        ParamOption beforeStcPositionWithEncoding = new ParamOption()
+                .setRelativePosition(ParamOption.RelativePosition.before)
+                .setRelativeParameterKey(Hit.HitParam.JSON.stringValue()).setEncode(true);
 
-            String visitorNumericID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
-            String visitorCategory = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
-            String visitorTextID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
-            if (visitorNumericID != null) {
-                tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
-            }
-            if (visitorTextID != null) {
-                tracker.setParam(Hit.HitParam.VisitorIdentifierText.stringValue(), visitorTextID, beforeStcPositionWithEncoding);
-            }
-            if (visitorCategory != null) {
-                tracker.setParam(Hit.HitParam.VisitorCategory.stringValue(), visitorCategory, beforeStcPosition);
-            }
+        String visitorNumericID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
+        String visitorCategory = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
+        String visitorTextID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
+        if (visitorNumericID != null) {
+            tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
+        }
+        if (visitorTextID != null) {
+            tracker.setParam(Hit.HitParam.VisitorIdentifierText.stringValue(), visitorTextID, beforeStcPositionWithEncoding);
+        }
+        if (visitorCategory != null) {
+            tracker.setParam(Hit.HitParam.VisitorCategory.stringValue(), visitorCategory, beforeStcPosition);
         }
     }
 }

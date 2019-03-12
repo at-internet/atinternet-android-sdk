@@ -18,14 +18,15 @@
   <component name="ChangeListManager">
     <list default="true" id="cd833247-8517-4f03-afee-79792ecf406b" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestApp/TestApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TestApp/TestApp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestApp/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TestApp/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestApp/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TestApp/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracker/Tracker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/Tracker.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/core.manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/core.manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/BuilderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/BuilderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -104,10 +105,10 @@
         <counts>
           <entry key="class" value="4" />
           <entry key="exec" value="1" />
-          <entry key="gradle" value="12" />
+          <entry key="gradle" value="13" />
           <entry key="html" value="1" />
-          <entry key="java" value="244" />
-          <entry key="json" value="1" />
+          <entry key="java" value="249" />
+          <entry key="json" value="2" />
           <entry key="properties" value="3" />
           <entry key="xml" value="8" />
         </counts>
@@ -115,10 +116,10 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="4" />
-          <entry key="Groovy" value="12" />
+          <entry key="Groovy" value="13" />
           <entry key="HTML" value="1" />
-          <entry key="JAVA" value="244" />
-          <entry key="JSON" value="1" />
+          <entry key="JAVA" value="249" />
+          <entry key="JSON" value="2" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="Properties" value="3" />
           <entry key="XML" value="8" />
@@ -127,8 +128,8 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="197" />
-          <entry key="java" value="4293" />
-          <entry key="json" value="3" />
+          <entry key="java" value="5000" />
+          <entry key="json" value="6" />
           <entry key="properties" value="4" />
           <entry key="xml" value="128" />
         </counts>
@@ -136,8 +137,8 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="197" />
-          <entry key="JAVA" value="4293" />
-          <entry key="JSON" value="3" />
+          <entry key="JAVA" value="5000" />
+          <entry key="JSON" value="6" />
           <entry key="Properties" value="4" />
           <entry key="XML" value="128" />
         </counts>
@@ -146,20 +147,80 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="20" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="287">
+              <caret line="23" column="37" lean-forward="true" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/SecondActivity.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
+            <state relative-caret-position="250">
+              <caret line="101" column="75" selection-start-line="101" selection-start-column="75" selection-end-line="101" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="191">
+              <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/BuilderTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="362">
+              <caret line="325" column="55" selection-start-line="325" selection-start-column="55" selection-end-line="325" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="636">
+              <caret line="174" column="22" selection-start-line="174" selection-start-column="5" selection-end-line="174" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="321">
+              <caret line="119" column="47" selection-start-line="119" selection-start-column="30" selection-end-line="119" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="759">
+              <caret line="151" column="73" selection-start-line="151" selection-start-column="56" selection-end-line="151" selection-end-column="73" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="748">
+              <caret line="172" selection-start-line="172" selection-end-line="172" />
             </state>
           </provider>
         </entry>
@@ -167,8 +228,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="1009" column="64" lean-forward="true" selection-start-line="1009" selection-start-column="64" selection-end-line="1009" selection-end-column="64" />
+            <state relative-caret-position="2070">
+              <caret line="201" column="24" lean-forward="true" selection-start-line="201" selection-start-column="24" selection-end-line="201" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3775#3776#0" expanded="true" />
@@ -209,28 +270,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="479" column="5" selection-start-line="479" selection-start-column="5" selection-end-line="479" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ATInternet.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="319" column="36" selection-start-line="319" selection-start-column="36" selection-end-line="319" selection-end-column="36" />
+            <state relative-caret-position="567">
+              <caret line="820" column="64" selection-start-line="820" selection-start-column="64" selection-end-line="820" selection-end-column="64" />
               <folding>
                 <element signature="docComment;class#Tracker#0" />
                 <element signature="e#1787#1837#0" />
@@ -245,6 +288,8 @@
                 <element signature="e#2386#2467#0" />
                 <element signature="e#2492#2536#0" />
                 <element signature="e#2492#2585#0" />
+                <element signature="e#6391#6392#0" expanded="true" />
+                <element signature="e#6420#6421#0" expanded="true" />
                 <element signature="e#45534#45585#0" />
                 <element signature="e#45534#50302#0" />
                 <element signature="e#50308#50628#0" />
@@ -253,42 +298,6 @@
                 <element signature="e#50835#50902#0" />
                 <element signature="e#50835#51032#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Screen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1230">
-              <caret line="103" column="36" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Gesture.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4170">
-              <caret line="317" column="35" selection-start-line="317" selection-start-column="35" selection-end-line="317" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publisher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3300">
-              <caret line="259" column="52" selection-start-line="259" selection-start-column="52" selection-end-line="259" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/SelfPromotion.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1800">
-              <caret line="149" column="52" selection-start-line="149" selection-start-column="52" selection-end-line="149" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -305,17 +314,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>custom</find>
-      <find>getI</find>
-      <find>refre</find>
-      <find>Local</find>
-      <find>Locale</find>
-      <find>2.</find>
-      <find>Locale.</find>
-      <find>Locale.getDefault</find>
-      <find>jacocoTestReport</find>
-      <find>/* This SDK is licensed under the MIT license (MIT) Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */</find>
-      <find>RuntimeEnvironment.systemContext</find>
       <find>RuntimeEnvironment.application</find>
       <find>.Lo</find>
       <find>logger</find>
@@ -335,12 +333,24 @@
       <find>TEch</find>
       <find>onac</find>
       <find>dispatc</find>
+      <find>dispa</find>
+      <find>”</find>
+      <find>build</find>
+      <find>getcon</find>
+      <find>tracker.getConfi</find>
+      <find>setsi</find>
+      <find>build(</find>
+      <find>run(</find>
+      <find>(boolean)</find>
+      <find>cleanAll</find>
+      <find>cleara</find>
     </findStrings>
     <replaceStrings>
       <replace>/*  * This SDK is licensed under the MIT license (MIT)  * Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)  *   * Permission is hereby granted, free of charge, to any person obtaining a copy  * of this software and associated documentation files (the &quot;Software&quot;), to deal  * in the Software without restriction, including without limitation the rights  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  * copies of the Software, and to permit persons to whom the Software is  * furnished to do so, subject to the following conditions:  *  * The above copyright notice and this permission notice shall be included in all  * copies or substantial portions of the Software.  *  * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  * SOFTWARE.  */</replace>
       <replace>RuntimeEnvironment.systemContext</replace>
       <replace>RuntimeEnvironment.application</replace>
       <replace>ApplicationProvider.getApplicationContext()</replace>
+      <replace>&quot;</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/SmartTracker/src/main/java/com/atinternet/tracker</dir>
@@ -4136,10 +4146,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ATRelativeLayout.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/AbstractScreen.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Aisle.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/BusinessObject.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Cart.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Context.java" />
@@ -4156,7 +4162,6 @@
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/OrderCustomVars.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ParamOption.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Product.java" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/AddProduct.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/AddProducts.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ecommerce/CartCreation.java" />
@@ -4170,13 +4175,11 @@
         <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerQueueTest.java" />
         <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/OfflineTest.java" />
         <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/StorageTest.java" />
-        <option value="$PROJECT_DIR$/Tracker/core.manifest.json" />
         <option value="$PROJECT_DIR$/TestApp/build.gradle" />
         <option value="$PROJECT_DIR$/Tracker/build.gradle" />
         <option value="$PROJECT_DIR$/TestApp/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/TestApp/src/main/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/TestApp/src/main/res/layout/second_activity.xml" />
-        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/RichMedia.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Screen.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Gesture.java" />
@@ -4184,9 +4187,16 @@
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/SelfPromotion.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/ATInternet.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/CoreFeatures.java" />
+        <option value="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/SecondActivity.java" />
+        <option value="$PROJECT_DIR$/Tracker/core.manifest.json" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/BuilderTest.java" />
+        <option value="$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java" />
         <option value="$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java" />
         <option value="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java" />
-        <option value="$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/SecondActivity.java" />
       </list>
     </option>
   </component>
@@ -4215,58 +4225,6 @@
             <path>
               <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
               <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="atinternet" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="res" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="TestApp" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="res" type="462c0819:PsiDirectoryNode" />
-              <item name="layout" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
             <path>
@@ -4296,6 +4254,30 @@
               <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tracker" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ATMobileAnalytics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ATMobileAnalytics" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="Tracker" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="tracker" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -4647,10 +4629,10 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="800" extended-state="6" />
+    <frame x="0" y="-1057" width="1920" height="1057" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21387696" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15921193" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Build Variants" order="3" side_tool="true" />
@@ -4661,16 +4643,16 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3109489" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3270073" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39915073" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.31678832" />
       <window_info anchor="bottom" id="Android Profiler" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50061053" side_tool="true" weight="0.32771084" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="10" sideWeight="0.4993895" visible="true" weight="0.027737226" />
+      <window_info anchor="bottom" id="Logcat" order="10" sideWeight="0.4993895" weight="0.485138" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4993895" weight="0.31104034" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4993895" visible="true" weight="0.31104034" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -4685,6 +4667,18 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java</url>
+          <line>672</line>
+          <properties />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
@@ -4731,27 +4725,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTesting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="134" column="43" selection-start-line="134" selection-start-column="43" selection-end-line="134" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/MvTestingVars.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="49" column="14" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/NuggAd.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/OnAppAd.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="395">
@@ -4777,13 +4750,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="207">
           <caret line="70" column="5" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="150" column="5" selection-start-line="150" selection-start-column="5" selection-end-line="150" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -4866,13 +4832,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.atinternet/Tracker/2.11.3/c86878af7100abb28b7ce1f2807f2a08232dbdd3/Tracker-2.11.3-sources.jar!/com/atinternet/tracker/ECommerce.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="592">
@@ -4915,23 +4874,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1088">
-          <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/SenderTest.java" />
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="172" selection-start-line="172" selection-end-line="172" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Publishers.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -5041,10 +4986,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/SecondActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="172" selection-start-line="172" selection-end-line="172" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/core.manifest.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="636">
+          <caret line="174" column="22" selection-start-line="174" selection-start-column="5" selection-end-line="174" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Configuration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="119" column="47" selection-start-line="119" selection-start-column="30" selection-end-line="119" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/TrackerConfigurationKeys.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="759">
+          <caret line="151" column="73" selection-start-line="151" selection-start-column="56" selection-end-line="151" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Tracker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="319" column="36" selection-start-line="319" selection-start-column="36" selection-end-line="319" selection-end-column="36" />
+        <state relative-caret-position="567">
+          <caret line="820" column="64" selection-start-line="820" selection-start-column="64" selection-end-line="820" selection-end-column="64" />
           <folding>
             <element signature="docComment;class#Tracker#0" />
             <element signature="e#1787#1837#0" />
@@ -5059,6 +5039,8 @@
             <element signature="e#2386#2467#0" />
             <element signature="e#2492#2536#0" />
             <element signature="e#2492#2585#0" />
+            <element signature="e#6391#6392#0" expanded="true" />
+            <element signature="e#6420#6421#0" expanded="true" />
             <element signature="e#45534#45585#0" />
             <element signature="e#45534#50302#0" />
             <element signature="e#50308#50628#0" />
@@ -5070,10 +5052,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/ConfigurationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="101" column="75" selection-start-line="101" selection-start-column="75" selection-end-line="101" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/BuilderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="325" column="55" selection-start-line="325" selection-start-column="55" selection-end-line="325" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tracker/src/test/java/com/atinternet/tracker/TrackerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Tracker/src/main/java/com/atinternet/tracker/Core.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="1009" column="64" lean-forward="true" selection-start-line="1009" selection-start-column="64" selection-end-line="1009" selection-end-column="64" />
+        <state relative-caret-position="2070">
+          <caret line="201" column="24" lean-forward="true" selection-start-line="201" selection-start-column="24" selection-end-line="201" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3775#3776#0" expanded="true" />
@@ -5114,15 +5120,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestApp/src/main/java/com/atinternet/SecondActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
+        <state relative-caret-position="287">
+          <caret line="23" column="37" lean-forward="true" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

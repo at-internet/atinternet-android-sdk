@@ -146,6 +146,11 @@ public final class TrackerConfigurationKeys {
      */
     public static final String IGNORE_LIMITED_AD_TRACKING = "ignoreLimitedAdTracking";
 
+    /**
+     * Constant for send Hit When Opt-Out
+     */
+    public static final String SEND_HIT_WHEN_OPT_OUT = "sendHitWhenOptOut";
+
     private TrackerConfigurationKeys() {
         throw new IllegalStateException("Utility class");
     }
