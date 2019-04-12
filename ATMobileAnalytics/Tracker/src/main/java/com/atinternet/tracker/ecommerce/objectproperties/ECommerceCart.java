@@ -36,8 +36,8 @@ public class ECommerceCart extends RequiredPropertiesDataObject {
         propertiesPrefix.put("creation_utc", "d");
 
         /// FLOAT
-        propertiesPrefix.put("turnoverTaxIncluded", "f");
-        propertiesPrefix.put("turnoverTaxFree", "f");
+        propertiesPrefix.put("turnovertaxincluded", "f");
+        propertiesPrefix.put("turnovertaxfree", "f");
 
         /// LONG
         propertiesPrefix.put("quantity", "n");

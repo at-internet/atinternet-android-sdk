@@ -67,8 +67,8 @@ public class AddProduct extends Event {
             int quantity = Utility.parseIntFromString(String.valueOf(product.get("n:quantity")));
             ccc.set("id", String.valueOf(cart.get("s:id")));
             ccc.set("currency", String.valueOf(product.get("s:currency")));
-            ccc.set("turnoverTaxIncluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxIncluded"))) * quantity);
-            ccc.set("turnoverTaxFree", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxFree"))) * quantity);
+            ccc.set("turnovertaxincluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxincluded"))) * quantity);
+            ccc.set("turnovertaxfree", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxfree"))) * quantity);
             ccc.set("quantity", quantity);
             ccc.set("nbDistinctProduct", 1);
             generatedEvents.add(cc);

@@ -69,7 +69,7 @@ public class DisplayCart extends Event {
 
             for (ECommerceProduct p : products) {
                 String stProductId;
-                Object name = p.get("s:name");
+                Object name = p.get("s:$");
                 if (name != null) {
                     stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {
@@ -78,8 +78,8 @@ public class DisplayCart extends Event {
 
                 com.atinternet.tracker.Product stProduct = stCart.Products().add(stProductId)
                         .setQuantity(Utility.parseIntFromString(String.valueOf(p.get("n:quantity"))))
-                        .setUnitPriceTaxIncluded(Utility.parseDoubleFromString(String.valueOf(p.get("f:priceTaxIncluded"))))
-                        .setUnitPriceTaxFree(Utility.parseDoubleFromString(String.valueOf(p.get("f:priceTaxFree"))));
+                        .setUnitPriceTaxIncluded(Utility.parseDoubleFromString(String.valueOf(p.get("f:pricetaxincluded"))))
+                        .setUnitPriceTaxFree(Utility.parseDoubleFromString(String.valueOf(p.get("f:pricetaxfree"))));
 
                 Object stCategory = p.get("s:category1");
                 if (stCategory != null) {

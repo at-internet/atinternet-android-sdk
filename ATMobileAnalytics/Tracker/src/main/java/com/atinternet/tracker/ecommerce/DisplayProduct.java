@@ -67,7 +67,7 @@ public class DisplayProduct extends Event {
             for (ECommerceProduct p : products) {
                 /// SALES TRACKER
                 String stProductId;
-                Object name = p.get("s:name");
+                Object name = p.get("s:$");
                 if (name != null) {
                     stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {

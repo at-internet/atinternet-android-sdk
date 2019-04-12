@@ -124,21 +124,21 @@ public class TransactionConfirmation extends Event {
 
         /// SALES TRACKER
         if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
-            double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxIncluded")));
-            double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxFree")));
+            double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
+            double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
 
             String[] codes = new String[promotionalCodes.size()];
             promotionalCodes.toArray(codes);
-            tracker.Orders().add(String.valueOf(transaction.get("s:id")), Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnoverTaxIncluded"))))
+            tracker.Orders().add(String.valueOf(transaction.get("s:id")), Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
                     .setStatus(3).setPaymentMethod(0).setConfirmationRequired(false).setNewCustomer(Utility.parseBooleanFromString(String.valueOf(customer.get("b:new"))))
-                    .Delivery().set(Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costTaxFree"))), Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costTaxIncluded"))), String.valueOf(shipping.get("s:delivery")))
+                    .Delivery().set(Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxfree"))), Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxincluded"))), String.valueOf(shipping.get("s:delivery")))
                     .Amount().set(turnoverTaxFree, turnoverTaxIncluded, turnoverTaxIncluded - turnoverTaxFree)
                     .Discount().setPromotionalCode(Utility.stringJoin('|', codes));
 
             com.atinternet.tracker.Cart stCart = tracker.Cart().set(String.valueOf(cart.get("s:id")));
             for (ECommerceProduct p : products) {
                 String stProductId;
-                Object name = p.get("s:name");
+                Object name = p.get("s:$");
                 if (name != null) {
                     stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {
@@ -147,8 +147,8 @@ public class TransactionConfirmation extends Event {
 
                 com.atinternet.tracker.Product stProduct = stCart.Products().add(stProductId)
                         .setQuantity(Utility.parseIntFromString(String.valueOf(p.get("n:quantity"))))
-                        .setUnitPriceTaxIncluded(Utility.parseDoubleFromString(String.valueOf(p.get("f:priceTaxIncluded"))))
-                        .setUnitPriceTaxFree(Utility.parseDoubleFromString(String.valueOf(p.get("f:priceTaxFree"))));
+                        .setUnitPriceTaxIncluded(Utility.parseDoubleFromString(String.valueOf(p.get("f:pricetaxincluded"))))
+                        .setUnitPriceTaxFree(Utility.parseDoubleFromString(String.valueOf(p.get("f:pricetaxfree"))));
 
                 Object stCategory = p.get("s:category1");
                 if (stCategory != null) {
