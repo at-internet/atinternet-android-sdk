@@ -670,10 +670,12 @@ class Builder implements Runnable {
             String key = p.getKey();
 
             if (key.equals(Hit.HitParam.UserId.stringValue())) {
-                if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
-                    strValue = OPT_OUT;
-                } else if (((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
-                    strValue = Tool.sha256(strValue);
+                if (!strValue.toLowerCase().equals(OPT_OUT)) {
+                    if (TechnicalContext.optOutEnabled(Tracker.getAppContext())) {
+                        strValue = OPT_OUT;
+                    } else if (((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID))) {
+                        strValue = Tool.sha256(strValue);
+                    }
                 }
                 tracker.setInternalUserId(strValue);
             } else if (key.equals(Hit.HitParam.Referrer.stringValue())) {
@@ -1109,15 +1111,15 @@ final class TrackerQueue extends LinkedBlockingQueue<Runnable> {
 class TechnicalContext {
 
     private static final int RETRY_GET_ADVERTISING_COUNT = 3;
-    private static final String ANDROID_ID_KEY = "androidId";
-    private static final String UUID_KEY = "UUID";
+    private static final String ANDROID_ID_KEY = "androidid";
+    private static final String ADVERTISING_ID_KEY = "advertisingid";
     private static String screenName = "";
     private static int level2 = -1;
 
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.12.0";
+            return "2.12.1";
         }
     };
 
@@ -1396,11 +1398,15 @@ class TechnicalContext {
 
                 if (preferences.getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false)) {
                     return "opt-out";
-                } else if (identifier.equals(ANDROID_ID_KEY)) {
+                }
+
+                String idType = TextUtils.isEmpty(identifier) ? "" : identifier.toLowerCase();
+
+                if (idType.equals(ANDROID_ID_KEY)) {
                     return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-                } else if (identifier.equals(UUID_KEY)) {
-                    return getIdentifierUUID(preferences);
-                } else {
+                }
+
+                if (idType.equals(ADVERTISING_ID_KEY)) {
                     try {
                         com.google.android.gms.ads.identifier.AdvertisingIdClient.Info adInfo = null;
                         int count = 0;
@@ -1422,6 +1428,8 @@ class TechnicalContext {
                         return "";
                     }
                 }
+
+                return getIdentifierUUID(preferences);
             }
         };
     }

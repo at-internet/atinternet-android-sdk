@@ -33,7 +33,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.12.0"
+version = "2.12.1"
 
 install {
     repositories.mavenInstaller {
@@ -76,7 +76,7 @@ bintray {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.google.android.gms:play-services-ads:17.1.3'
+    compileOnly 'com.google.android.gms:play-services-ads:17.2.0'
     testImplementation 'org.robolectric:robolectric:4.2'
     testImplementation 'androidx.test:core:1.1.0'
     testImplementation 'junit:junit:4.12'
