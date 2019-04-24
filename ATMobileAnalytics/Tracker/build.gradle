@@ -134,12 +134,6 @@ task createDelivery {
             include '*.manifest.json'
             into destination
         }
-        task(createZipForAnalyser, type: Zip) {
-            from destination
-            include 'Tracker.jar'
-            archiveName 'ATInternet_Android_SDK_' + version + '.zip'
-            destinationDir project.rootDir
-        }.execute()
     }
 }
 
