@@ -26,21 +26,23 @@ import com.atinternet.tracker.Event;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ProductAwaitingPayment extends Event {
 
-    private ECommerceProduct product;
+    private List<ECommerceProduct> products;
     private ECommerceCart cart;
 
     ProductAwaitingPayment() {
         super("product.awaiting_payment");
+        products = new ArrayList<>();
         cart = new ECommerceCart();
-        product = new ECommerceProduct();
     }
 
-    public ECommerceProduct Product() {
-        return product;
+    public List<ECommerceProduct> Products() {
+        return products;
     }
 
 
@@ -50,8 +52,21 @@ public class ProductAwaitingPayment extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("product", product.getAll());
-        data.put("cart", cart.getAll());
-        return super.getData();
+        return data;
+    }
+
+    @Override
+    protected List<Event> getAdditionalEvents() {
+        List<Event> generatedEvents = super.getAdditionalEvents();
+
+        for (ECommerceProduct p : products) {
+            /// SALES INSIGHTS
+            ProductAwaitingPayment pap = new ProductAwaitingPayment();
+            pap.data.put("product", p.getAll());
+            pap.data.put("cart", cart.getAll());
+            generatedEvents.add(pap);
+        }
+
+        return generatedEvents;
     }
 }
