@@ -23,11 +23,13 @@
 package com.atinternet.tracker;
 
 import com.atinternet.tracker.ecommerce.AddProducts;
+import com.atinternet.tracker.ecommerce.CartAwaitingPayments;
 import com.atinternet.tracker.ecommerce.DeliveryCheckouts;
 import com.atinternet.tracker.ecommerce.DisplayCarts;
-import com.atinternet.tracker.ecommerce.DisplayProducts;
 import com.atinternet.tracker.ecommerce.DisplayPageProducts;
+import com.atinternet.tracker.ecommerce.DisplayProducts;
 import com.atinternet.tracker.ecommerce.PaymentCheckouts;
+import com.atinternet.tracker.ecommerce.ProductAwaitingPayments;
 import com.atinternet.tracker.ecommerce.RemoveProducts;
 import com.atinternet.tracker.ecommerce.TransactionConfirmations;
 import com.atinternet.tracker.ecommerce.UpdateCarts;
@@ -45,6 +47,8 @@ public class ECommerce {
     private UpdateCarts updateCarts;
     private DeliveryCheckouts deliveryCheckouts;
     private PaymentCheckouts paymentCheckouts;
+    private ProductAwaitingPayments productAwaitingPayments;
+    private CartAwaitingPayments cartAwaitingPayments;
     private TransactionConfirmations transactionConfirmations;
 
     ECommerce(Tracker tracker) {
@@ -160,6 +164,28 @@ public class ECommerce {
             paymentCheckouts = new PaymentCheckouts(events);
         }
         return paymentCheckouts;
+    }
+
+    /***
+     * Create ProductAwaitingPayments helper
+     * @return ProductAwaitingPayments
+     */
+    public ProductAwaitingPayments ProductAwaitingPayments() {
+        if (productAwaitingPayments == null) {
+            productAwaitingPayments = new ProductAwaitingPayments(events, tracker);
+        }
+        return productAwaitingPayments;
+    }
+
+    /***
+     * Create CartAwaitingPayments helper
+     * @return CartAwaitingPayments
+     */
+    public CartAwaitingPayments CartAwaitingPayments() {
+        if (cartAwaitingPayments == null) {
+            cartAwaitingPayments = new CartAwaitingPayments(events, tracker);
+        }
+        return cartAwaitingPayments;
     }
 
     /***

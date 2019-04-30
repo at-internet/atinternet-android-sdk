@@ -28,7 +28,6 @@ import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
-import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCustomer;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommercePayment;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceShipping;
@@ -44,11 +43,9 @@ public class TransactionConfirmation extends Event {
     private Screen screen;
 
     private ECommerceCart cart;
-    private List<String> promotionalCodes;
     private ECommerceTransaction transaction;
     private ECommerceShipping shipping;
     private ECommercePayment payment;
-    private ECommerceCustomer customer;
     private List<ECommerceProduct> products;
 
 
@@ -57,20 +54,14 @@ public class TransactionConfirmation extends Event {
         this.tracker = tracker;
         this.screen = screen;
         cart = new ECommerceCart();
-        promotionalCodes = new ArrayList<>();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
         payment = new ECommercePayment();
-        customer = new ECommerceCustomer();
         products = new ArrayList<>();
     }
 
     public ECommerceCart Cart() {
         return cart;
-    }
-
-    public List<String> PromotionalCodes() {
-        return promotionalCodes;
     }
 
     public ECommerceTransaction Transaction() {
@@ -85,10 +76,6 @@ public class TransactionConfirmation extends Event {
         return payment;
     }
 
-    public ECommerceCustomer Customer() {
-        return customer;
-    }
-
     public List<ECommerceProduct> Products() {
         return products;
     }
@@ -97,10 +84,8 @@ public class TransactionConfirmation extends Event {
     protected Map<String, Object> getData() {
         data.put("cart", cart.getAll());
         data.put("payment", payment.getAll());
-        data.put("customer", customer.getAll());
         data.put("shipping", shipping.getAll());
         data.put("transaction", transaction.getAll());
-        data.put("a:s:promotionalCode", promotionalCodes);
         return super.getData();
     }
 
@@ -127,10 +112,11 @@ public class TransactionConfirmation extends Event {
             double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
             double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
 
-            String[] codes = new String[promotionalCodes.size()];
-            promotionalCodes.toArray(codes);
+            List<String> promoCodes = (List<String>) transaction.get("a:s:promocode");
+            String[] codes = new String[promoCodes.size()];
+            promoCodes.toArray(codes);
             tracker.Orders().add(String.valueOf(transaction.get("s:id")), Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
-                    .setStatus(3).setPaymentMethod(0).setConfirmationRequired(false).setNewCustomer(Utility.parseBooleanFromString(String.valueOf(customer.get("b:new"))))
+                    .setStatus(3).setPaymentMethod(0).setConfirmationRequired(false).setNewCustomer(Utility.parseBooleanFromString(String.valueOf(transaction.get("b:firstpurchase"))))
                     .Delivery().set(Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxfree"))), Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxincluded"))), String.valueOf(shipping.get("s:delivery")))
                     .Amount().set(turnoverTaxFree, turnoverTaxIncluded, turnoverTaxIncluded - turnoverTaxFree)
                     .Discount().setPromotionalCode(Utility.stringJoin('|', codes));

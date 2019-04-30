@@ -20,14 +20,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce.objectproperties;
+package com.atinternet.tracker.ecommerce;
 
-import com.atinternet.tracker.RequiredPropertiesDataObject;
+import com.atinternet.tracker.Event;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
-public class ECommerceCustomer extends RequiredPropertiesDataObject {
+import java.util.Map;
 
-    public ECommerceCustomer() {
-        super();
-        propertiesPrefix.put("new", "b");
+public class ProductAwaitingPayment extends Event {
+
+    private ECommerceProduct product;
+    private ECommerceCart cart;
+
+    ProductAwaitingPayment() {
+        super("product.awaiting_payment");
+        cart = new ECommerceCart();
+        product = new ECommerceProduct();
+    }
+
+    public ECommerceProduct Product() {
+        return product;
+    }
+
+
+    public ECommerceCart Cart() {
+        return cart;
+    }
+
+    @Override
+    protected Map<String, Object> getData() {
+        data.put("product", product.getAll());
+        data.put("cart", cart.getAll());
+        return super.getData();
     }
 }

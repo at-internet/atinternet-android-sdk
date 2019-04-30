@@ -20,17 +20,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce.objectproperties;
+package com.atinternet.tracker.ecommerce;
 
-import com.atinternet.tracker.RequiredPropertiesDataObject;
+import com.atinternet.tracker.Events;
+import com.atinternet.tracker.Tracker;
 
-public class ECommerceTransaction extends RequiredPropertiesDataObject {
+public class ProductAwaitingPayments extends AbstractEventsHelper {
 
-    public ECommerceTransaction() {
-        super();
-        /// STRING
-        propertiesPrefix.put("id", "s");
-        propertiesPrefix.put("firstpurchase", "b");
-        propertiesPrefix.put("promocode", "a:s");
+    private Tracker tracker;
+
+    public ProductAwaitingPayments(Events events, Tracker tracker) {
+        super(events);
+        this.tracker = tracker;
+    }
+
+    public ProductAwaitingPayment add() {
+        ProductAwaitingPayment pap = new ProductAwaitingPayment();
+        events.add(pap);
+        return pap;
     }
 }
