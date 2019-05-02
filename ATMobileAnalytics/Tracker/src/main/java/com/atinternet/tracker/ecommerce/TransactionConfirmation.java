@@ -82,10 +82,18 @@ public class TransactionConfirmation extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        data.put("payment", payment.getAll());
-        data.put("shipping", shipping.getAll());
-        data.put("transaction", transaction.getAll());
+        if (!cart.isEmpty()) {
+            data.put("cart", cart.getAll());
+        }
+        if (!payment.isEmpty()) {
+            data.put("payment", payment.getAll());
+        }
+        if (!shipping.isEmpty()) {
+            data.put("shipping", shipping.getAll());
+        }
+        if (!transaction.isEmpty()) {
+            data.put("transaction", transaction.getAll());
+        }
         return super.getData();
     }
 
@@ -103,7 +111,9 @@ public class TransactionConfirmation extends Event {
             ProductPurchased pp = new ProductPurchased();
             pp.Cart().set("id", String.valueOf(cart.get("s:id")));
             pp.Transaction().set("id", String.valueOf(transaction.get("s:id")));
-            pp.Product().setAll(p.getAll());
+            if (!p.isEmpty()) {
+                pp.Product().setAll(p.getAll());
+            }
             generatedEvents.add(pp);
         }
 

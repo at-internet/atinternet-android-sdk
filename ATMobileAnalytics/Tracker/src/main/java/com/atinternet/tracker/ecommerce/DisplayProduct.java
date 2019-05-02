@@ -59,7 +59,9 @@ public class DisplayProduct extends Event {
         for (ECommerceProduct p : products) {
             /// SALES INSIGHTS
             DisplayProduct dp = new DisplayProduct(tracker);
-            dp.data.put("product", p.getAll());
+            if (!p.isEmpty()) {
+                dp.data.put("product", p.getAll());
+            }
             generatedEvents.add(dp);
         }
 

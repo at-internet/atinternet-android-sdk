@@ -50,8 +50,12 @@ public class CartConfirmation extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        data.put("transaction", transaction.getAll());
+        if (!cart.isEmpty()) {
+            data.put("cart", cart.getAll());
+        }
+        if (!transaction.isEmpty()) {
+            data.put("transaction", transaction.getAll());
+        }
         return super.getData();
     }
 }

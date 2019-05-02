@@ -7,11 +7,6 @@ import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.ecommerce.CartAwaitingPayment;
-import com.atinternet.tracker.ecommerce.ProductAwaitingPayment;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tracker.setDefaultListener();
         tracker.setSiteId(552987, null, true);
         tracker.setLog("logp", null, true);
-        tracker.ECommerce().setCollectDomain("collect-euw1", null, true);
+        tracker.ECommerce().setCollectDomain("logp", null, true);
     }
 
     @Override
@@ -36,20 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.firstAction:
                 // add action
-                CartAwaitingPayment cap = tracker.ECommerce().CartAwaitingPayments().add();
-                cap.Cart()
-                        .set("id", "test")
-                        .set("currency", "test")
-                        .set("turnovertaxincluded", 54.9);
-                cap.Transaction()
-                        .set("promocode", new ArrayList<>(Arrays.asList("xyz", "abc")))
-                        .set("firstpurchase", true);
-                ProductAwaitingPayment pap = tracker.ECommerce().ProductAwaitingPayments().add();
-                pap.Cart().set("id", "test");
-                pap.Product()
-                        .set("id", "toto")
-                        .set("$", "name");
-                tracker.Events().send();
                 break;
             case R.id.goToSecondScreen:
                 startActivity(new Intent(this, SecondActivity.class));

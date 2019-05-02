@@ -62,8 +62,12 @@ public class ProductAwaitingPayment extends Event {
         for (ECommerceProduct p : products) {
             /// SALES INSIGHTS
             ProductAwaitingPayment pap = new ProductAwaitingPayment();
-            pap.data.put("product", p.getAll());
-            pap.data.put("cart", cart.getAll());
+            if (!p.isEmpty()) {
+                pap.data.put("product", p.getAll());
+            }
+            if (!cart.isEmpty()) {
+                pap.data.put("cart", cart.getAll());
+            }
             generatedEvents.add(pap);
         }
 
