@@ -41,6 +41,6 @@ public class ECommerceCart extends RequiredPropertiesDataObject {
 
         /// LONG
         propertiesPrefix.put("quantity", "n");
-        propertiesPrefix.put("nbDistinctProduct", "n");
+        propertiesPrefix.put("nbdistinctproduct", "n");
     }
 }

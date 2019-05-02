@@ -74,7 +74,7 @@ public class AddProduct extends Event {
             ccc.set("turnovertaxincluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxincluded"))) * quantity);
             ccc.set("turnovertaxfree", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxfree"))) * quantity);
             ccc.set("quantity", quantity);
-            ccc.set("nbDistinctProduct", 1);
+            ccc.set("nbdistinctproduct", 1);
             generatedEvents.add(cc);
         }
 
