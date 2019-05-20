@@ -41,12 +41,12 @@ public class Events extends BusinessObject {
 
     /***
      * Add an event
-     * @param action String
+     * @param name String
      * @param dataObject Map
      * @return Event
      */
-    public Event add(String action, Map<String, Object> dataObject) {
-        return add(new Event(action).setData(dataObject));
+    public Event add(String name, Map<String, Object> dataObject) {
+        return add(new Event(name).setData(dataObject));
     }
 
     /***
@@ -77,7 +77,7 @@ public class Events extends BusinessObject {
                 Map<String, Object> data = e.getData();
                 if (data.size() != 0) {
                     eventsArray.put(new JSONObject()
-                            .put("event", e.getType())
+                            .put("name", e.getName())
                             .put("data", new JSONObject(data)));
                 }
 
@@ -85,7 +85,7 @@ public class Events extends BusinessObject {
 
                 for (Event ev : additionalEvents) {
                     eventsArray.put(new JSONObject()
-                            .put("event", ev.getType())
+                            .put("name", ev.getName())
                             .put("data", new JSONObject(ev.getData())));
                 }
             }

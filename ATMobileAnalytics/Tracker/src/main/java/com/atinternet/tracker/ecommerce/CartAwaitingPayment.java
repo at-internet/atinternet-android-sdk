@@ -25,9 +25,13 @@ package com.atinternet.tracker.ecommerce;
 import com.atinternet.tracker.Event;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommercePayment;
+import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceShipping;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceTransaction;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CartAwaitingPayment extends Event {
@@ -36,6 +40,7 @@ public class CartAwaitingPayment extends Event {
     private ECommerceTransaction transaction;
     private ECommerceShipping shipping;
     private ECommercePayment payment;
+    private List<ECommerceProduct> products;
 
     public CartAwaitingPayment() {
         super("cart.awaiting_payment");
@@ -43,6 +48,7 @@ public class CartAwaitingPayment extends Event {
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
         payment = new ECommercePayment();
+        products = new ArrayList<>();
     }
 
     public ECommerceCart Cart() {
@@ -61,10 +67,16 @@ public class CartAwaitingPayment extends Event {
         return payment;
     }
 
+    public List<ECommerceProduct> Products() {
+        return products;
+    }
+
     @Override
     protected Map<String, Object> getData() {
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            Map cartData = cart.getAll();
+            cartData.put("s:version", cart.getVersion());
+            data.put("cart", cartData);
         }
         if (!payment.isEmpty()) {
             data.put("payment", payment.getAll());
@@ -76,5 +88,22 @@ public class CartAwaitingPayment extends Event {
             data.put("transaction", transaction.getAll());
         }
         return super.getData();
+    }
+
+    @Override
+    protected List<Event> getAdditionalEvents() {
+        List<Event> generatedEvents = super.getAdditionalEvents();
+        for (ECommerceProduct p : products) {
+            ProductAwaitingPayment pap = new ProductAwaitingPayment();
+            pap.Cart().setAll(new HashMap<String, Object>() {{
+                put("id", String.valueOf(cart.get("s:id")));
+                put("version", cart.getVersion());
+            }});
+            if (!p.isEmpty()) {
+                pap.Product().setAll(p.getAll());
+            }
+            generatedEvents.add(pap);
+        }
+        return generatedEvents;
     }
 }

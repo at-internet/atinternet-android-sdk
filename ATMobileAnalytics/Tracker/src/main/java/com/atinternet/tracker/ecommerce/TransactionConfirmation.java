@@ -102,13 +102,6 @@ public class TransactionConfirmation extends Event {
         /// SALES INSIGHTS
         List<Event> generatedEvents = super.getAdditionalEvents();
 
-        CartConfirmation cc = new CartConfirmation();
-        cc.Transaction().set("id", String.valueOf(transaction.get("s:id")));
-        if (!cart.isEmpty()) {
-            cc.Cart().setAll(cart.getAll());
-        }
-        generatedEvents.add(cc);
-
         for (ECommerceProduct p : products) {
             ProductPurchased pp = new ProductPurchased();
             pp.Cart().set("id", String.valueOf(cart.get("s:id")));
