@@ -108,7 +108,7 @@ public class DisplayCart extends Event {
                     stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
                 }
             }
-
+            tracker.setParam("tp", "cart");
             stCart.send();
         }
         return super.getAdditionalEvents();

@@ -23,6 +23,10 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
+import com.atinternet.tracker.Screen;
+import com.atinternet.tracker.Tracker;
+import com.atinternet.tracker.TrackerConfigurationKeys;
+import com.atinternet.tracker.Utility;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommercePayment;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
@@ -36,14 +40,19 @@ import java.util.Map;
 
 public class CartAwaitingPayment extends Event {
 
+    private Tracker tracker;
+    private Screen screen;
+
     private ECommerceCart cart;
     private ECommerceTransaction transaction;
     private ECommerceShipping shipping;
     private ECommercePayment payment;
     private List<ECommerceProduct> products;
 
-    public CartAwaitingPayment() {
+    public CartAwaitingPayment(Tracker tracker, Screen screen) {
         super("cart.awaiting_payment");
+        this.tracker = tracker;
+        this.screen = screen;
         cart = new ECommerceCart();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
@@ -104,6 +113,70 @@ public class CartAwaitingPayment extends Event {
             }
             generatedEvents.add(pap);
         }
+
+        /// SALES TRACKER
+        if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+            double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
+            double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
+            String cartId = String.valueOf(cart.get("s:id"));
+
+            List<String> promoCodes = (List<String>) transaction.get("a:s:promocode");
+            String[] codes = new String[promoCodes.size()];
+            promoCodes.toArray(codes);
+            tracker.Orders().add(cartId, Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
+                    .setStatus(3).setPaymentMethod(0).setConfirmationRequired(false).setNewCustomer(Utility.parseBooleanFromString(String.valueOf(transaction.get("b:firstpurchase"))))
+                    .Delivery().set(Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxfree"))), Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxincluded"))), String.valueOf(shipping.get("s:delivery")))
+                    .Amount().set(turnoverTaxFree, turnoverTaxIncluded, turnoverTaxIncluded - turnoverTaxFree)
+                    .Discount().setPromotionalCode(Utility.stringJoin('|', codes));
+
+            com.atinternet.tracker.Cart stCart = tracker.Cart().set(cartId);
+            for (ECommerceProduct p : products) {
+                String stProductId;
+                Object name = p.get("s:$");
+                if (name != null) {
+                    stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
+                } else {
+                    stProductId = String.valueOf(p.get("s:id"));
+                }
+
+                com.atinternet.tracker.Product stProduct = stCart.Products().add(stProductId)
+                        .setQuantity(Utility.parseIntFromString(String.valueOf(p.get("n:quantity"))))
+                        .setUnitPriceTaxIncluded(Utility.parseDoubleFromString(String.valueOf(p.get("f:pricetaxincluded"))))
+                        .setUnitPriceTaxFree(Utility.parseDoubleFromString(String.valueOf(p.get("f:pricetaxfree"))));
+
+                Object stCategory = p.get("s:category1");
+                if (stCategory != null) {
+                    stProduct.setCategory1(String.format("[%s]", String.valueOf(stCategory)));
+                }
+                stCategory = p.get("s:category2");
+                if (stCategory != null) {
+                    stProduct.setCategory2(String.format("[%s]", String.valueOf(stCategory)));
+                }
+                stCategory = p.get("s:category3");
+                if (stCategory != null) {
+                    stProduct.setCategory3(String.format("[%s]", String.valueOf(stCategory)));
+                }
+                stCategory = p.get("s:category4");
+                if (stCategory != null) {
+                    stProduct.setCategory4(String.format("[%s]", String.valueOf(stCategory)));
+                }
+                stCategory = p.get("s:category5");
+                if (stCategory != null) {
+                    stProduct.setCategory5(String.format("[%s]", String.valueOf(stCategory)));
+                }
+                stCategory = p.get("s:category6");
+                if (stCategory != null) {
+                    stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
+                }
+
+            }
+            screen.setTimestamp(System.nanoTime());
+            screen.setCart(stCart);
+            screen.setIsBasketScreen(false).sendView();
+            screen.setCart(null);
+            stCart.unset();
+        }
+
         return generatedEvents;
     }
 }
