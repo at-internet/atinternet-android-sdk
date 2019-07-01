@@ -40,7 +40,7 @@ import java.util.Map;
 public class TransactionConfirmation extends Event {
 
     private Tracker tracker;
-    private Screen screen;
+    private String screenLabel;
 
     private ECommerceCart cart;
     private ECommerceTransaction transaction;
@@ -49,10 +49,10 @@ public class TransactionConfirmation extends Event {
     private List<ECommerceProduct> products;
 
 
-    TransactionConfirmation(Tracker tracker, Screen screen) {
+    TransactionConfirmation(Tracker tracker, String screenLabel) {
         super("transaction.confirmation");
         this.tracker = tracker;
-        this.screen = screen;
+        this.screenLabel = screenLabel;
         cart = new ECommerceCart();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
@@ -113,7 +113,7 @@ public class TransactionConfirmation extends Event {
         }
 
         /// SALES TRACKER
-        if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
             double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
             double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
 
@@ -167,11 +167,9 @@ public class TransactionConfirmation extends Event {
                 }
 
             }
-            screen.setTimestamp(System.nanoTime());
-            screen.setCart(stCart);
-            screen.setIsBasketScreen(false).sendView();
-            screen.setCart(null);
-            stCart.unset();
+            Screen s = tracker.Screens().add(screenLabel);
+            s.setCart(stCart);
+            s.setIsBasketScreen(false).sendView();
         }
 
         return generatedEvents;

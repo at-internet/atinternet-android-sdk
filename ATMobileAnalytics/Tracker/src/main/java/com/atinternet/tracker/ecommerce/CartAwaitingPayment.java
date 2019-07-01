@@ -41,7 +41,7 @@ import java.util.Map;
 public class CartAwaitingPayment extends Event {
 
     private Tracker tracker;
-    private Screen screen;
+    private String screenLabel;
 
     private ECommerceCart cart;
     private ECommerceTransaction transaction;
@@ -49,10 +49,10 @@ public class CartAwaitingPayment extends Event {
     private ECommercePayment payment;
     private List<ECommerceProduct> products;
 
-    public CartAwaitingPayment(Tracker tracker, Screen screen) {
+    public CartAwaitingPayment(Tracker tracker, String screenLabel) {
         super("cart.awaiting_payment");
         this.tracker = tracker;
-        this.screen = screen;
+        this.screenLabel = screenLabel;
         cart = new ECommerceCart();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
@@ -115,7 +115,7 @@ public class CartAwaitingPayment extends Event {
         }
 
         /// SALES TRACKER
-        if (screen != null && Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
             double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
             double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
             String cartId = String.valueOf(cart.get("s:id"));
@@ -170,11 +170,10 @@ public class CartAwaitingPayment extends Event {
                 }
 
             }
-            screen.setTimestamp(System.nanoTime());
-            screen.setCart(stCart);
-            screen.setIsBasketScreen(false).sendView();
-            screen.setCart(null);
-            stCart.unset();
+
+            Screen s = tracker.Screens().add(screenLabel);
+            s.setCart(stCart);
+            s.setIsBasketScreen(false).sendView();
         }
 
         return generatedEvents;
