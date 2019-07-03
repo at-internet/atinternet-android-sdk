@@ -30,5 +30,7 @@ public class ECommerceTransaction extends RequiredPropertiesDataObject {
         super();
         /// STRING
         propertiesPrefix.put("id", "s");
+        propertiesPrefix.put("firstpurchase", "b");
+        propertiesPrefix.put("promocode", "a:s");
     }
 }

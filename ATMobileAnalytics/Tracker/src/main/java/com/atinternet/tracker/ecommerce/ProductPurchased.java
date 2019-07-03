@@ -58,9 +58,15 @@ public class ProductPurchased extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        data.put("transaction", transaction.getAll());
-        data.put("product", product.getAll());
+        if (!cart.isEmpty()) {
+            data.put("cart", cart.getAll());
+        }
+        if (!transaction.isEmpty()) {
+            data.put("transaction", transaction.getAll());
+        }
+        if (!product.isEmpty()) {
+            data.put("product", product.getAll());
+        }
         return super.getData();
     }
 }

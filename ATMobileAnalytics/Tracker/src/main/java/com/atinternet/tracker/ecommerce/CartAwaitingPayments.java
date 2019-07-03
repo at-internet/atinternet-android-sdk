@@ -22,36 +22,21 @@
  */
 package com.atinternet.tracker.ecommerce;
 
-import com.atinternet.tracker.Event;
-import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
-import com.atinternet.tracker.ecommerce.objectproperties.ECommerceTransaction;
+import com.atinternet.tracker.Events;
+import com.atinternet.tracker.Tracker;
 
-import java.util.Map;
+public class CartAwaitingPayments extends AbstractEventsHelper {
 
-public class CartConfirmation extends Event {
+    private Tracker tracker;
 
-    private ECommerceCart cart;
-    private ECommerceTransaction transaction;
-
-    public CartConfirmation() {
-        super("cart.confirmation");
-        cart = new ECommerceCart();
-        transaction = new ECommerceTransaction();
+    public CartAwaitingPayments(Events events, Tracker tracker) {
+        super(events);
+        this.tracker = tracker;
     }
 
-    public ECommerceCart Cart() {
-        return cart;
-    }
-
-
-    public ECommerceTransaction Transaction() {
-        return transaction;
-    }
-
-    @Override
-    protected Map<String, Object> getData() {
-        data.put("cart", cart.getAll());
-        data.put("transaction", transaction.getAll());
-        return super.getData();
+    public CartAwaitingPayment add(String screenLabel) {
+        CartAwaitingPayment cap = new CartAwaitingPayment(tracker, screenLabel);
+        events.add(cap);
+        return cap;
     }
 }

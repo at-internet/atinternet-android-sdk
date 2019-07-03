@@ -32,7 +32,7 @@ public class ECommerceShipping extends RequiredPropertiesDataObject {
         propertiesPrefix.put("delivery", "s");
 
         /// FLOAT
-        propertiesPrefix.put("costTaxIncluded", "f");
-        propertiesPrefix.put("costTaxFree", "f");
+        propertiesPrefix.put("costtaxincluded", "f");
+        propertiesPrefix.put("costtaxfree", "f");
     }
 }

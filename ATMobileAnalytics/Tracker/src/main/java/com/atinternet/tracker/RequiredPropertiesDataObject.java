@@ -44,6 +44,14 @@ public abstract class RequiredPropertiesDataObject {
     }
 
     /***
+     * Return true if properties map is empty
+     * @return boolean
+     */
+    public boolean isEmpty() {
+        return properties.isEmpty();
+    }
+
+    /***
      * Get a property
      * @param key String
      * @return Object

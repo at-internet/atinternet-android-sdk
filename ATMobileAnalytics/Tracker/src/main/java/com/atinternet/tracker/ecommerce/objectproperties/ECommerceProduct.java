@@ -32,7 +32,7 @@ public class ECommerceProduct extends RequiredPropertiesDataObject {
         super();
         /// STRING
         propertiesPrefix.put("id", "s");
-        propertiesPrefix.put("name", "s");
+        propertiesPrefix.put("$", "s");
         propertiesPrefix.put("brand", "s");
         propertiesPrefix.put("currency", "s");
         propertiesPrefix.put("variant", "s");
@@ -49,8 +49,8 @@ public class ECommerceProduct extends RequiredPropertiesDataObject {
         propertiesPrefix.put("cartcreation", "b");
 
         /// FLOAT
-        propertiesPrefix.put("priceTaxIncluded", "f");
-        propertiesPrefix.put("priceTaxFree", "f");
+        propertiesPrefix.put("pricetaxincluded", "f");
+        propertiesPrefix.put("pricetaxfree", "f");
 
         /// LONG
         propertiesPrefix.put("quantity", "n");

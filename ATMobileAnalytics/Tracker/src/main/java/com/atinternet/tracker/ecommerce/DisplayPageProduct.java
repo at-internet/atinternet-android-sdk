@@ -42,7 +42,9 @@ public class DisplayPageProduct extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("product", product.getAll());
+        if (!product.isEmpty()) {
+            data.put("product", product.getAll());
+        }
         return super.getData();
     }
 }

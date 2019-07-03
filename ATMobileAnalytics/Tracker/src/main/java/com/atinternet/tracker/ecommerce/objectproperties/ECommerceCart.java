@@ -24,11 +24,17 @@ package com.atinternet.tracker.ecommerce.objectproperties;
 
 import com.atinternet.tracker.RequiredPropertiesDataObject;
 
+import java.util.UUID;
+
 public class ECommerceCart extends RequiredPropertiesDataObject {
+
+    private String version;
 
     public ECommerceCart() {
         super();
+        version = UUID.randomUUID().toString().substring(0, 8);
         /// STRING
+        propertiesPrefix.put("version", "s");
         propertiesPrefix.put("id", "s");
         propertiesPrefix.put("currency", "s");
 
@@ -36,11 +42,15 @@ public class ECommerceCart extends RequiredPropertiesDataObject {
         propertiesPrefix.put("creation_utc", "d");
 
         /// FLOAT
-        propertiesPrefix.put("turnoverTaxIncluded", "f");
-        propertiesPrefix.put("turnoverTaxFree", "f");
+        propertiesPrefix.put("turnovertaxincluded", "f");
+        propertiesPrefix.put("turnovertaxfree", "f");
 
         /// LONG
         propertiesPrefix.put("quantity", "n");
-        propertiesPrefix.put("nbDistinctProduct", "n");
+        propertiesPrefix.put("nbdistinctproduct", "n");
+    }
+
+    public String getVersion() {
+        return version;
     }
 }

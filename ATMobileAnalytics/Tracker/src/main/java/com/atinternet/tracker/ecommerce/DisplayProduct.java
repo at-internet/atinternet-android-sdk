@@ -59,7 +59,9 @@ public class DisplayProduct extends Event {
         for (ECommerceProduct p : products) {
             /// SALES INSIGHTS
             DisplayProduct dp = new DisplayProduct(tracker);
-            dp.data.put("product", p.getAll());
+            if (!p.isEmpty()) {
+                dp.data.put("product", p.getAll());
+            }
             generatedEvents.add(dp);
         }
 
@@ -67,7 +69,7 @@ public class DisplayProduct extends Event {
             for (ECommerceProduct p : products) {
                 /// SALES TRACKER
                 String stProductId;
-                Object name = p.get("s:name");
+                Object name = p.get("s:$");
                 if (name != null) {
                     stProductId = String.format("%s[%s]", String.valueOf(p.get("s:id")), String.valueOf(name));
                 } else {

@@ -34,10 +34,11 @@ import com.atinternet.tracker.ecommerce.objectproperties.ECommerceShipping;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceTransaction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TransactionConfirmation extends Event {
+public class CartAwaitingPayment extends Event {
 
     private Tracker tracker;
     private String screenLabel;
@@ -48,9 +49,8 @@ public class TransactionConfirmation extends Event {
     private ECommercePayment payment;
     private List<ECommerceProduct> products;
 
-
-    TransactionConfirmation(Tracker tracker, String screenLabel) {
-        super("transaction.confirmation");
+    public CartAwaitingPayment(Tracker tracker, String screenLabel) {
+        super("cart.awaiting_payment");
         this.tracker = tracker;
         this.screenLabel = screenLabel;
         cart = new ECommerceCart();
@@ -83,7 +83,9 @@ public class TransactionConfirmation extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            Map cartData = cart.getAll();
+            cartData.put("s:version", cart.getVersion());
+            data.put("cart", cartData);
         }
         if (!payment.isEmpty()) {
             data.put("payment", payment.getAll());
@@ -99,34 +101,35 @@ public class TransactionConfirmation extends Event {
 
     @Override
     protected List<Event> getAdditionalEvents() {
-        /// SALES INSIGHTS
         List<Event> generatedEvents = super.getAdditionalEvents();
-
         for (ECommerceProduct p : products) {
-            ProductPurchased pp = new ProductPurchased();
-            pp.Cart().set("id", String.valueOf(cart.get("s:id")));
-            pp.Transaction().set("id", String.valueOf(transaction.get("s:id")));
+            ProductAwaitingPayment pap = new ProductAwaitingPayment();
+            pap.Cart().setAll(new HashMap<String, Object>() {{
+                put("id", String.valueOf(cart.get("s:id")));
+                put("version", cart.getVersion());
+            }});
             if (!p.isEmpty()) {
-                pp.Product().setAll(p.getAll());
+                pap.Product().setAll(p.getAll());
             }
-            generatedEvents.add(pp);
+            generatedEvents.add(pap);
         }
 
         /// SALES TRACKER
         if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
             double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
             double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
+            String cartId = String.valueOf(cart.get("s:id"));
 
             List<String> promoCodes = (List<String>) transaction.get("a:s:promocode");
             String[] codes = new String[promoCodes.size()];
             promoCodes.toArray(codes);
-            tracker.Orders().add(String.valueOf(transaction.get("s:id")), Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
+            tracker.Orders().add(cartId, Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
                     .setStatus(3).setPaymentMethod(0).setConfirmationRequired(false).setNewCustomer(Utility.parseBooleanFromString(String.valueOf(transaction.get("b:firstpurchase"))))
                     .Delivery().set(Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxfree"))), Utility.parseDoubleFromString(String.valueOf(shipping.get("f:costtaxincluded"))), String.valueOf(shipping.get("s:delivery")))
                     .Amount().set(turnoverTaxFree, turnoverTaxIncluded, turnoverTaxIncluded - turnoverTaxFree)
                     .Discount().setPromotionalCode(Utility.stringJoin('|', codes));
 
-            com.atinternet.tracker.Cart stCart = tracker.Cart().set(String.valueOf(cart.get("s:id")));
+            com.atinternet.tracker.Cart stCart = tracker.Cart().set(cartId);
             for (ECommerceProduct p : products) {
                 String stProductId;
                 Object name = p.get("s:$");
@@ -167,6 +170,7 @@ public class TransactionConfirmation extends Event {
                 }
 
             }
+
             Screen s = tracker.Screens().add(screenLabel);
             s.setCart(stCart);
             s.setIsBasketScreen(false).sendView();
