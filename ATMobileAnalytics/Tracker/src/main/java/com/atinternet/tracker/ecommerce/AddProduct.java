@@ -52,8 +52,12 @@ public class AddProduct extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        data.put("product", product.getAll());
-        data.put("cart", cart.getAll());
+        if (!product.isEmpty()) {
+            data.put("product", product.getAll());
+        }
+        if (!cart.isEmpty()) {
+            data.put("cart", cart.getAll());
+        }
         return super.getData();
     }
 
@@ -67,10 +71,10 @@ public class AddProduct extends Event {
             int quantity = Utility.parseIntFromString(String.valueOf(product.get("n:quantity")));
             ccc.set("id", String.valueOf(cart.get("s:id")));
             ccc.set("currency", String.valueOf(product.get("s:currency")));
-            ccc.set("turnoverTaxIncluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxIncluded"))) * quantity);
-            ccc.set("turnoverTaxFree", Utility.parseDoubleFromString(String.valueOf(product.get("f:priceTaxFree"))) * quantity);
+            ccc.set("turnovertaxincluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxincluded"))) * quantity);
+            ccc.set("turnovertaxfree", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxfree"))) * quantity);
             ccc.set("quantity", quantity);
-            ccc.set("nbDistinctProduct", 1);
+            ccc.set("nbdistinctproduct", 1);
             generatedEvents.add(cc);
         }
 

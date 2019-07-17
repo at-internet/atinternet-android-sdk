@@ -4,11 +4,11 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.0'
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
     }
@@ -33,7 +33,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.12.1"
+version = "2.13.0"
 
 install {
     repositories.mavenInstaller {
@@ -76,9 +76,9 @@ bintray {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.google.android.gms:play-services-ads:17.2.0'
+    compileOnly 'com.google.android.gms:play-services-ads:17.2.1'
     testImplementation 'org.robolectric:robolectric:4.2'
-    testImplementation 'androidx.test:core:1.1.0'
+    testImplementation 'androidx.test:core:1.2.0'
     testImplementation 'junit:junit:4.12'
 }
 
