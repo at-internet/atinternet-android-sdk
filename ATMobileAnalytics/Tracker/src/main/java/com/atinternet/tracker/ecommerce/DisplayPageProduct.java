@@ -23,17 +23,23 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
+import com.atinternet.tracker.Tracker;
+import com.atinternet.tracker.TrackerConfigurationKeys;
+import com.atinternet.tracker.Utility;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
+import java.util.List;
 import java.util.Map;
 
 public class DisplayPageProduct extends Event {
 
     private ECommerceProduct product;
+    private Tracker tracker;
 
-    DisplayPageProduct() {
+    DisplayPageProduct(Tracker tracker) {
         super("product.page_display");
         product = new ECommerceProduct();
+        this.tracker = tracker;
     }
 
     public ECommerceProduct Product() {
@@ -46,5 +52,48 @@ public class DisplayPageProduct extends Event {
             data.put("product", product.getAll());
         }
         return super.getData();
+    }
+
+    @Override
+    protected List<Event> getAdditionalEvents() {
+        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+            /// SALES TRACKER
+            String stProductId;
+            Object name = product.get("s:$");
+            if (name != null) {
+                stProductId = String.format("%s[%s]", String.valueOf(product.get("s:id")), String.valueOf(name));
+            } else {
+                stProductId = String.valueOf(product.get("s:id"));
+            }
+            com.atinternet.tracker.Product stProduct = tracker.Products().add(stProductId);
+
+            Object stCategory = product.get("s:category1");
+            if (stCategory != null) {
+                stProduct.setCategory1(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            stCategory = product.get("s:category2");
+            if (stCategory != null) {
+                stProduct.setCategory2(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            stCategory = product.get("s:category3");
+            if (stCategory != null) {
+                stProduct.setCategory3(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            stCategory = product.get("s:category4");
+            if (stCategory != null) {
+                stProduct.setCategory4(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            stCategory = product.get("s:category5");
+            if (stCategory != null) {
+                stProduct.setCategory5(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            stCategory = product.get("s:category6");
+            if (stCategory != null) {
+                stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            stProduct.sendView();
+        }
+
+        return super.getAdditionalEvents();
     }
 }
