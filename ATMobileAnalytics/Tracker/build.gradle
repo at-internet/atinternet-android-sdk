@@ -5,7 +5,7 @@ apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '29.0.0'
+    buildToolsVersion '29.0.2'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
@@ -76,7 +76,7 @@ bintray {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.google.android.gms:play-services-ads:17.2.1'
+    compileOnly 'com.google.android.gms:play-services-ads:18.1.1'
     testImplementation 'org.robolectric:robolectric:4.2'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation 'junit:junit:4.12'
@@ -132,6 +132,11 @@ task createDelivery {
         copy {
             from '.'
             include '*.manifest.json'
+            into destination
+        }
+        copy {
+            from '.'
+            include 'referential.json'
             into destination
         }
     }

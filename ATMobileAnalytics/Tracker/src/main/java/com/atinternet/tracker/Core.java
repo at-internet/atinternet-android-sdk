@@ -739,19 +739,21 @@ class Sender implements Runnable {
 
     private void send(final Hit hit) {
         /// Mode offline only
-        if (tracker.getOfflineMode() == Tracker.OfflineMode.always &&
-                !forceSendOfflineHits) {
+        if (tracker.getOfflineMode() == Tracker.OfflineMode.always && !forceSendOfflineHits) {
             saveHitDatabase(hit);
             return;
         }
 
         // Si pas de connexion
-        if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE ||
-                (!hit.isOffline() && storage.getCountOfflineHits() > 0)) {
-            // Si le hit ne provient pas du offline
-            if (!hit.isOffline()) {
+        if (TechnicalContext.getConnection() == TechnicalContext.ConnectionType.OFFLINE) {
+            if (tracker.getOfflineMode() == Tracker.OfflineMode.required) {
                 saveHitDatabase(hit);
             }
+            return;
+        }
+
+        if (!hit.isOffline() && storage.getCountOfflineHits() > 0) {
+            saveHitDatabase(hit);
             return;
         }
 
