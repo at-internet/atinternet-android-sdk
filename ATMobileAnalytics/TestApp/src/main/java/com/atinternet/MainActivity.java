@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.ecommerce.CartAwaitingPayment;
 import com.atinternet.tracker.ecommerce.TransactionConfirmation;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
@@ -33,9 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("pixelPath", "/hit.xiti");
             put("secure", false);
             put("site", 552987);
-        }},  null, true);
+        }}, null, true);
         tracker.ECommerce().setAutoSalesTrackerEnabled(true, null, true);
         tracker.ECommerce().setCollectDomain("logp", null, true);
+        tracker.setOfflineMode(Tracker.OfflineMode.required, null, true);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("delivery", "My carrier");
                 }});
                 cap.Payment().set("mode", "Credit card");
-                cap.Transaction().setAll(new HashMap<String, Object>(){{
+                cap.Transaction().setAll(new HashMap<String, Object>() {{
                     put("promocode", new ArrayList<String>() {{
                         add("DQQYRZSJ");
                         add("UN1ENE27");
