@@ -104,10 +104,10 @@ public class CartAwaitingPayment extends Event {
         List<Event> generatedEvents = super.getAdditionalEvents();
         for (ECommerceProduct p : products) {
             ProductAwaitingPayment pap = new ProductAwaitingPayment();
-            pap.Cart().setAll(new HashMap<String, Object>() {{
-                put("id", String.valueOf(cart.get("s:id")));
-                put("version", cart.getVersion());
-            }});
+            Map<String, Object> m = new HashMap<>();
+            m.put("id", String.valueOf(cart.get("s:id")));
+            m.put("version", cart.getVersion());
+            pap.Cart().setAll(m);
             if (!p.isEmpty()) {
                 pap.Product().setAll(p.getAll());
             }

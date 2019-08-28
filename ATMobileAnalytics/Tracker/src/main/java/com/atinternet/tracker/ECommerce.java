@@ -82,7 +82,7 @@ public class ECommerce {
      */
     public DisplayPageProducts DisplayPageProducts() {
         if (displayPageProducts == null) {
-            displayPageProducts = new DisplayPageProducts(events);
+            displayPageProducts = new DisplayPageProducts(events, tracker);
         }
         return displayPageProducts;
     }
@@ -93,7 +93,7 @@ public class ECommerce {
      */
     public DisplayProducts DisplayProducts() {
         if (displayProducts == null) {
-            displayProducts = new DisplayProducts(events, tracker);
+            displayProducts = new DisplayProducts(events);
         }
         return displayProducts;
     }

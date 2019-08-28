@@ -1476,4 +1476,12 @@ public class Tracker {
     public Map<String, String> getCrashInformation() {
         return CrashDetectionHandler.getCrashInfo(getPreferences());
     }
+
+    /***
+     * Get SDK version
+     * @return String
+     */
+    public String getSdkVersion() {
+        return TechnicalContext.VTAG.execute();
+    }
 }
