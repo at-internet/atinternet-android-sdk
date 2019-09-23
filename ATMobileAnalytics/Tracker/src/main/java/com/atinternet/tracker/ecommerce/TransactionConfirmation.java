@@ -41,6 +41,7 @@ public class TransactionConfirmation extends Event {
 
     private Tracker tracker;
     private String screenLabel;
+    private Screen screen;
 
     private ECommerceCart cart;
     private ECommerceTransaction transaction;
@@ -49,15 +50,24 @@ public class TransactionConfirmation extends Event {
     private List<ECommerceProduct> products;
 
 
-    TransactionConfirmation(Tracker tracker, String screenLabel) {
+    TransactionConfirmation(Tracker tracker) {
         super("transaction.confirmation");
         this.tracker = tracker;
-        this.screenLabel = screenLabel;
         cart = new ECommerceCart();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
         payment = new ECommercePayment();
         products = new ArrayList<>();
+    }
+
+    TransactionConfirmation setScreenLabel(String screenLabel) {
+        this.screenLabel = screenLabel;
+        return this;
+    }
+
+    TransactionConfirmation setScreen(Screen screen) {
+        this.screen = screen;
+        return this;
     }
 
     public ECommerceCart Cart() {
@@ -117,7 +127,11 @@ public class TransactionConfirmation extends Event {
             double turnoverTaxIncluded = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded")));
             double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
 
-            List<String> promoCodes = (List<String>) transaction.get("a:s:promocode");
+            List<String> promoCodes = new ArrayList<>();
+            Object pc = transaction.get("a:s:promocode");
+            if (pc instanceof List) {
+                promoCodes.addAll((List<String>) pc);
+            }
             String[] codes = new String[promoCodes.size()];
             promoCodes.toArray(codes);
             tracker.Orders().add(String.valueOf(transaction.get("s:id")), Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
@@ -167,9 +181,16 @@ public class TransactionConfirmation extends Event {
                 }
 
             }
-            Screen s = tracker.Screens().add(screenLabel);
-            s.setCart(stCart);
-            s.setIsBasketScreen(false).sendView();
+            if (screen == null) {
+                Screen s = tracker.Screens().add(screenLabel);
+                s.setCart(stCart);
+                s.setIsBasketScreen(false).sendView();
+            } else {
+                screen.setCart(stCart);
+                screen.setIsBasketScreen(false).sendView();
+                screen.setCart(null);
+                stCart.unset();
+            }
         }
 
         return generatedEvents;

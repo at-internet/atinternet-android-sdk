@@ -23,6 +23,7 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 public class CartAwaitingPayments extends AbstractEventsHelper {
@@ -35,7 +36,14 @@ public class CartAwaitingPayments extends AbstractEventsHelper {
     }
 
     public CartAwaitingPayment add(String screenLabel) {
-        CartAwaitingPayment cap = new CartAwaitingPayment(tracker, screenLabel);
+        CartAwaitingPayment cap = new CartAwaitingPayment(tracker).setScreenLabel(screenLabel);
+        events.add(cap);
+        return cap;
+    }
+
+    public CartAwaitingPayment add(Screen screen) {
+        CartAwaitingPayment cap = new CartAwaitingPayment(tracker).setScreen(screen);
+        tracker.getBusinessObjects().remove(screen.getId());
         events.add(cap);
         return cap;
     }

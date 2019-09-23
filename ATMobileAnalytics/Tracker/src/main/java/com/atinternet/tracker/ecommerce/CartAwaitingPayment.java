@@ -42,6 +42,7 @@ public class CartAwaitingPayment extends Event {
 
     private Tracker tracker;
     private String screenLabel;
+    private Screen screen;
 
     private ECommerceCart cart;
     private ECommerceTransaction transaction;
@@ -49,15 +50,24 @@ public class CartAwaitingPayment extends Event {
     private ECommercePayment payment;
     private List<ECommerceProduct> products;
 
-    public CartAwaitingPayment(Tracker tracker, String screenLabel) {
+    public CartAwaitingPayment(Tracker tracker) {
         super("cart.awaiting_payment");
         this.tracker = tracker;
-        this.screenLabel = screenLabel;
         cart = new ECommerceCart();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
         payment = new ECommercePayment();
         products = new ArrayList<>();
+    }
+
+    CartAwaitingPayment setScreenLabel(String screenLabel) {
+        this.screenLabel = screenLabel;
+        return this;
+    }
+
+    CartAwaitingPayment setScreen(Screen screen) {
+        this.screen = screen;
+        return this;
     }
 
     public ECommerceCart Cart() {
@@ -120,7 +130,11 @@ public class CartAwaitingPayment extends Event {
             double turnoverTaxFree = Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxfree")));
             String cartId = String.valueOf(cart.get("s:id"));
 
-            List<String> promoCodes = (List<String>) transaction.get("a:s:promocode");
+            List<String> promoCodes = new ArrayList<>();
+            Object pc = transaction.get("a:s:promocode");
+            if (pc instanceof List) {
+                promoCodes.addAll((List<String>) pc);
+            }
             String[] codes = new String[promoCodes.size()];
             promoCodes.toArray(codes);
             tracker.Orders().add(cartId, Utility.parseDoubleFromString(String.valueOf(cart.get("f:turnovertaxincluded"))))
@@ -171,9 +185,16 @@ public class CartAwaitingPayment extends Event {
 
             }
 
-            Screen s = tracker.Screens().add(screenLabel);
-            s.setCart(stCart);
-            s.setIsBasketScreen(false).sendView();
+            if (screen == null) {
+                Screen s = tracker.Screens().add(screenLabel);
+                s.setCart(stCart);
+                s.setIsBasketScreen(false).sendView();
+            } else {
+                screen.setCart(stCart);
+                screen.setIsBasketScreen(false).sendView();
+                screen.setCart(null);
+                stCart.unset();
+            }
         }
 
         return generatedEvents;

@@ -23,6 +23,7 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 public class DisplayPageProducts extends AbstractEventsHelper {
@@ -34,8 +35,22 @@ public class DisplayPageProducts extends AbstractEventsHelper {
         this.tracker = tracker;
     }
 
+    @Deprecated
     public DisplayPageProduct add() {
         DisplayPageProduct dpp = new DisplayPageProduct(tracker);
+        events.add(dpp);
+        return dpp;
+    }
+
+    public DisplayPageProduct add(String screenLabel) {
+        DisplayPageProduct dpp = new DisplayPageProduct(tracker).setScreenLabel(screenLabel);
+        events.add(dpp);
+        return dpp;
+    }
+
+    public DisplayPageProduct add(Screen screen) {
+        DisplayPageProduct dpp = new DisplayPageProduct(tracker).setScreen(screen);
+        tracker.getBusinessObjects().remove(screen.getId());
         events.add(dpp);
         return dpp;
     }

@@ -33,7 +33,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.13.1"
+version = "2.13.2"
 
 install {
     repositories.mavenInstaller {

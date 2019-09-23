@@ -41,7 +41,7 @@ public abstract class BusinessObject {
         this.tracker = tracker;
     }
 
-    String getId() {
+    public String getId() {
         return id;
     }
 

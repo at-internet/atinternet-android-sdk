@@ -193,7 +193,7 @@ public class Tracker {
         return buffer;
     }
 
-    LinkedHashMap<String, BusinessObject> getBusinessObjects() {
+    public LinkedHashMap<String, BusinessObject> getBusinessObjects() {
         return businessObjects;
     }
 

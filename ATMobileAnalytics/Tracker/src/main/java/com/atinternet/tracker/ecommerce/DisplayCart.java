@@ -23,6 +23,7 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
@@ -37,6 +38,8 @@ public class DisplayCart extends Event {
 
     private List<ECommerceProduct> products;
     private ECommerceCart cart;
+    private String screenLabel;
+    private Screen screen;
 
     private Tracker tracker;
 
@@ -45,6 +48,16 @@ public class DisplayCart extends Event {
         cart = new ECommerceCart();
         products = new ArrayList<>();
         this.tracker = tracker;
+    }
+
+    DisplayCart setScreenLabel(String screenLabel) {
+        this.screenLabel = screenLabel;
+        return this;
+    }
+
+    DisplayCart setScreen(Screen screen) {
+        this.screen = screen;
+        return this;
     }
 
     public ECommerceCart Cart() {
@@ -108,8 +121,16 @@ public class DisplayCart extends Event {
                     stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
                 }
             }
-            tracker.setParam("tp", "cart");
-            stCart.send();
+            if (screen == null) {
+                Screen s = tracker.Screens().add(screenLabel);
+                s.setCart(stCart);
+                s.setIsBasketScreen(true).sendView();
+            } else {
+                screen.setCart(stCart);
+                screen.setIsBasketScreen(true).sendView();
+                screen.setCart(null);
+                stCart.unset();
+            }
         }
         return super.getAdditionalEvents();
     }
