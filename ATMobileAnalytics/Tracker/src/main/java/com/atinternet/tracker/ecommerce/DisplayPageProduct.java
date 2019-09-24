@@ -71,14 +71,14 @@ public class DisplayPageProduct extends Event {
 
     @Override
     protected List<Event> getAdditionalEvents() {
-        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+        if (Utility.parseBoolean(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER))) {
             /// SALES TRACKER
             String stProductId;
             Object name = product.get("s:$");
             if (name != null) {
-                stProductId = String.format("%s[%s]", String.valueOf(product.get("s:id")), String.valueOf(name));
+                stProductId = String.format("%s[%s]", Utility.parseString(product.get("s:id")), Utility.parseString(name));
             } else {
-                stProductId = String.valueOf(product.get("s:id"));
+                stProductId = Utility.parseString(product.get("s:id"));
             }
             com.atinternet.tracker.Product stProduct = tracker.Products().add(stProductId);
 

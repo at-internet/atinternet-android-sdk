@@ -397,7 +397,8 @@ public class Product extends BusinessObject {
         productName = (category4 == null) ? productName : (productName + category4 + "::");
         productName = (category5 == null) ? productName : (productName + category5 + "::");
         productName = (category6 == null) ? productName : (productName + category6 + "::");
+        productName = (productId == null) ? productName : (productName + productId);
 
-        return productName + productId;
+        return productName;
     }
 }

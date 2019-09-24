@@ -110,15 +110,13 @@ public class Cart extends BusinessObject {
     /***
      * Send cart info
      */
-    public void send(){
+    public void send() {
         tracker.getDispatcher().dispatch(this);
     }
 
     @Override
     void setParams() {
-        if (cartId != null) {
-            tracker.setParam(Hit.HitParam.CartId.stringValue(), cartId);
-        }
+        tracker.setParam(Hit.HitParam.CartId.stringValue(), cartId);
 
         if (products != null && productsList != null) {
             ParamOption encoding = new ParamOption().setEncode(true);

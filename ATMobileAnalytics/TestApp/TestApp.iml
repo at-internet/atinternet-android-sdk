@@ -110,5 +110,7 @@
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-base:16.0.0@aar" level="project" />
     <orderEntry type="module" module-name="Tracker" />
+    <orderEntry type="module" module-name="Tracker" />
+    <orderEntry type="module" module-name="Tracker" />
   </component>
 </module>

@@ -65,14 +65,14 @@ public class AddProduct extends Event {
     protected List<Event> getAdditionalEvents() {
         List<Event> generatedEvents = super.getAdditionalEvents();
 
-        if (Utility.parseBooleanFromString(String.valueOf(product.get("b:cartcreation")))) {
+        if (Utility.parseBoolean(product.get("b:cartcreation"))) {
             CartCreation cc = new CartCreation();
             ECommerceCart ccc = cc.Cart();
-            int quantity = Utility.parseIntFromString(String.valueOf(product.get("n:quantity")));
-            ccc.set("id", String.valueOf(cart.get("s:id")));
-            ccc.set("currency", String.valueOf(product.get("s:currency")));
-            ccc.set("turnovertaxincluded", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxincluded"))) * quantity);
-            ccc.set("turnovertaxfree", Utility.parseDoubleFromString(String.valueOf(product.get("f:pricetaxfree"))) * quantity);
+            int quantity = Utility.parseInt(product.get("n:quantity"));
+            ccc.set("id", Utility.parseString(cart.get("s:id")));
+            ccc.set("currency", Utility.parseString(product.get("s:currency")));
+            ccc.set("turnovertaxincluded", Utility.parseDouble(product.get("f:pricetaxincluded")) * quantity);
+            ccc.set("turnovertaxfree", Utility.parseDouble(product.get("f:pricetaxfree")) * quantity);
             ccc.set("quantity", quantity);
             ccc.set("nbdistinctproduct", 1);
             generatedEvents.add(cc);

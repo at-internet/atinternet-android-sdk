@@ -7,10 +7,8 @@ import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.ecommerce.TransactionConfirmation;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("site", 552987);
         }}, null, true);
         tracker.ECommerce().setAutoSalesTrackerEnabled(true, null, true);
-        tracker.ECommerce().setCollectDomain("logp", null, true);
+        //tracker.ECommerce().setCollectDomain("logp", null, true);
         tracker.setOfflineMode(Tracker.OfflineMode.required, null, true);
     }
 
@@ -42,44 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.firstAction:
-                TransactionConfirmation cap = tracker.ECommerce().TransactionConfirmations().add("screen");
-                cap.Cart().setAll(new HashMap<String, Object>() {{
-                    put("id", "34");
-                    put("currency", "EUR");
-                    put("turnovertaxfree", 463.2);
-                    put("turnovertaxincluded", 557.4);
-                    put("creation_utc", 1514973161);
-                    put("quantity", 1);
-                    put("nbdistinctproduct", 1);
-                }});
-                cap.Products().add(new ECommerceProduct(new HashMap<String, Object>() {{
-                    put("id", "7");
-                    put("variant", "1");
-                    put("$", "laptop_A56");
-                    put("brand", "ACER");
-                    put("discount", 1);
-                    put("pricetaxincluded", 549);
-                    put("pricetaxfree", 456.2);
-                    put("currency", "EUR");
-                    put("stock", 1);
-                    put("quantity", 1);
-                    put("category1", "Computers_and_Networking");
-                    put("category2", "Computers");
-                    put("category3", "Laptops");
-                }}));
-                cap.Shipping().setAll(new HashMap<String, Object>() {{
-                    put("costtaxfree", 7);
-                    put("costtaxincluded", 8.4);
-                    put("delivery", "My carrier");
-                }});
-                cap.Payment().set("mode", "Credit card");
-                cap.Transaction().setAll(new HashMap<String, Object>() {{
-                    put("promocode", new ArrayList<String>() {{
-                        add("DQQYRZSJ");
-                        add("UN1ENE27");
-                    }});
-                    put("firstpurchase", 0);
-                }});
+                tracker.ECommerce().TransactionConfirmations().add("test");
+                tracker.ECommerce().DisplayPageProducts().add(tracker.Screens().add("truc").setLevel2(4));
                 tracker.dispatch();
                 // add action
                 break;

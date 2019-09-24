@@ -24,25 +24,56 @@ package com.atinternet.tracker;
 
 public class Utility {
 
-    public static double parseDoubleFromString(String s) {
+    public static String parseString(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (o instanceof String) {
+            return (String) o;
+        }
+        return String.valueOf(o);
+    }
+
+    public static double parseDouble(Object o) {
+        if (o == null) {
+            return 0.0;
+        }
+        if (o instanceof Double){
+            return (double) o;
+        }
         try {
-            return Double.parseDouble(s);
+            return Double.parseDouble(parseString(o));
         } catch (Exception ignored) {
             return 0.0;
         }
     }
 
-    public static boolean parseBooleanFromString(String s) {
+    public static boolean parseBoolean(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o instanceof Boolean){
+            return (boolean) o;
+        }
         try {
-            return Boolean.parseBoolean(s);
+            return Boolean.parseBoolean(parseString(o));
         } catch (Exception ignored) {
             return false;
         }
     }
 
-    public static int parseIntFromString(String s) {
+    public static int parseInt(Object o) {
+        if (o == null) {
+            return 0;
+        }
+        if (o instanceof Integer){
+            return (int) o;
+        }
+        if (o instanceof Double){
+            return ((Double) o).intValue();
+        }
         try {
-            return Integer.parseInt(s);
+            return Integer.parseInt(parseString(o));
         } catch (Exception ignored) {
             return 0;
         }
