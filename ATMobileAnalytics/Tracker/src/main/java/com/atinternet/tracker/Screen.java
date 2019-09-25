@@ -27,11 +27,11 @@ package com.atinternet.tracker;
  */
 public class Screen extends AbstractScreen {
 
-    private String builtScreenName;
+    private String completeLabel;
 
     Screen(Tracker tracker) {
         super(tracker);
-        builtScreenName = "";
+        completeLabel = "";
     }
 
     /**
@@ -42,7 +42,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setName(String name) {
         this.name = name;
-        updateBuiltScreenName();
+        updateCompleteLabel();
         return this;
     }
 
@@ -65,7 +65,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setChapter1(String chapter1) {
         this.chapter1 = chapter1;
-        updateBuiltScreenName();
+        updateCompleteLabel();
         return this;
     }
 
@@ -77,7 +77,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setChapter2(String chapter2) {
         this.chapter2 = chapter2;
-        updateBuiltScreenName();
+        updateCompleteLabel();
         return this;
     }
 
@@ -89,7 +89,7 @@ public class Screen extends AbstractScreen {
      */
     public Screen setChapter3(String chapter3) {
         this.chapter3 = chapter3;
-        updateBuiltScreenName();
+        updateCompleteLabel();
         return this;
     }
 
@@ -116,32 +116,40 @@ public class Screen extends AbstractScreen {
         return this;
     }
 
-    void updateBuiltScreenName() {
-        builtScreenName = chapter1;
-        if (builtScreenName == null) {
-            builtScreenName = chapter2;
+    private void updateCompleteLabel() {
+        completeLabel = chapter1;
+        if (completeLabel == null) {
+            completeLabel = chapter2;
         } else {
-            builtScreenName += (chapter2 == null) ? "" : ("::" + chapter2);
+            completeLabel += (chapter2 == null) ? "" : ("::" + chapter2);
         }
-        if (builtScreenName == null) {
-            builtScreenName = chapter3;
+        if (completeLabel == null) {
+            completeLabel = chapter3;
         } else {
-            builtScreenName += (chapter3 == null) ? "" : ("::" + chapter3);
+            completeLabel += (chapter3 == null) ? "" : ("::" + chapter3);
         }
-        if (builtScreenName == null) {
-            builtScreenName = name;
+        if (completeLabel == null) {
+            completeLabel = name;
         } else {
-            builtScreenName += (name == null) ? "" : ("::" + name);
+            completeLabel += (name == null) ? "" : ("::" + name);
         }
 
-        TechnicalContext.setScreenName(builtScreenName);
-        CrashDetectionHandler.setCrashLastScreen(builtScreenName);
+        TechnicalContext.setScreenName(completeLabel);
+        CrashDetectionHandler.setCrashLastScreen(completeLabel);
+    }
+
+    /***
+     * Get the complete screen label (name with chapters)
+     * @return String
+     */
+    public String getCompleteLabel() {
+        return completeLabel;
     }
 
     @Override
     void setParams() {
         super.setParams();
-        tracker.setParam(Hit.HitParam.Screen.stringValue(), builtScreenName,
+        tracker.setParam(Hit.HitParam.Screen.stringValue(), completeLabel,
                 new ParamOption().setRelativePosition(ParamOption.RelativePosition.after)
                         .setRelativeParameterKey(Hit.HitParam.UserId.stringValue())
                         .setEncode(true));

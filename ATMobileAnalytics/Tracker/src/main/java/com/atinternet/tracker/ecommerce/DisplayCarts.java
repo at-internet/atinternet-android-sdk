@@ -23,6 +23,7 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 public class DisplayCarts extends AbstractEventsHelper {
@@ -38,5 +39,14 @@ public class DisplayCarts extends AbstractEventsHelper {
         DisplayCart dc = new DisplayCart(tracker);
         events.add(dc);
         return dc;
+    }
+
+    public DisplayCart add(String screenLabel) {
+        return add().setScreenLabel(screenLabel);
+    }
+
+    public DisplayCart add(Screen screen) {
+        tracker.getBusinessObjects().remove(screen.getId());
+        return add().setScreen(screen);
     }
 }

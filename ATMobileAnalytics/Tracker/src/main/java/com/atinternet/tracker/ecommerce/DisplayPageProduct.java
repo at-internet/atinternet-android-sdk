@@ -22,7 +22,10 @@
  */
 package com.atinternet.tracker.ecommerce;
 
+import android.text.TextUtils;
+
 import com.atinternet.tracker.Event;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
@@ -35,11 +38,23 @@ public class DisplayPageProduct extends Event {
 
     private ECommerceProduct product;
     private Tracker tracker;
+    private String screenLabel;
+    private Screen screen;
 
     DisplayPageProduct(Tracker tracker) {
         super("product.page_display");
         product = new ECommerceProduct();
         this.tracker = tracker;
+    }
+
+    DisplayPageProduct setScreenLabel(String screenLabel) {
+        this.screenLabel = screenLabel;
+        return this;
+    }
+
+    DisplayPageProduct setScreen(Screen screen) {
+        this.screen = screen;
+        return this;
     }
 
     public ECommerceProduct Product() {
@@ -56,14 +71,14 @@ public class DisplayPageProduct extends Event {
 
     @Override
     protected List<Event> getAdditionalEvents() {
-        if (Utility.parseBooleanFromString(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER)))) {
+        if (Utility.parseBoolean(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER))) {
             /// SALES TRACKER
             String stProductId;
             Object name = product.get("s:$");
             if (name != null) {
-                stProductId = String.format("%s[%s]", String.valueOf(product.get("s:id")), String.valueOf(name));
+                stProductId = String.format("%s[%s]", Utility.parseString(product.get("s:id")), Utility.parseString(name));
             } else {
-                stProductId = String.valueOf(product.get("s:id"));
+                stProductId = Utility.parseString(product.get("s:id"));
             }
             com.atinternet.tracker.Product stProduct = tracker.Products().add(stProductId);
 
@@ -90,6 +105,18 @@ public class DisplayPageProduct extends Event {
             stCategory = product.get("s:category6");
             if (stCategory != null) {
                 stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
+            }
+            if (screen == null) {
+                if (!TextUtils.isEmpty(screenLabel)) {
+                    tracker.setParam("p", screenLabel);
+                }
+            } else {
+                if (!TextUtils.isEmpty(screen.getCompleteLabel())) {
+                    tracker.setParam("p", screen.getCompleteLabel());
+                }
+                if (screen.getLevel2() > 0) {
+                    tracker.setParam("s2", screen.getLevel2());
+                }
             }
             stProduct.sendView();
         }

@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.ecommerce.TransactionConfirmation;
+import com.atinternet.tracker.ecommerce.CartAwaitingPayment;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.firstAction:
-                TransactionConfirmation cap = tracker.ECommerce().TransactionConfirmations().add("screen");
+                CartAwaitingPayment cap = tracker.ECommerce().CartAwaitingPayments().add(tracker.Screens().add("prout").setLevel2(6));
                 cap.Cart().setAll(new HashMap<String, Object>() {{
                     put("id", "34");
                     put("currency", "EUR");
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("delivery", "My carrier");
                 }});
                 cap.Payment().set("mode", "Credit card");
-                cap.Transaction().setAll(new HashMap<String, Object>() {{
+                cap.Transaction().setAll(new HashMap<String, Object>(){{
                     put("promocode", new ArrayList<String>() {{
                         add("DQQYRZSJ");
                         add("UN1ENE27");
