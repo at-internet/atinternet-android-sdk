@@ -35,16 +35,18 @@ public class CartAwaitingPayments extends AbstractEventsHelper {
         this.tracker = tracker;
     }
 
-    public CartAwaitingPayment add(String screenLabel) {
-        CartAwaitingPayment cap = new CartAwaitingPayment(tracker).setScreenLabel(screenLabel);
+    public CartAwaitingPayment add() {
+        CartAwaitingPayment cap = new CartAwaitingPayment(tracker);
         events.add(cap);
         return cap;
     }
 
+    public CartAwaitingPayment add(String screenLabel) {
+        return add().setScreenLabel(screenLabel);
+    }
+
     public CartAwaitingPayment add(Screen screen) {
-        CartAwaitingPayment cap = new CartAwaitingPayment(tracker).setScreen(screen);
         tracker.getBusinessObjects().remove(screen.getId());
-        events.add(cap);
-        return cap;
+        return add().setScreen(screen);
     }
 }

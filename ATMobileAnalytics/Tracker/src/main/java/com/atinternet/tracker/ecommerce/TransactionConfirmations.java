@@ -35,16 +35,18 @@ public class TransactionConfirmations extends AbstractEventsHelper {
         this.tracker = tracker;
     }
 
-    public TransactionConfirmation add(String screenLabel) {
-        TransactionConfirmation tc = new TransactionConfirmation(tracker).setScreenLabel(screenLabel);
+    public TransactionConfirmation add() {
+        TransactionConfirmation tc = new TransactionConfirmation(tracker);
         events.add(tc);
         return tc;
     }
 
+    public TransactionConfirmation add(String screenLabel) {
+        return add().setScreenLabel(screenLabel);
+    }
+
     public TransactionConfirmation add(Screen screen) {
-        TransactionConfirmation tc = new TransactionConfirmation(tracker).setScreen(screen);
         tracker.getBusinessObjects().remove(screen.getId());
-        events.add(tc);
-        return tc;
+        return add().setScreen(screen);
     }
 }

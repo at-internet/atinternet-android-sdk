@@ -35,7 +35,6 @@ public class DisplayCarts extends AbstractEventsHelper {
         this.tracker = tracker;
     }
 
-    @Deprecated
     public DisplayCart add() {
         DisplayCart dc = new DisplayCart(tracker);
         events.add(dc);
@@ -43,15 +42,11 @@ public class DisplayCarts extends AbstractEventsHelper {
     }
 
     public DisplayCart add(String screenLabel) {
-        DisplayCart dc = new DisplayCart(tracker).setScreenLabel(screenLabel);
-        events.add(dc);
-        return dc;
+        return add().setScreenLabel(screenLabel);
     }
 
     public DisplayCart add(Screen screen) {
-        DisplayCart dc = new DisplayCart(tracker).setScreen(screen);
         tracker.getBusinessObjects().remove(screen.getId());
-        events.add(dc);
-        return dc;
+        return add().setScreen(screen);
     }
 }

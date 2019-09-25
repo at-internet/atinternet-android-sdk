@@ -35,7 +35,6 @@ public class DisplayPageProducts extends AbstractEventsHelper {
         this.tracker = tracker;
     }
 
-    @Deprecated
     public DisplayPageProduct add() {
         DisplayPageProduct dpp = new DisplayPageProduct(tracker);
         events.add(dpp);
@@ -43,15 +42,11 @@ public class DisplayPageProducts extends AbstractEventsHelper {
     }
 
     public DisplayPageProduct add(String screenLabel) {
-        DisplayPageProduct dpp = new DisplayPageProduct(tracker).setScreenLabel(screenLabel);
-        events.add(dpp);
-        return dpp;
+        return add().setScreenLabel(screenLabel);
     }
 
     public DisplayPageProduct add(Screen screen) {
-        DisplayPageProduct dpp = new DisplayPageProduct(tracker).setScreen(screen);
         tracker.getBusinessObjects().remove(screen.getId());
-        events.add(dpp);
-        return dpp;
+        return add().setScreen(screen);
     }
 }
