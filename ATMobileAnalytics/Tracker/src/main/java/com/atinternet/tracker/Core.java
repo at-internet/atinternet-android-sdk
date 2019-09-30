@@ -752,7 +752,8 @@ class Sender implements Runnable {
             return;
         }
 
-        if (!hit.isOffline() && storage.getCountOfflineHits() > 0) {
+        // For offlineModes "required" and "always", skip sending hit if sendOfflineHits left hits in the database (e.g. server error,...)
+        if (tracker.getOfflineMode() != Tracker.OfflineMode.never && !hit.isOffline() && storage.getCountOfflineHits() > 0) {
             saveHitDatabase(hit);
             return;
         }
