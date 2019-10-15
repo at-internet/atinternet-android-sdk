@@ -423,6 +423,15 @@ public class Tracker {
     }
 
     /**
+     * Set a custom application version
+     *
+     * @param value new application version value
+     */
+    public void setApplicationVersion(String value) {
+        handleNotClosureStringParameterSetting("apvr", value, new ParamOption().setPersistent(true));
+    }
+
+    /**
      * Get Screens instance
      *
      * @return Screens instance

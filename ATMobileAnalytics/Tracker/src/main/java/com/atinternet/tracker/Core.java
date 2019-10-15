@@ -1122,7 +1122,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.13.3";
+            return "2.14.0";
         }
     };
 
@@ -1944,7 +1944,7 @@ final class Storage extends SQLiteOpenHelper {
     ArrayList<Hit> getOfflineHits() {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
-            return null;
+            return new ArrayList<>();
         }
         ArrayList<Hit> hits = new ArrayList<>();
         Cursor c = db.rawQuery(SELECT_ALL_QUERY + "ORDER BY " + ID + " ASC", null);
@@ -2065,7 +2065,6 @@ final class Lists {
         set.add("manufacturer");
         set.add("model");
         set.add("os");
-        set.add("apvr");
         set.add("hl");
         set.add("r");
         set.add("car");
