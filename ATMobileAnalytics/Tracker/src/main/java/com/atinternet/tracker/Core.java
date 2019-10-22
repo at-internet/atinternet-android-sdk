@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -226,7 +227,7 @@ class Buffer {
         manufacturer = TechnicalContext.getManufacturer().execute();
         model = TechnicalContext.getModel().execute();
         apid = TechnicalContext.getApplicationIdentifier().execute();
-        apvr = TechnicalContext.getApplicationVersion().execute();
+        apvr = String.format("[%s]", TechnicalContext.getApplicationVersion());
         diagonal = TechnicalContext.getDiagonal().execute();
 
         osClosure = new Closure() {
@@ -765,6 +766,9 @@ class Sender implements Runnable {
             connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(TIMEOUT);
             connection.setConnectTimeout(TIMEOUT);
+
+            connection.setRequestProperty("User-Agent", TextUtils.isEmpty(tracker.getUserAgent()) ? TechnicalContext.getDefaultUserAgent() : tracker.getUserAgent());
+
             connection.connect();
 
             int statusCode = connection.getResponseCode();
@@ -1119,6 +1123,8 @@ class TechnicalContext {
     private static String screenName = "";
     private static int level2 = -1;
 
+    private static String applicationIdentifier;
+
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
@@ -1199,6 +1205,11 @@ class TechnicalContext {
             default:
                 return ConnectionType.UNKNOWN;
         }
+    }
+
+    static String getApplicationName() {
+        ApplicationInfo applicationInfo = Tracker.getAppContext().getApplicationInfo();
+        return applicationInfo.labelRes == 0 ? applicationInfo.nonLocalizedLabel.toString() : Tracker.getAppContext().getString(applicationInfo.labelRes);
     }
 
     static Closure getConnectionType() {
@@ -1302,28 +1313,10 @@ class TechnicalContext {
         return new Closure() {
             @Override
             public String execute() {
-                return Tracker.getAppContext().getPackageName();
-            }
-        };
-    }
-
-    static Closure getApplicationVersion() {
-        return new Closure() {
-            @Override
-            public String execute() {
-                android.content.Context context = Tracker.getAppContext();
-                String versionName = "";
-                try {
-                    if (context.getPackageManager() != null &&
-                            context.getPackageName() != null &&
-                            context.getPackageManager().getPackageInfo(context.getPackageName(), 0) != null) {
-
-                        versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(ATInternet.TAG, e.toString());
+                if (TextUtils.isEmpty(applicationIdentifier)) {
+                    applicationIdentifier = Tracker.getAppContext().getPackageName();
                 }
-                return String.format("[%s]", versionName);
+                return applicationIdentifier;
             }
         };
     }
@@ -1452,6 +1445,25 @@ class TechnicalContext {
 
     static boolean optOutEnabled(android.content.Context context) {
         return context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE).getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false);
+    }
+
+    static String getApplicationVersion() {
+        android.content.Context context = Tracker.getAppContext();
+        try {
+            if (context.getPackageManager() != null &&
+                    context.getPackageName() != null &&
+                    context.getPackageManager().getPackageInfo(context.getPackageName(), 0) != null) {
+
+                return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(ATInternet.TAG, e.toString());
+        }
+        return "";
+    }
+
+    static String getDefaultUserAgent() {
+        return String.format("%s %s/%s", System.getProperty("http.agent"), getApplicationName(), getApplicationVersion());
     }
 }
 

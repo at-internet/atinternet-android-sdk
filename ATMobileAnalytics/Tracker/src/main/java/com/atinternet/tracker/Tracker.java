@@ -36,6 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Wrapper class for tracking usage of your application
@@ -121,10 +122,23 @@ public class Tracker {
     private MvTestings mvTestings;
     private ECommerce eCommerce;
 
+    private String userAgent;
+    private String applicationVersion;
+
+    private void registerInstanceIfNeeded(boolean registerNeeded) {
+        if (registerNeeded) {
+            ATInternet.getInstance().registerTracker(UUID.randomUUID().toString(), this);
+        }
+    }
+
     /**
      * Initialisation with default configuration
      */
     public Tracker() {
+        this(true);
+    }
+
+    Tracker(boolean registerNeeded) {
         try {
             android.content.Context ctx = ((Application) Class.forName("android.app.ActivityThread")
                     .getMethod("currentApplication").invoke(null, (Object[]) null));
@@ -134,6 +148,8 @@ public class Tracker {
             if (!LifeCycle.isInitialized) {
                 LifeCycle.initLifeCycle(appContext.get());
             }
+
+            registerInstanceIfNeeded(registerNeeded);
         } catch (Exception e) {
             Log.e(ATInternet.TAG, e.toString());
         }
@@ -145,12 +161,17 @@ public class Tracker {
      * @param context the current Activity context
      */
     public Tracker(android.content.Context context) {
+        this(context, true);
+    }
+
+    Tracker(android.content.Context context, boolean registerNeeded) {
         appContext = new WeakReference<>(context.getApplicationContext());
         configuration = new Configuration(appContext.get());
         initTracker();
         if (!LifeCycle.isInitialized) {
             LifeCycle.initLifeCycle(appContext.get());
         }
+        registerInstanceIfNeeded(registerNeeded);
     }
 
     /**
@@ -159,6 +180,10 @@ public class Tracker {
      * @param configuration map that contains new keys/values see TrackerConfigurationKeys
      */
     public Tracker(final HashMap<String, Object> configuration) {
+        this(configuration, true);
+    }
+
+    Tracker(final HashMap<String, Object> configuration, boolean registerNeeded) {
         android.content.Context context;
         try {
             context = ((Application) Class.forName("android.app.ActivityThread")
@@ -169,6 +194,7 @@ public class Tracker {
             if (!LifeCycle.isInitialized) {
                 LifeCycle.initLifeCycle(appContext.get());
             }
+            registerInstanceIfNeeded(registerNeeded);
         } catch (Exception e) {
             Log.e(ATInternet.TAG, e.toString());
         }
@@ -181,12 +207,17 @@ public class Tracker {
      * @param configuration map that contains new keys/values see TrackerConfigurationKeys
      */
     public Tracker(android.content.Context context, final HashMap<String, Object> configuration) {
+        this(context, configuration, true);
+    }
+
+    Tracker(android.content.Context context, final HashMap<String, Object> configuration, boolean registerNeeded) {
         appContext = new WeakReference<>(context.getApplicationContext());
         this.configuration = new Configuration(configuration);
         initTracker();
         if (!LifeCycle.isInitialized) {
             LifeCycle.initLifeCycle(appContext.get());
         }
+        registerInstanceIfNeeded(registerNeeded);
     }
 
     Buffer getBuffer() {
@@ -420,15 +451,6 @@ public class Tracker {
      */
     public void setUserId(String value) {
         handleNotClosureStringParameterSetting(Hit.HitParam.UserId.stringValue(), value, new ParamOption().setPersistent(true));
-    }
-
-    /**
-     * Set a custom application version
-     *
-     * @param value new application version value
-     */
-    public void setApplicationVersion(String value) {
-        handleNotClosureStringParameterSetting("apvr", value, new ParamOption().setPersistent(true));
     }
 
     /**
@@ -1492,5 +1514,39 @@ public class Tracker {
      */
     public String getSdkVersion() {
         return TechnicalContext.VTAG.execute();
+    }
+
+    /**
+     * Set a custom application version
+     *
+     * @param value new application version value
+     */
+    Tracker setApplicationVersion(String value) {
+        ParamOption po = new ParamOption().setPersistent(true);
+        if (TextUtils.isEmpty(value)) {
+            handleNotClosureStringParameterSetting("apvr", String.format("[%s]", TechnicalContext.getApplicationVersion()), po);
+        } else {
+            handleNotClosureStringParameterSetting("apvr", String.format("[%s]", value), po);
+        }
+        applicationVersion = value;
+        return this;
+    }
+
+    /***
+     * Override user agent for instance
+     * @param ua new user agent
+     * @return Tracker instance
+     */
+    Tracker setUserAgent(String ua) {
+        userAgent = ua;
+        return this;
+    }
+
+    /***
+     * Get current tracker user agent
+     * @return Tracker user agent
+     */
+    String getUserAgent() {
+        return userAgent;
     }
 }
