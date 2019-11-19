@@ -103,7 +103,6 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("domain", "xiti.com")
                         .put("pixelPath", "/hit.xiti")
                         .put("site", "")
-                        .put("secure", false)
                         .put("identifier", "androidId")
                         .put("enableCrashDetection", true)
                         .put("plugins", "")

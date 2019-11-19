@@ -315,28 +315,22 @@ class Builder implements Runnable {
         StringBuilder conf = new StringBuilder();
         int hitConfigChunks = 0;
 
-        boolean isSecure = (boolean) configuration.get(TrackerConfigurationKeys.SECURE);
         String log = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG));
         String logSecure = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL));
         String domain = String.valueOf(configuration.get(TrackerConfigurationKeys.DOMAIN));
         String pixelPath = String.valueOf(configuration.get(TrackerConfigurationKeys.PIXEL_PATH));
         String siteID = String.valueOf(configuration.get(TrackerConfigurationKeys.SITE));
 
-        if (isSecure) {
-            if (!TextUtils.isEmpty(logSecure)) {
-                conf.append("https://")
-                        .append(logSecure)
-                        .append(".");
-                hitConfigChunks++;
-            }
-        } else {
-            if (!TextUtils.isEmpty(log)) {
-                conf.append("http://")
-                        .append(log)
-                        .append(".");
-                hitConfigChunks++;
-            }
+        conf.append("https://");
+        if (!TextUtils.isEmpty(logSecure)) {
+            conf.append(logSecure);
+            hitConfigChunks++;
+        } else if (!TextUtils.isEmpty(log)) {
+            conf.append(log);
+            hitConfigChunks++;
         }
+        conf.append(".");
+
         if (!TextUtils.isEmpty(domain)) {
             conf.append(domain);
             hitConfigChunks++;
@@ -381,9 +375,10 @@ class Builder implements Runnable {
                 Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "invalid collect domain", TrackerListener.HitStatus.Failed);
                 return new Pair<>(hitsList, oltParameter);
             }
-            boolean isSecure = (boolean) configuration.get(TrackerConfigurationKeys.SECURE);
-            if (isSecure) {
-                configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL)), collectDomain);
+
+            String logSecure = (String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL)));
+            if (!TextUtils.isEmpty(logSecure)) {
+                configStr = configStr.replace(logSecure, collectDomain);
             } else {
                 configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG)), collectDomain);
             }

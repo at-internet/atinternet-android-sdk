@@ -805,14 +805,16 @@ public class Tracker {
     }
 
     /**
-     * Enable secure mode (use HTTPS with secured log)
+     * Enable secure mode
      *
      * @param enabled           /
      * @param setConfigCallback Callback called when the operation has been done
      * @param sync              (optional) perform the operation synchronously (default: false)
+     * @deprecated Since 2.14.0, secure mode is forced
      */
+    @Deprecated
     public void setSecureModeEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
-        setConfig(TrackerConfigurationKeys.SECURE, enabled, setConfigCallback, sync);
+        Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Useless method, secure mode is forced");
     }
 
     /**
