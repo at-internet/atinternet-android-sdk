@@ -47,7 +47,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
     @Test
     public void getDefaultConfigurationTest() {
-        assertEquals(20, defaultConfiguration.size());
+        assertEquals(19, defaultConfiguration.size());
         assertEquals("", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("", defaultConfiguration.get("site"));
@@ -55,7 +55,6 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals("", defaultConfiguration.get("plugins"));
         assertEquals("xiti.com", defaultConfiguration.get("domain"));
         assertEquals("androidId", defaultConfiguration.get("identifier"));
-        assertEquals(false, defaultConfiguration.get("secure"));
         assertEquals(false, defaultConfiguration.get("hashUserId"));
         assertEquals("/hit.xiti", defaultConfiguration.get("pixelPath"));
         assertEquals(true, defaultConfiguration.get("persistIdentifiedVisitor"));

@@ -161,7 +161,7 @@ public class TrackerTest extends AbstractTestClass {
     public void setSecureSyncTest() {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
         tracker.setSecureModeEnabled(true, null, true);
-        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.SECURE), false);
     }
 
     @Test

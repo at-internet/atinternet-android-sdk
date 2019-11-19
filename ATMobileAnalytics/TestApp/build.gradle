@@ -36,5 +36,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
     implementation project(':Tracker')
+    //implementation(name: 'Tracker', ext: 'aar')
+    //implementation 'com.atinternet:Tracker:2.2.1'
 
 }

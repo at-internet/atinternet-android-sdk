@@ -45,10 +45,15 @@ public class BuilderTest extends AbstractTestClass {
     private Builder builder;
 
     @Test
-    public void buildPhoneConfigurationTest() throws Exception {
+    public void buildPhoneConfigurationTest() {
         builder = new Builder(tracker);
         String result = builder.buildConfiguration();
-        assertEquals(result, "http://logp.xiti.com/hit.xiti?s=552987");
+        assertEquals(result, "https://logs.xiti.com/hit.xiti?s=552987");
+
+        tracker.setConfig(TrackerConfigurationKeys.LOG_SSL, "", null, true);
+        builder = new Builder(tracker);
+        result = builder.buildConfiguration();
+        assertEquals(result, "https://logp.xiti.com/hit.xiti?s=552987");
 
         tracker.setConfig(TrackerConfigurationKeys.LOG, "", null, true);
         builder = new Builder(tracker);
@@ -307,7 +312,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void buildTest() throws Exception {
+    public void buildTest() {
         tracker.setParam("p", "page")
                 .setParam("p", "page2", new ParamOption().setAppend(true).setSeparator("--"))
                 .setParam("array", "[{\"test\":\"value\"}]")
@@ -326,7 +331,7 @@ public class BuilderTest extends AbstractTestClass {
         ArrayList<String> hits = builder.build().first;
         assertEquals(1, hits.size());
 
-        assertEquals("http://logp.xiti.com/hit.xiti?s=552987&p=page--page2&array=[{\"test\":\"value\"}]&test=value&stc={\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\",\"obj\":{\"subkey\":\"subvalue\"}}", hits.get(0));
+        assertEquals("https://logs.xiti.com/hit.xiti?s=552987&p=page--page2&array=[{\"test\":\"value\"}]&test=value&stc={\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\",\"obj\":{\"subkey\":\"subvalue\"}}", hits.get(0));
     }
 
     private Closure closureValue(final Object object) {

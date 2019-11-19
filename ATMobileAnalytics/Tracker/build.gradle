@@ -76,7 +76,7 @@ bintray {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.google.android.gms:play-services-ads:18.1.1'
+    compileOnly 'com.google.android.gms:play-services-ads:18.3.0'
     testImplementation 'org.robolectric:robolectric:4.2'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation 'junit:junit:4.12'
@@ -161,13 +161,14 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testReleaseUnitTest") {
 
     description = "Generate Jacoco coverage reports"
 
-    classDirectories = fileTree(
-            dir: project.rootDir.absolutePath + '/Tracker/build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/com/atinternet/tracker',
-    )
 
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = files(project.rootDir.absolutePath + '/Tracker/build/jacoco/testReleaseUnitTest.exec')
+    getClassDirectories().from(fileTree(
+            dir: project.rootDir.absolutePath + '/Tracker/build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/com/atinternet/tracker',
+    ))
+
+    getAdditionalSourceDirs().from(files(coverageSourceDirs))
+    getSourceDirectories().from(files(coverageSourceDirs))
+    getExecutionData().from(files(project.rootDir.absolutePath + '/Tracker/build/jacoco/testReleaseUnitTest.exec'))
 
     reports {
         xml.enabled true
