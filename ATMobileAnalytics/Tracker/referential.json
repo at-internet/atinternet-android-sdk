@@ -29,7 +29,11 @@
       "type": "list",
       "isPublic": true,
       "isGlobal": true,
-      "values" :["always", "required", "never"]
+      "values": [
+        "always",
+        "required",
+        "never"
+      ]
     },
     {
       "_id": "plugins",
@@ -104,18 +108,6 @@
       "isGlobal": true
     },
     {
-      "_id": "secure",
-      "name": "secure",
-      "pluginId": "core",
-      "category": "advanced",
-      "label": "Geode_Tag_SDK_Config_Title_secure",
-      "description": "Geode_Tag_SDK_Config_Description_secure",
-      "defaultValue": "false",
-      "type": "bool",
-      "isPublic": true,
-      "isGlobal": true
-    },
-    {
       "_id": "identifier",
       "name": "identifier",
       "pluginId": "core",
@@ -126,7 +118,11 @@
       "type": "list",
       "isPublic": true,
       "isGlobal": true,
-      "values": ["AndroidId", "AdvertisingId", "UUID"]
+      "values": [
+        "AndroidId",
+        "AdvertisingId",
+        "UUID"
+      ]
     },
     {
       "_id": "enableCrashDetection",
