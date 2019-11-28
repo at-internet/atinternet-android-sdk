@@ -810,11 +810,11 @@ public class Tracker {
      * @param enabled           /
      * @param setConfigCallback Callback called when the operation has been done
      * @param sync              (optional) perform the operation synchronously (default: false)
-     * @deprecated Since 2.14.0, secure mode is forced
+     * @deprecated Since 2.14.0, secure mode forced
      */
     @Deprecated
     public void setSecureModeEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
-        Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Useless method, secure mode is forced");
+        Tool.executeCallback(listener, Tool.CallbackType.WARNING, "Useless method, secure mode forced");
     }
 
     /**

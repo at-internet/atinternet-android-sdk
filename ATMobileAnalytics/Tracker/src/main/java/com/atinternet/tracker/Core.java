@@ -368,22 +368,6 @@ class Builder implements Runnable {
         LinkedHashMap<String, Pair<String, String>> dictionary = prepareQuery();
         Set<String> keySet = dictionary.keySet();
 
-        /// Surcharge du domain pour les events
-        if (keySet.contains("col")) {
-            String collectDomain = String.valueOf(configuration.get(TrackerConfigurationKeys.COLLECT_DOMAIN));
-            if (TextUtils.isEmpty(collectDomain)) {
-                Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "invalid collect domain", TrackerListener.HitStatus.Failed);
-                return new Pair<>(hitsList, oltParameter);
-            }
-
-            String logSecure = (String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL)));
-            if (!TextUtils.isEmpty(logSecure)) {
-                configStr = configStr.replace(logSecure, collectDomain);
-            } else {
-                configStr = configStr.replace(String.valueOf(configuration.get(TrackerConfigurationKeys.LOG)), collectDomain);
-            }
-        }
-
         int maxLengthAvailable = HIT_MAX_LENGTH - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
         StringBuilder queryString = new StringBuilder();
         StringBuilder mhCommonQueryContentSb = new StringBuilder();

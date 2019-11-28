@@ -109,12 +109,10 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("storage", "never")
                         .put("hashUserId", false)
                         .put("persistIdentifiedVisitor", true)
-                        .put("token", "")
                         .put("campaignLastPersistence", false)
                         .put("campaignLifetime", DEFAULT_CAMPAIGN_LIFETIME)
                         .put("sessionBackgroundDuration", DEFAULT_SESSION_BACKGROUND_DURATION)
                         .put("autoSalesTracker", false)
-                        .put("collectDomain", "")
                         .put("ignoreLimitedAdTracking", false)
                         .put("sendHitWhenOptOut", true);
             } catch (JSONException e1) {
