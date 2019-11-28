@@ -29,7 +29,11 @@
       "type": "list",
       "isPublic": true,
       "isGlobal": true,
-      "values" :["always", "required", "never"]
+      "values": [
+        "always",
+        "required",
+        "never"
+      ]
     },
     {
       "_id": "plugins",
@@ -104,18 +108,6 @@
       "isGlobal": true
     },
     {
-      "_id": "secure",
-      "name": "secure",
-      "pluginId": "core",
-      "category": "advanced",
-      "label": "Geode_Tag_SDK_Config_Title_secure",
-      "description": "Geode_Tag_SDK_Config_Description_secure",
-      "defaultValue": "false",
-      "type": "bool",
-      "isPublic": true,
-      "isGlobal": true
-    },
-    {
       "_id": "identifier",
       "name": "identifier",
       "pluginId": "core",
@@ -126,7 +118,11 @@
       "type": "list",
       "isPublic": true,
       "isGlobal": true,
-      "values": ["AndroidId", "AdvertisingId", "UUID"]
+      "values": [
+        "AndroidId",
+        "AdvertisingId",
+        "UUID"
+      ]
     },
     {
       "_id": "enableCrashDetection",
@@ -208,18 +204,6 @@
       "label": "Geode_Tag_SDK_Config_Title_downloadSource",
       "description": "Geode_Tag_SDK_Config_Description_downloadSource",
       "defaultValue": "int",
-      "type": "string",
-      "isPublic": false,
-      "isGlobal": true
-    },
-    {
-      "_id": "collectDomain",
-      "name": "collectDomain",
-      "pluginId": "core",
-      "category": "deployment",
-      "label": "Geode_Tag_SDK_Config_Title_collectDomain",
-      "description": "Geode_Tag_SDK_Config_Description_collectDomain",
-      "defaultValue": "",
       "type": "string",
       "isPublic": false,
       "isGlobal": true

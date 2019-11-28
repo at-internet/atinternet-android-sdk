@@ -93,12 +93,6 @@ public class TechnicalContextTest extends AbstractTestClass {
     }
 
     @Test
-    public void getApplicationVersionTest() {
-        assertNotNull(TechnicalContext.getApplicationVersion().execute());
-        assertNotSame("", TechnicalContext.getApplicationVersion().execute());
-    }
-
-    @Test
     public void getResolutionTest() {
         assertNotNull(TechnicalContext.getResolution().execute());
         assertNotSame("", TechnicalContext.getResolution().execute());

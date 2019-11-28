@@ -71,9 +71,11 @@ public class ECommerce {
      * @param domain            String
      * @param setConfigCallback Callback called when the operation has been done
      * @param sync              (optional) perform the operation synchronously (default: false)
+     * @deprecated Since 2.14.0, default log domain used
      */
+    @Deprecated
     public void setCollectDomain(String domain, SetConfigCallback setConfigCallback, boolean... sync) {
-        tracker.setConfig(TrackerConfigurationKeys.COLLECT_DOMAIN, domain, setConfigCallback, sync);
+        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Useless method, default log domain used");
     }
 
     /***

@@ -22,7 +22,10 @@
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Use this class to manage tracker instances
@@ -38,7 +41,10 @@ public final class ATInternet {
 
     private static ATInternet instance = new ATInternet();
 
-    private final HashMap<String, Tracker> trackers = new HashMap<>();
+    private final ConcurrentHashMap<String, Tracker> trackers = new ConcurrentHashMap<>();
+
+    private String userAgent;
+    private String applicationVersion;
 
     private ATInternet() {
     }
@@ -103,8 +109,7 @@ public final class ATInternet {
      */
     public Tracker getTracker(String trackerName) {
         if (!trackers.containsKey(trackerName)) {
-            Tracker tracker = new Tracker();
-            trackers.put(trackerName, tracker);
+            registerTracker(trackerName, new Tracker(false));
         }
         return trackers.get(trackerName);
     }
@@ -118,8 +123,7 @@ public final class ATInternet {
      */
     public Tracker getTracker(android.content.Context context, String trackerName) {
         if (!trackers.containsKey(trackerName)) {
-            Tracker tracker = new Tracker(context);
-            trackers.put(trackerName, tracker);
+            registerTracker(trackerName, new Tracker(context, false));
         }
         return trackers.get(trackerName);
     }
@@ -133,8 +137,7 @@ public final class ATInternet {
      */
     public Tracker getTracker(String trackerName, HashMap<String, Object> configuration) {
         if (!trackers.containsKey(trackerName)) {
-            Tracker tracker = new Tracker(configuration);
-            trackers.put(trackerName, tracker);
+            registerTracker(trackerName, new Tracker(configuration, false));
         }
         return trackers.get(trackerName);
     }
@@ -149,9 +152,62 @@ public final class ATInternet {
      */
     public Tracker getTracker(android.content.Context context, String trackerName, HashMap<String, Object> configuration) {
         if (!trackers.containsKey(trackerName)) {
-            Tracker tracker = new Tracker(context, configuration);
-            trackers.put(trackerName, tracker);
+            registerTracker(trackerName, new Tracker(context, configuration, false));
         }
         return trackers.get(trackerName);
+    }
+
+    void registerTracker(String trackerName, Tracker t) {
+        if (!TextUtils.isEmpty(userAgent)) {
+            t.setUserAgent(userAgent);
+        }
+        if (!TextUtils.isEmpty(applicationVersion)) {
+            t.setApplicationVersion(applicationVersion);
+        }
+        trackers.putIfAbsent(trackerName, t);
+    }
+
+    /***
+     * Get custom application version
+     * @return String
+     */
+    public String getApplicationVersion() {
+        if (!TextUtils.isEmpty(applicationVersion)) {
+            return applicationVersion;
+        }
+        return TechnicalContext.getApplicationVersion();
+    }
+
+    /***
+     * Method to override application version for all trackers
+     * @param apvr new application version
+     */
+    public void setApplicationVersion(String apvr) {
+        applicationVersion = apvr;
+        for (Tracker t : trackers.values()) {
+            t.setApplicationVersion(applicationVersion);
+        }
+    }
+
+    /***
+     * Get user agent
+     * @return String
+     */
+    public String getUserAgent() {
+        if (!TextUtils.isEmpty(userAgent)) {
+            return userAgent;
+        }
+        return TechnicalContext.getDefaultUserAgent();
+    }
+
+    /***
+     * Method to override user agent for all trackers
+     * @param ua new user agent
+     */
+    public void setUserAgent(String ua) {
+        userAgent = ua;
+        for (Tracker t : trackers.values()) {
+            t.setUserAgent(ua);
+        }
     }
 }

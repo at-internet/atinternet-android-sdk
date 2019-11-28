@@ -47,7 +47,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
     @Test
     public void getDefaultConfigurationTest() {
-        assertEquals(20, defaultConfiguration.size());
+        assertEquals(17, defaultConfiguration.size());
         assertEquals("", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("", defaultConfiguration.get("site"));
@@ -55,17 +55,14 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals("", defaultConfiguration.get("plugins"));
         assertEquals("xiti.com", defaultConfiguration.get("domain"));
         assertEquals("androidId", defaultConfiguration.get("identifier"));
-        assertEquals(false, defaultConfiguration.get("secure"));
         assertEquals(false, defaultConfiguration.get("hashUserId"));
         assertEquals("/hit.xiti", defaultConfiguration.get("pixelPath"));
         assertEquals(true, defaultConfiguration.get("persistIdentifiedVisitor"));
-        assertEquals("", defaultConfiguration.get("token"));
         assertEquals(true, defaultConfiguration.get("enableCrashDetection"));
         assertEquals(false, defaultConfiguration.get("campaignLastPersistence"));
         assertEquals(30, defaultConfiguration.get("campaignLifetime"));
         assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
         assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
-        assertEquals("", defaultConfiguration.get("collectDomain"));
         assertEquals(false, defaultConfiguration.get("ignoreLimitedAdTracking"));
         assertEquals(true, defaultConfiguration.get("sendHitWhenOptOut"));
     }
@@ -86,7 +83,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
         defaultConfiguration = new Configuration(dictionary);
 
-        assertEquals(20, defaultConfiguration.size());
+        assertEquals(18, defaultConfiguration.size());
         assertEquals("logtest", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("123456", defaultConfiguration.get("site"));
@@ -98,13 +95,11 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(true, defaultConfiguration.get("hashUserId"));
         assertEquals("/test.xiti", defaultConfiguration.get("pixelPath"));
         assertEquals(true, defaultConfiguration.get("persistIdentifiedVisitor"));
-        assertEquals("", defaultConfiguration.get("token"));
         assertEquals(true, defaultConfiguration.get("enableCrashDetection"));
         assertEquals(false, defaultConfiguration.get("campaignLastPersistence"));
         assertEquals(30, defaultConfiguration.get("campaignLifetime"));
         assertEquals(60, defaultConfiguration.get("sessionBackgroundDuration"));
         assertEquals(false, defaultConfiguration.get("autoSalesTracker"));
-        assertEquals("", defaultConfiguration.get("collectDomain"));
         assertEquals(false, defaultConfiguration.get("ignoreLimitedAdTracking"));
         assertEquals(true, defaultConfiguration.get("sendHitWhenOptOut"));
     }
