@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.atinternet"
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 29
         versionCode 1
         versionName "1.1"
     }
@@ -24,7 +24,10 @@ android {
 
 repositories {
     maven {
-        url "https://dl.bintray.com/atinternet/maven/"
+        url 'https://dl.bintray.com/atinternet/maven/'
+    }
+    maven {
+        url 'http://developer.huawei.com/repo/'
     }
     flatDir {
         dirs 'libs'
@@ -33,10 +36,9 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.android.gms:play-services-ads:16.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation project(':Tracker')
-    //implementation(name: 'Tracker', ext: 'aar')
-    //implementation 'com.atinternet:Tracker:2.2.1'
+    implementation 'com.google.android.gms:play-services-ads:16.0.0'
+    implementation 'com.huawei.hms:hms-ads-identifier:3.4.26.303'
 
 }

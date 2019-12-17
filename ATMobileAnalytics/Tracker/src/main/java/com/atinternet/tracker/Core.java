@@ -1096,7 +1096,6 @@ final class TrackerQueue extends LinkedBlockingQueue<Runnable> {
 
 class TechnicalContext {
 
-    private static final int RETRY_GET_ADVERTISING_COUNT = 3;
     private static final String ANDROID_ID_KEY = "androidid";
     private static final String ADVERTISING_ID_KEY = "advertisingid";
     private static String screenName = "";
@@ -1107,7 +1106,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.14.0";
+            return "2.15.0";
         }
     };
 
@@ -1382,26 +1381,44 @@ class TechnicalContext {
                 }
 
                 if (idType.equals(ADVERTISING_ID_KEY)) {
-                    try {
-                        com.google.android.gms.ads.identifier.AdvertisingIdClient.Info adInfo = null;
-                        int count = 0;
-                        while (adInfo == null && count < RETRY_GET_ADVERTISING_COUNT) {
-                            adInfo = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
-                            count++;
-                        }
 
-                        if (adInfo != null && !adInfo.isLimitAdTrackingEnabled()) {
-                            return adInfo.getId();
-                        } else {
-                            if (ignoreLimitedAdTracking) {
-                                return getIdentifierUUID(preferences);
+                    /// Google Mobile Services
+                    /// Check if class is available to prevent stucking process
+                    if (Tool.isClassAvailable("com.google.android.gms.ads.identifier.AdvertisingIdClient")) {
+                        try {
+                            com.google.android.gms.ads.identifier.AdvertisingIdClient.Info gmsAdInfo = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
+                            if (gmsAdInfo != null && !gmsAdInfo.isLimitAdTrackingEnabled()) {
+                                return gmsAdInfo.getId();
+                            } else {
+                                if (ignoreLimitedAdTracking) {
+                                    return getIdentifierUUID(preferences);
+                                }
+                                return "opt-out";
                             }
-                            return "opt-out";
+                        } catch (Exception e) {
+                            Log.e(ATInternet.TAG, e.toString());
                         }
-                    } catch (Exception e) {
-                        Log.e(ATInternet.TAG, e.toString());
-                        return "";
                     }
+
+                    /// Huawei Mobile Services
+                    /// Check if class is available to prevent stucking process
+                    if (Tool.isClassAvailable("com.huawei.hms.ads.identifier.AdvertisingIdClient")) {
+                        try {
+                            com.huawei.hms.ads.identifier.AdvertisingIdClient.Info hmsAdInfo = com.huawei.hms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
+                            if (hmsAdInfo != null && !hmsAdInfo.isLimitAdTrackingEnabled()) {
+                                return hmsAdInfo.getId();
+                            } else {
+                                if (ignoreLimitedAdTracking) {
+                                    return getIdentifierUUID(preferences);
+                                }
+                                return "opt-out";
+                            }
+                        } catch (Exception e) {
+                            Log.e(ATInternet.TAG, e.toString());
+                        }
+                    }
+
+                    return "";
                 }
 
                 return getIdentifierUUID(preferences);
@@ -1778,6 +1795,15 @@ class Tool {
             r.run();
         } else {
             act.runOnUiThread(r);
+        }
+    }
+
+    static boolean isClassAvailable(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException ce) {
+            return false;
         }
     }
 }
