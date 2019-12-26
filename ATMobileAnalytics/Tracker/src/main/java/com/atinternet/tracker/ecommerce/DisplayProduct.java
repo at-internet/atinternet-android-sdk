@@ -55,7 +55,7 @@ public class DisplayProduct extends Event {
             /// SALES INSIGHTS
             DisplayProduct dp = new DisplayProduct();
             if (!p.isEmpty()) {
-                dp.data.put("product", p.getAll());
+                dp.data.put("product", p.getProps());
             }
             generatedEvents.add(dp);
         }

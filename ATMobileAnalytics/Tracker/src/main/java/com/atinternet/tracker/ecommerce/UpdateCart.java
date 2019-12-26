@@ -43,7 +43,7 @@ public class UpdateCart extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            data.put("cart", cart.getProps());
         }
         return super.getData();
     }

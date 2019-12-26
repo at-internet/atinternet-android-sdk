@@ -23,10 +23,6 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.TrackerConfigurationKeys;
-import com.atinternet.tracker.Utility;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
@@ -38,26 +34,11 @@ public class DisplayCart extends Event {
 
     private List<ECommerceProduct> products;
     private ECommerceCart cart;
-    private String screenLabel;
-    private Screen screen;
 
-    private Tracker tracker;
-
-    DisplayCart(Tracker tracker) {
+    DisplayCart() {
         super("cart.display");
         cart = new ECommerceCart();
         products = new ArrayList<>();
-        this.tracker = tracker;
-    }
-
-    DisplayCart setScreenLabel(String screenLabel) {
-        this.screenLabel = screenLabel;
-        return this;
-    }
-
-    DisplayCart setScreen(Screen screen) {
-        this.screen = screen;
-        return this;
     }
 
     public ECommerceCart Cart() {
@@ -71,67 +52,8 @@ public class DisplayCart extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            data.put("cart", cart.getProps());
         }
         return super.getData();
-    }
-
-    @Override
-    protected List<Event> getAdditionalEvents() {
-        /// SALES TRACKER
-        if (Utility.parseBoolean(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER))) {
-            com.atinternet.tracker.Cart stCart = tracker.Cart().set(Utility.parseString(cart.get("s:id")));
-
-            for (ECommerceProduct p : products) {
-                String stProductId;
-                Object name = p.get("s:$");
-                if (name != null) {
-                    stProductId = String.format("%s[%s]", Utility.parseString(p.get("s:id")), Utility.parseString(name));
-                } else {
-                    stProductId = Utility.parseString(p.get("s:id"));
-                }
-
-                com.atinternet.tracker.Product stProduct = stCart.Products().add(stProductId)
-                        .setQuantity(Utility.parseInt(p.get("n:quantity")))
-                        .setUnitPriceTaxIncluded(Utility.parseDouble(p.get("f:pricetaxincluded")))
-                        .setUnitPriceTaxFree(Utility.parseDouble(p.get("f:pricetaxfree")));
-
-                Object stCategory = p.get("s:category1");
-                if (stCategory != null) {
-                    stProduct.setCategory1(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category2");
-                if (stCategory != null) {
-                    stProduct.setCategory2(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category3");
-                if (stCategory != null) {
-                    stProduct.setCategory3(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category4");
-                if (stCategory != null) {
-                    stProduct.setCategory4(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category5");
-                if (stCategory != null) {
-                    stProduct.setCategory5(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category6");
-                if (stCategory != null) {
-                    stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
-                }
-            }
-            if (screen == null) {
-                Screen s = tracker.Screens().add(screenLabel);
-                s.setCart(stCart);
-                s.setIsBasketScreen(true).sendView();
-            } else {
-                screen.setCart(stCart);
-                screen.setIsBasketScreen(true).sendView();
-                screen.setCart(null);
-                stCart.unset();
-            }
-        }
-        return super.getAdditionalEvents();
     }
 }

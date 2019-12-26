@@ -24,29 +24,34 @@ package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
 import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.Tracker;
 
-public class DisplayCarts extends AbstractEventsHelper {
+public class DisplayCarts {
 
-    private Tracker tracker;
+    private Events events;
 
-    public DisplayCarts(Events events, Tracker tracker) {
-        super(events);
-        this.tracker = tracker;
+    public DisplayCarts(Events events) {
+        this.events = events;
     }
 
     public DisplayCart add() {
-        DisplayCart dc = new DisplayCart(tracker);
+        DisplayCart dc = new DisplayCart();
         events.add(dc);
         return dc;
     }
 
+    /**
+     * @deprecated Since 2.16.0, use add() method instead
+     */
+    @Deprecated
     public DisplayCart add(String screenLabel) {
-        return add().setScreenLabel(screenLabel);
+        return add();
     }
 
+    /**
+     * @deprecated Since 2.16.0, use add() method instead
+     */
+    @Deprecated
     public DisplayCart add(Screen screen) {
-        tracker.getBusinessObjects().remove(screen.getId());
-        return add().setScreen(screen);
+        return add();
     }
 }

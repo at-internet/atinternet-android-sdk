@@ -60,9 +60,10 @@ public class ECommerce {
      * @param enabled           /
      * @param setConfigCallback Callback called when the operation has been done
      * @param sync              (optional) perform the operation synchronously (default: false)
+     * @deprecated Since 2.16.0, configuration is unused
      */
     public void setAutoSalesTrackerEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
-        tracker.setConfig(TrackerConfigurationKeys.AUTO_SALES_TRACKER, enabled, setConfigCallback, sync);
+        Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Useless method");
     }
 
     /**
@@ -84,7 +85,7 @@ public class ECommerce {
      */
     public DisplayPageProducts DisplayPageProducts() {
         if (displayPageProducts == null) {
-            displayPageProducts = new DisplayPageProducts(events, tracker);
+            displayPageProducts = new DisplayPageProducts(events);
         }
         return displayPageProducts;
     }
@@ -128,7 +129,7 @@ public class ECommerce {
      */
     public DisplayCarts DisplayCarts() {
         if (displayCarts == null) {
-            displayCarts = new DisplayCarts(events, tracker);
+            displayCarts = new DisplayCarts(events);
         }
         return displayCarts;
     }
@@ -172,7 +173,7 @@ public class ECommerce {
      */
     public CartAwaitingPayments CartAwaitingPayments() {
         if (cartAwaitingPayments == null) {
-            cartAwaitingPayments = new CartAwaitingPayments(events, tracker);
+            cartAwaitingPayments = new CartAwaitingPayments(events);
         }
         return cartAwaitingPayments;
     }
@@ -183,7 +184,7 @@ public class ECommerce {
      */
     public TransactionConfirmations TransactionConfirmations() {
         if (transactionConfirmations == null) {
-            transactionConfirmations = new TransactionConfirmations(events, tracker);
+            transactionConfirmations = new TransactionConfirmations(events);
         }
         return transactionConfirmations;
     }

@@ -22,24 +22,22 @@
  */
 package com.atinternet.tracker;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class RequiredPropertiesDataObject {
+public class RequiredPropertiesDataObject {
 
-    protected final Map<String, Object> properties;
-    protected final Map<String, String> propertiesPrefix;
+    private final Map<String, Object> properties;
 
-    protected RequiredPropertiesDataObject() {
-        properties = new HashMap<>();
-        propertiesPrefix = new HashMap<>();
+    public RequiredPropertiesDataObject() {
+        properties = new ConcurrentHashMap<>();
     }
 
     /***
      * Get all properties set
-     * @return Map
+     * @return ConcurrentHashMap
      */
-    public Map<String, Object> getAll() {
+    public Map<String, Object> getProps() {
         return properties;
     }
 
@@ -64,35 +62,62 @@ public abstract class RequiredPropertiesDataObject {
      * Set a property with prefix if needed
      * @param key String
      * @param value Object
-     * @return RequiredPropertiesDataObject instance
+     * @return PropertiesDataObject instance
      */
     public RequiredPropertiesDataObject set(String key, Object value) {
-        String prefix = propertiesPrefix.get(key);
+        properties.put(key, value);
+        return this;
+    }
 
-        if (prefix != null) {
-            properties.put(String.format("%s:%s", prefix, key), value);
-        } else {
-            properties.put(key, value);
-        }
+    /***
+     * Delete property
+     * @param key String
+     * @return PropertiesDataObject instance
+     */
+    public RequiredPropertiesDataObject del(String key) {
+        properties.remove(key);
         return this;
     }
 
     /***
      * Set all properties with prefix if needed
      * @param obj Map
-     * @return RequiredPropertiesDataObject instance
+     * @return PropertiesDataObject instance
      */
-    public RequiredPropertiesDataObject setAll(Map<String, Object> obj) {
+    public RequiredPropertiesDataObject setProps(Map<String, Object> obj) {
         for (Map.Entry<String, Object> entry : obj.entrySet()) {
-            String entryKey = entry.getKey();
-            String prefix = propertiesPrefix.get(entryKey);
-
-            if (prefix != null) {
-                properties.put(String.format("%s:%s", prefix, entryKey), entry.getValue());
-            } else {
-                properties.put(entryKey, entry.getValue());
-            }
+            set(entry.getKey(), entry.getValue());
         }
         return this;
+    }
+
+    /***
+     * Delete all properties
+     * @return PropertiesDataObject instance
+     */
+    public RequiredPropertiesDataObject delProps() {
+        properties.clear();
+        return this;
+    }
+
+    /***
+     * Get all properties set
+     * @return ConcurrentHashMap
+     * @deprecated Since 2.16.0, use getProps instead
+     */
+    @Deprecated
+    public Map<String, Object> getAll() {
+        return getProps();
+    }
+
+    /***
+     * Set all properties with prefix if needed
+     * @param obj Map
+     * @return PropertiesDataObject instance
+     * @deprecated Since 2.16.0, use setProps instead
+     */
+    @Deprecated
+    public RequiredPropertiesDataObject setAll(Map<String, Object> obj) {
+        return setProps(obj);
     }
 }
