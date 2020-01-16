@@ -33,7 +33,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.14.0"
+version = "2.15.0"
 
 install {
     repositories.mavenInstaller {
@@ -74,9 +74,18 @@ bintray {
     }
 }
 
+repositories {
+    maven {
+        url 'http://developer.huawei.com/repo/'
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     compileOnly 'com.google.android.gms:play-services-ads:18.3.0'
+    compileOnly 'com.huawei.hms:hms-ads-identifier:3.4.26.303'
+
     testImplementation 'org.robolectric:robolectric:4.2'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation 'junit:junit:4.12'

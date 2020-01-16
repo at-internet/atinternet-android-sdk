@@ -1096,9 +1096,10 @@ final class TrackerQueue extends LinkedBlockingQueue<Runnable> {
 
 class TechnicalContext {
 
-    private static final int RETRY_GET_ADVERTISING_COUNT = 3;
     private static final String ANDROID_ID_KEY = "androidid";
     private static final String ADVERTISING_ID_KEY = "advertisingid";
+    private static final String HUAWEI_OA_ID_KEY = "huaweioaid";
+    private static final String GOOGLE_AD_ID_KEY = "googleadid";
     private static String screenName = "";
     private static int level2 = -1;
 
@@ -1107,7 +1108,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.14.0";
+            return "2.15.0";
         }
     };
 
@@ -1376,35 +1377,95 @@ class TechnicalContext {
                 }
 
                 String idType = TextUtils.isEmpty(identifier) ? "" : identifier.toLowerCase();
+                switch (idType) {
+                    case ANDROID_ID_KEY:
+                        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    case ADVERTISING_ID_KEY:
+                        boolean adTrackingLimitedByUser = false;
 
-                if (idType.equals(ANDROID_ID_KEY)) {
-                    return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-                }
-
-                if (idType.equals(ADVERTISING_ID_KEY)) {
-                    try {
-                        com.google.android.gms.ads.identifier.AdvertisingIdClient.Info adInfo = null;
-                        int count = 0;
-                        while (adInfo == null && count < RETRY_GET_ADVERTISING_COUNT) {
-                            adInfo = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
-                            count++;
-                        }
-
-                        if (adInfo != null && !adInfo.isLimitAdTrackingEnabled()) {
-                            return adInfo.getId();
-                        } else {
-                            if (ignoreLimitedAdTracking) {
-                                return getIdentifierUUID(preferences);
+                        /// Google Mobile Services
+                        /// Check if class is available to prevent stucking process
+                        if (Tool.isClassAvailable("com.google.android.gms.ads.identifier.AdvertisingIdClient")) {
+                            try {
+                                com.google.android.gms.ads.identifier.AdvertisingIdClient.Info gmsAdInfo = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
+                                if (gmsAdInfo != null) {
+                                    if (gmsAdInfo.isLimitAdTrackingEnabled()) {
+                                        adTrackingLimitedByUser = true;
+                                    } else {
+                                        return gmsAdInfo.getId();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Log.e(ATInternet.TAG, e.toString());
                             }
-                            return "opt-out";
                         }
-                    } catch (Exception e) {
-                        Log.e(ATInternet.TAG, e.toString());
-                        return "";
-                    }
-                }
 
-                return getIdentifierUUID(preferences);
+                        /// Huawei Mobile Services
+                        /// Check if class is available to prevent stucking process
+                        if (Tool.isClassAvailable("com.huawei.hms.ads.identifier.AdvertisingIdClient")) {
+                            try {
+                                com.huawei.hms.ads.identifier.AdvertisingIdClient.Info hmsAdInfo = com.huawei.hms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
+                                if (hmsAdInfo != null) {
+                                    if (hmsAdInfo.isLimitAdTrackingEnabled()) {
+                                        adTrackingLimitedByUser = true;
+                                    } else {
+                                        return hmsAdInfo.getId();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Log.e(ATInternet.TAG, e.toString());
+                            }
+                        }
+
+                        if (!adTrackingLimitedByUser) {
+                            return "";
+                        }
+
+                        if (ignoreLimitedAdTracking) {
+                            return getIdentifierUUID(preferences);
+                        }
+                        return "opt-out";
+                    case GOOGLE_AD_ID_KEY:
+                        /// Google Advertising ID Only
+                        /// Check if class is available to prevent stucking process
+                        if (Tool.isClassAvailable("com.google.android.gms.ads.identifier.AdvertisingIdClient")) {
+                            try {
+                                com.google.android.gms.ads.identifier.AdvertisingIdClient.Info gmsAdInfo = com.google.android.gms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
+                                if (gmsAdInfo != null && !gmsAdInfo.isLimitAdTrackingEnabled()) {
+                                    return gmsAdInfo.getId();
+                                } else {
+                                    if (ignoreLimitedAdTracking) {
+                                        return getIdentifierUUID(preferences);
+                                    }
+                                    return "opt-out";
+                                }
+                            } catch (Exception e) {
+                                Log.e(ATInternet.TAG, e.toString());
+                            }
+                        }
+                        return "";
+                    case HUAWEI_OA_ID_KEY:
+                        /// Huawei Mobile Services
+                        /// Check if class is available to prevent stucking process
+                        if (Tool.isClassAvailable("com.huawei.hms.ads.identifier.AdvertisingIdClient")) {
+                            try {
+                                com.huawei.hms.ads.identifier.AdvertisingIdClient.Info hmsAdInfo = com.huawei.hms.ads.identifier.AdvertisingIdClient.getAdvertisingIdInfo(context);
+                                if (hmsAdInfo != null && !hmsAdInfo.isLimitAdTrackingEnabled()) {
+                                    return hmsAdInfo.getId();
+                                } else {
+                                    if (ignoreLimitedAdTracking) {
+                                        return getIdentifierUUID(preferences);
+                                    }
+                                    return "opt-out";
+                                }
+                            } catch (Exception e) {
+                                Log.e(ATInternet.TAG, e.toString());
+                            }
+                        }
+                        return "";
+                    default:
+                        return getIdentifierUUID(preferences);
+                }
             }
         };
     }
@@ -1778,6 +1839,15 @@ class Tool {
             r.run();
         } else {
             act.runOnUiThread(r);
+        }
+    }
+
+    static boolean isClassAvailable(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException ce) {
+            return false;
         }
     }
 }

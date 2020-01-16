@@ -21,30 +21,6 @@
             android:text="first Action" />
 
         <Button
-            android:id="@+id/secondAction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="second Action" />
-
-        <Button
-            android:id="@+id/thirdAction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="third Action" />
-
-        <Button
-            android:id="@+id/fourthAction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="fourth Action" />
-
-        <Button
-            android:id="@+id/fifthAction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="fifth Action" />
-
-        <Button
             android:id="@+id/goToSecondScreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
