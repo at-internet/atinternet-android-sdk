@@ -121,7 +121,9 @@
       "values": [
         "AndroidId",
         "AdvertisingId",
-        "UUID"
+        "UUID",
+        "GoogleAdId",
+        "HuaweiOAId"
       ]
     },
     {
