@@ -2,8 +2,9 @@ package com.atinternet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         put("log", "logp");
         put("domain", "xiti.com");
         put("pixelPath", "/hit.xiti");
-        put("secure", false);
+        put("identifier", "advertisingId");
         put("site", 552987);
     }};
 
@@ -27,51 +28,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.firstAction).setOnClickListener(this);
-        findViewById(R.id.secondAction).setOnClickListener(this);
-        findViewById(R.id.thirdAction).setOnClickListener(this);
-        findViewById(R.id.fourthAction).setOnClickListener(this);
-        findViewById(R.id.fifthAction).setOnClickListener(this);
         findViewById(R.id.goToSecondScreen).setOnClickListener(this);
 
         tracker = ATInternet.getInstance().getDefaultTracker();
         tracker.setConfig(config, null, true);
+        tracker.setDefaultListener();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.firstAction:
-                /// global apvr
-                ATInternet.getInstance().setApplicationVersion("globalapp");
-                tracker.dispatch();
-                tracker.Screens().add(this).sendView();
-                // add action
-                break;
-            case R.id.secondAction:
-                /// global apvr & global ua
-                ATInternet.getInstance().setUserAgent("globalua");
-                tracker.dispatch();
-                break;
-            case R.id.thirdAction:
-                /// global apvr & global ua
-                tracker = ATInternet.getInstance().getTracker("tracker", config);
-                tracker.dispatch();
-                break;
-            case R.id.fourthAction:
-                /// Normal
-                ATInternet.getInstance().setUserAgent(null);
-                ATInternet.getInstance().setApplicationVersion(null);
-                tracker = new Tracker(config);
-                tracker.dispatch();
-                break;
-            case R.id.fifthAction:
-                /// Normal
-                ATInternet.getInstance().setApplicationVersion("globalapp");
-                ATInternet.getInstance().setUserAgent("globalua");
-                tracker = new Tracker(config);
-                ATInternet.getInstance().setUserAgent(null);
-                ATInternet.getInstance().setApplicationVersion(null);
-                tracker.dispatch();
                 tracker.Screens().add(this).sendView();
                 break;
             case R.id.goToSecondScreen:

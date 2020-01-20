@@ -25,6 +25,8 @@ package com.atinternet.tracker;
 import android.app.Application;
 import android.text.format.DateFormat;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +35,6 @@ import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import androidx.test.core.app.ApplicationProvider;
 
 import static com.atinternet.tracker.Tracker.OfflineMode;
 import static com.atinternet.tracker.Tracker.getAppContext;
@@ -171,6 +171,10 @@ public class TrackerTest extends AbstractTestClass {
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "advertisingId");
         tracker.setIdentifierType(Tracker.IdentifierType.UUID, null, true);
         assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "UUID");
+        tracker.setIdentifierType(Tracker.IdentifierType.googleAdId, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "googleAdId");
+        tracker.setIdentifierType(Tracker.IdentifierType.huaweiOAId, null, true);
+        assertEquals(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER), "huaweiOAId");
     }
 
     @Test
