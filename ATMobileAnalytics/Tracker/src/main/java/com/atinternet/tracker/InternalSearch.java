@@ -100,7 +100,7 @@ public class InternalSearch extends BusinessObject {
 
     @Override
     void setParams() {
-        tracker.setParam(Hit.HitParam.InternalSearchKeyword.stringValue(), keyword == null ? "" : keyword.replaceAll("\\W", ""))
+        tracker.setParam(Hit.HitParam.InternalSearchKeyword.stringValue(), keyword == null ? "" : keyword, new ParamOption().setEncode(true))
                 .setParam(Hit.HitParam.InternalSearchResultScreenNumber.stringValue(), resultScreenNumber);
 
         if (resultPosition > -1) {
