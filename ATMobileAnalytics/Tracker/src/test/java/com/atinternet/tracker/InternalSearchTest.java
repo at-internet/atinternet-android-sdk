@@ -78,7 +78,7 @@ public class InternalSearchTest extends AbstractTestClass {
         assertEquals(0, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getVolatileParams().get("mc").getValues().size());
-        assertEquals("search", buffer.getVolatileParams().get("mc").getValues().get(0).execute());
+        assertEquals("se)a..rù c^h", buffer.getVolatileParams().get("mc").getValues().get(0).execute());
 
         assertEquals(1, buffer.getVolatileParams().get("np").getValues().size());
         assertEquals("3", buffer.getVolatileParams().get("np").getValues().get(0).execute());
