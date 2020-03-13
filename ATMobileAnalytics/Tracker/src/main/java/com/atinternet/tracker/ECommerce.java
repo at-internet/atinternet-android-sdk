@@ -62,6 +62,7 @@ public class ECommerce {
      * @param sync              (optional) perform the operation synchronously (default: false)
      * @deprecated Since 2.16.0, configuration is unused
      */
+    @Deprecated
     public void setAutoSalesTrackerEnabled(boolean enabled, SetConfigCallback setConfigCallback, boolean... sync) {
         Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "Useless method");
     }

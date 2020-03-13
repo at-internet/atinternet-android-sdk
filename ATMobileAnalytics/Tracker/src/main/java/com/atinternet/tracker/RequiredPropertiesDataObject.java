@@ -25,17 +25,17 @@ package com.atinternet.tracker;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RequiredPropertiesDataObject {
+public abstract class RequiredPropertiesDataObject {
 
     private final Map<String, Object> properties;
 
-    public RequiredPropertiesDataObject() {
+    protected RequiredPropertiesDataObject() {
         properties = new ConcurrentHashMap<>();
     }
 
     /***
      * Get all properties set
-     * @return ConcurrentHashMap
+     * @return Map
      */
     public Map<String, Object> getProps() {
         return properties;
@@ -62,7 +62,7 @@ public class RequiredPropertiesDataObject {
      * Set a property with prefix if needed
      * @param key String
      * @param value Object
-     * @return PropertiesDataObject instance
+     * @return RequiredPropertiesDataObject instance
      */
     public RequiredPropertiesDataObject set(String key, Object value) {
         properties.put(key, value);
@@ -72,7 +72,7 @@ public class RequiredPropertiesDataObject {
     /***
      * Delete property
      * @param key String
-     * @return PropertiesDataObject instance
+     * @return RequiredPropertiesDataObject instance
      */
     public RequiredPropertiesDataObject del(String key) {
         properties.remove(key);
@@ -82,7 +82,7 @@ public class RequiredPropertiesDataObject {
     /***
      * Set all properties with prefix if needed
      * @param obj Map
-     * @return PropertiesDataObject instance
+     * @return RequiredPropertiesDataObject instance
      */
     public RequiredPropertiesDataObject setProps(Map<String, Object> obj) {
         for (Map.Entry<String, Object> entry : obj.entrySet()) {
@@ -93,7 +93,7 @@ public class RequiredPropertiesDataObject {
 
     /***
      * Delete all properties
-     * @return PropertiesDataObject instance
+     * @return RequiredPropertiesDataObject instance
      */
     public RequiredPropertiesDataObject delProps() {
         properties.clear();
@@ -102,7 +102,7 @@ public class RequiredPropertiesDataObject {
 
     /***
      * Get all properties set
-     * @return ConcurrentHashMap
+     * @return Map
      * @deprecated Since 2.16.0, use getProps instead
      */
     @Deprecated
@@ -113,7 +113,7 @@ public class RequiredPropertiesDataObject {
     /***
      * Set all properties with prefix if needed
      * @param obj Map
-     * @return PropertiesDataObject instance
+     * @return RequiredPropertiesDataObject instance
      * @deprecated Since 2.16.0, use setProps instead
      */
     @Deprecated
