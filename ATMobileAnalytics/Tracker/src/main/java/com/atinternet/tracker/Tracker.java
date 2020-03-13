@@ -129,6 +129,7 @@ public class Tracker {
     private MediaPlayers mediaPlayers;
     private MvTestings mvTestings;
     private ECommerce eCommerce;
+    private AVInsights avInsights;
 
     private String userAgent;
     private String applicationVersion;
@@ -497,6 +498,13 @@ public class Tracker {
             eCommerce = new ECommerce(this);
         }
         return eCommerce;
+    }
+
+    public AVInsights AVInsights() {
+        if (avInsights == null) {
+            avInsights = new AVInsights(this);
+        }
+        return avInsights;
     }
 
     /**
@@ -974,6 +982,18 @@ public class Tracker {
         } else {
             setConfig(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION, duration, setConfigCallback, sync);
         }
+    }
+
+    /**
+     * Set a new max hit size value
+     *
+     * @param maxHitSize int
+     */
+    public void setMaxHitSize(int maxHitSize) {
+        if (maxHitSize < 1_600) {
+            maxHitSize = 1_600;
+        }
+        configuration.put(TrackerConfigurationKeys.MAX_HIT_SIZE, maxHitSize);
     }
 
     /**

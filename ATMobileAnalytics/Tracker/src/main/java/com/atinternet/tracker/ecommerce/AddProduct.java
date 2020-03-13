@@ -53,10 +53,10 @@ public class AddProduct extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!product.isEmpty()) {
-            data.put("product", product.getAll());
+            data.put("product", product.getProps());
         }
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            data.put("cart", cart.getProps());
         }
         return super.getData();
     }
@@ -65,14 +65,14 @@ public class AddProduct extends Event {
     protected List<Event> getAdditionalEvents() {
         List<Event> generatedEvents = super.getAdditionalEvents();
 
-        if (Utility.parseBoolean(product.get("b:cartcreation"))) {
+        if (Utility.parseBoolean(product.get("cartcreation"))) {
             CartCreation cc = new CartCreation();
             ECommerceCart ccc = cc.Cart();
-            int quantity = Utility.parseInt(product.get("n:quantity"));
-            ccc.set("id", Utility.parseString(cart.get("s:id")));
-            ccc.set("currency", Utility.parseString(product.get("s:currency")));
-            ccc.set("turnovertaxincluded", Utility.parseDouble(product.get("f:pricetaxincluded")) * quantity);
-            ccc.set("turnovertaxfree", Utility.parseDouble(product.get("f:pricetaxfree")) * quantity);
+            int quantity = Utility.parseInt(product.get("quantity"), 0);
+            ccc.set("id", Utility.parseString(cart.get("id")));
+            ccc.set("currency", Utility.parseString(product.get("currency")));
+            ccc.set("turnovertaxincluded", Utility.parseDouble(product.get("pricetaxincluded")) * quantity);
+            ccc.set("turnovertaxfree", Utility.parseDouble(product.get("pricetaxfree")) * quantity);
             ccc.set("quantity", quantity);
             ccc.set("nbdistinctproduct", 1);
             generatedEvents.add(cc);

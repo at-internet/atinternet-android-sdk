@@ -294,9 +294,9 @@ class Builder implements Runnable {
     private static final int MHID_UPPER_LIMIT = 9_000_000;
     private static final int MHID_LOWER_LIMIT = 1_000_000;
     private static final int REFCONFIGCHUNKS = 4;
+    private static final int DEFAULT_MAX_HIT_SIZE = 8_000;
     private static final int MH_PARAMETER_MAX_LENGTH = 30;
     private static final int MHERR_PARAMETER_LENGTH = 8;
-    private static final int HIT_MAX_LENGTH = 1600;
     private static final int HIT_MAX_COUNT = 999;
 
     private final Configuration configuration;
@@ -315,11 +315,11 @@ class Builder implements Runnable {
         StringBuilder conf = new StringBuilder();
         int hitConfigChunks = 0;
 
-        String log = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG));
-        String logSecure = String.valueOf(configuration.get(TrackerConfigurationKeys.LOG_SSL));
-        String domain = String.valueOf(configuration.get(TrackerConfigurationKeys.DOMAIN));
-        String pixelPath = String.valueOf(configuration.get(TrackerConfigurationKeys.PIXEL_PATH));
-        String siteID = String.valueOf(configuration.get(TrackerConfigurationKeys.SITE));
+        String log = Utility.parseString(configuration.get(TrackerConfigurationKeys.LOG));
+        String logSecure = Utility.parseString(configuration.get(TrackerConfigurationKeys.LOG_SSL));
+        String domain = Utility.parseString(configuration.get(TrackerConfigurationKeys.DOMAIN));
+        String pixelPath = Utility.parseString(configuration.get(TrackerConfigurationKeys.PIXEL_PATH));
+        String siteID = Utility.parseString(configuration.get(TrackerConfigurationKeys.SITE));
 
         conf.append("https://");
         if (!TextUtils.isEmpty(logSecure)) {
@@ -368,7 +368,7 @@ class Builder implements Runnable {
         LinkedHashMap<String, Pair<String, String>> dictionary = prepareQuery();
         Set<String> keySet = dictionary.keySet();
 
-        int maxLengthAvailable = HIT_MAX_LENGTH - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
+        int maxLengthAvailable = Utility.parseInt(configuration.get(TrackerConfigurationKeys.MAX_HIT_SIZE), DEFAULT_MAX_HIT_SIZE) - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
         StringBuilder queryString = new StringBuilder();
         StringBuilder mhCommonQueryContentSb = new StringBuilder();
         String mhCommonQueryContent;
@@ -1100,7 +1100,7 @@ class TechnicalContext {
     private static final String ADVERTISING_ID_KEY = "advertisingid";
     private static final String HUAWEI_OA_ID_KEY = "huaweioaid";
     private static final String GOOGLE_AD_ID_KEY = "googleadid";
-    private static String screenName = "";
+    private static String screenName = null;
     private static int level2 = -1;
 
     private static String applicationIdentifier;
@@ -1108,7 +1108,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.15.1";
+            return "2.16.0";
         }
     };
 

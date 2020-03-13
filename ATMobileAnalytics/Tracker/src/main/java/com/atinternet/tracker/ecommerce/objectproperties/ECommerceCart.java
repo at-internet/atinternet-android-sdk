@@ -33,21 +33,6 @@ public class ECommerceCart extends RequiredPropertiesDataObject {
     public ECommerceCart() {
         super();
         version = UUID.randomUUID().toString().substring(0, 8);
-        /// STRING
-        propertiesPrefix.put("version", "s");
-        propertiesPrefix.put("id", "s");
-        propertiesPrefix.put("currency", "s");
-
-        /// DATE
-        propertiesPrefix.put("creation_utc", "d");
-
-        /// FLOAT
-        propertiesPrefix.put("turnovertaxincluded", "f");
-        propertiesPrefix.put("turnovertaxfree", "f");
-
-        /// LONG
-        propertiesPrefix.put("quantity", "n");
-        propertiesPrefix.put("nbdistinctproduct", "n");
     }
 
     public String getVersion() {

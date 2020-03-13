@@ -22,8 +22,6 @@
  */
 package com.atinternet.tracker;
 
-import android.text.TextUtils;
-
 import java.util.LinkedHashMap;
 
 /**
@@ -311,7 +309,7 @@ public class Gesture extends BusinessObject {
     @Override
     void setParams() {
         String sn = TechnicalContext.getScreenName();
-        if (!TextUtils.isEmpty(sn)) {
+        if (sn != null) {
             tracker.setParam(Hit.HitParam.TouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
         }
 

@@ -64,7 +64,7 @@ public class BuilderTest extends AbstractTestClass {
     @Test
     public void multiHitsFailedNotSplittableParameterTest() {
         ArrayList<String> array = new ArrayList<>();
-        for (int i = 1; i <= 150; i++) {
+        for (int i = 1; i <= 1500; i++) {
             array.add("verybigvalue" + i);
         }
         buffer.getVolatileParams().put("test", new Param("test", closureValue(Tool.convertToString(array, null))));
@@ -80,7 +80,7 @@ public class BuilderTest extends AbstractTestClass {
     @Test
     public void multiHitsFailedNotSplittableValueTest() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= 150; i++) {
+        for (int i = 1; i <= 1500; i++) {
             sb.append("verybigvalue").append(i);
         }
         buffer.getVolatileParams().put("stc", new Param("stc", closureValue(sb.toString())));
@@ -101,7 +101,7 @@ public class BuilderTest extends AbstractTestClass {
             }
         }));
         ArrayList<String> array = new ArrayList<>();
-        for (int i = 1; i <= 200; i++) {
+        for (int i = 1; i <= 800; i++) {
             array.add("verybigvalue" + i);
         }
         ParamOption options = new ParamOption().setSeparator("|");
@@ -109,14 +109,16 @@ public class BuilderTest extends AbstractTestClass {
         builder = new Builder(tracker);
 
         ArrayList<String> hits = builder.build().first;
-        assertEquals(5, hits.size());
+        assertEquals(4, hits.size());
         assertFalse(hits.get(0).contains("mherr=1"));
         assertFalse(hits.get(1).contains("mherr=1"));
         assertFalse(hits.get(2).contains("mherr=1"));
+        assertFalse(hits.get(3).contains("mherr=1"));
 
-        assertTrue(hits.get(0).contains("mh="));
-        assertTrue(hits.get(1).contains("mh="));
-        assertTrue(hits.get(2).contains("mh="));
+        assertTrue(hits.get(0).contains("mh=1-4"));
+        assertTrue(hits.get(1).contains("mh=2-4"));
+        assertTrue(hits.get(2).contains("mh=3-4"));
+        assertTrue(hits.get(3).contains("mh=4-4"));
     }
 
     @Test
@@ -127,35 +129,33 @@ public class BuilderTest extends AbstractTestClass {
                 return "CustomId";
             }
         }));
-        for (int i = 1; i <= 220; i++) {
+        for (int i = 1; i <= 800; i++) {
             buffer.getVolatileParams().put("verybigkey" + i, new Param("verybigkey" + i, closureValue("verybigvalue" + i)));
         }
         builder = new Builder(tracker);
 
         ArrayList<String> hits = builder.build().first;
-        assertEquals(5, hits.size());
+        assertEquals(4, hits.size());
         assertFalse(hits.get(0).contains("mherr=1"));
         assertFalse(hits.get(1).contains("mherr=1"));
         assertFalse(hits.get(2).contains("mherr=1"));
         assertFalse(hits.get(3).contains("mherr=1"));
-        assertFalse(hits.get(4).contains("mherr=1"));
 
-        assertTrue(hits.get(0).contains("mh=1-5"));
-        assertTrue(hits.get(1).contains("mh=2-5"));
-        assertTrue(hits.get(2).contains("mh=3-5"));
-        assertTrue(hits.get(3).contains("mh=4-5"));
-        assertTrue(hits.get(4).contains("mh=5-5"));
+        assertTrue(hits.get(0).contains("mh=1-4"));
+        assertTrue(hits.get(1).contains("mh=2-4"));
+        assertTrue(hits.get(2).contains("mh=3-4"));
+        assertTrue(hits.get(3).contains("mh=4-4"));
     }
 
     @Test
-    public void makeSubQueryTest() throws Exception {
+    public void makeSubQueryTest() {
         builder = new Builder(tracker);
         String result = builder.makeSubQuery("p", "test");
         assertEquals("&p=test", result);
     }
 
     @Test
-    public void organizeParametersTest() throws Exception {
+    public void organizeParametersTest() {
         LinkedHashMap<String, Param> completeBuffer = new LinkedHashMap<>();
         tracker.setParam("ref", "www.atinternet.com?test1=1&test2=2&test3=<script></script>")
                 .setParam("map", new HashMap())
@@ -178,7 +178,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void prepareQuerySuccessTest() throws Exception {
+    public void prepareQuerySuccessTest() {
         tracker.setParam("p", "page")
                 .setParam("p", "page2", new ParamOption().setAppend(true).setSeparator("--"))
                 .setParam("array", "[{\"test\":\"value\"}]")
@@ -215,7 +215,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void overrideParam1Test() throws Exception {
+    public void overrideParam1Test() {
         tracker.setParam("test", "value", new ParamOption().setPersistent(true))
                 .setParam("test", "value2");
         builder = new Builder(tracker);
@@ -233,7 +233,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void overrideParam2Test() throws Exception {
+    public void overrideParam2Test() {
         tracker.setParam("test", "value", new ParamOption().setPersistent(true))
                 .setParam("test", "value2", new ParamOption().setAppend(true));
 
@@ -245,7 +245,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void overrideParam3Test() throws Exception {
+    public void overrideParam3Test() {
         tracker.setParam("test", "value2")
                 .setParam("test", "value", new ParamOption().setPersistent(true));
         builder = new Builder(tracker);
@@ -256,7 +256,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void appendParam1Test() throws Exception {
+    public void appendParam1Test() {
         tracker.setParam("test", "value2")
                 .setParam("test", "value", new ParamOption().setPersistent(true).setAppend(true))
                 .setParam("test", "value3", new ParamOption().setAppend(true));
@@ -275,7 +275,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void appendParam2Test() throws Exception {
+    public void appendParam2Test() {
         tracker.setParam("test", "value2")
                 .setParam("test", "value", new ParamOption().setPersistent(true).setAppend(true))
                 .setParam("test", "value3");
@@ -294,7 +294,7 @@ public class BuilderTest extends AbstractTestClass {
     }
 
     @Test
-    public void prepareQueryCannotAppendValuesTest() throws Exception {
+    public void prepareQueryCannotAppendValuesTest() {
         tracker.setParam("array", "[{\"test\":\"value\"}]")
                 .setParam("array", "value", new ParamOption().setAppend(true))
                 .setParam("stc", new HashMap() {{

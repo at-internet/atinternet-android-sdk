@@ -24,10 +24,12 @@ package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
 
-public class DeliveryCheckouts extends AbstractEventsHelper {
+public class DeliveryCheckouts {
+
+    private Events events;
 
     public DeliveryCheckouts(Events events) {
-        super(events);
+        this.events = events;
     }
 
     public DeliveryCheckout add() {

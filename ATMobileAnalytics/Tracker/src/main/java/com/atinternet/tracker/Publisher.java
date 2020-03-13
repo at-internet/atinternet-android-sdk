@@ -258,7 +258,7 @@ public class Publisher extends OnAppAd {
 
         if (action == Action.Touch) {
             String sn = TechnicalContext.getScreenName();
-            if (!TextUtils.isEmpty(sn)) {
+            if (sn != null) {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
             }
 

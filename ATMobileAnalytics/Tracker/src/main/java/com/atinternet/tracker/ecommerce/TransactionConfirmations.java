@@ -24,29 +24,34 @@ package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
 import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.Tracker;
 
-public class TransactionConfirmations extends AbstractEventsHelper {
+public class TransactionConfirmations {
 
-    private Tracker tracker;
+    private Events events;
 
-    public TransactionConfirmations(Events events, Tracker tracker) {
-        super(events);
-        this.tracker = tracker;
+    public TransactionConfirmations(Events events) {
+        this.events = events;
     }
 
     public TransactionConfirmation add() {
-        TransactionConfirmation tc = new TransactionConfirmation(tracker);
+        TransactionConfirmation tc = new TransactionConfirmation();
         events.add(tc);
         return tc;
     }
 
+    /**
+     * @deprecated Since 2.16.0, use add() method instead
+     */
+    @Deprecated
     public TransactionConfirmation add(String screenLabel) {
-        return add().setScreenLabel(screenLabel);
+        return add();
     }
 
+    /**
+     * @deprecated Since 2.16.0, use add() method instead
+     */
+    @Deprecated
     public TransactionConfirmation add(Screen screen) {
-        tracker.getBusinessObjects().remove(screen.getId());
-        return add().setScreen(screen);
+        return add();
     }
 }

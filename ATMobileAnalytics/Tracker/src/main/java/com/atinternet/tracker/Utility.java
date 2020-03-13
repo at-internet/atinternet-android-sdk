@@ -22,6 +22,11 @@
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Utility {
 
     public static String parseString(Object o) {
@@ -38,7 +43,7 @@ public class Utility {
         if (o == null) {
             return 0.0;
         }
-        if (o instanceof Double){
+        if (o instanceof Double) {
             return (double) o;
         }
         try {
@@ -52,7 +57,7 @@ public class Utility {
         if (o == null) {
             return false;
         }
-        if (o instanceof Boolean){
+        if (o instanceof Boolean) {
             return (boolean) o;
         }
         try {
@@ -62,20 +67,20 @@ public class Utility {
         }
     }
 
-    public static int parseInt(Object o) {
+    public static int parseInt(Object o, int defaultValue) {
         if (o == null) {
-            return 0;
+            return defaultValue;
         }
-        if (o instanceof Integer){
+        if (o instanceof Integer) {
             return (int) o;
         }
-        if (o instanceof Double){
+        if (o instanceof Double) {
             return ((Double) o).intValue();
         }
         try {
             return Integer.parseInt(parseString(o));
         } catch (Exception ignored) {
-            return 0;
+            return defaultValue;
         }
     }
 
@@ -99,5 +104,63 @@ public class Utility {
         }
 
         return sb.toString();
+    }
+
+    public static Map<String, Object> toFlatten(Map<String, Object> src) {
+        Map<String, Object> dst = new HashMap<>();
+        doFlatten(src, "", dst);
+        return dst;
+    }
+
+    public static Map<String, Object> toObject(Map<String, Object> flattened) {
+        Map<String, Object> unflattened = new HashMap<>();
+        for (String key : flattened.keySet()) {
+            doUnflatten(unflattened, key, flattened.get(key));
+        }
+        return unflattened;
+    }
+
+    private static void doFlatten(Map<String, Object> src, String prefix, Map<String, Object> dst) {
+        for (Map.Entry<String, Object> e : src.entrySet()) {
+            Object value = e.getValue();
+            String key = TextUtils.isEmpty(prefix) ? e.getKey() : prefix + "_" + e.getKey();
+            if (value instanceof Map) {
+                doFlatten((Map<String, Object>) value, key, dst);
+            } else {
+                dst.put(key, value);
+            }
+        }
+    }
+
+    private static void doUnflatten(Map<String, Object> current, String key, Object originalValue) {
+
+        String[] parts = key.split("_");
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (i == (parts.length - 1)) {
+                if (current.containsKey(part)) {
+                    Map<String, Object> m = new HashMap<>((Map<String, Object>) current.get(part));
+                    m.put("$", originalValue);
+                    originalValue = m;
+                }
+                current.put(part, originalValue);
+                return;
+            }
+
+            Map<String, Object> nestedMap;
+            Object v = current.get(part);
+            if (v != null && !(v instanceof Map)) {
+                Map<String, Object> m = new HashMap<>();
+                m.put("$", v);
+                current.put(part, m);
+            }
+            nestedMap = (Map<String, Object>) current.get(part);
+            if (nestedMap == null) {
+                nestedMap = new HashMap<>();
+                current.put(part, nestedMap);
+            }
+
+            current = nestedMap;
+        }
     }
 }
