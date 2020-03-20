@@ -145,12 +145,12 @@ public class Media extends RequiredPropertiesDataObject {
         return this;
     }
 
-    public synchronized void track(String action, Map<String, Object> options, Map<String, Object> extraProps) {
+    public synchronized void track(String event, Map<String, Object> options, Map<String, Object> extraProps) {
         if (options == null) {
             options = new HashMap<>();
         }
 
-        switch (action) {
+        switch (event) {
             case "av.heartbeat":
                 heartbeat(extraProps);
                 break;
@@ -191,7 +191,7 @@ public class Media extends RequiredPropertiesDataObject {
                 error(Utility.parseString(options.get("av_player_error")), extraProps);
                 break;
             default:
-                sendEvents(createEvent(action, false, extraProps));
+                sendEvents(createEvent(event, false, extraProps));
         }
     }
 
