@@ -71,6 +71,9 @@ public class Media extends RequiredPropertiesDataObject {
      * @return current Media instance
      */
     Media setHeartbeat(int heartbeat) {
+        if (heartbeat <= 0) {
+            return this;
+        }
         SparseIntArray sia = new SparseIntArray();
         sia.append(0, heartbeat);
         return setHeartbeat(sia);
@@ -111,6 +114,9 @@ public class Media extends RequiredPropertiesDataObject {
      * @return current Media instance
      */
     Media setBufferHeartbeat(int bufferHeartbeat) {
+        if (bufferHeartbeat <= 0) {
+            return this;
+        }
         SparseIntArray sia = new SparseIntArray();
         sia.append(0, bufferHeartbeat);
         return setBufferHeartbeat(sia);
