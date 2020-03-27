@@ -38,6 +38,7 @@ public class Media extends RequiredPropertiesDataObject {
     private long bufferTimeMillis = 0;
     private boolean isPlaying = false;
     private boolean isPlaybackActivated = false;
+    private double playbackSpeed = 1;
 
     private boolean autoHeartbeat;
     private boolean autoBufferHeartbeat;
@@ -71,11 +72,8 @@ public class Media extends RequiredPropertiesDataObject {
      * @return current Media instance
      */
     Media setHeartbeat(int heartbeat) {
-        if (heartbeat <= 0) {
-            return this;
-        }
         SparseIntArray sia = new SparseIntArray();
-        sia.append(0, heartbeat);
+        sia.append(0, Math.max(heartbeat, MIN_HEARTBEAT_DURATION));
         return setHeartbeat(sia);
     }
 
@@ -95,12 +93,7 @@ public class Media extends RequiredPropertiesDataObject {
         autoHeartbeat = true;
         heartbeatDurations.clear();
         for (int i = 0; i < size; i++) {
-            int value = heartbeat.valueAt(i);
-            if (value < MIN_HEARTBEAT_DURATION) {
-                heartbeatDurations.put(heartbeat.keyAt(i), MIN_HEARTBEAT_DURATION);
-            } else {
-                heartbeatDurations.put(heartbeat.keyAt(i), value);
-            }
+            heartbeatDurations.put(heartbeat.keyAt(i), Math.max(heartbeat.valueAt(i), MIN_HEARTBEAT_DURATION));
         }
         if (heartbeatDurations.indexOfKey(0) < 0) {
             heartbeatDurations.put(0, MIN_HEARTBEAT_DURATION);
@@ -114,11 +107,8 @@ public class Media extends RequiredPropertiesDataObject {
      * @return current Media instance
      */
     Media setBufferHeartbeat(int bufferHeartbeat) {
-        if (bufferHeartbeat <= 0) {
-            return this;
-        }
         SparseIntArray sia = new SparseIntArray();
-        sia.append(0, bufferHeartbeat);
+        sia.append(0, Math.max(bufferHeartbeat, MIN_BUFFER_HEARTBEAT_DURATION));
         return setBufferHeartbeat(sia);
     }
 
@@ -138,12 +128,7 @@ public class Media extends RequiredPropertiesDataObject {
         autoBufferHeartbeat = true;
         bufferHeartbeatDurations.clear();
         for (int i = 0; i < size; i++) {
-            int value = bufferHeartbeat.valueAt(i);
-            if (value < MIN_BUFFER_HEARTBEAT_DURATION) {
-                bufferHeartbeatDurations.put(bufferHeartbeat.keyAt(i), MIN_BUFFER_HEARTBEAT_DURATION);
-            } else {
-                bufferHeartbeatDurations.put(bufferHeartbeat.keyAt(i), value);
-            }
+            bufferHeartbeatDurations.put(bufferHeartbeat.keyAt(i), Math.max(bufferHeartbeat.valueAt(i), MIN_BUFFER_HEARTBEAT_DURATION));
         }
         if (bufferHeartbeatDurations.indexOfKey(0) < 0) {
             bufferHeartbeatDurations.put(0, MIN_BUFFER_HEARTBEAT_DURATION);
@@ -202,86 +187,48 @@ public class Media extends RequiredPropertiesDataObject {
     }
 
     /***
-     * Generate heartbeat event.
+     * Set a new playback speed and update session context
+     * @param playbackSpeed double
      */
-    public synchronized void heartbeat(Map<String, Object> extraProps) {
-        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
+    public synchronized void setPlaybackSpeed(double playbackSpeed) {
+        if (this.playbackSpeed == playbackSpeed && playbackSpeed <= 0) {
+            return;
+        }
 
-        updateDuration();
+        if (!isPlaying) {
+            this.playbackSpeed = playbackSpeed;
+            return;
+        }
 
-        previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis += eventDurationMillis;
-
-        sendEvents(createEvent("av.heartbeat", true, extraProps));
-    }
-
-    synchronized void processAutoHeartbeat() {
-        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
-
-        updateDuration();
-
-        previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis += eventDurationMillis;
+        processHeartbeat(false, null);
+        stopHeartbeatService();
 
         if (autoHeartbeat) {
             int diffMin = (int) ((System.currentTimeMillis() - startSessionTimeMillis) / 60000);
             heartbeatExecutor.schedule(heartbeatRunnable, heartbeatDurations.get(diffMin, MIN_HEARTBEAT_DURATION), TimeUnit.SECONDS);
         }
+        this.playbackSpeed = playbackSpeed;
+    }
 
-        sendEvents(createEvent("av.heartbeat", true, null));
+    /***
+     * Generate heartbeat event.
+     */
+    public synchronized void heartbeat(Map<String, Object> extraProps) {
+        processHeartbeat(false, extraProps);
     }
 
     /***
      * Generate heartbeat event during buffering.
      */
     public synchronized void bufferHeartbeat(Map<String, Object> extraProps) {
-        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
-
-        updateDuration();
-
-        sendEvents(createEvent("av.buffer.heartbeat", true, extraProps));
-    }
-
-    synchronized void processAutoBufferHeartbeat() {
-        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
-
-        updateDuration();
-
-        if (autoBufferHeartbeat) {
-            bufferTimeMillis = bufferTimeMillis == 0 ? System.currentTimeMillis() : bufferTimeMillis;
-            int diffMin = (int) ((System.currentTimeMillis() - bufferTimeMillis) / 60000);
-            heartbeatExecutor.schedule(bufferHeartbeatRunnable, bufferHeartbeatDurations.get(diffMin, MIN_BUFFER_HEARTBEAT_DURATION), TimeUnit.SECONDS);
-        }
-        sendEvents(createEvent("av.buffer.heartbeat", true, null));
+        processBufferHeartbeat(false, extraProps);
     }
 
     /***
      * Generate heartbeat event during rebuffering.
      */
     public synchronized void rebufferHeartbeat(Map<String, Object> extraProps) {
-        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
-
-        updateDuration();
-
-        previousCursorPositionMillis = currentCursorPositionMillis;
-
-        sendEvents(createEvent("av.rebuffer.heartbeat", true, extraProps));
-    }
-
-    synchronized void processAutoRebufferHeartbeat() {
-        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
-
-        updateDuration();
-
-        previousCursorPositionMillis = currentCursorPositionMillis;
-
-        if (autoBufferHeartbeat) {
-            bufferTimeMillis = bufferTimeMillis == 0 ? System.currentTimeMillis() : bufferTimeMillis;
-            int diffMin = (int) ((System.currentTimeMillis() - bufferTimeMillis) / 60000);
-            heartbeatExecutor.schedule(rebufferHeartbeatRunnable, bufferHeartbeatDurations.get(diffMin, MIN_BUFFER_HEARTBEAT_DURATION), TimeUnit.SECONDS);
-        }
-
-        sendEvents(createEvent("av.rebuffer.heartbeat", true, null));
+        processRebufferHeartbeat(false, extraProps);
     }
 
     /***
@@ -293,6 +240,7 @@ public class Media extends RequiredPropertiesDataObject {
 
         eventDurationMillis = 0;
 
+        cursorPosition = Math.max(cursorPosition, 0);
         previousCursorPositionMillis = cursorPosition;
         currentCursorPositionMillis = cursorPosition;
 
@@ -314,7 +262,7 @@ public class Media extends RequiredPropertiesDataObject {
 
         updateDuration();
         previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis = cursorPosition;
+        currentCursorPositionMillis = Math.max(cursorPosition, 0);
 
         stopHeartbeatService();
 
@@ -344,6 +292,7 @@ public class Media extends RequiredPropertiesDataObject {
 
         updateDuration();
 
+        cursorPosition = Math.max(cursorPosition, 0);
         previousCursorPositionMillis = cursorPosition;
         currentCursorPositionMillis = cursorPosition;
         bufferTimeMillis = 0;
@@ -369,7 +318,7 @@ public class Media extends RequiredPropertiesDataObject {
         updateDuration();
 
         previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis = cursorPosition;
+        currentCursorPositionMillis = Math.max(cursorPosition, 0);
         bufferTimeMillis = 0;
         isPlaying = true;
         isPlaybackActivated = true;
@@ -393,7 +342,7 @@ public class Media extends RequiredPropertiesDataObject {
         updateDuration();
 
         previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis = cursorPosition;
+        currentCursorPositionMillis = Math.max(cursorPosition, 0);
         bufferTimeMillis = 0;
         isPlaying = false;
         isPlaybackActivated = true;
@@ -413,7 +362,7 @@ public class Media extends RequiredPropertiesDataObject {
         updateDuration();
 
         previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis = cursorPosition;
+        currentCursorPositionMillis = Math.max(cursorPosition, 0);
 
         bufferTimeMillis = 0;
         isPlaying = false;
@@ -564,9 +513,54 @@ public class Media extends RequiredPropertiesDataObject {
         sendEvents(createEvent("av.share", false, extraProps));
     }
 
+    synchronized void processHeartbeat(boolean fromAuto, Map<String, Object> extraProps) {
+        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
+
+        updateDuration();
+
+        previousCursorPositionMillis = currentCursorPositionMillis;
+        currentCursorPositionMillis += (eventDurationMillis * playbackSpeed);
+
+        if (fromAuto) {
+            int diffMin = (int) ((System.currentTimeMillis() - startSessionTimeMillis) / 60000);
+            heartbeatExecutor.schedule(heartbeatRunnable, heartbeatDurations.get(diffMin, MIN_HEARTBEAT_DURATION), TimeUnit.SECONDS);
+        }
+
+        sendEvents(createEvent("av.heartbeat", true, extraProps));
+    }
+
+    synchronized void processBufferHeartbeat(boolean fromAuto, Map<String, Object> extraProps) {
+        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
+
+        updateDuration();
+
+        if (fromAuto) {
+            bufferTimeMillis = bufferTimeMillis == 0 ? System.currentTimeMillis() : bufferTimeMillis;
+            int diffMin = (int) ((System.currentTimeMillis() - bufferTimeMillis) / 60000);
+            heartbeatExecutor.schedule(bufferHeartbeatRunnable, bufferHeartbeatDurations.get(diffMin, MIN_BUFFER_HEARTBEAT_DURATION), TimeUnit.SECONDS);
+        }
+        sendEvents(createEvent("av.buffer.heartbeat", true, extraProps));
+    }
+
+    synchronized void processRebufferHeartbeat(boolean fromAuto, Map<String, Object> extraProps) {
+        startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
+
+        updateDuration();
+
+        previousCursorPositionMillis = currentCursorPositionMillis;
+
+        if (fromAuto) {
+            bufferTimeMillis = bufferTimeMillis == 0 ? System.currentTimeMillis() : bufferTimeMillis;
+            int diffMin = (int) ((System.currentTimeMillis() - bufferTimeMillis) / 60000);
+            heartbeatExecutor.schedule(rebufferHeartbeatRunnable, bufferHeartbeatDurations.get(diffMin, MIN_BUFFER_HEARTBEAT_DURATION), TimeUnit.SECONDS);
+        }
+
+        sendEvents(createEvent("av.rebuffer.heartbeat", true, extraProps));
+    }
+
     private synchronized Event createSeekStart(int oldCursorPosition, Map<String, Object> extraProps) {
         previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis = oldCursorPosition;
+        currentCursorPositionMillis = Math.max(oldCursorPosition, 0);
 
         if (isPlaying) {
             updateDuration();
@@ -580,8 +574,8 @@ public class Media extends RequiredPropertiesDataObject {
         Event seekStart = createSeekStart(oldCursorPosition, extraProps);
 
         eventDurationMillis = 0;
-        previousCursorPositionMillis = oldCursorPosition;
-        currentCursorPositionMillis = newCursorPosition;
+        previousCursorPositionMillis = Math.max(oldCursorPosition, 0);
+        currentCursorPositionMillis = Math.max(newCursorPosition, 0);
 
         sendEvents(seekStart, createEvent("av." + seekDirection, true, extraProps));
     }

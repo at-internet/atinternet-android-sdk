@@ -16,7 +16,7 @@ class HeartbeatRunnable extends AVRunnable {
 
     @Override
     public void run() {
-        media.processAutoHeartbeat();
+        media.processHeartbeat(true, null);
     }
 }
 
@@ -28,7 +28,7 @@ class BufferHeartbeatRunnable extends AVRunnable {
 
     @Override
     public void run() {
-        media.processAutoBufferHeartbeat();
+        media.processBufferHeartbeat(true, null);
     }
 }
 
@@ -40,6 +40,6 @@ class RebufferHeartbeatRunnable extends AVRunnable {
 
     @Override
     public void run() {
-        media.processAutoRebufferHeartbeat();
+        media.processRebufferHeartbeat(true, null);
     }
 }
