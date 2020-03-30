@@ -195,13 +195,14 @@ public class Media extends RequiredPropertiesDataObject {
             return;
         }
 
+        stopHeartbeatService();
+
         if (!isPlaying) {
             this.playbackSpeed = playbackSpeed;
             return;
         }
 
         processHeartbeat(false, null);
-        stopHeartbeatService();
 
         if (autoHeartbeat) {
             int diffMin = (int) ((System.currentTimeMillis() - startSessionTimeMillis) / 60000);
