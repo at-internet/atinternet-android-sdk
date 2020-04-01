@@ -136,14 +136,14 @@ public class Media extends RequiredPropertiesDataObject {
         return this;
     }
 
-    public synchronized void track(String event, Map<String, Object> options, Map<String, Object> extraProps) {
+    public void track(String event, Map<String, Object> options, Map<String, Object> extraProps) {
         if (options == null) {
             options = new HashMap<>();
         }
 
         switch (event) {
             case "av.heartbeat":
-                heartbeat(extraProps);
+                heartbeat(Utility.parseInt(options.get("av_position"), -1), extraProps);
                 break;
             case "av.buffer.heartbeat":
                 bufferHeartbeat(extraProps);
@@ -202,7 +202,7 @@ public class Media extends RequiredPropertiesDataObject {
             return;
         }
 
-        processHeartbeat(false, null);
+        heartbeat(null);
 
         if (autoHeartbeat) {
             int diffMin = (int) ((System.currentTimeMillis() - startSessionTimeMillis) / 60000);
@@ -214,21 +214,29 @@ public class Media extends RequiredPropertiesDataObject {
     /***
      * Generate heartbeat event.
      */
-    public synchronized void heartbeat(Map<String, Object> extraProps) {
-        processHeartbeat(false, extraProps);
+    public void heartbeat(Map<String, Object> extraProps) {
+        heartbeat(-1, extraProps);
+    }
+
+
+    /***
+     * Generate heartbeat event.
+     */
+    public void heartbeat(int cursorPosition, Map<String, Object> extraProps) {
+        processHeartbeat(cursorPosition, false, extraProps);
     }
 
     /***
      * Generate heartbeat event during buffering.
      */
-    public synchronized void bufferHeartbeat(Map<String, Object> extraProps) {
+    public void bufferHeartbeat(Map<String, Object> extraProps) {
         processBufferHeartbeat(false, extraProps);
     }
 
     /***
      * Generate heartbeat event during rebuffering.
      */
-    public synchronized void rebufferHeartbeat(Map<String, Object> extraProps) {
+    public void rebufferHeartbeat(Map<String, Object> extraProps) {
         processRebufferHeartbeat(false, extraProps);
     }
 
@@ -398,7 +406,7 @@ public class Media extends RequiredPropertiesDataObject {
      * @param oldCursorPosition Starting position (milliseconds)
      * @param newCursorPosition Ending position (milliseconds)
      */
-    public synchronized void seekBackward(int oldCursorPosition, int newCursorPosition, Map<String, Object> extraProps) {
+    public void seekBackward(int oldCursorPosition, int newCursorPosition, Map<String, Object> extraProps) {
         processSeek("backward", oldCursorPosition, newCursorPosition, extraProps);
     }
 
@@ -407,7 +415,7 @@ public class Media extends RequiredPropertiesDataObject {
      * @param oldCursorPosition Starting position (milliseconds)
      * @param newCursorPosition Ending position (milliseconds)
      */
-    public synchronized void seekForward(int oldCursorPosition, int newCursorPosition, Map<String, Object> extraProps) {
+    public void seekForward(int oldCursorPosition, int newCursorPosition, Map<String, Object> extraProps) {
         processSeek("forward", oldCursorPosition, newCursorPosition, extraProps);
     }
 
@@ -415,28 +423,28 @@ public class Media extends RequiredPropertiesDataObject {
      * Measuring seek start.
      * @param oldCursorPosition Old Cursor position (milliseconds)
      */
-    public synchronized void seekStart(int oldCursorPosition, Map<String, Object> extraProps) {
+    public void seekStart(int oldCursorPosition, Map<String, Object> extraProps) {
         sendEvents(createSeekStart(oldCursorPosition, extraProps));
     }
 
     /***
      * Measuring media click (especially for ads).
      */
-    public synchronized void adClick(Map<String, Object> extraProps) {
+    public void adClick(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.ad.click", false, extraProps));
     }
 
     /***
      * Measuring media skip (especially for ads).
      */
-    public synchronized void adSkip(Map<String, Object> extraProps) {
+    public void adSkip(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.ad.skip", false, extraProps));
     }
 
     /***
      * Error measurement preventing reading from continuing.
      */
-    public synchronized void error(String message, Map<String, Object> extraProps) {
+    public void error(String message, Map<String, Object> extraProps) {
         if (extraProps == null) {
             extraProps = new HashMap<>();
         }
@@ -447,74 +455,77 @@ public class Media extends RequiredPropertiesDataObject {
     /***
      * Measuring reco or Ad display.
      */
-    public synchronized void display(Map<String, Object> extraProps) {
+    public void display(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.display", false, extraProps));
     }
 
     /***
      * Measuring close action.
      */
-    public synchronized void close(Map<String, Object> extraProps) {
+    public void close(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.close", false, extraProps));
     }
 
     /***
      * Measurement of a volume change action.
      */
-    public synchronized void volume(Map<String, Object> extraProps) {
+    public void volume(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.volume", false, extraProps));
     }
 
     /***
      * Measurement of activated subtitles.
      */
-    public synchronized void subtitleOn(Map<String, Object> extraProps) {
+    public void subtitleOn(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.subtitle.on", false, extraProps));
     }
 
     /***
      * Measurement of deactivated subtitles.
      */
-    public synchronized void subtitleOff(Map<String, Object> extraProps) {
+    public void subtitleOff(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.subtitle.off", false, extraProps));
     }
 
     /***
      * Measuring a full-screen display.
      */
-    public synchronized void fullscreenOn(Map<String, Object> extraProps) {
+    public void fullscreenOn(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.fullscreen.on", false, extraProps));
     }
 
     /***
      * Measuring a full screen deactivation.
      */
-    public synchronized void fullscreenOff(Map<String, Object> extraProps) {
+    public void fullscreenOff(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.fullscreen.off", false, extraProps));
     }
 
     /***
      * Measurement of a quality change action.
      */
-    public synchronized void quality(Map<String, Object> extraProps) {
+    public void quality(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.quality", false, extraProps));
     }
 
     /***
      * Measurement of a speed change action.
      */
-    public synchronized void speed(Map<String, Object> extraProps) {
+    public void speed(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.speed", false, extraProps));
     }
 
     /***
      * Measurement of a sharing action.
      */
-    public synchronized void share(Map<String, Object> extraProps) {
+    public void share(Map<String, Object> extraProps) {
         sendEvents(createEvent("av.share", false, extraProps));
     }
 
-    synchronized void processHeartbeat(boolean fromAuto, Map<String, Object> extraProps) {
+    synchronized void processHeartbeat(int cursorPosition, boolean fromAuto, Map<String, Object> extraProps) {
+        if (cursorPosition >= 0) {
+            currentCursorPositionMillis = cursorPosition;
+        }
         startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
 
         updateDuration();

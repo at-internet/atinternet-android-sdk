@@ -16,7 +16,7 @@ class HeartbeatRunnable extends AVRunnable {
 
     @Override
     public void run() {
-        media.processHeartbeat(true, null);
+        media.processHeartbeat(-1, true, null);
     }
 }
 
