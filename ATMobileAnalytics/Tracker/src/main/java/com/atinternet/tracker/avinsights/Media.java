@@ -202,7 +202,7 @@ public class Media extends RequiredPropertiesDataObject {
             return;
         }
 
-        heartbeat(null);
+        heartbeat(-1, null);
 
         if (autoHeartbeat) {
             int diffMin = (int) ((System.currentTimeMillis() - startSessionTimeMillis) / 60000);
@@ -210,14 +210,6 @@ public class Media extends RequiredPropertiesDataObject {
         }
         this.playbackSpeed = playbackSpeed;
     }
-
-    /***
-     * Generate heartbeat event.
-     */
-    public void heartbeat(Map<String, Object> extraProps) {
-        heartbeat(-1, extraProps);
-    }
-
 
     /***
      * Generate heartbeat event.
@@ -523,15 +515,16 @@ public class Media extends RequiredPropertiesDataObject {
     }
 
     synchronized void processHeartbeat(int cursorPosition, boolean fromAuto, Map<String, Object> extraProps) {
-        if (cursorPosition >= 0) {
-            currentCursorPositionMillis = cursorPosition;
-        }
         startSessionTimeMillis = startSessionTimeMillis == 0 ? System.currentTimeMillis() : startSessionTimeMillis;
 
         updateDuration();
 
         previousCursorPositionMillis = currentCursorPositionMillis;
-        currentCursorPositionMillis += (eventDurationMillis * playbackSpeed);
+        if (cursorPosition >= 0) {
+            currentCursorPositionMillis = cursorPosition;
+        } else {
+            currentCursorPositionMillis += (eventDurationMillis * playbackSpeed);
+        }
 
         if (fromAuto) {
             int diffMin = (int) ((System.currentTimeMillis() - startSessionTimeMillis) / 60000);
@@ -592,7 +585,7 @@ public class Media extends RequiredPropertiesDataObject {
         sendEvents(seekStart, createEvent("av." + seekDirection, true, extraProps));
     }
 
-    private Event createEvent(String name, boolean withOptions, Map<String, Object> extraProps) {
+    private synchronized Event createEvent(String name, boolean withOptions, Map<String, Object> extraProps) {
         Map<String, Object> props = Utility.toFlatten(this.getProps());
         if (withOptions) {
             props.put("av_previous_position", this.previousCursorPositionMillis);
