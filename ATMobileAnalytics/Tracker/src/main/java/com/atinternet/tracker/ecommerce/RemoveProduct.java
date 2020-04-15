@@ -51,10 +51,10 @@ public class RemoveProduct extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!product.isEmpty()) {
-            data.put("product", product.getAll());
+            data.put("product", product.getProps());
         }
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            data.put("cart", cart.getProps());
         }
         return super.getData();
     }

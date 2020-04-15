@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +79,7 @@ public class Events extends BusinessObject {
                 if (data.size() != 0) {
                     eventsArray.put(new JSONObject()
                             .put("name", e.getName())
-                            .put("data", new JSONObject(data)));
+                            .put("data", new JSONObject(Utility.toObject(data))));
                 }
 
                 List<Event> additionalEvents = e.getAdditionalEvents();
@@ -86,7 +87,7 @@ public class Events extends BusinessObject {
                 for (Event ev : additionalEvents) {
                     eventsArray.put(new JSONObject()
                             .put("name", ev.getName())
-                            .put("data", new JSONObject(ev.getData())));
+                            .put("data", new JSONObject(Utility.toObject(ev.getData()))));
                 }
             }
 
@@ -94,10 +95,44 @@ public class Events extends BusinessObject {
 
             tracker.setParam("col", "2").setParam("events", eventsArray.toString(), new ParamOption().setEncode(true));
 
+            /// Context
+            Map<String, Object> pageContext = getPageContext();
+            if (pageContext.size() != 0) {
+                JSONArray contextArray = new JSONArray();
+                contextArray.put(new JSONObject().put("data", new JSONObject(pageContext)));
+                tracker.setParam("context", contextArray.toString(), new ParamOption().setEncode(true));
+            }
+
         } catch (JSONException e1) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.BUILD, "error on create events list : " + e1, TrackerListener.HitStatus.Failed);
             tracker.setParam("events", String.valueOf(eventLists), new ParamOption().setEncode(true));
             eventLists.clear();
         }
+    }
+
+    private Map<String, Object> getPageContext() {
+        Map<String, Object> pageContext = new HashMap<>();
+
+        /// Page
+        String s = TechnicalContext.getScreenName();
+        if (s != null) {
+            Map<String, Object> pageObj = new HashMap<>();
+            String[] splt = s.split("::");
+            pageObj.put("$", splt[splt.length - 1]);
+            for (int i = 0; i < splt.length - 1; i++) {
+                pageObj.put("chapter" + (i + 1), splt[i]);
+            }
+            pageContext.put("page", pageObj);
+        }
+
+        /// Level2
+        int level2 = TechnicalContext.getLevel2();
+        if (level2 > -1) {
+            Map<String, Object> siteObj = new HashMap<>();
+            siteObj.put("level2_id", TechnicalContext.getLevel2());
+            pageContext.put("site", siteObj);
+        }
+
+        return pageContext;
     }
 }

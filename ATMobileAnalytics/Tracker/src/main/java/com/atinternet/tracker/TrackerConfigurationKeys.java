@@ -151,6 +151,11 @@ public final class TrackerConfigurationKeys {
      */
     public static final String SEND_HIT_WHEN_OPT_OUT = "sendHitWhenOptOut";
 
+    /**
+     * Constant for Max hit size
+     */
+    public static final String MAX_HIT_SIZE = "maxHitSize";
+
     private TrackerConfigurationKeys() {
         throw new IllegalStateException("Utility class");
     }

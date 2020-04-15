@@ -42,8 +42,6 @@ public class Configuration extends LinkedHashMap<String, Object> {
     private static final String PHONE_CONFIGURATION = "phone";
     private static final String TABLET_CONFIGURATION = "tablet";
     private static final String JSON_FILE = "defaultConfiguration.json";
-    private static final int DEFAULT_CAMPAIGN_LIFETIME = 30;
-    private static final int DEFAULT_SESSION_BACKGROUND_DURATION = 60;
 
     Configuration(Context context) {
         JSONObject jsonObject = getDefaultConfiguration(Tool.isTablet(context));
@@ -110,11 +108,12 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put("hashUserId", false)
                         .put("persistIdentifiedVisitor", true)
                         .put("campaignLastPersistence", false)
-                        .put("campaignLifetime", DEFAULT_CAMPAIGN_LIFETIME)
-                        .put("sessionBackgroundDuration", DEFAULT_SESSION_BACKGROUND_DURATION)
+                        .put("campaignLifetime", 30)
+                        .put("sessionBackgroundDuration", 60)
                         .put("autoSalesTracker", false)
                         .put("ignoreLimitedAdTracking", false)
-                        .put("sendHitWhenOptOut", true);
+                        .put("sendHitWhenOptOut", true)
+                        .put("maxHitSize", 8_000);
             } catch (JSONException e1) {
                 Log.e(ATInternet.TAG, e1.toString());
             }

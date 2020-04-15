@@ -51,10 +51,10 @@ public class DeliveryCheckout extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!cart.isEmpty()) {
-            data.put("cart", cart.getAll());
+            data.put("cart", cart.getProps());
         }
         if (!shipping.isEmpty()) {
-            data.put("shipping", shipping.getAll());
+            data.put("shipping", shipping.getProps());
         }
         return super.getData();
     }

@@ -22,39 +22,18 @@
  */
 package com.atinternet.tracker.ecommerce;
 
-import android.text.TextUtils;
-
 import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.TrackerConfigurationKeys;
-import com.atinternet.tracker.Utility;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceProduct;
 
-import java.util.List;
 import java.util.Map;
 
 public class DisplayPageProduct extends Event {
 
     private ECommerceProduct product;
-    private Tracker tracker;
-    private String screenLabel;
-    private Screen screen;
 
-    DisplayPageProduct(Tracker tracker) {
+    DisplayPageProduct() {
         super("product.page_display");
         product = new ECommerceProduct();
-        this.tracker = tracker;
-    }
-
-    DisplayPageProduct setScreenLabel(String screenLabel) {
-        this.screenLabel = screenLabel;
-        return this;
-    }
-
-    DisplayPageProduct setScreen(Screen screen) {
-        this.screen = screen;
-        return this;
     }
 
     public ECommerceProduct Product() {
@@ -64,63 +43,8 @@ public class DisplayPageProduct extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!product.isEmpty()) {
-            data.put("product", product.getAll());
+            data.put("product", product.getProps());
         }
         return super.getData();
-    }
-
-    @Override
-    protected List<Event> getAdditionalEvents() {
-        if (Utility.parseBoolean(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER))) {
-            /// SALES TRACKER
-            String stProductId;
-            Object name = product.get("s:$");
-            if (name != null) {
-                stProductId = String.format("%s[%s]", Utility.parseString(product.get("s:id")), Utility.parseString(name));
-            } else {
-                stProductId = Utility.parseString(product.get("s:id"));
-            }
-            com.atinternet.tracker.Product stProduct = tracker.Products().add(stProductId);
-
-            Object stCategory = product.get("s:category1");
-            if (stCategory != null) {
-                stProduct.setCategory1(String.format("[%s]", String.valueOf(stCategory)));
-            }
-            stCategory = product.get("s:category2");
-            if (stCategory != null) {
-                stProduct.setCategory2(String.format("[%s]", String.valueOf(stCategory)));
-            }
-            stCategory = product.get("s:category3");
-            if (stCategory != null) {
-                stProduct.setCategory3(String.format("[%s]", String.valueOf(stCategory)));
-            }
-            stCategory = product.get("s:category4");
-            if (stCategory != null) {
-                stProduct.setCategory4(String.format("[%s]", String.valueOf(stCategory)));
-            }
-            stCategory = product.get("s:category5");
-            if (stCategory != null) {
-                stProduct.setCategory5(String.format("[%s]", String.valueOf(stCategory)));
-            }
-            stCategory = product.get("s:category6");
-            if (stCategory != null) {
-                stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
-            }
-            if (screen == null) {
-                if (!TextUtils.isEmpty(screenLabel)) {
-                    tracker.setParam("p", screenLabel);
-                }
-            } else {
-                if (!TextUtils.isEmpty(screen.getCompleteLabel())) {
-                    tracker.setParam("p", screen.getCompleteLabel());
-                }
-                if (screen.getLevel2() > 0) {
-                    tracker.setParam("s2", screen.getLevel2());
-                }
-            }
-            stProduct.sendView();
-        }
-
-        return super.getAdditionalEvents();
     }
 }

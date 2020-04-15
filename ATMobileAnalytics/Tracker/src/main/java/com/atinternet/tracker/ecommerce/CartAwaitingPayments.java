@@ -24,29 +24,34 @@ package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Events;
 import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.Tracker;
 
-public class CartAwaitingPayments extends AbstractEventsHelper {
+public class CartAwaitingPayments {
 
-    private Tracker tracker;
+    private Events events;
 
-    public CartAwaitingPayments(Events events, Tracker tracker) {
-        super(events);
-        this.tracker = tracker;
+    public CartAwaitingPayments(Events events) {
+        this.events = events;
     }
 
     public CartAwaitingPayment add() {
-        CartAwaitingPayment cap = new CartAwaitingPayment(tracker);
+        CartAwaitingPayment cap = new CartAwaitingPayment();
         events.add(cap);
         return cap;
     }
 
+    /**
+     * @deprecated Since 2.16.0, use add() method instead
+     */
+    @Deprecated
     public CartAwaitingPayment add(String screenLabel) {
-        return add().setScreenLabel(screenLabel);
+        return add();
     }
 
+    /**
+     * @deprecated Since 2.16.0, use add() method instead
+     */
+    @Deprecated
     public CartAwaitingPayment add(Screen screen) {
-        tracker.getBusinessObjects().remove(screen.getId());
-        return add().setScreen(screen);
+        return add();
     }
 }

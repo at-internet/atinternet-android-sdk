@@ -28,11 +28,5 @@ public class ECommerceShipping extends RequiredPropertiesDataObject {
 
     public ECommerceShipping() {
         super();
-        /// STRING
-        propertiesPrefix.put("delivery", "s");
-
-        /// FLOAT
-        propertiesPrefix.put("costtaxincluded", "f");
-        propertiesPrefix.put("costtaxfree", "f");
     }
 }

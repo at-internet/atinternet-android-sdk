@@ -33,7 +33,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.15.1"
+version = "2.16.0"
 
 install {
     repositories.mavenInstaller {
@@ -83,7 +83,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compileOnly 'com.google.android.gms:play-services-ads:18.3.0'
+    compileOnly 'com.google.android.gms:play-services-ads:19.0.0'
     compileOnly 'com.huawei.hms:hms-ads-identifier:3.4.26.303'
 
     testImplementation 'org.robolectric:robolectric:4.2'
@@ -133,7 +133,7 @@ task createDelivery {
             rename('Tracker-release.aar', 'Tracker.aar')
         }
         copy {
-            from 'build/intermediates/packaged-classes/release/'
+            from 'build/intermediates/aar_main_jar/release/'
             into destination
             include('classes.jar')
             rename('classes.jar', 'Tracker.jar')

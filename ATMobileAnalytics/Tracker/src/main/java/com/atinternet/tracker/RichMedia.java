@@ -499,7 +499,7 @@ public abstract class RichMedia extends BusinessObject {
             tracker.setParam("m9", webDomain, encode);
         }
         String sn = TechnicalContext.getScreenName();
-        if (!TextUtils.isEmpty(sn)) {
+        if (sn != null) {
             tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), sn, encode);
         }
 

@@ -20,15 +20,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce;
+package com.atinternet.tracker;
 
-import com.atinternet.tracker.Events;
+import android.util.SparseIntArray;
 
-abstract class AbstractEventsHelper {
+public class AVInsights {
 
-    protected Events events;
+    private Events events;
 
-    AbstractEventsHelper(Events events) {
-        this.events = events;
+    AVInsights(Tracker tracker) {
+        this.events = tracker.Events();
+    }
+
+    /***
+     * Create new Media
+     * @return Media instance
+     */
+    public com.atinternet.tracker.avinsights.Media Media() {
+        return new com.atinternet.tracker.avinsights.Media(events);
+    }
+
+    /***
+     * Create new Media
+     * @param heartbeat heartbeat period
+     * @param bufferHeartbeat buffer heartbeat period
+     * @return Media instance
+     */
+    public com.atinternet.tracker.avinsights.Media Media(int heartbeat, int bufferHeartbeat) {
+        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat);
+    }
+
+    /***
+     * Create new Media
+     * @param heartbeat heartbeat periods
+     * @param bufferHeartbeat buffer heartbeat periods
+     * @return Media instance
+     */
+    public com.atinternet.tracker.avinsights.Media Media(SparseIntArray heartbeat, SparseIntArray bufferHeartbeat) {
+        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat);
     }
 }

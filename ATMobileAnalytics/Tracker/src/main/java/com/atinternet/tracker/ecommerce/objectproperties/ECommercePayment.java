@@ -28,7 +28,5 @@ public class ECommercePayment extends RequiredPropertiesDataObject {
 
     public ECommercePayment() {
         super();
-        /// STRING
-        propertiesPrefix.put("mode", "s");
     }
 }

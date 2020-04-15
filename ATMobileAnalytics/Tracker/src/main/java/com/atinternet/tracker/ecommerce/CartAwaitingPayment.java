@@ -23,9 +23,6 @@
 package com.atinternet.tracker.ecommerce;
 
 import com.atinternet.tracker.Event;
-import com.atinternet.tracker.Screen;
-import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.TrackerConfigurationKeys;
 import com.atinternet.tracker.Utility;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommerceCart;
 import com.atinternet.tracker.ecommerce.objectproperties.ECommercePayment;
@@ -40,34 +37,19 @@ import java.util.Map;
 
 public class CartAwaitingPayment extends Event {
 
-    private Tracker tracker;
-    private String screenLabel;
-    private Screen screen;
-
     private ECommerceCart cart;
     private ECommerceTransaction transaction;
     private ECommerceShipping shipping;
     private ECommercePayment payment;
     private List<ECommerceProduct> products;
 
-    public CartAwaitingPayment(Tracker tracker) {
+    public CartAwaitingPayment() {
         super("cart.awaiting_payment");
-        this.tracker = tracker;
         cart = new ECommerceCart();
         transaction = new ECommerceTransaction();
         shipping = new ECommerceShipping();
         payment = new ECommercePayment();
         products = new ArrayList<>();
-    }
-
-    CartAwaitingPayment setScreenLabel(String screenLabel) {
-        this.screenLabel = screenLabel;
-        return this;
-    }
-
-    CartAwaitingPayment setScreen(Screen screen) {
-        this.screen = screen;
-        return this;
     }
 
     public ECommerceCart Cart() {
@@ -93,18 +75,18 @@ public class CartAwaitingPayment extends Event {
     @Override
     protected Map<String, Object> getData() {
         if (!cart.isEmpty()) {
-            Map cartData = cart.getAll();
-            cartData.put("s:version", cart.getVersion());
+            Map cartData = cart.getProps();
+            cartData.put("version", cart.getVersion());
             data.put("cart", cartData);
         }
         if (!payment.isEmpty()) {
-            data.put("payment", payment.getAll());
+            data.put("payment", payment.getProps());
         }
         if (!shipping.isEmpty()) {
-            data.put("shipping", shipping.getAll());
+            data.put("shipping", shipping.getProps());
         }
         if (!transaction.isEmpty()) {
-            data.put("transaction", transaction.getAll());
+            data.put("transaction", transaction.getProps());
         }
         return super.getData();
     }
@@ -115,87 +97,13 @@ public class CartAwaitingPayment extends Event {
         for (ECommerceProduct p : products) {
             ProductAwaitingPayment pap = new ProductAwaitingPayment();
             Map<String, Object> m = new HashMap<>();
-            m.put("id", Utility.parseString(cart.get("s:id")));
+            m.put("id", Utility.parseString(cart.get("id")));
             m.put("version", cart.getVersion());
-            pap.Cart().setAll(m);
+            pap.Cart().setProps(m);
             if (!p.isEmpty()) {
-                pap.Product().setAll(p.getAll());
+                pap.Product().setProps(p.getProps());
             }
             generatedEvents.add(pap);
-        }
-
-        /// SALES TRACKER
-        if (Utility.parseBoolean(tracker.getConfiguration().get(TrackerConfigurationKeys.AUTO_SALES_TRACKER))) {
-            double turnoverTaxIncluded = Utility.parseDouble(cart.get("f:turnovertaxincluded"));
-            double turnoverTaxFree = Utility.parseDouble(cart.get("f:turnovertaxfree"));
-            String cartId = Utility.parseString(cart.get("s:id"));
-
-            List<String> promoCodes = new ArrayList<>();
-            Object pc = transaction.get("a:s:promocode");
-            if (pc instanceof List) {
-                promoCodes.addAll((List<String>) pc);
-            }
-            String[] codes = new String[promoCodes.size()];
-            promoCodes.toArray(codes);
-            tracker.Orders().add(cartId, Utility.parseDouble(cart.get("f:turnovertaxincluded")))
-                    .setStatus(3).setPaymentMethod(0).setConfirmationRequired(false).setNewCustomer(Utility.parseBoolean(transaction.get("b:firstpurchase")))
-                    .Delivery().set(Utility.parseDouble(shipping.get("f:costtaxfree")), Utility.parseDouble(shipping.get("f:costtaxincluded")), Utility.parseString(shipping.get("s:delivery")))
-                    .Amount().set(turnoverTaxFree, turnoverTaxIncluded, turnoverTaxIncluded - turnoverTaxFree)
-                    .Discount().setPromotionalCode(Utility.stringJoin('|', codes));
-
-            com.atinternet.tracker.Cart stCart = tracker.Cart().set(cartId);
-            for (ECommerceProduct p : products) {
-                String stProductId;
-                Object name = p.get("s:$");
-                if (name != null) {
-                    stProductId = String.format("%s[%s]", Utility.parseString(p.get("s:id")), Utility.parseString(name));
-                } else {
-                    stProductId = Utility.parseString(p.get("s:id"));
-                }
-
-                com.atinternet.tracker.Product stProduct = stCart.Products().add(stProductId)
-                        .setQuantity(Utility.parseInt(p.get("n:quantity")))
-                        .setUnitPriceTaxIncluded(Utility.parseDouble(p.get("f:pricetaxincluded")))
-                        .setUnitPriceTaxFree(Utility.parseDouble(p.get("f:pricetaxfree")));
-
-                Object stCategory = p.get("s:category1");
-                if (stCategory != null) {
-                    stProduct.setCategory1(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category2");
-                if (stCategory != null) {
-                    stProduct.setCategory2(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category3");
-                if (stCategory != null) {
-                    stProduct.setCategory3(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category4");
-                if (stCategory != null) {
-                    stProduct.setCategory4(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category5");
-                if (stCategory != null) {
-                    stProduct.setCategory5(String.format("[%s]", String.valueOf(stCategory)));
-                }
-                stCategory = p.get("s:category6");
-                if (stCategory != null) {
-                    stProduct.setCategory6(String.format("[%s]", String.valueOf(stCategory)));
-                }
-
-            }
-
-            if (screen == null) {
-                Screen s = tracker.Screens().add(screenLabel);
-                s.setCart(stCart);
-                s.setIsBasketScreen(false).sendView();
-            } else {
-                screen.setTimestamp(System.nanoTime());
-                screen.setCart(stCart);
-                screen.setIsBasketScreen(false).sendView();
-                screen.setCart(null);
-                stCart.unset();
-            }
         }
 
         return generatedEvents;

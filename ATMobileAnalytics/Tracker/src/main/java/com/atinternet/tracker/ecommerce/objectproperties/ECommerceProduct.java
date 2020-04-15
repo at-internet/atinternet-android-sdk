@@ -30,30 +30,6 @@ public class ECommerceProduct extends RequiredPropertiesDataObject {
 
     public ECommerceProduct() {
         super();
-        /// STRING
-        propertiesPrefix.put("id", "s");
-        propertiesPrefix.put("$", "s");
-        propertiesPrefix.put("brand", "s");
-        propertiesPrefix.put("currency", "s");
-        propertiesPrefix.put("variant", "s");
-        propertiesPrefix.put("category1", "s");
-        propertiesPrefix.put("category2", "s");
-        propertiesPrefix.put("category3", "s");
-        propertiesPrefix.put("category4", "s");
-        propertiesPrefix.put("category5", "s");
-        propertiesPrefix.put("category6", "s");
-
-        /// BOOLEAN
-        propertiesPrefix.put("discount", "b");
-        propertiesPrefix.put("stock", "b");
-        propertiesPrefix.put("cartcreation", "b");
-
-        /// FLOAT
-        propertiesPrefix.put("pricetaxincluded", "f");
-        propertiesPrefix.put("pricetaxfree", "f");
-
-        /// LONG
-        propertiesPrefix.put("quantity", "n");
     }
 
     public ECommerceProduct(Map<String, Object> obj) {
