@@ -5,18 +5,13 @@ apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '29.0.3'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.-rules.pro'
-        }
+        consumerProguardFiles 'consumer-proguard-rules.pro'
     }
     testOptions {
         unitTests.all {
@@ -33,7 +28,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.16.0"
+version = "2.16.1"
 
 install {
     repositories.mavenInstaller {
