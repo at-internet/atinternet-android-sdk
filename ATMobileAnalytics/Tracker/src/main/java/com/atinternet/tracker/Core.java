@@ -88,63 +88,6 @@ interface Closure {
     String execute();
 }
 
-class Param {
-
-    private String key;
-    private List<Closure> values;
-    private ParamOption paramOption;
-
-    Param() {
-        key = "";
-        values = new ArrayList<>();
-        paramOption = null;
-    }
-
-    Param(String key, final Closure value) {
-        this();
-        this.key = key;
-        this.values.add(value);
-    }
-
-    Param(String key, Closure value, ParamOption paramOption) {
-        this(key, value);
-        this.paramOption = paramOption;
-    }
-
-    String getKey() {
-        return key;
-    }
-
-    void setKey(String key) {
-        this.key = key;
-    }
-
-    List<Closure> getValues() {
-        return values;
-    }
-
-    void setValue(Closure value) {
-        values.clear();
-        values.add(value);
-    }
-
-    void setValues(List<Closure> values) {
-        this.values = values;
-    }
-
-    ParamOption getOptions() {
-        return paramOption;
-    }
-
-    void setOptions(ParamOption paramOption) {
-        this.paramOption = paramOption;
-    }
-
-    boolean isPersistent() {
-        return paramOption != null && paramOption.isPersistent();
-    }
-}
-
 class Buffer {
 
     private final LinkedHashMap<String, Param> persistentParams;
@@ -998,7 +941,7 @@ class Dispatcher {
             tracker.getBuffer().getVolatileParams().clear();
             TrackerQueue.getInstance().put(builder);
 
-            tracker.Context().setLevel2(tracker.Context().getLevel2());
+            tracker.Context().setLevel2(tracker.Context().getLevel2String());
         } catch (Exception e) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.ERROR, e.toString(), TrackerListener.HitStatus.Failed);
         }
@@ -1101,14 +1044,15 @@ class TechnicalContext {
     private static final String HUAWEI_OA_ID_KEY = "huaweioaid";
     private static final String GOOGLE_AD_ID_KEY = "googleadid";
     private static String screenName = null;
-    private static int level2 = -1;
+    private static String level2 = null;
+    private static boolean isLevel2Int = false;
 
     private static String applicationIdentifier;
 
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.16.1";
+            return "2.17.0";
         }
     };
 
@@ -1125,7 +1069,8 @@ class TechnicalContext {
 
     static void resetScreenContext() {
         screenName = null;
-        level2 = -1;
+        level2 = null;
+        isLevel2Int = false;
     }
 
     static void setScreenName(String sn) {
@@ -1136,11 +1081,19 @@ class TechnicalContext {
         return screenName;
     }
 
-    static void setLevel2(int lv) {
+    static void setIsLevel2Int(boolean b) {
+        isLevel2Int = b;
+    }
+
+    static boolean isIsLevel2Int() {
+        return isLevel2Int;
+    }
+
+    static void setLevel2(String lv) {
         level2 = lv;
     }
 
-    static int getLevel2() {
+    static String getLevel2() {
         return level2;
     }
 

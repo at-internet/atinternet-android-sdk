@@ -83,7 +83,20 @@ public class LiveMedium extends RichMedia {
      * @return LiveMedium instance
      */
     public LiveMedium setMediaLevel2(int mediaLevel2) {
-        this.mediaLevel2 = mediaLevel2;
+        if (mediaLevel2 >= 0) {
+            return setMediaLevel2(String.valueOf(mediaLevel2));
+        }
+        return setMediaLevel2(null);
+    }
+
+    /**
+     * Set a new media level 2
+     *
+     * @param mediaLevel2 /
+     * @return LiveMedium instance
+     */
+    public LiveMedium setMediaLevel2(String mediaLevel2) {
+        super.setMediaLevel2(mediaLevel2);
         return this;
     }
 

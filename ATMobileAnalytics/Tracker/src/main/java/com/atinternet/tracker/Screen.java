@@ -100,7 +100,26 @@ public class Screen extends AbstractScreen {
      * @return the Screen instance
      */
     public Screen setLevel2(int level2) {
+        if (level2 >= 0) {
+            this.level2 = String.valueOf(level2);
+            TechnicalContext.setIsLevel2Int(true);
+        } else {
+            this.level2 = null;
+            TechnicalContext.setIsLevel2Int(false);
+        }
+        TechnicalContext.setLevel2(this.level2);
+        return this;
+    }
+
+    /**
+     * Set a new level 2 string
+     *
+     * @param level2 /
+     * @return the Screen instance
+     */
+    public Screen setLevel2(String level2) {
         this.level2 = level2;
+        TechnicalContext.setIsLevel2Int(false);
         TechnicalContext.setLevel2(level2);
         return this;
     }

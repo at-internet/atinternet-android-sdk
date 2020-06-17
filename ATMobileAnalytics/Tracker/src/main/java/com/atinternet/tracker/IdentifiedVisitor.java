@@ -62,8 +62,19 @@ public class IdentifiedVisitor {
      * @return Tracker instance
      */
     public Tracker set(long visitorId, int visitorCategory) {
+        return set(visitorId, String.valueOf(visitorCategory));
+    }
+
+    /**
+     * Set Identified visitor for the current session
+     *
+     * @param visitorId       numeric identifier
+     * @param visitorCategory visitor category
+     * @return Tracker instance
+     */
+    public Tracker set(long visitorId, String visitorCategory) {
         set(visitorId);
-        save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, String.valueOf(visitorCategory));
+        save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, visitorCategory);
 
         return tracker;
     }
@@ -89,8 +100,19 @@ public class IdentifiedVisitor {
      * @return Tracker instance
      */
     public Tracker set(String visitorId, int visitorCategory) {
+        return set(visitorId, String.valueOf(visitorCategory));
+    }
+
+    /**
+     * Set Identified visitor for the current session
+     *
+     * @param visitorId       textual identifier
+     * @param visitorCategory visitor category
+     * @return Tracker instance
+     */
+    public Tracker set(String visitorId, String visitorCategory) {
         set(visitorId);
-        save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, String.valueOf(visitorCategory));
+        save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, visitorCategory);
 
         return tracker;
     }
