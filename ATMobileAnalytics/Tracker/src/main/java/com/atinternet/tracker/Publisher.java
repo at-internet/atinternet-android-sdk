@@ -22,8 +22,6 @@
  */
 package com.atinternet.tracker;
 
-import android.text.TextUtils;
-
 import java.util.LinkedHashMap;
 
 /**
@@ -262,8 +260,8 @@ public class Publisher extends OnAppAd {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
             }
 
-            int lvl2 = TechnicalContext.getLevel2();
-            if (lvl2 >= 0) {
+            String lvl2 = TechnicalContext.getLevel2();
+            if (lvl2 != null) {
                 tracker.setParam(Hit.HitParam.OnAppAdTouchLevel2.stringValue(), lvl2);
             }
         }

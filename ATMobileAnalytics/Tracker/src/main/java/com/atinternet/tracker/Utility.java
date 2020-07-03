@@ -106,9 +106,9 @@ public class Utility {
         return sb.toString();
     }
 
-    public static Map<String, Object> toFlatten(Map<String, Object> src) {
+    public static Map<String, Object> toFlatten(Map<String, Object> src, boolean lowercase) {
         Map<String, Object> dst = new HashMap<>();
-        doFlatten(src, "", dst);
+        doFlatten(src, "", dst, lowercase);
         return dst;
     }
 
@@ -120,14 +120,14 @@ public class Utility {
         return unflattened;
     }
 
-    private static void doFlatten(Map<String, Object> src, String prefix, Map<String, Object> dst) {
+    private static void doFlatten(Map<String, Object> src, String prefix, Map<String, Object> dst, boolean lowercase) {
         for (Map.Entry<String, Object> e : src.entrySet()) {
             Object value = e.getValue();
             String key = TextUtils.isEmpty(prefix) ? e.getKey() : prefix + "_" + e.getKey();
             if (value instanceof Map) {
-                doFlatten((Map<String, Object>) value, key, dst);
+                doFlatten((Map<String, Object>) value, key, dst, lowercase);
             } else {
-                dst.put(key, value);
+                dst.put(lowercase ? key.toLowerCase() : key, value);
             }
         }
     }

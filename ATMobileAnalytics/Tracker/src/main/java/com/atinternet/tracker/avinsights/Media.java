@@ -586,7 +586,7 @@ public class Media extends RequiredPropertiesDataObject {
     }
 
     private synchronized Event createEvent(String name, boolean withOptions, Map<String, Object> extraProps) {
-        Map<String, Object> props = Utility.toFlatten(this.getProps());
+        Map<String, Object> props = new HashMap<>(this.getProps());
         if (withOptions) {
             props.put("av_previous_position", this.previousCursorPositionMillis);
             props.put("av_position", this.currentCursorPositionMillis);
@@ -597,7 +597,7 @@ public class Media extends RequiredPropertiesDataObject {
         props.put("av_session_id", sessionId);
 
         if (extraProps != null) {
-            props.putAll(Utility.toFlatten(extraProps));
+            props.putAll(new HashMap<>(extraProps));
         }
         return new Event(name).setData(props);
     }

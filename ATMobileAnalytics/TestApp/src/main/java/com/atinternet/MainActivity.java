@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
 import com.atinternet.tracker.avinsights.Media;
+import com.atinternet.tracker.ecommerce.CartAwaitingPayment;
 
 import java.util.HashMap;
 
@@ -40,13 +41,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.firstAction:
-                Media m = tracker.AVInsights().Media();
-                m.set("content", "test");
-                m.set("content_id", 23);
-                m.set("player", "play");
-                m.set("player_id", 45);
-                m.set("test", "yt");
-                m.playbackStart(0, null);
+                CartAwaitingPayment cp = tracker.ECommerce().CartAwaitingPayments().add();
+                cp.Cart().set("TEST", "totot");
+
+                tracker.Events().add("evENnt", new HashMap<String, Object>() {{
+                    put("My_Prop", true);
+                }});
+
+                tracker.setProp("PROp_1", "test", false);
+                tracker.setProps(new HashMap<String, String>() {{
+                    put("dic_PROP", "45");
+                    put("dFc_PROP", "33");
+                }}, false);
+                tracker.dispatch();
                 break;
             case R.id.goToSecondScreen:
                 startActivity(new Intent(this, SecondActivity.class));

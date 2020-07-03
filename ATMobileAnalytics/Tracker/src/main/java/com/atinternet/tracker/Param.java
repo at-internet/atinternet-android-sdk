@@ -20,20 +20,68 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.atinternet.tracker.ecommerce.objectproperties;
+package com.atinternet.tracker;
 
-import com.atinternet.tracker.RequiredPropertiesDataObject;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Map;
+public class Param {
 
-public class ECommerceProduct extends RequiredPropertiesDataObject {
+    private String key;
+    private List<Closure> values;
+    private ParamOption paramOption;
 
-    public ECommerceProduct() {
-        super();
+    Param() {
+        key = "";
+        values = new ArrayList<>();
+        paramOption = null;
     }
 
-    public ECommerceProduct(Map<String, Object> obj) {
+    Param(String key, final Closure value) {
         this();
-        setProps(obj);
+        this.key = key;
+        this.values.add(value);
+    }
+
+    Param(String key, Closure value, ParamOption paramOption) {
+        this(key, value);
+        this.paramOption = paramOption;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    void setKey(String key) {
+        this.key = key;
+    }
+
+    public List<Closure> getValues() {
+        return values;
+    }
+
+    void setValue(Closure value) {
+        values.clear();
+        values.add(value);
+    }
+
+    void setValues(List<Closure> values) {
+        this.values = values;
+    }
+
+    ParamOption getOptions() {
+        return paramOption;
+    }
+
+    void setOptions(ParamOption paramOption) {
+        this.paramOption = paramOption;
+    }
+
+    public boolean isPersistent() {
+        return paramOption != null && paramOption.isPersistent();
+    }
+
+    boolean isProperty() {
+        return paramOption != null && paramOption.isProperty();
     }
 }

@@ -75,19 +75,21 @@ public class Events extends BusinessObject {
 
             for (Event e : eventLists) {
 
-                Map<String, Object> data = e.getData();
+                Map<String, Object> data = Utility.toFlatten(e.getData(), true);
+
                 if (data.size() != 0) {
                     eventsArray.put(new JSONObject()
-                            .put("name", e.getName())
+                            .put("name", e.getName().toLowerCase())
                             .put("data", new JSONObject(Utility.toObject(data))));
                 }
 
                 List<Event> additionalEvents = e.getAdditionalEvents();
 
                 for (Event ev : additionalEvents) {
+                    data = Utility.toFlatten(ev.getData(), true);
                     eventsArray.put(new JSONObject()
-                            .put("name", ev.getName())
-                            .put("data", new JSONObject(Utility.toObject(ev.getData()))));
+                            .put("name", ev.getName().toLowerCase())
+                            .put("data", new JSONObject(Utility.toObject(data))));
                 }
             }
 
@@ -126,10 +128,15 @@ public class Events extends BusinessObject {
         }
 
         /// Level2
-        int level2 = TechnicalContext.getLevel2();
-        if (level2 > -1) {
+        String level2 = TechnicalContext.getLevel2();
+        if (level2 != null) {
             Map<String, Object> siteObj = new HashMap<>();
-            siteObj.put("level2_id", TechnicalContext.getLevel2());
+            int level2Int = Utility.parseInt(level2, -1);
+            if (level2Int >= 0 && TechnicalContext.isIsLevel2Int()) {
+                siteObj.put("level2_id", level2Int);
+            } else {
+                siteObj.put("level2", level2);
+            }
             pageContext.put("site", siteObj);
         }
 

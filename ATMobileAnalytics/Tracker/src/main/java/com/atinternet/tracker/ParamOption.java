@@ -63,6 +63,7 @@ public class ParamOption {
     private String separator;
     private boolean persistent;
     private boolean append;
+    private boolean property;
     private Type type;
 
     /**
@@ -75,6 +76,7 @@ public class ParamOption {
         encode = false;
         persistent = false;
         append = false;
+        property = false;
         type = Type.DEFAULT;
     }
 
@@ -134,6 +136,10 @@ public class ParamOption {
 
     Type getType() {
         return this.type;
+    }
+
+    boolean isProperty() {
+        return property;
     }
 
     /**
@@ -204,6 +210,11 @@ public class ParamOption {
 
     ParamOption setType(Type type) {
         this.type = type;
+        return this;
+    }
+
+    ParamOption setProperty(boolean property) {
+        this.property = property;
         return this;
     }
 }

@@ -22,7 +22,6 @@
  */
 package com.atinternet.tracker;
 
-import android.text.TextUtils;
 import android.util.SparseIntArray;
 
 import java.util.concurrent.Executors;
@@ -102,7 +101,7 @@ public abstract class RichMedia extends BusinessObject {
     String mediaType;
     String webDomain;
     String linkedContent;
-    int mediaLevel2;
+    String mediaLevel2;
     int duration;
     BroadcastMode broadcastMode;
     boolean isEmbedded;
@@ -113,7 +112,7 @@ public abstract class RichMedia extends BusinessObject {
         mediaLabel = "";
         mediaType = "";
         broadcastMode = BroadcastMode.Clip;
-        mediaLevel2 = -1;
+        mediaLevel2 = null;
         duration = 0;
         playTimestamp = -1;
         elapsedTime = 0;
@@ -165,6 +164,15 @@ public abstract class RichMedia extends BusinessObject {
      * @return the media level 2
      */
     public int getMediaLevel2() {
+        return Utility.parseInt(mediaLevel2, -1);
+    }
+
+    /**
+     * Get the level 2 string
+     *
+     * @return the level 2
+     */
+    public String getMediaLevel2String() {
         return mediaLevel2;
     }
 
@@ -282,6 +290,19 @@ public abstract class RichMedia extends BusinessObject {
      * @return RichMedia instance
      */
     public RichMedia setMediaLevel2(int mediaLevel2) {
+        if (mediaLevel2 >= 0) {
+            return setMediaLevel2(String.valueOf(mediaLevel2));
+        }
+        return setMediaLevel2(null);
+    }
+
+    /**
+     * Set a new media level2
+     *
+     * @param mediaLevel2 /
+     * @return RichMedia instance
+     */
+    public RichMedia setMediaLevel2(String mediaLevel2) {
         this.mediaLevel2 = mediaLevel2;
         return this;
     }
@@ -329,7 +350,7 @@ public abstract class RichMedia extends BusinessObject {
                 .setParam("plyr", mediaPlayer.getPlayerId())
                 .setParam("m5", isEmbedded ? "ext" : "int");
 
-        if (mediaLevel2 >= 0) {
+        if (mediaLevel2 != null) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), mediaLevel2);
         }
     }
@@ -503,8 +524,8 @@ public abstract class RichMedia extends BusinessObject {
             tracker.setParam(Hit.HitParam.RichMediaScreen.stringValue(), sn, encode);
         }
 
-        int lvl2 = TechnicalContext.getLevel2();
-        if (lvl2 >= 0) {
+        String lvl2 = TechnicalContext.getLevel2();
+        if (lvl2 != null) {
             tracker.setParam(Hit.HitParam.RichMediaLevel2.stringValue(), lvl2);
         }
         if (linkedContent != null) {
