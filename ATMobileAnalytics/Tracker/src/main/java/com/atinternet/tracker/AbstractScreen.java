@@ -51,7 +51,7 @@ public abstract class AbstractScreen extends BusinessObject {
 
     protected Action action;
     boolean isBasketScreen;
-    int level2;
+    String level2;
 
     private LinkedHashMap<String, CustomObject> customObjectsMap;
     private LinkedHashMap<String, CustomVar> customVarsMap;
@@ -72,14 +72,14 @@ public abstract class AbstractScreen extends BusinessObject {
 
     AbstractScreen() {
         action = Action.View;
-        level2 = -1;
+        level2 = null;
         name = "";
     }
 
     AbstractScreen(Tracker tracker) {
         super(tracker);
         action = Action.View;
-        level2 = -1;
+        level2 = null;
         name = "";
     }
 
@@ -135,6 +135,15 @@ public abstract class AbstractScreen extends BusinessObject {
      * @return the level 2
      */
     public int getLevel2() {
+        return Utility.parseInt(level2, -1);
+    }
+
+    /**
+     * Get the level 2 string
+     *
+     * @return the level 2
+     */
+    public String getLevel2String() {
         return level2;
     }
 
@@ -327,7 +336,7 @@ public abstract class AbstractScreen extends BusinessObject {
 
     @Override
     void setParams() {
-        if (level2 >= 0) {
+        if (level2 != null) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
 

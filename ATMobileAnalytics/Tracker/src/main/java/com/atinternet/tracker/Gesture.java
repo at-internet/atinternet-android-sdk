@@ -70,7 +70,7 @@ public class Gesture extends BusinessObject {
     private String chapter2;
     private String chapter3;
     private Action action;
-    private int level2;
+    private String level2;
 
     private LinkedHashMap<String, CustomObject> customObjectsMap;
     private InternalSearch internalSearch;
@@ -79,7 +79,7 @@ public class Gesture extends BusinessObject {
     Gesture(Tracker tracker) {
         super(tracker);
         action = Action.Touch;
-        level2 = -1;
+        level2 = null;
         name = "";
     }
 
@@ -189,6 +189,15 @@ public class Gesture extends BusinessObject {
      * @return the level 2
      */
     public int getLevel2() {
+        return Utility.parseInt(level2, -1);
+    }
+
+    /**
+     * Get the level 2 string
+     *
+     * @return the level 2
+     */
+    public String getLevel2String() {
         return level2;
     }
 
@@ -259,8 +268,20 @@ public class Gesture extends BusinessObject {
      * @return Gesture instance
      */
     public Gesture setLevel2(int level2) {
-        this.level2 = level2;
+        if (level2 >= 0) {
+            return setLevel2(String.valueOf(level2));
+        }
+        return setLevel2(null);
+    }
 
+    /**
+     * Set a new level 2 string
+     *
+     * @param level2 /
+     * @return the Screen instance
+     */
+    public Gesture setLevel2(String level2) {
+        this.level2 = level2;
         return this;
     }
 
@@ -313,12 +334,12 @@ public class Gesture extends BusinessObject {
             tracker.setParam(Hit.HitParam.TouchScreen.stringValue(), sn, new ParamOption().setEncode(true));
         }
 
-        int lvl2 = TechnicalContext.getLevel2();
-        if (lvl2 >= 0) {
+        String lvl2 = TechnicalContext.getLevel2();
+        if (lvl2 != null) {
             tracker.setParam(Hit.HitParam.TouchLevel2.stringValue(), lvl2);
         }
 
-        if (level2 >= 0) {
+        if (level2 != null) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2);
         }
 

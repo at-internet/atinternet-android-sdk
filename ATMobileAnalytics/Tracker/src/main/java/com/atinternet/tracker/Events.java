@@ -126,10 +126,15 @@ public class Events extends BusinessObject {
         }
 
         /// Level2
-        int level2 = TechnicalContext.getLevel2();
-        if (level2 > -1) {
+        String level2 = TechnicalContext.getLevel2();
+        if (level2 != null) {
             Map<String, Object> siteObj = new HashMap<>();
-            siteObj.put("level2_id", TechnicalContext.getLevel2());
+            int level2Int = Utility.parseInt(level2, -1);
+            if (level2Int >= 0 && TechnicalContext.isIsLevel2Int()) {
+                siteObj.put("level2_id", level2Int);
+            } else {
+                siteObj.put("level2", level2);
+            }
             pageContext.put("site", siteObj);
         }
 

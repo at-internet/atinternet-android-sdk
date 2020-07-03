@@ -73,11 +73,26 @@ public class ContextTest extends AbstractTestClass {
     public void setLevel2Test() {
         context.setLevel2(4);
 
+        assertEquals(4, context.getLevel2());
+        assertEquals("4", context.getLevel2String());
         assertEquals(0, buffer.getVolatileParams().size());
         assertEquals(1, buffer.getPersistentParams().size());
 
         assertEquals(1, buffer.getPersistentParams().get("s2").getValues().size());
         assertEquals("4", buffer.getPersistentParams().get("s2").getValues().get(0).execute());
+    }
+
+    @Test
+    public void setLevel2StringTest() {
+        context.setLevel2("test");
+
+        assertEquals(-1, context.getLevel2());
+        assertEquals("test", context.getLevel2String());
+        assertEquals(0, buffer.getVolatileParams().size());
+        assertEquals(1, buffer.getPersistentParams().size());
+
+        assertEquals(1, buffer.getPersistentParams().get("s2").getValues().size());
+        assertEquals("test", buffer.getPersistentParams().get("s2").getValues().get(0).execute());
     }
 
     @Test
