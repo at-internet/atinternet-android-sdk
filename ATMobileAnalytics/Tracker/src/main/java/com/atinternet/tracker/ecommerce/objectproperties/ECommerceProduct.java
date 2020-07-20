@@ -34,6 +34,6 @@ public class ECommerceProduct extends RequiredPropertiesDataObject {
 
     public ECommerceProduct(Map<String, Object> obj) {
         this();
-        setAll(obj);
+        setProps(obj);
     }
 }
