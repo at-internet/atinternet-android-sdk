@@ -1325,7 +1325,7 @@ public class Tracker {
      * @return Tracker instance
      */
     public Tracker setProp(String key, final String value, boolean persistent) {
-        return setParam(key.toLowerCase(), new Closure() {
+        return setParam(key, new Closure() {
             @Override
             public String execute() {
                 return value;

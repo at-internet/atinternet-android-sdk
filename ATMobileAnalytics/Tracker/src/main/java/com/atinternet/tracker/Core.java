@@ -616,9 +616,7 @@ class Builder implements Runnable {
                 }
             }
 
-            if (p.isProperty()) {
-                key = key.toLowerCase();
-            }
+            key = p.isProperty() ? key.toLowerCase() : key;
             formattedParameters.put(key, new Pair<>(makeSubQuery(key, strValue), separator));
         }
         return formattedParameters;
