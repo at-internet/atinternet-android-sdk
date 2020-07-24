@@ -45,7 +45,7 @@ public class Context {
     private final Tracker tracker;
 
     // Tracker level2
-    private int level2 = -1;
+    private String level2 = null;
 
     // Tracker background mode
     private BackgroundMode backgroundMode;
@@ -60,6 +60,15 @@ public class Context {
      * @return the level 2
      */
     public int getLevel2() {
+        return Utility.parseInt(getLevel2String(), -1);
+    }
+
+    /**
+     * Get level 2 string
+     *
+     * @return the level 2
+     */
+    public String getLevel2String() {
         return level2;
     }
 
@@ -78,8 +87,21 @@ public class Context {
      * @param level2 /
      */
     public void setLevel2(int level2) {
-        this.level2 = level2;
         if (level2 > 0) {
+            setLevel2(String.valueOf(level2));
+        } else {
+            setLevel2(null);
+        }
+    }
+
+    /**
+     * Set a new level 2 string
+     *
+     * @param level2 /
+     */
+    public void setLevel2(String level2) {
+        this.level2 = level2;
+        if (level2 != null) {
             tracker.setParam(Hit.HitParam.Level2.stringValue(), level2, new ParamOption().setPersistent(true));
         } else {
             tracker.unsetParam(Hit.HitParam.Level2.stringValue());

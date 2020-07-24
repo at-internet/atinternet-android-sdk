@@ -88,63 +88,6 @@ interface Closure {
     String execute();
 }
 
-class Param {
-
-    private String key;
-    private List<Closure> values;
-    private ParamOption paramOption;
-
-    Param() {
-        key = "";
-        values = new ArrayList<>();
-        paramOption = null;
-    }
-
-    Param(String key, final Closure value) {
-        this();
-        this.key = key;
-        this.values.add(value);
-    }
-
-    Param(String key, Closure value, ParamOption paramOption) {
-        this(key, value);
-        this.paramOption = paramOption;
-    }
-
-    String getKey() {
-        return key;
-    }
-
-    void setKey(String key) {
-        this.key = key;
-    }
-
-    List<Closure> getValues() {
-        return values;
-    }
-
-    void setValue(Closure value) {
-        values.clear();
-        values.add(value);
-    }
-
-    void setValues(List<Closure> values) {
-        this.values = values;
-    }
-
-    ParamOption getOptions() {
-        return paramOption;
-    }
-
-    void setOptions(ParamOption paramOption) {
-        this.paramOption = paramOption;
-    }
-
-    boolean isPersistent() {
-        return paramOption != null && paramOption.isPersistent();
-    }
-}
-
 class Buffer {
 
     private final LinkedHashMap<String, Param> persistentParams;
@@ -673,6 +616,7 @@ class Builder implements Runnable {
                 }
             }
 
+            key = p.isProperty() ? key.toLowerCase() : key;
             formattedParameters.put(key, new Pair<>(makeSubQuery(key, strValue), separator));
         }
         return formattedParameters;
@@ -998,7 +942,7 @@ class Dispatcher {
             tracker.getBuffer().getVolatileParams().clear();
             TrackerQueue.getInstance().put(builder);
 
-            tracker.Context().setLevel2(tracker.Context().getLevel2());
+            tracker.Context().setLevel2(tracker.Context().getLevel2String());
         } catch (Exception e) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.ERROR, e.toString(), TrackerListener.HitStatus.Failed);
         }
@@ -1101,14 +1045,15 @@ class TechnicalContext {
     private static final String HUAWEI_OA_ID_KEY = "huaweioaid";
     private static final String GOOGLE_AD_ID_KEY = "googleadid";
     private static String screenName = null;
-    private static int level2 = -1;
+    private static String level2 = null;
+    private static boolean isLevel2Int = false;
 
     private static String applicationIdentifier;
 
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.16.0";
+            return "2.17.0";
         }
     };
 
@@ -1125,7 +1070,8 @@ class TechnicalContext {
 
     static void resetScreenContext() {
         screenName = null;
-        level2 = -1;
+        level2 = null;
+        isLevel2Int = false;
     }
 
     static void setScreenName(String sn) {
@@ -1136,11 +1082,19 @@ class TechnicalContext {
         return screenName;
     }
 
-    static void setLevel2(int lv) {
+    static void setIsLevel2Int(boolean b) {
+        isLevel2Int = b;
+    }
+
+    static boolean isIsLevel2Int() {
+        return isLevel2Int;
+    }
+
+    static void setLevel2(String lv) {
         level2 = lv;
     }
 
-    static int getLevel2() {
+    static String getLevel2() {
         return level2;
     }
 
@@ -1916,22 +1870,30 @@ final class Storage extends SQLiteOpenHelper {
         values.put(HIT, hit);
         values.put(RETRY, 0);
         values.put(DATE, time);
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return null;
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            if (db == null) {
+                return null;
+            }
+            db.insert(HITS_STORAGE_TABLE, null, values);
+        } finally {
+            if (db != null) db.close();
         }
-        db.insert(HITS_STORAGE_TABLE, null, values);
-        db.close();
         return hit;
     }
 
     void deleteHit(String hit) {
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return;
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            if (db == null) {
+                return;
+            }
+            db.delete(HITS_STORAGE_TABLE, HIT + "='" + hit + "'", null);
+        } finally {
+            if (db != null) db.close();
         }
-        db.delete(HITS_STORAGE_TABLE, HIT + "='" + hit + "'", null);
-        db.close();
     }
 
     String buildHitToStore(String hit, String olt) {
@@ -1957,112 +1919,157 @@ final class Storage extends SQLiteOpenHelper {
     void updateRetry(String hit, int retry) {
         ContentValues values = new ContentValues();
         values.put(RETRY, retry);
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return;
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            if (db == null) {
+                return;
+            }
+            db.update(HITS_STORAGE_TABLE, values, HIT + "='" + hit + "'", null);
+        } finally {
+            if (db != null) db.close();
         }
-        db.update(HITS_STORAGE_TABLE, values, HIT + "='" + hit + "'", null);
-        db.close();
     }
 
     int getCountOfflineHits() {
         int result = -1;
-        SQLiteDatabase db = getReadableDatabase();
-        if (db == null) {
-            return result;
+        SQLiteDatabase db = null;
+        try {
+            db = getReadableDatabase();
+            if (db == null) {
+                return result;
+            }
+            Cursor c = null;
+            try {
+                c = db.rawQuery(SELECT_ALL_QUERY, null);
+                if (c != null) {
+                    result = c.getCount();
+                }
+            } finally {
+                if (c != null) c.close();
+            }
+        } finally {
+            if (db != null) db.close();
         }
-        Cursor c = db.rawQuery(SELECT_ALL_QUERY, null);
-        if (c != null) {
-            result = c.getCount();
-            c.close();
-        }
-        db.close();
         return result;
     }
 
     void removeAllOfflineHits() {
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return;
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            if (db == null) {
+                return;
+            }
+            db.delete(HITS_STORAGE_TABLE, null, null);
+        } finally {
+            if (db != null) db.close();
         }
-        db.delete(HITS_STORAGE_TABLE, null, null);
-        db.close();
     }
 
     void removeOldOfflineHits(int storageDuration) {
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return;
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            if (db == null) {
+                return;
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DATE, -storageDuration);
+            long maxOldDate = cal.getTime().getTime();
+            db.delete(HITS_STORAGE_TABLE, DATE + " < " + maxOldDate, null);
+        } finally {
+            if (db != null) db.close();
         }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, -storageDuration);
-        long maxOldDate = cal.getTime().getTime();
-        db.delete(HITS_STORAGE_TABLE, DATE + " < " + maxOldDate, null);
-        db.close();
     }
 
     ArrayList<Hit> getOfflineHits() {
-        SQLiteDatabase db = getReadableDatabase();
-        if (db == null) {
-            return new ArrayList<>();
-        }
+        SQLiteDatabase db = null;
         ArrayList<Hit> hits = new ArrayList<>();
-        Cursor c = db.rawQuery(SELECT_ALL_QUERY + "ORDER BY " + ID + " ASC", null);
-        if (c != null && c.getCount() > 0) {
-            c.moveToFirst();
-            do {
-                String hit = c.getString(c.getColumnIndex(HIT));
-                String time = c.getString(c.getColumnIndex(DATE));
-                int retry = c.getInt(c.getColumnIndex(RETRY));
-                hits.add(new Hit(hit, new Date(Long.parseLong(time)), retry, true));
+        try {
+            db = getReadableDatabase();
+            if (db == null) {
+                return new ArrayList<>();
             }
-            while (c.moveToNext());
-            c.close();
+            Cursor c = null;
+            try {
+                c = db.rawQuery(SELECT_ALL_QUERY + "ORDER BY " + ID + " ASC", null);
+                if (c != null && c.getCount() > 0) {
+                    c.moveToFirst();
+                    do {
+                        String hit = c.getString(c.getColumnIndex(HIT));
+                        String time = c.getString(c.getColumnIndex(DATE));
+                        int retry = c.getInt(c.getColumnIndex(RETRY));
+                        hits.add(new Hit(hit, new Date(Long.parseLong(time)), retry, true));
+                    }
+                    while (c.moveToNext());
+                }
+            } finally {
+                if (c != null) c.close();
+            }
+        } finally {
+            if (db != null) db.close();
         }
-        db.close();
         return hits;
     }
 
     Hit getOldestOfflineHit() {
-        SQLiteDatabase db = getReadableDatabase();
-        if (db == null) {
-            return null;
-        }
-        Cursor c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MIN(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
-        if (c != null && c.moveToFirst()) {
-            String hit = c.getString(c.getColumnIndex(HIT));
-            String time = c.getString(c.getColumnIndex(DATE));
-            int retry = c.getInt(c.getColumnIndex(RETRY));
-            if (hit != null && time != null) {
-                c.close();
-                db.close();
-                return new Hit(hit, new Date(Long.parseLong(time)), retry, true);
+        SQLiteDatabase db = null;
+        try {
+            db = getReadableDatabase();
+            if (db == null) {
+                return null;
             }
-            c.close();
+            Cursor c = null;
+            try {
+                c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MIN(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
+                if (c != null && c.moveToFirst()) {
+                    String hit = c.getString(c.getColumnIndex(HIT));
+                    String time = c.getString(c.getColumnIndex(DATE));
+                    int retry = c.getInt(c.getColumnIndex(RETRY));
+                    if (hit != null && time != null) {
+                        c.close();
+                        db.close();
+                        return new Hit(hit, new Date(Long.parseLong(time)), retry, true);
+                    }
+                }
+            } finally {
+                if (c != null) c.close();
+            }
+        } finally {
+            if (db != null) db.close();
         }
-        db.close();
+
         return null;
     }
 
     Hit getLatestOfflineHit() {
-        SQLiteDatabase db = getReadableDatabase();
-        if (db == null) {
-            return null;
-        }
-        Cursor c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MAX(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
-        if (c != null && c.moveToFirst()) {
-            String hit = c.getString(c.getColumnIndex(HIT));
-            String time = c.getString(c.getColumnIndex(DATE));
-            int retry = c.getInt(c.getColumnIndex(RETRY));
-            if (hit != null && time != null) {
-                c.close();
-                db.close();
-                return new Hit(hit, new Date(Long.parseLong(time)), retry, true);
+        SQLiteDatabase db = null;
+        try {
+            db = getReadableDatabase();
+            if (db == null) {
+                return null;
             }
-            c.close();
+            Cursor c = null;
+            try {
+                c = db.rawQuery(SELECT_ALL_QUERY + "WHERE " + DATE + " = (SELECT MAX(" + DATE + ") FROM " + HITS_STORAGE_TABLE + " )", null);
+                if (c != null && c.moveToFirst()) {
+                    String hit = c.getString(c.getColumnIndex(HIT));
+                    String time = c.getString(c.getColumnIndex(DATE));
+                    int retry = c.getInt(c.getColumnIndex(RETRY));
+                    if (hit != null && time != null) {
+                        c.close();
+                        db.close();
+                        return new Hit(hit, new Date(Long.parseLong(time)), retry, true);
+                    }
+                }
+            } finally {
+                if (c != null) c.close();
+            }
+        } finally {
+            if (db != null) db.close();
         }
-        db.close();
         return null;
     }
 

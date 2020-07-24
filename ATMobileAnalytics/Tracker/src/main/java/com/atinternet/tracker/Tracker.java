@@ -349,6 +349,21 @@ public class Tracker {
         return this;
     }
 
+    Param getParam(String key) {
+        Param p = buffer.getVolatileParams().get(key);
+        if (p != null) {
+            return p;
+        }
+        return buffer.getPersistentParams().get(key);
+    }
+
+    List<Param> getParams() {
+        List<Param> params = new ArrayList<>();
+        params.addAll(buffer.getVolatileParams().values());
+        params.addAll(buffer.getPersistentParams().values());
+        return params;
+    }
+
     Tracker setParam(String key, Closure value) {
         return processSetParam(key, value);
     }
@@ -1299,6 +1314,93 @@ public class Tracker {
      */
     public Tracker setParam(String key, String value) {
         return setParam(key, value, new ParamOption());
+    }
+
+    /**
+     * Add a property in the hit querystring
+     *
+     * @param key        property key
+     * @param value      string value
+     * @param persistent boolean option
+     * @return Tracker instance
+     */
+    public Tracker setProp(String key, final String value, boolean persistent) {
+        return setParam(key, new Closure() {
+            @Override
+            public String execute() {
+                return value;
+            }
+        }, new ParamOption()
+                .setEncode(true)
+                .setPersistent(persistent)
+                .setProperty(true));
+    }
+
+    /**
+     * Add properties in the hit querystring
+     *
+     * @param props props map
+     * @return Tracker instance
+     */
+    public Tracker setProps(Map<String, String> props, boolean persistent) {
+        for (Map.Entry<String, String> entry : props.entrySet()) {
+            setProp(entry.getKey(), entry.getValue(), persistent);
+        }
+        return this;
+    }
+
+    /**
+     * Get a property
+     *
+     * @param key property key
+     * @return param object
+     */
+    public Param getProp(String key) {
+        Param prop = getParam(key);
+        if (prop != null && prop.isProperty()) {
+            return prop;
+        }
+        return null;
+    }
+
+    /**
+     * Get all properties
+     *
+     * @return List properties
+     */
+    public List<Param> getProps() {
+        List<Param> params = getParams();
+        List<Param> properties = new ArrayList<>();
+        for (Param p : params) {
+            if (p.isProperty()) {
+                properties.add(p);
+            }
+        }
+        return properties;
+    }
+
+    /**
+     * remove property from the hit
+     *
+     * @param key property key
+     */
+    public void delProp(String key) {
+        Param prop = getProp(key);
+        if (prop != null) {
+            unsetParam(prop.getKey());
+        }
+    }
+
+    /**
+     * remove properties from the hit
+     */
+    public void delProps() {
+        List<String> keys = new ArrayList<>();
+        keys.addAll(buffer.getVolatileParams().keySet());
+        keys.addAll(buffer.getPersistentParams().keySet());
+        for (String key : keys) {
+            delProp(key);
+        }
     }
 
     /**

@@ -160,6 +160,19 @@ public class DynamicScreen extends AbstractScreen {
      * @return the DynamicScreen instance
      */
     public DynamicScreen setLevel2(int level2) {
+        if (level2 >= 0) {
+            return setLevel2(String.valueOf(level2));
+        }
+        return setLevel2(null);
+    }
+
+    /**
+     * Set a new level 2 string
+     *
+     * @param level2 /
+     * @return the DynamicScreen instance
+     */
+    public DynamicScreen setLevel2(String level2) {
         this.level2 = level2;
         return this;
     }
