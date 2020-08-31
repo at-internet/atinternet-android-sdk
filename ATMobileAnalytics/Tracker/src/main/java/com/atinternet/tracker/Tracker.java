@@ -375,10 +375,13 @@ public class Tracker {
     private void refreshConfigurationDependencies() {
         String identifierKey = String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER));
         boolean ignoreLimitedAdTracking = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING)));
+        int uuidDuration = Integer.parseInt(String.valueOf(configuration.get(TrackerConfigurationKeys.UUID_DURATION)));
+        String uuidExpirationMode = String.valueOf(configuration.get(TrackerConfigurationKeys.UUID_EXPIRATION_MODE));
+
         boolean enableCrashDetectionHandler = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION)));
 
         if (!TextUtils.isEmpty(identifierKey)) {
-            buffer.setIdentifierKey(identifierKey, ignoreLimitedAdTracking);
+            buffer.setIdentifierKey(identifierKey, ignoreLimitedAdTracking, uuidDuration, uuidExpirationMode);
         }
 
         if (enableCrashDetectionHandler) {
@@ -443,7 +446,11 @@ public class Tracker {
             @Override
             public void run() {
                 if (callback != null) {
-                    String userID = TechnicalContext.getUserId(String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER)), (boolean) configuration.get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING)).execute();
+                    boolean ignoreLimitedAdTracking = Boolean.parseBoolean(String.valueOf(configuration.get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING)));
+                    int uuidDuration = Integer.parseInt(String.valueOf(configuration.get(TrackerConfigurationKeys.UUID_DURATION)));
+                    String uuidExpirationMode = String.valueOf(configuration.get(TrackerConfigurationKeys.UUID_EXPIRATION_MODE));
+
+                    String userID = TechnicalContext.getUserId(String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER)), ignoreLimitedAdTracking, uuidDuration, uuidExpirationMode).execute();
                     if ((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !TechnicalContext.optOutEnabled(getAppContext())) {
                         callback.receiveUserId(Tool.sha256(userID));
                     } else {
@@ -1009,6 +1016,24 @@ public class Tracker {
             maxHitSize = 1_600;
         }
         configuration.put(TrackerConfigurationKeys.MAX_HIT_SIZE, maxHitSize);
+    }
+
+    /**
+     * Set a new uuid duration
+     *
+     * @param uuidDuration int
+     */
+    public void setUUIDDuration(int uuidDuration) {
+        setConfig(TrackerConfigurationKeys.UUID_DURATION, uuidDuration, null, true);
+    }
+
+    /**
+     * Set a new uuid expiration mode
+     *
+     * @param uuidExpirationMode String
+     */
+    public void setUUIDExpirationMode(String uuidExpirationMode) {
+        setConfig(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, uuidExpirationMode, null, true);
     }
 
     /**

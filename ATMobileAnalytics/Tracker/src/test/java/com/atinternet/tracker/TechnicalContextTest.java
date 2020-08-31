@@ -22,12 +22,12 @@ SOFTWARE.
  */
 package com.atinternet.tracker;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import androidx.test.core.app.ApplicationProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -106,7 +106,7 @@ public class TechnicalContextTest extends AbstractTestClass {
 
     @Test
     public void getUUIDTest() {
-        String uuid = TechnicalContext.getUserId("UUID", false).execute();
-        assertEquals(uuid, TechnicalContext.getUserId("UUID", false).execute());
+        String uuid = TechnicalContext.getUserId("UUID", false, 1, "fixed").execute();
+        assertEquals(uuid, TechnicalContext.getUserId("UUID", false, 1, "fixed").execute());
     }
 }

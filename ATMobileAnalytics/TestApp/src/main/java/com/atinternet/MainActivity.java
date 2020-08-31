@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.avinsights.Media;
 import com.atinternet.tracker.ecommerce.CartAwaitingPayment;
 
 import java.util.HashMap;
@@ -21,8 +20,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         put("log", "logp");
         put("domain", "xiti.com");
         put("pixelPath", "/hit.xiti");
-        //put("identifier", "advertisingId");
+        put("identifier", "uuid");
         put("site", 552987);
+        put("UUIDDuration", 1);
+        put("UUIDExpirationMode", "relative");
     }};
 
     @Override

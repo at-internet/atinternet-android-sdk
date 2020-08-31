@@ -96,24 +96,26 @@ public class Configuration extends LinkedHashMap<String, Object> {
             inputStream.close();
         } catch (Exception e) {
             try {
-                result.put("log", "")
-                        .put("logSSL", "")
-                        .put("domain", "xiti.com")
-                        .put("pixelPath", "/hit.xiti")
-                        .put("site", "")
-                        .put("identifier", "androidId")
-                        .put("enableCrashDetection", true)
-                        .put("plugins", "")
-                        .put("storage", "never")
-                        .put("hashUserId", false)
-                        .put("persistIdentifiedVisitor", true)
-                        .put("campaignLastPersistence", false)
-                        .put("campaignLifetime", 30)
-                        .put("sessionBackgroundDuration", 60)
-                        .put("autoSalesTracker", false)
-                        .put("ignoreLimitedAdTracking", false)
-                        .put("sendHitWhenOptOut", true)
-                        .put("maxHitSize", 8_000);
+                result.put(TrackerConfigurationKeys.LOG, "")
+                        .put(TrackerConfigurationKeys.LOG_SSL, "")
+                        .put(TrackerConfigurationKeys.DOMAIN, "xiti.com")
+                        .put(TrackerConfigurationKeys.PIXEL_PATH, "/hit.xiti")
+                        .put(TrackerConfigurationKeys.SITE, "")
+                        .put(TrackerConfigurationKeys.IDENTIFIER, "androidId")
+                        .put(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION, true)
+                        .put(TrackerConfigurationKeys.PLUGINS, "")
+                        .put(TrackerConfigurationKeys.STORAGE, "never")
+                        .put(TrackerConfigurationKeys.HASH_USER_ID, false)
+                        .put(TrackerConfigurationKeys.PERSIST_IDENTIFIED_VISITOR, true)
+                        .put(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE, false)
+                        .put(TrackerConfigurationKeys.CAMPAIGN_LIFETIME, 30)
+                        .put(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION, 60)
+                        .put(TrackerConfigurationKeys.AUTO_SALES_TRACKER, false)
+                        .put(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING, false)
+                        .put(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT, true)
+                        .put(TrackerConfigurationKeys.MAX_HIT_SIZE, 8_000)
+                        .put(TrackerConfigurationKeys.UUID_DURATION, 397)
+                        .put(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, "fixed");
             } catch (JSONException e1) {
                 Log.e(ATInternet.TAG, e1.toString());
             }

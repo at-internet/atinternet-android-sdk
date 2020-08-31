@@ -95,6 +95,8 @@ class Buffer {
 
     private String identifierKey;
     private boolean ignoreLimitedAdTracking;
+    private String uuidExpirationMode;
+    private int uuidDuration;
 
     private String os;
     private Closure osClosure;
@@ -121,6 +123,8 @@ class Buffer {
         volatileParams = new LinkedHashMap<>();
         identifierKey = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.IDENTIFIER));
         ignoreLimitedAdTracking = (boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.IGNORE_LIMITED_AD_TRACKING);
+        uuidDuration = Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.UUID_DURATION)));
+        uuidExpirationMode = String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.UUID_EXPIRATION_MODE));
 
         initConstantClosures();
         addContextVariables(tracker);
@@ -134,10 +138,10 @@ class Buffer {
         return volatileParams;
     }
 
-    void setIdentifierKey(String identifierKey, boolean ignoreLimitedAdTracking) {
+    void setIdentifierKey(String identifierKey, boolean ignoreLimitedAdTracking, int uuidDuration, String uuidExpirationMode) {
         volatileParams.remove(Hit.HitParam.UserId.stringValue());
         ParamOption persistent = new ParamOption().setPersistent(true);
-        persistentParams.put(Hit.HitParam.UserId.stringValue(), new Param(Hit.HitParam.UserId.stringValue(), TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking), persistent));
+        persistentParams.put(Hit.HitParam.UserId.stringValue(), new Param(Hit.HitParam.UserId.stringValue(), TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking, uuidDuration, uuidExpirationMode), persistent));
     }
 
     private void addContextVariables(Tracker tracker) {
@@ -161,7 +165,7 @@ class Buffer {
         persistentParams.put("cn", new Param("cn", TechnicalContext.getConnectionType(), persistentWithEncoding));
         persistentParams.put("ts", new Param("ts", Tool.getTimeStamp(), persistent));
         persistentParams.put("dls", new Param("dls", TechnicalContext.getDownloadSource(tracker), persistent));
-        persistentParams.put("idclient", new Param("idclient", TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking), persistent));
+        persistentParams.put("idclient", new Param("idclient", TechnicalContext.getUserId(identifierKey, ignoreLimitedAdTracking, uuidDuration, uuidExpirationMode), persistent));
     }
 
     private void initConstantClosures() {
@@ -1049,11 +1053,12 @@ class TechnicalContext {
     private static boolean isLevel2Int = false;
 
     private static String applicationIdentifier;
+    private static String generatedUUID;
 
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.17.0";
+            return "2.18.0";
         }
     };
 
@@ -1318,7 +1323,7 @@ class TechnicalContext {
         };
     }
 
-    static Closure getUserId(final String identifier, final boolean ignoreLimitedAdTracking) {
+    static Closure getUserId(final String identifier, final boolean ignoreLimitedAdTracking, final int uuidDuration, final String uuidExpirationMode) {
         return new Closure() {
             @SuppressLint("HardwareIds")
             @Override
@@ -1376,7 +1381,7 @@ class TechnicalContext {
                         }
 
                         if (ignoreLimitedAdTracking) {
-                            return getIdentifierUUID(preferences);
+                            return getIdentifierUUID(preferences, uuidDuration, uuidExpirationMode);
                         }
                         return "opt-out";
                     case GOOGLE_AD_ID_KEY:
@@ -1389,7 +1394,7 @@ class TechnicalContext {
                                     return gmsAdInfo.getId();
                                 } else {
                                     if (ignoreLimitedAdTracking) {
-                                        return getIdentifierUUID(preferences);
+                                        return getIdentifierUUID(preferences, uuidDuration, uuidExpirationMode);
                                     }
                                     return "opt-out";
                                 }
@@ -1408,7 +1413,7 @@ class TechnicalContext {
                                     return hmsAdInfo.getId();
                                 } else {
                                     if (ignoreLimitedAdTracking) {
-                                        return getIdentifierUUID(preferences);
+                                        return getIdentifierUUID(preferences, uuidDuration, uuidExpirationMode);
                                     }
                                     return "opt-out";
                                 }
@@ -1418,18 +1423,46 @@ class TechnicalContext {
                         }
                         return "";
                     default:
-                        return getIdentifierUUID(preferences);
+                        return getIdentifierUUID(preferences, uuidDuration, uuidExpirationMode);
                 }
             }
         };
     }
 
-    private static String getIdentifierUUID(SharedPreferences preferences) {
+    private static String getIdentifierUUID(SharedPreferences preferences, int uuidDuration, String uuidExpirationMode) {
+        /// From context
+        if (TechnicalContext.generatedUUID != null) {
+            return TechnicalContext.generatedUUID;
+        }
+
         String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
+
+        /// uuid expired ?
+        if (uuid != null) {
+            long uuidGenerationTimestamp = preferences.getLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, 0);
+            long daysSinceGeneration = (System.currentTimeMillis() - uuidGenerationTimestamp) / (1000 * 60 * 60 * 24);
+            if (daysSinceGeneration >= uuidDuration) {
+                uuid = null;
+            }
+        }
+
+        /// No or expired id
         if (uuid == null) {
             uuid = UUID.randomUUID().toString();
-            preferences.edit().putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid).apply();
+            preferences.edit()
+                    .putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid)
+                    .putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, System.currentTimeMillis())
+                    .apply();
+            generatedUUID = uuid;
+            return uuid;
         }
+
+        /// expiration relative
+        if (uuidExpirationMode.toLowerCase().equals("relative")) {
+            preferences.edit().putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, System.currentTimeMillis()).apply();
+        }
+
+        generatedUUID = uuid;
         return uuid;
     }
 

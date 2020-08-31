@@ -69,8 +69,8 @@ public class BufferTest extends AbstractTestClass {
 
     @Test
     public void setIdentifierKey() {
-        buffer.setIdentifierKey("androidId", false);
-        assertEquals(TechnicalContext.getUserId("androidId", false).execute(), buffer.getPersistentParams().get("idclient").getValues().get(0).execute());
+        buffer.setIdentifierKey("androidId", false, 0, "");
+        assertEquals(TechnicalContext.getUserId("androidId", false, 0, "").execute(), buffer.getPersistentParams().get("idclient").getValues().get(0).execute());
     }
 
     @Test
