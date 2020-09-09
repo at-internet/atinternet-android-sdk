@@ -88,6 +88,14 @@ public class Tracker {
     }
 
     /**
+     * Enum for different UUID Expiration mode
+     */
+    public enum UUIDExpirationMode {
+        fixed,
+        relative,
+    }
+
+    /**
      * Enum for different plugin
      */
     public enum PluginKey {
@@ -1030,10 +1038,10 @@ public class Tracker {
     /**
      * Set a new uuid expiration mode
      *
-     * @param uuidExpirationMode String
+     * @param uuidExpirationMode UUIDExpirationMode
      */
-    public void setUUIDExpirationMode(String uuidExpirationMode) {
-        setConfig(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, uuidExpirationMode, null, true);
+    public void setUUIDExpirationMode(UUIDExpirationMode uuidExpirationMode) {
+        setConfig(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, uuidExpirationMode.toString(), null, true);
     }
 
     /**

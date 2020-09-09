@@ -1435,12 +1435,19 @@ class TechnicalContext {
             return TechnicalContext.generatedUUID;
         }
 
+        long now = System.currentTimeMillis();
         String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
 
-        /// uuid expired ?
         if (uuid != null) {
-            long uuidGenerationTimestamp = preferences.getLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, 0);
-            long daysSinceGeneration = (System.currentTimeMillis() - uuidGenerationTimestamp) / (1000 * 60 * 60 * 24);
+            /// get uuid generation timestamp
+            long uuidGenerationTimestamp = preferences.getLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, -1);
+            if (uuidGenerationTimestamp == -1) {
+                preferences.edit().putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now).apply();
+                uuidGenerationTimestamp = now;
+            }
+
+            /// uuid expired ?
+            long daysSinceGeneration = (now - uuidGenerationTimestamp) / (1000 * 60 * 60 * 24);
             if (daysSinceGeneration >= uuidDuration) {
                 uuid = null;
             }
@@ -1451,7 +1458,7 @@ class TechnicalContext {
             uuid = UUID.randomUUID().toString();
             preferences.edit()
                     .putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid)
-                    .putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, System.currentTimeMillis())
+                    .putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now)
                     .apply();
             generatedUUID = uuid;
             return uuid;
@@ -1459,7 +1466,7 @@ class TechnicalContext {
 
         /// expiration relative
         if (uuidExpirationMode.toLowerCase().equals("relative")) {
-            preferences.edit().putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, System.currentTimeMillis()).apply();
+            preferences.edit().putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now).apply();
         }
 
         generatedUUID = uuid;

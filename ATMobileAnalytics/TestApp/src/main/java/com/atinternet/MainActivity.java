@@ -1,60 +1,63 @@
 package com.atinternet;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Tracker;
-import com.atinternet.tracker.ecommerce.CartAwaitingPayment;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Tracker tracker;
-    private HashMap config = new HashMap<String, Object>() {{
-        put("logSSL", "logs");
-        put("log", "logp");
-        put("domain", "xiti.com");
-        put("pixelPath", "/hit.xiti");
-        put("identifier", "uuid");
-        put("site", 552987);
-        put("UUIDDuration", 1);
-        put("UUIDExpirationMode", "relative");
-    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.firstAction).setOnClickListener(this);
-        findViewById(R.id.goToSecondScreen).setOnClickListener(this);
+        findViewById(R.id.setOlderContext).setOnClickListener(this);
+        findViewById(R.id.sendHit).setOnClickListener(this);
 
-        tracker = ATInternet.getInstance().getDefaultTracker();
-        tracker.setConfig(config, null, true);
-        tracker.setDefaultListener();
+        tracker = ATInternet.getInstance().getDefaultTracker()
+                .setDefaultListener();
+        tracker.setConfig(new HashMap<String, Object>() {{
+            put("logSSL", "logs");
+            put("log", "logp");
+            put("domain", "xiti.com");
+            put("pixelPath", "/hit.xiti");
+            put("identifier", "uuid");
+            put("site", 552987);
+            put("UUIDDuration", 1);
+        }}, null, true);
+        //tracker.setUUIDDuration(0);
+        //tracker.setUUIDExpirationMode(Tracker.UUIDExpirationMode.relative);
     }
 
     @Override
     public void onClick(View v) {
+        SharedPreferences preferences = getSharedPreferences("ATPreferencesKey", Context.MODE_PRIVATE);
+        Map<String, ?> values;
         switch (v.getId()) {
-            case R.id.firstAction:
-                CartAwaitingPayment cp = tracker.ECommerce().CartAwaitingPayments().add();
-                cp.Cart().set("TEST", "totot");
-
-                tracker.Events().add("evENnt", new HashMap<String, Object>() {{
-                    put("My_Prop", true);
-                }});
-
-                tracker.setProp("PROp_1", "test", false);
-                tracker.setProps(new HashMap<String, String>() {{
-                    put("dic_PROP", "45");
-                    put("dFc_PROP", "33");
-                }}, false);
-                tracker.dispatch();
+            case R.id.setOlderContext:
+                preferences.edit()
+                        .clear()
+                        .putString("ATIdclientUUID", "test")
+                        .apply();
+                break;
+            case R.id.getPrefs:
+                values = preferences.getAll();
+                Log.d("ATINTERNET", "Debug stop");
+                break;
+            case R.id.sendHit:
+                tracker.Screens().add("Page").sendView();
                 break;
             case R.id.goToSecondScreen:
                 startActivity(new Intent(this, SecondActivity.class));
