@@ -47,7 +47,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
     @Test
     public void getDefaultConfigurationTest() {
-        assertEquals(18, defaultConfiguration.size());
+        assertEquals(20, defaultConfiguration.size());
         assertEquals("", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("", defaultConfiguration.get("site"));
@@ -66,6 +66,8 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(false, defaultConfiguration.get("ignoreLimitedAdTracking"));
         assertEquals(true, defaultConfiguration.get("sendHitWhenOptOut"));
         assertEquals(8_000, defaultConfiguration.get("maxHitSize"));
+        assertEquals(397, defaultConfiguration.get("UUIDDuration"));
+        assertEquals("fixed", defaultConfiguration.get("UUIDExpirationMode"));
     }
 
     @Test
@@ -84,7 +86,7 @@ public class ConfigurationTest extends AbstractTestClass {
 
         defaultConfiguration = new Configuration(dictionary);
 
-        assertEquals(19, defaultConfiguration.size());
+        assertEquals(21, defaultConfiguration.size());
         assertEquals("logtest", defaultConfiguration.get("log"));
         assertEquals("", defaultConfiguration.get("logSSL"));
         assertEquals("123456", defaultConfiguration.get("site"));
@@ -104,5 +106,7 @@ public class ConfigurationTest extends AbstractTestClass {
         assertEquals(false, defaultConfiguration.get("ignoreLimitedAdTracking"));
         assertEquals(true, defaultConfiguration.get("sendHitWhenOptOut"));
         assertEquals(8_000, defaultConfiguration.get("maxHitSize"));
+        assertEquals(397, defaultConfiguration.get("UUIDDuration"));
+        assertEquals("fixed", defaultConfiguration.get("UUIDExpirationMode"));
     }
 }

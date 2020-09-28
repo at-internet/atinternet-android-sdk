@@ -27,7 +27,7 @@ repositories {
         url 'https://dl.bintray.com/atinternet/maven/'
     }
     maven {
-        url 'http://developer.huawei.com/repo/'
+        url 'https://developer.huawei.com/repo/'
     }
     flatDir {
         dirs 'libs'

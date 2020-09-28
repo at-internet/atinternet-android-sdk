@@ -51,6 +51,9 @@ public final class TrackerConfigurationKeys {
     //Global key representing idclient from uuid
     static final String IDCLIENT_UUID = "ATIdclientUUID";
 
+    //Global key representing idclient generation timestamp from uuid
+    static final String IDCLIENT_UUID_GENERATION_TIMESTAMP = "ATIdclientUUIDGenerationTimestamp";
+
     /**
      * Constant for storage offline mode configuration key
      */
@@ -62,9 +65,14 @@ public final class TrackerConfigurationKeys {
     public static final String IDENTIFIER = "identifier";
 
     /**
-     * Constant for hash use rid configuration
+     * Constant for hash user id configuration
      */
     public static final String HASH_USER_ID = "hashUserId";
+
+    /**
+     * Constant for persistence identified visitor configuration
+     */
+    public static final String PERSIST_IDENTIFIED_VISITOR = "persistIdentifiedVisitor";
 
     /**
      * Constant for enableCrashDetection configuration
@@ -102,14 +110,14 @@ public final class TrackerConfigurationKeys {
     public static final String DOMAIN = "domain";
 
     /**
-     * Constant for persist identified visitor configuration
-     */
-    public static final String PERSIST_IDENTIFIED_VISITOR = "persistIdentifiedVisitor";
-
-    /**
      * Constant for plugins configuration
      */
     public static final String PLUGINS = "plugins";
+
+    /**
+     * Constant for storage configuration
+     */
+    public static final String STORAGE = "storage";
 
     /**
      * Constant for campaign remanence configuration
@@ -155,6 +163,16 @@ public final class TrackerConfigurationKeys {
      * Constant for Max hit size
      */
     public static final String MAX_HIT_SIZE = "maxHitSize";
+
+    /**
+     * Constant for UUID duration
+     */
+    public static final String UUID_DURATION = "UUIDDuration";
+
+    /**
+     * Constant for UUID expiration mode
+     */
+    public static final String UUID_EXPIRATION_MODE = "UUIDExpirationMode";
 
     private TrackerConfigurationKeys() {
         throw new IllegalStateException("Utility class");

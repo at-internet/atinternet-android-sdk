@@ -15,10 +15,22 @@
         android:paddingBottom="@dimen/activity_vertical_margin">
 
         <Button
-            android:id="@+id/firstAction"
+            android:id="@+id/setOlderContext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="first Action" />
+            android:text="Set Old context" />
+
+        <Button
+            android:id="@+id/getPrefs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get preferences" />
+
+        <Button
+            android:id="@+id/sendHit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send hit" />
 
         <Button
             android:id="@+id/goToSecondScreen"

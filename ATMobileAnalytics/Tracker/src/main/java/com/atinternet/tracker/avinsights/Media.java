@@ -1,5 +1,6 @@
 package com.atinternet.tracker.avinsights;
 
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 
 import com.atinternet.tracker.Event;
@@ -28,7 +29,7 @@ public class Media extends RequiredPropertiesDataObject {
     private final AVRunnable bufferHeartbeatRunnable;
     private final AVRunnable rebufferHeartbeatRunnable;
 
-    private String sessionId = UUID.randomUUID().toString();
+    private String sessionId;
     private String previousEvent = "";
     private int previousCursorPositionMillis = 0;
     private int currentCursorPositionMillis = 0;
@@ -54,16 +55,26 @@ public class Media extends RequiredPropertiesDataObject {
         rebufferHeartbeatRunnable = new RebufferHeartbeatRunnable(this);
     }
 
-    public Media(Events events, int heartbeat, int bufferHeartbeat) {
+    public Media(Events events, int heartbeat, int bufferHeartbeat, String sessionId) {
         this(events);
         setHeartbeat(heartbeat);
         setBufferHeartbeat(bufferHeartbeat);
+        this.sessionId = TextUtils.isEmpty(sessionId) ? UUID.randomUUID().toString() : sessionId;
     }
 
-    public Media(Events events, SparseIntArray heartbeat, SparseIntArray bufferHeartbeat) {
+    public Media(Events events, SparseIntArray heartbeat, SparseIntArray bufferHeartbeat, String sessionId) {
         this(events);
         setHeartbeat(heartbeat);
         setBufferHeartbeat(bufferHeartbeat);
+        this.sessionId = TextUtils.isEmpty(sessionId) ? UUID.randomUUID().toString() : sessionId;
+    }
+
+    /***
+     * Get session
+     * @return String
+     */
+    public synchronized String getSessionId() {
+        return sessionId;
     }
 
     /***

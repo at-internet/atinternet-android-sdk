@@ -47,7 +47,18 @@ public class AVInsights {
      * @return Media instance
      */
     public com.atinternet.tracker.avinsights.Media Media(int heartbeat, int bufferHeartbeat) {
-        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat);
+        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat, null);
+    }
+
+    /***
+     * Create new Media
+     * @param heartbeat heartbeat period
+     * @param bufferHeartbeat buffer heartbeat period
+     * @param sessionId custom sessionId
+     * @return Media instance
+     */
+    public com.atinternet.tracker.avinsights.Media Media(int heartbeat, int bufferHeartbeat, String sessionId) {
+        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat, sessionId);
     }
 
     /***
@@ -57,6 +68,17 @@ public class AVInsights {
      * @return Media instance
      */
     public com.atinternet.tracker.avinsights.Media Media(SparseIntArray heartbeat, SparseIntArray bufferHeartbeat) {
-        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat);
+        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat, null);
+    }
+
+    /***
+     * Create new Media
+     * @param heartbeat heartbeat periods
+     * @param bufferHeartbeat buffer heartbeat periods
+     * @param sessionId custom sessionId
+     * @return Media instance
+     */
+    public com.atinternet.tracker.avinsights.Media Media(SparseIntArray heartbeat, SparseIntArray bufferHeartbeat, String sessionId) {
+        return new com.atinternet.tracker.avinsights.Media(events, heartbeat, bufferHeartbeat, sessionId);
     }
 }
