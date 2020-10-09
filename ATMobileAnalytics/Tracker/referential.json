@@ -273,6 +273,43 @@
         "fixed",
         "relative"
       ]
+    },
+    {
+      "_id": "proxyType",
+      "name": "proxyType",
+      "pluginId": "core",
+      "category": "advanced",
+      "label": "Geode_Tag_SDK_Config_Title_proxyType",
+      "description": "Geode_Tag_SDK_Config_Description_proxyType",
+      "defaultValue": "none",
+      "type": "list",
+      "isPublic": true,
+      "isGlobal": true,
+      "values": [
+        "http",
+        "socks"
+      ]
+    },
+    {
+      "_id": "proxyAddress",
+      "name": "proxyAddress",
+      "pluginId": "core",
+      "category": "advanced",
+      "label": "Geode_Tag_SDK_Config_Title_proxyAddress",
+      "description": "Geode_Tag_SDK_Config_Description_proxyAddress",
+      "defaultValue": "",
+      "type": "string",
+      >>>>>>>
+      feature: add
+      proxying
+      configuration
+      feature
+      "isPublic": true,
+      "isGlobal": true,
+      "values": [
+        "fixed",
+        "relative"
+      ]
     }
   ]
 }

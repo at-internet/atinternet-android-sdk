@@ -115,7 +115,9 @@ public class Configuration extends LinkedHashMap<String, Object> {
                         .put(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT, true)
                         .put(TrackerConfigurationKeys.MAX_HIT_SIZE, 8_000)
                         .put(TrackerConfigurationKeys.UUID_DURATION, 397)
-                        .put(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, "fixed");
+                        .put(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, "fixed")
+                        .put(TrackerConfigurationKeys.PROXY_TYPE, "none")
+                        .put(TrackerConfigurationKeys.PROXY_ADDRESS, "");
             } catch (JSONException e1) {
                 Log.e(ATInternet.TAG, e1.toString());
             }

@@ -97,6 +97,30 @@ bintray {
     }
 }
 
+repositories {
+    maven {
+        url 'https://developer.huawei.com/repo/'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    compileOnly 'com.google.android.gms:play-services-ads:19.4.0'
+    compileOnly 'com.huawei.hms:hms-ads-identifier:3.4.26.303'
+
+    testImplementation 'org.robolectric:robolectric:4.2'
+    testImplementation 'androidx.test:core:1.3.0'
+    testImplementation 'junit:junit:4.12'
+}
+
+clean {
+    delete project.rootDir.absolutePath + '/delivery/'
+    delete project.rootDir.absolutePath + '/documentation/'
+    delete project.rootDir.absolutePath + '/build.properties'
+    delete project.rootDir.absolutePath + '/ATInternet_Android_SDK_' + version + '.zip'
+}
+
 task sourcesJar(type: Jar) {
     from project.rootDir.absolutePath + '/Tracker/src/main/java'
     classifier = 'sources'

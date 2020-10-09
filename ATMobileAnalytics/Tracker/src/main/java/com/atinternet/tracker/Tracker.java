@@ -96,6 +96,15 @@ public class Tracker {
     }
 
     /**
+     * Enum for different Proxy type
+     */
+    public enum ProxyType {
+        none,
+        http,
+        socks
+    }
+
+    /**
      * Enum for different plugin
      */
     public enum PluginKey {
@@ -1036,12 +1045,21 @@ public class Tracker {
     }
 
     /**
-     * Set a new uuid expiration mode
+     * Set a new proxy type
      *
-     * @param uuidExpirationMode UUIDExpirationMode
+     * @param proxyType ProxyType
      */
-    public void setUUIDExpirationMode(UUIDExpirationMode uuidExpirationMode) {
-        setConfig(TrackerConfigurationKeys.UUID_EXPIRATION_MODE, uuidExpirationMode.toString(), null, true);
+    public void setProxyType(ProxyType proxyType) {
+        setConfig(TrackerConfigurationKeys.PROXY_TYPE, proxyType.toString(), null, true);
+    }
+
+    /**
+     * Set a new proxy address
+     *
+     * @param proxyAddress String
+     */
+    public void setProxyAddress(String proxyAddress) {
+        setConfig(TrackerConfigurationKeys.PROXY_ADDRESS, proxyAddress, null, true);
     }
 
     /**

@@ -186,6 +186,16 @@ public final class TrackerConfigurationKeys {
      */
     public static final String UUID_EXPIRATION_MODE = "UUIDExpirationMode";
 
+    /**
+     * Constant for Proxy type
+     */
+    public static final String PROXY_TYPE = "proxyType";
+
+    /**
+     * Constant for Proxy address
+     */
+    public static final String PROXY_ADDRESS = "proxyAddress";
+
     private TrackerConfigurationKeys() {
         throw new IllegalStateException("Utility class");
     }

@@ -60,6 +60,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -687,10 +689,31 @@ class Sender implements Runnable {
         }
 
         HttpURLConnection connection = null;
+        String[] splt;
+        Proxy proxy = null;
         try {
             // Execution de la requête
             URL url = new URL(hit.getUrl());
-            connection = (HttpURLConnection) url.openConnection();
+            switch (String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.PROXY_TYPE)).toLowerCase()) {
+                case "http":
+                    splt = String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.PROXY_ADDRESS)).split(":");
+                    if (splt.length == 2) {
+                        proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(splt[0], Utility.parseInt(splt[1], -1)));
+                    }
+                    break;
+                case "socks":
+                    splt = String.valueOf(tracker.configuration.get(TrackerConfigurationKeys.PROXY_ADDRESS)).split(":");
+                    if (splt.length == 2) {
+                        proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(splt[0], Utility.parseInt(splt[1], -1)));
+                    }
+                    break;
+            }
+
+            if (proxy != null) {
+                connection = (HttpURLConnection) url.openConnection(proxy);
+            } else {
+                connection = (HttpURLConnection) url.openConnection();
+            }
             connection.setReadTimeout(TIMEOUT);
             connection.setConnectTimeout(TIMEOUT);
 

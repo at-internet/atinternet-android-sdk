@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("site", 999999);
             put("UUIDDuration", 1);
         }}, null, true);
-        Privacy.extendIncludeBuffer("events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
-        Privacy.extendIncludeBuffer(Privacy.VisitorMode.Exempt, "events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
+        tracker.setProxyType(Tracker.ProxyType.http);
+        tracker.setProxyAddress("127.0.0.1:8888");
     }
 
     @Override
