@@ -628,14 +628,13 @@ public final class Debugger extends GestureDetector.SimpleOnGestureListener impl
     /**
      * Offline hits adapter
      */
-    private class DebuggerOfflineHitsAdapter extends BaseAdapter {
+    private static class DebuggerOfflineHitsAdapter extends BaseAdapter {
 
         private static final int SIZE_IMAGE = 70;
         private static final String HOUR_FORMAT = "HH:mm:ss";
         private static final String DATE_STRING = "dd/MM/yyyy";
         private final RelativeLayout noOfflineHitsLayout;
 
-        private ArrayList<Hit> offlineHits = new ArrayList<>();
         private final LayoutInflater inflater;
         private final Context context;
         private final Tracker tracker;
@@ -644,7 +643,6 @@ public final class Debugger extends GestureDetector.SimpleOnGestureListener impl
             this.context = context;
             this.tracker = tracker;
             inflater = LayoutInflater.from(context);
-            this.offlineHits = Debugger.offlineHits;
             this.noOfflineHitsLayout = noOfflineHitsLayout;
         }
 
@@ -725,7 +723,7 @@ public final class Debugger extends GestureDetector.SimpleOnGestureListener impl
             removeOfflineHit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Storage.getInstance(Tracker.getAppContext()).deleteHit(offlineHit.getUrl());
+                    Storage.getInstance(Tracker.getAppContext()).deleteHit(offlineHit.getId());
                     notifyDataSetChanged();
                     noOfflineHitsLayout.setVisibility(offlineHits.isEmpty() ? View.VISIBLE : View.GONE);
                 }

@@ -131,7 +131,7 @@ public class IdentifiedVisitor {
 
     private void save(String key, String preferencesKey, String value) {
         if (persistIdentifiedVisitor) {
-            Tracker.getPreferences().edit().putString(preferencesKey, value).apply();
+            Tracker.getPreferences().edit().putString(preferencesKey, new Crypt().encrypt(value)).apply();
         } else {
             tracker.setParam(key, value, option);
         }
