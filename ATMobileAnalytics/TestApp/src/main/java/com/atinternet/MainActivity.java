@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("site", 552987);
             put("UUIDDuration", 1);
         }}, null, true);
-        //tracker.setUUIDDuration(0);
-        //tracker.setUUIDExpirationMode(Tracker.UUIDExpirationMode.relative);
+        tracker.setMaxHitSize(1500);
     }
 
     @Override
@@ -57,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("ATINTERNET", "Debug stop");
                 break;
             case R.id.sendHit:
+                for (int i = 0; i < 1000; i++) {
+                    tracker.setParam("key" + i, "value" + i);
+                }
                 tracker.Screens().add("Page").sendView();
                 break;
             case R.id.goToSecondScreen:
