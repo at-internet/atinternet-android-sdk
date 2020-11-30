@@ -1072,7 +1072,7 @@ class TechnicalContext {
     };
 
     enum ConnectionType {
-        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, WIFI, OFFLINE, UNKNOWN
+        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, FIVEG, WIFI, OFFLINE, UNKNOWN
     }
 
     static void resetScreenContext() {
@@ -1143,6 +1143,8 @@ class TechnicalContext {
             case TelephonyManager.NETWORK_TYPE_HSPAP:
             case TelephonyManager.NETWORK_TYPE_LTE:
                 return ConnectionType.FOURG;
+            case TelephonyManager.NETWORK_TYPE_NR:
+                return ConnectionType.FIVEG;
             default:
                 return ConnectionType.UNKNOWN;
         }
@@ -1170,6 +1172,8 @@ class TechnicalContext {
                         return "3g+";
                     case FOURG:
                         return "4g";
+                    case FIVEG:
+                        return "5g";
                     case WIFI:
                         return "wifi";
                     case UNKNOWN:
