@@ -22,10 +22,8 @@
  */
 package com.atinternet.tracker;
 
-import android.text.TextUtils;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class Utility {
 
@@ -104,5 +102,32 @@ public class Utility {
         }
 
         return sb.toString();
+    }
+
+    /// Workaround to bypass the identified NTP issue on Android
+    /// (https://stackoverflow.com/questions/45509101/system-currenttimemillis-returns-incorrect-timestamp-on-huawei)
+    public static long currentTimeMillis() {
+        long timeMillis;
+        int year;
+        do {
+            timeMillis = System.currentTimeMillis();
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timeMillis);
+            year = cal.get(Calendar.YEAR);
+            if (year < 2000) {
+                sleep();
+            }
+        } while (year < 2000);
+
+        return timeMillis;
+    }
+
+    private static void sleep() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -67,7 +67,7 @@ public class Campaign extends ScreenInfo {
         preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
 
         if (remanentMarketingCampaign != null) {
-            if (Tool.getDaysBetweenTimes(System.currentTimeMillis(), campaignDate) > (Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME))))) {
+            if (Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), campaignDate) > (Integer.parseInt(String.valueOf(tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LIFETIME))))) {
                 preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null).apply();
                 remanentMarketingCampaign = null;
             } else {
@@ -75,13 +75,13 @@ public class Campaign extends ScreenInfo {
             }
         } else {
             preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
-                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
+                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, Utility.currentTimeMillis())
                     .apply();
         }
 
         if (((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.CAMPAIGN_LAST_PERSISTENCE)) || remanentMarketingCampaign == null) {
             preferences.edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, campaignId)
-                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
+                    .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, Utility.currentTimeMillis())
                     .apply();
         }
     }

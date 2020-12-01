@@ -803,7 +803,7 @@ class Sender implements Runnable {
     }
 
     void saveHitDatabase(final Hit hit) {
-        final String url = storage.saveHit(hit.getUrl(), System.currentTimeMillis(), oltParameter);
+        final String url = storage.saveHit(hit.getUrl(), Utility.currentTimeMillis(), oltParameter);
         if (!TextUtils.isEmpty(url)) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SAVE, url);
             updateDebugger(url, "save48", true);
@@ -1441,7 +1441,7 @@ class TechnicalContext {
             return TechnicalContext.generatedUUID;
         }
 
-        long now = System.currentTimeMillis();
+        long now = Utility.currentTimeMillis();
         String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
 
         if (uuid != null) {
@@ -1580,7 +1580,7 @@ class Tool {
             @Override
             public String execute() {
 
-                double result = System.currentTimeMillis() / 1000.0;
+                double result = Utility.currentTimeMillis() / 1_000.0;
                 long d = (long) result;
                 String afterZero = Double.toString(result - d);
 

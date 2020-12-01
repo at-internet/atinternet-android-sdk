@@ -67,7 +67,7 @@ public class ReferrerReceiver extends BroadcastReceiver {
             if (key.equals(Hit.HitParam.RemanentSource.stringValue())) {
                 context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE)
                         .edit().putString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, paramComponents[1])
-                        .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, System.currentTimeMillis())
+                        .putLong(TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME, Utility.currentTimeMillis())
                         .apply();
             }
         }

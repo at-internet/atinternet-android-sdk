@@ -344,21 +344,21 @@ final class LifeCycle {
             String firstLaunchDate = preferences.getString(FIRST_SESSION_DATE, "");
             if (!TextUtils.isEmpty(firstLaunchDate)) {
                 long timeSinceFirstLaunch = simpleDateFormat.parse(firstLaunchDate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_FIRST_SESSION, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceFirstLaunch)).apply();
+                preferences.edit().putInt(DAYS_SINCE_FIRST_SESSION, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceFirstLaunch)).apply();
             }
 
             // Calcul dsu
             String firstLaunchDateAfterUpdate = preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, "");
             if (!TextUtils.isEmpty(firstLaunchDateAfterUpdate)) {
                 long timeSinceFirstLaunchAfterUpdate = simpleDateFormat.parse(firstLaunchDateAfterUpdate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_UPDATE, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceFirstLaunchAfterUpdate)).apply();
+                preferences.edit().putInt(DAYS_SINCE_UPDATE, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceFirstLaunchAfterUpdate)).apply();
             }
 
             // Calcul dsls
             String lastLaunchDate = preferences.getString(LAST_SESSION_DATE, "");
             if (!TextUtils.isEmpty(lastLaunchDate)) {
                 long timeSinceLastUse = simpleDateFormat.parse(lastLaunchDate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_LAST_SESSION, Tool.getDaysBetweenTimes(System.currentTimeMillis(), timeSinceLastUse)).apply();
+                preferences.edit().putInt(DAYS_SINCE_LAST_SESSION, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceLastUse)).apply();
             }
             preferences.edit().putString(LAST_SESSION_DATE, simpleDateFormat.format(new Date())).apply();
 
@@ -491,7 +491,7 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
     public void onActivityStarted(Activity activity) {
         if (timeInBackground > -1) {
             int sessionBackgroundDuration = Integer.parseInt(String.valueOf(configuration.get(TrackerConfigurationKeys.SESSION_BACKGROUND_DURATION)));
-            if (Tool.getSecondsBetweenTimes(System.currentTimeMillis(), timeInBackground) >= (sessionBackgroundDuration < DELTA ? DELTA : sessionBackgroundDuration)) {
+            if (Tool.getSecondsBetweenTimes(Utility.currentTimeMillis(), timeInBackground) >= (sessionBackgroundDuration < DELTA ? DELTA : sessionBackgroundDuration)) {
                 LifeCycle.newSessionInit(Tracker.getPreferences());
                 timeInBackground = -1;
             }
@@ -510,7 +510,7 @@ class TrackerActivityLifeCycle implements Application.ActivityLifecycleCallbacks
     public void onActivityPaused(Activity activity) {
         savedActivityName = activity.getClass().getCanonicalName();
         savedActivityTaskId = activity.getTaskId();
-        timeInBackground = System.currentTimeMillis();
+        timeInBackground = Utility.currentTimeMillis();
         if (Debugger.isActive()) {
             handler.postDelayed(debuggerCancelable, DELAY);
         }

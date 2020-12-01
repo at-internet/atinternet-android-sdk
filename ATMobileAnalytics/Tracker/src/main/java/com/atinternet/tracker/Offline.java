@@ -96,7 +96,7 @@ public class Offline {
      * @param date /
      */
     public void delete(Date date) {
-        int daysCount = Tool.getDaysBetweenTimes(System.currentTimeMillis(), date.getTime());
+        int daysCount = Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), date.getTime());
         storage.removeOldOfflineHits(daysCount);
     }
 
