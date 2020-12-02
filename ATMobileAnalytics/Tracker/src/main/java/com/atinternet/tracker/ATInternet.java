@@ -31,6 +31,25 @@ import java.util.concurrent.ConcurrentHashMap;
  * Use this class to manage tracker instances
  */
 public final class ATInternet {
+
+    /**
+     * Enum for different encryption mode
+     */
+    public enum EncryptionMode {
+        /**
+         * No encryption stored data
+         */
+        none,
+        /**
+         * encryption stored data enabled if device is compatible
+         */
+        ifCompatible,
+        /**
+         * /!\ encryption stored data enable AND if not data not stored
+         */
+        force
+    }
+
     /**
      * Overlay permission Activity result code
      */
@@ -39,7 +58,7 @@ public final class ATInternet {
 
     static final String TAG = "ATINTERNET";
 
-    private static ATInternet instance = new ATInternet();
+    private static final ATInternet instance = new ATInternet();
 
     private final ConcurrentHashMap<String, Tracker> trackers = new ConcurrentHashMap<>();
 
@@ -56,13 +75,30 @@ public final class ATInternet {
         Storage.setDatabasePath(path);
     }
 
-    /**
+    /***
      * Get ATInternet database path
-     *
      * @return Database path
      */
     public static String getDatabasePath() {
         return Storage.getDatabasePath();
+    }
+
+
+    /***
+     * Set ATInternet encryption mode
+     * @param encryptionMode EncryptionMode
+     */
+    public static void setEncryptionMode(EncryptionMode encryptionMode) {
+        Crypt.setEncryptionMode(encryptionMode);
+    }
+
+    /**
+     * Get ATInternet encryption mode
+     *
+     * @return Encryption mode
+     */
+    public static EncryptionMode getEncryptionMode() {
+        return Crypt.getEncryptionMode();
     }
 
     /**

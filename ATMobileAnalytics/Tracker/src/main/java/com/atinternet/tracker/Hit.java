@@ -209,6 +209,7 @@ public class Hit {
 
     private final String url;
     private Date date;
+    private int id;
     private int retry;
     private boolean isOffline;
 
@@ -220,6 +221,7 @@ public class Hit {
     public Hit(String url) {
         this.url = url;
         date = null;
+        id = -1;
         retry = -1;
         isOffline = false;
     }
@@ -231,12 +233,14 @@ public class Hit {
      * @param date      hit building date
      * @param retry     sending retry count
      * @param isOffline true if hit come from storage
+     * @param id        offline id entry
      */
-    public Hit(String url, Date date, int retry, boolean isOffline) {
+    public Hit(String url, Date date, int retry, boolean isOffline, int id) {
         this(url);
         this.date = date;
         this.retry = retry;
         this.isOffline = isOffline;
+        this.id = id;
     }
 
     /**
@@ -264,6 +268,15 @@ public class Hit {
      */
     public int getRetry() {
         return retry;
+    }
+
+    /**
+     * Get the offline hit id
+     *
+     * @return int
+     */
+    int getId() {
+        return id;
     }
 
     /**

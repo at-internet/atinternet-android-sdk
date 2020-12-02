@@ -458,7 +458,7 @@ public abstract class RichMedia extends BusinessObject {
             scheduler = Executors.newSingleThreadScheduledExecutor();
         }
 
-        playTimestamp = (int) (System.currentTimeMillis() / 1000);
+        playTimestamp = (int) (Utility.currentTimeMillis() / 1_000);
 
         int refreshSparseArraySize = refreshDurationsSparseIntArray.size();
 
@@ -557,7 +557,7 @@ public abstract class RichMedia extends BusinessObject {
      */
     public void sendPause() {
         tracker.setParam("a", Action.Pause.stringValue());
-        elapsedTime += ((int) (System.currentTimeMillis() / 1000) - playTimestamp);
+        elapsedTime += ((int) (Utility.currentTimeMillis() / 1_000) - playTimestamp);
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdownNow();
         }

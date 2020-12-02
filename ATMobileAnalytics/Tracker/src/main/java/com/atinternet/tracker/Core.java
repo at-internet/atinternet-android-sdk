@@ -64,6 +64,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +77,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -633,7 +633,7 @@ class Builder implements Runnable {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
                 calendar.get(Calendar.SECOND),
-                new Random().nextInt(MHID_UPPER_LIMIT) + MHID_LOWER_LIMIT);
+                new SecureRandom().nextInt(MHID_UPPER_LIMIT) + MHID_LOWER_LIMIT);
     }
 
     String makeSubQuery(String key, String value) {
@@ -715,7 +715,7 @@ class Sender implements Runnable {
             } else {
                 // Si le hit provient du stockage, on le supprime de la base
                 if (hit.isOffline()) {
-                    storage.deleteHit(hit.getUrl());
+                    storage.deleteHit(hit.getId());
                 }
                 Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SEND, hit.getUrl(), TrackerListener.HitStatus.Success);
                 updateDebugger(hit.getUrl(), "sent48", true);
@@ -726,7 +726,7 @@ class Sender implements Runnable {
             if (checkExceptionServerReceiveData(e)) {
                 // Si il s'agissait d'un hit offline, on le supprime
                 if (hit.isOffline()) {
-                    storage.deleteHit(hit.getUrl());
+                    storage.deleteHit(hit.getId());
                 }
             } else if (tracker.getOfflineMode() != Tracker.OfflineMode.never) {
                 if (!hit.isOffline()) {
@@ -796,14 +796,14 @@ class Sender implements Runnable {
     private void updateRetryCount(Hit hit) {
         int retryCount = hit.getRetry();
         if (retryCount < RETRY_COUNT) {
-            storage.updateRetry(hit.getUrl(), retryCount + 1);
+            storage.updateRetry(hit.getId(), retryCount + 1);
         } else {
-            storage.deleteHit(hit.getUrl());
+            storage.deleteHit(hit.getId());
         }
     }
 
     void saveHitDatabase(final Hit hit) {
-        final String url = storage.saveHit(hit.getUrl(), System.currentTimeMillis(), oltParameter);
+        final String url = storage.saveHit(hit.getUrl(), Utility.currentTimeMillis(), oltParameter);
         if (!TextUtils.isEmpty(url)) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.SAVE, url);
             updateDebugger(url, "save48", true);
@@ -971,9 +971,11 @@ class Dispatcher {
                 .setRelativePosition(ParamOption.RelativePosition.before)
                 .setRelativeParameterKey(Hit.HitParam.JSON.stringValue()).setEncode(true);
 
-        String visitorNumericID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_NUMERIC, null);
-        String visitorCategory = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_CATEGORY, null);
-        String visitorTextID = Tracker.getPreferences().getString(IdentifiedVisitor.VISITOR_TEXT, null);
+        Crypt crypt = new Crypt();
+        SharedPreferences prefs = Tracker.getPreferences();
+        String visitorNumericID = crypt.decrypt(prefs.getString(IdentifiedVisitor.VISITOR_NUMERIC, null));
+        String visitorCategory = crypt.decrypt(prefs.getString(IdentifiedVisitor.VISITOR_CATEGORY, null));
+        String visitorTextID = crypt.decrypt(prefs.getString(IdentifiedVisitor.VISITOR_TEXT, null));
         if (visitorNumericID != null) {
             tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
         }
@@ -1058,7 +1060,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.18.0";
+            return "2.19.0";
         }
     };
 
@@ -1070,7 +1072,7 @@ class TechnicalContext {
     };
 
     enum ConnectionType {
-        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, WIFI, OFFLINE, UNKNOWN
+        GPRS, EDGE, TWOG, THREEG, THREEGPLUS, FOURG, FIVEG, WIFI, OFFLINE, UNKNOWN
     }
 
     static void resetScreenContext() {
@@ -1141,6 +1143,8 @@ class TechnicalContext {
             case TelephonyManager.NETWORK_TYPE_HSPAP:
             case TelephonyManager.NETWORK_TYPE_LTE:
                 return ConnectionType.FOURG;
+            case TelephonyManager.NETWORK_TYPE_NR:
+                return ConnectionType.FIVEG;
             default:
                 return ConnectionType.UNKNOWN;
         }
@@ -1168,6 +1172,8 @@ class TechnicalContext {
                         return "3g+";
                     case FOURG:
                         return "4g";
+                    case FIVEG:
+                        return "5g";
                     case WIFI:
                         return "wifi";
                     case UNKNOWN:
@@ -1435,7 +1441,7 @@ class TechnicalContext {
             return TechnicalContext.generatedUUID;
         }
 
-        long now = System.currentTimeMillis();
+        long now = Utility.currentTimeMillis();
         String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
 
         if (uuid != null) {
@@ -1574,7 +1580,7 @@ class Tool {
             @Override
             public String execute() {
 
-                double result = System.currentTimeMillis() / 1000.0;
+                double result = Utility.currentTimeMillis() / 1_000.0;
                 long d = (long) result;
                 String afterZero = Double.toString(result - d);
 
@@ -1906,8 +1912,12 @@ final class Storage extends SQLiteOpenHelper {
 
     String saveHit(String hit, long time, String oltParameter) {
         hit = buildHitToStore(hit, oltParameter);
+        String encryptedHit = new Crypt().encrypt(hit);
+        if (TextUtils.isEmpty(encryptedHit)) {
+            return null;
+        }
         ContentValues values = new ContentValues();
-        values.put(HIT, hit);
+        values.put(HIT, encryptedHit);
         values.put(RETRY, 0);
         values.put(DATE, time);
         SQLiteDatabase db = null;
@@ -1923,14 +1933,14 @@ final class Storage extends SQLiteOpenHelper {
         return hit;
     }
 
-    void deleteHit(String hit) {
+    void deleteHit(int id) {
         SQLiteDatabase db = null;
         try {
             db = getWritableDatabase();
             if (db == null) {
                 return;
             }
-            db.delete(HITS_STORAGE_TABLE, HIT + "='" + hit + "'", null);
+            db.delete(HITS_STORAGE_TABLE, ID + "=" + id, null);
         } finally {
             if (db != null) db.close();
         }
@@ -1956,7 +1966,7 @@ final class Storage extends SQLiteOpenHelper {
         return newHitBuilder.toString();
     }
 
-    void updateRetry(String hit, int retry) {
+    void updateRetry(int id, int retry) {
         ContentValues values = new ContentValues();
         values.put(RETRY, retry);
         SQLiteDatabase db = null;
@@ -1965,7 +1975,7 @@ final class Storage extends SQLiteOpenHelper {
             if (db == null) {
                 return;
             }
-            db.update(HITS_STORAGE_TABLE, values, HIT + "='" + hit + "'", null);
+            db.update(HITS_STORAGE_TABLE, values, ID + "=" + id, null);
         } finally {
             if (db != null) db.close();
         }
@@ -2036,12 +2046,14 @@ final class Storage extends SQLiteOpenHelper {
             try {
                 c = db.rawQuery(SELECT_ALL_QUERY + "ORDER BY " + ID + " ASC", null);
                 if (c != null && c.getCount() > 0) {
+                    Crypt crypt = new Crypt();
                     c.moveToFirst();
                     do {
                         String hit = c.getString(c.getColumnIndex(HIT));
                         String time = c.getString(c.getColumnIndex(DATE));
                         int retry = c.getInt(c.getColumnIndex(RETRY));
-                        hits.add(new Hit(hit, new Date(Long.parseLong(time)), retry, true));
+                        int id = c.getInt(c.getColumnIndex(ID));
+                        hits.add(new Hit(crypt.decrypt(hit), new Date(Long.parseLong(time)), retry, true, id));
                     }
                     while (c.moveToNext());
                 }
@@ -2068,10 +2080,11 @@ final class Storage extends SQLiteOpenHelper {
                     String hit = c.getString(c.getColumnIndex(HIT));
                     String time = c.getString(c.getColumnIndex(DATE));
                     int retry = c.getInt(c.getColumnIndex(RETRY));
+                    int id = c.getInt(c.getColumnIndex(ID));
                     if (hit != null && time != null) {
                         c.close();
                         db.close();
-                        return new Hit(hit, new Date(Long.parseLong(time)), retry, true);
+                        return new Hit(new Crypt().decrypt(hit), new Date(Long.parseLong(time)), retry, true, id);
                     }
                 }
             } finally {
@@ -2098,10 +2111,11 @@ final class Storage extends SQLiteOpenHelper {
                     String hit = c.getString(c.getColumnIndex(HIT));
                     String time = c.getString(c.getColumnIndex(DATE));
                     int retry = c.getInt(c.getColumnIndex(RETRY));
+                    int id = c.getInt(c.getColumnIndex(ID));
                     if (hit != null && time != null) {
                         c.close();
                         db.close();
-                        return new Hit(hit, new Date(Long.parseLong(time)), retry, true);
+                        return new Hit(new Crypt().decrypt(hit), new Date(Long.parseLong(time)), retry, true, id);
                     }
                 }
             } finally {
