@@ -56,10 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("ATINTERNET", "Debug stop");
                 break;
             case R.id.sendHit:
-                for (int i = 0; i < 1000; i++) {
-                    tracker.setParam("key" + i, "value" + i);
-                }
-                tracker.Screens().add("Page").sendView();
+                tracker.AVInsights().Media(3, 10).playbackStart(0, null);
+                //tracker.Screens().add("Page").sendView();
                 break;
             case R.id.goToSecondScreen:
                 startActivity(new Intent(this, SecondActivity.class));
