@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("ATINTERNET", "Debug stop");
                 break;
             case R.id.sendHit:
-                tracker.AVInsights().Media(3, 10).playbackStart(0, null);
+                tracker.AVInsights().Media(13, 10).playbackStart(0, null);
                 //tracker.Screens().add("Page").sendView();
                 break;
             case R.id.goToSecondScreen:
