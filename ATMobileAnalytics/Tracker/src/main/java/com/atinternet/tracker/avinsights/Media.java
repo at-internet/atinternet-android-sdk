@@ -59,9 +59,9 @@ public class Media extends RequiredPropertiesDataObject {
         this(events, null, null, sessionId);
     }
 
-    private static SparseIntArray createHeartbeatStages() {
+    private static SparseIntArray createHeartbeatStages(int heartbeat) {
         SparseIntArray s = new SparseIntArray();
-        s.append(0, 5);
+        s.append(0, heartbeat);
         s.append(1, 10);
         s.append(5, 20);
         s.append(15, 30);
@@ -71,8 +71,8 @@ public class Media extends RequiredPropertiesDataObject {
 
     public Media(Events events, SparseIntArray heartbeat, SparseIntArray bufferHeartbeat, String sessionId) {
         this(events);
-        setHeartbeat(createHeartbeatStages());
-        setBufferHeartbeat(createHeartbeatStages());
+        setHeartbeat(createHeartbeatStages(MIN_HEARTBEAT_DURATION));
+        setBufferHeartbeat(createHeartbeatStages(MIN_BUFFER_HEARTBEAT_DURATION));
         this.sessionId = TextUtils.isEmpty(sessionId) ? UUID.randomUUID().toString() : sessionId;
     }
 
