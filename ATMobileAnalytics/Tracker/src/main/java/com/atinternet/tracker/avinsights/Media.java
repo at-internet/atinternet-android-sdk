@@ -56,16 +56,23 @@ public class Media extends RequiredPropertiesDataObject {
     }
 
     public Media(Events events, int heartbeat, int bufferHeartbeat, String sessionId) {
-        this(events);
-        setHeartbeat(heartbeat);
-        setBufferHeartbeat(bufferHeartbeat);
-        this.sessionId = TextUtils.isEmpty(sessionId) ? UUID.randomUUID().toString() : sessionId;
+        this(events, null, null, sessionId);
+    }
+
+    private static SparseIntArray createHeartbeatStages(int heartbeat) {
+        SparseIntArray s = new SparseIntArray();
+        s.append(0, heartbeat);
+        s.append(1, 10);
+        s.append(5, 20);
+        s.append(15, 30);
+        s.append(30, 60);
+        return s;
     }
 
     public Media(Events events, SparseIntArray heartbeat, SparseIntArray bufferHeartbeat, String sessionId) {
         this(events);
-        setHeartbeat(heartbeat);
-        setBufferHeartbeat(bufferHeartbeat);
+        setHeartbeat(createHeartbeatStages(MIN_HEARTBEAT_DURATION));
+        setBufferHeartbeat(createHeartbeatStages(MIN_BUFFER_HEARTBEAT_DURATION));
         this.sessionId = TextUtils.isEmpty(sessionId) ? UUID.randomUUID().toString() : sessionId;
     }
 
@@ -75,17 +82,6 @@ public class Media extends RequiredPropertiesDataObject {
      */
     public synchronized String getSessionId() {
         return sessionId;
-    }
-
-    /***
-     * Set heartbeat value
-     * @param heartbeat int
-     * @return current Media instance
-     */
-    Media setHeartbeat(int heartbeat) {
-        SparseIntArray sia = new SparseIntArray();
-        sia.append(0, Math.max(heartbeat, MIN_HEARTBEAT_DURATION));
-        return setHeartbeat(sia);
     }
 
     /***
@@ -110,17 +106,6 @@ public class Media extends RequiredPropertiesDataObject {
             heartbeatDurations.put(0, MIN_HEARTBEAT_DURATION);
         }
         return this;
-    }
-
-    /***
-     * Set buffer heartbeat value
-     * @param bufferHeartbeat int
-     * @return current Media instance
-     */
-    Media setBufferHeartbeat(int bufferHeartbeat) {
-        SparseIntArray sia = new SparseIntArray();
-        sia.append(0, Math.max(bufferHeartbeat, MIN_BUFFER_HEARTBEAT_DURATION));
-        return setBufferHeartbeat(sia);
     }
 
     /***

@@ -109,7 +109,9 @@ public class Utility {
     public static long currentTimeMillis() {
         long timeMillis;
         int year;
+        int retry = 3;
         do {
+            retry--;
             timeMillis = System.currentTimeMillis();
 
             Calendar cal = Calendar.getInstance();
@@ -118,14 +120,14 @@ public class Utility {
             if (year < 2000) {
                 sleep();
             }
-        } while (year < 2000);
+        } while (year < 2000 && retry > 0);
 
         return timeMillis;
     }
 
     private static void sleep() {
         try {
-            TimeUnit.MILLISECONDS.sleep(200);
+            TimeUnit.MILLISECONDS.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -266,9 +266,13 @@
       "label": "Geode_Tag_SDK_Config_Title_UUIDExpirationMode",
       "description": "Geode_Tag_SDK_Config_Description_UUIDExpirationMode",
       "defaultValue": "fixed",
-      "type": "int",
+      "type": "list",
       "isPublic": true,
-      "isGlobal": true
+      "isGlobal": true,
+      "values": [
+        "fixed",
+        "relative"
+      ]
     }
   ]
 }
