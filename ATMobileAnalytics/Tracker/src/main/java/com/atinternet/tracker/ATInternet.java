@@ -105,7 +105,9 @@ public final class ATInternet {
      * Disable user identification
      *
      * @param enabled /
+     * @deprecated
      */
+    @Deprecated
     public static void optOut(android.content.Context context, final boolean enabled) {
         TechnicalContext.optOut(context, enabled);
     }
@@ -113,8 +115,10 @@ public final class ATInternet {
     /**
      * Get "optOut" value
      *
+     * @deprecated
      * @return true if "optOut" is enabled
      */
+    @Deprecated
     public static boolean optOutEnabled(android.content.Context context) {
         return TechnicalContext.optOutEnabled(context);
     }

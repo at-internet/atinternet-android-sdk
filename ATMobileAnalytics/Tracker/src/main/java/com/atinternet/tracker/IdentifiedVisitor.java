@@ -27,10 +27,6 @@ package com.atinternet.tracker;
  */
 public class IdentifiedVisitor {
 
-    static final String VISITOR_NUMERIC = "ATVisitorNumeric";
-    static final String VISITOR_CATEGORY = "ATVisitorCategory";
-    static final String VISITOR_TEXT = "ATVisitorText";
-
     private final Tracker tracker;
     private final boolean persistIdentifiedVisitor;
     private final ParamOption option = new ParamOption();
@@ -49,7 +45,7 @@ public class IdentifiedVisitor {
      */
     public Tracker set(long visitorId) {
         unset();
-        save(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), VISITOR_NUMERIC, String.valueOf(visitorId));
+        save(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), TrackerConfigurationKeys.VISITOR_NUMERIC, String.valueOf(visitorId));
 
         return tracker;
     }
@@ -74,7 +70,7 @@ public class IdentifiedVisitor {
      */
     public Tracker set(long visitorId, String visitorCategory) {
         set(visitorId);
-        save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, visitorCategory);
+        save(Hit.HitParam.VisitorCategory.stringValue(), TrackerConfigurationKeys.VISITOR_CATEGORY, visitorCategory);
 
         return tracker;
     }
@@ -87,7 +83,7 @@ public class IdentifiedVisitor {
      */
     public Tracker set(String visitorId) {
         unset();
-        save(Hit.HitParam.VisitorIdentifierText.stringValue(), VISITOR_TEXT, visitorId);
+        save(Hit.HitParam.VisitorIdentifierText.stringValue(), TrackerConfigurationKeys.VISITOR_TEXT, visitorId);
 
         return tracker;
     }
@@ -112,7 +108,7 @@ public class IdentifiedVisitor {
      */
     public Tracker set(String visitorId, String visitorCategory) {
         set(visitorId);
-        save(Hit.HitParam.VisitorCategory.stringValue(), VISITOR_CATEGORY, visitorCategory);
+        save(Hit.HitParam.VisitorCategory.stringValue(), TrackerConfigurationKeys.VISITOR_CATEGORY, visitorCategory);
 
         return tracker;
     }
@@ -124,13 +120,14 @@ public class IdentifiedVisitor {
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue());
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierText.stringValue());
         tracker.unsetParam(Hit.HitParam.VisitorCategory.stringValue());
-        Tracker.getPreferences().edit().putString(VISITOR_NUMERIC, null)
-                .putString(VISITOR_CATEGORY, null)
-                .putString(VISITOR_TEXT, null).apply();
+        Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.VISITOR_NUMERIC, null)
+                .putString(TrackerConfigurationKeys.VISITOR_CATEGORY, null)
+                .putString(TrackerConfigurationKeys.VISITOR_TEXT, null).apply();
     }
 
     private void save(String key, String preferencesKey, String value) {
-        if (persistIdentifiedVisitor) {
+        Privacy.VisitorMode visitorMode = Privacy.getVisitorMode();
+        if (persistIdentifiedVisitor && (visitorMode == Privacy.VisitorMode.OptIn || visitorMode == Privacy.VisitorMode.None)) {
             Tracker.getPreferences().edit().putString(preferencesKey, new Crypt().encrypt(value)).apply();
         } else {
             tracker.setParam(key, value, option);

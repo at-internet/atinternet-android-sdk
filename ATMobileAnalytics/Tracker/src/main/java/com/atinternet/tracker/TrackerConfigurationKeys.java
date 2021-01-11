@@ -54,6 +54,18 @@ public final class TrackerConfigurationKeys {
     //Global key representing idclient generation timestamp from uuid
     static final String IDCLIENT_UUID_GENERATION_TIMESTAMP = "ATIdclientUUIDGenerationTimestamp";
 
+    static final String VISITOR_NUMERIC = "ATVisitorNumeric";
+
+    static final String VISITOR_CATEGORY = "ATVisitorCategory";
+
+    static final String VISITOR_TEXT = "ATVisitorText";
+
+    //Global key representing privacy mode
+    static final String PRIVACY_MODE = "ATPrivacyMode";
+
+    //Global key representing privacy mode
+    static final String PRIVACY_MODE_EXPIRATION_TIMESTAMP = "ATPrivacyModeExpirationTimestamp";
+
     /**
      * Constant for storage offline mode configuration key
      */
