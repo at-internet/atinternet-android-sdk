@@ -40,8 +40,8 @@ public final class Privacy {
         Map<VisitorMode, Set<String>> m = new HashMap<>();
         m.put(VisitorMode.None, new HashSet<>(Collections.singletonList("*")));
         m.put(VisitorMode.OptIn, new HashSet<>(Collections.singletonList("*")));
-        m.put(VisitorMode.OptOut, new HashSet<>(Arrays.asList("idclient", "ts", "olt", "click", "type")));
-        m.put(VisitorMode.NoConsent, new HashSet<>(Arrays.asList("idclient", "ts", "olt", "click", "type")));
+        m.put(VisitorMode.OptOut, new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
+        m.put(VisitorMode.NoConsent, new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
         m.put(VisitorMode.Exempt, new HashSet<>(Arrays.asList("idclient", "p", "olt", "vtag", "ptag", "ts", "click", "type", "cn", "apvr", "mfmd", "model", "manufacturer", "os", "stc_crash_*")));
         return m;
     }

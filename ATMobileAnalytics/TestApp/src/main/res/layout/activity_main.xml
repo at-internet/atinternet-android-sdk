@@ -33,6 +33,12 @@
             android:text="set Visitor Exempt" />
 
         <Button
+            android:id="@+id/setVisitorNoConsent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="set Visitor NoConsent" />
+
+        <Button
             android:id="@+id/setVisitorNone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,6 +49,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send hit" />
+
+        <Button
+            android:id="@+id/sendHitPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send hit page" />
 
         <Button
             android:id="@+id/goToSecondScreen"

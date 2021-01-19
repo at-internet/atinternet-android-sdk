@@ -23,8 +23,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.setVisitorOptOut).setOnClickListener(this);
         findViewById(R.id.setVisitorOptIn).setOnClickListener(this);
         findViewById(R.id.setVisitorExempt).setOnClickListener(this);
+        findViewById(R.id.setVisitorNoConsent).setOnClickListener(this);
         findViewById(R.id.setVisitorNone).setOnClickListener(this);
         findViewById(R.id.sendHit).setOnClickListener(this);
+        findViewById(R.id.sendHitPage).setOnClickListener(this);
         findViewById(R.id.goToSecondScreen).setOnClickListener(this);
 
         tracker = ATInternet.getInstance().getDefaultTracker()
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("UUIDDuration", 1);
         }}, null, true);
         tracker.setMaxHitSize(1500);
-        Privacy.extendIncludeBuffer("events_name","events_data_av_duration", "events_data_av_p*");
+        Privacy.extendIncludeBuffer("events_name","events_data_av_duration", "events_data_av_p*", "stc_test6");
     }
 
     @Override
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.setVisitorExempt:
                 Privacy.setVisitorMode(Privacy.VisitorMode.Exempt);
+                break;
+            case R.id.setVisitorNoConsent:
+                Privacy.setVisitorMode(Privacy.VisitorMode.NoConsent);
+                break;
             case R.id.setVisitorNone:
                 Privacy.setVisitorMode(Privacy.VisitorMode.None);
                 break;
@@ -62,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     put("test6", "2");
                 }});
                 tracker.AVInsights().Media().playbackStart(0, null);
+                break;
+            case R.id.sendHitPage:
+                tracker.CustomObjects().add(new HashMap<String, Object>() {{
+                    put("test", "12");
+                    put("test6", "2");
+                }});
+                tracker.Screens().add("test_privacy").sendView();
                 break;
             case R.id.goToSecondScreen:
                 startActivity(new Intent(this, SecondActivity.class));
