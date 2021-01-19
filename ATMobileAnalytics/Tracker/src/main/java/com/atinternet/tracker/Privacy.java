@@ -107,11 +107,15 @@ public final class Privacy {
     }
 
     public static void extendIncludeBuffer(String... keys) {
+        extendIncludeBuffer(getVisitorMode(), keys);
+    }
+
+    public static void extendIncludeBuffer(VisitorMode visitorMode, String... keys) {
         List<String> lowercaseKeys = new ArrayList<>();
         for (String k : keys) {
             lowercaseKeys.add(k.toLowerCase());
         }
-        includeBufferByMode.get(getVisitorMode()).addAll(lowercaseKeys);
+        includeBufferByMode.get(visitorMode).addAll(lowercaseKeys);
     }
 
     static LinkedHashMap<String, Pair<String, String>> apply(LinkedHashMap<String, Pair<String, String>> parameters) {
