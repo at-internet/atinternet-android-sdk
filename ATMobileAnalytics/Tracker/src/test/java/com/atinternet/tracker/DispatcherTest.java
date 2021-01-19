@@ -65,9 +65,9 @@ public class DispatcherTest extends AbstractTestClass {
     public void setPersistentIdentifiedVisitorTest() {
         tracker.getConfiguration().put("persistIdentifiedVisitor", true);
         Assert.assertEquals(0, buffer.getVolatileParams().size());
-        Tracker.getPreferences().edit().putString(IdentifiedVisitor.VISITOR_NUMERIC, "1").apply();
-        Tracker.getPreferences().edit().putString(IdentifiedVisitor.VISITOR_CATEGORY, "3").apply();
-        Tracker.getPreferences().edit().putString(IdentifiedVisitor.VISITOR_TEXT, "test").apply();
+        Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.VISITOR_NUMERIC, "1").apply();
+        Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.VISITOR_CATEGORY, "3").apply();
+        Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.VISITOR_TEXT, "test").apply();
         dispatcher.setIdentifiedVisitorInfos();
         Assert.assertEquals(3, buffer.getVolatileParams().size());
         Assert.assertEquals("an", buffer.getVolatileParams().get("an").getKey());
