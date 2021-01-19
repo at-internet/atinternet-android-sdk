@@ -125,29 +125,6 @@ public final class Privacy {
         LinkedHashMap<String, Pair<String, String>> result = new LinkedHashMap<>();
         Map<String, List<String>> specificIncludedKeys = new HashMap<>();
 
-        switch (currentPrivacyMode) {
-            case OptIn:
-                result.put("vc", new Pair<>("&vc=1", ","));
-                result.put("vm", new Pair<>("&vm=optin", ","));
-                break;
-            case OptOut:
-                result.put("vc", new Pair<>("&vc=0", ","));
-                result.put("vm", new Pair<>("&vm=optout", ","));
-                result.put("idclient", new Pair<>("&idclient=opt-out", ","));
-                break;
-            case NoConsent:
-                result.put("vc", new Pair<>("&vc=0", ","));
-                result.put("vm", new Pair<>("&vm=no-consent", ","));
-                result.put("idclient", new Pair<>("&idclient=Consent-NO", ","));
-                break;
-            case Exempt:
-                result.put("vc", new Pair<>("&vc=0", ","));
-                result.put("vm", new Pair<>("&vm=exempt", ","));
-                break;
-            default: /// None
-                break;
-        }
-
         for (String key : includeBufferKeys) {
             key = key.toLowerCase();
 
@@ -196,6 +173,29 @@ public final class Privacy {
             if (jsonParam != null) {
                 result.put(jsonParameter, applyToJSONParameter(jsonParameter, jsonParam, includeJSONParameterKeys));
             }
+        }
+
+        switch (currentPrivacyMode) {
+            case OptIn:
+                result.put("vc", new Pair<>("&vc=1", ","));
+                result.put("vm", new Pair<>("&vm=optin", ","));
+                break;
+            case OptOut:
+                result.put("vc", new Pair<>("&vc=0", ","));
+                result.put("vm", new Pair<>("&vm=optout", ","));
+                result.put("idclient", new Pair<>("&idclient=opt-out", ","));
+                break;
+            case NoConsent:
+                result.put("vc", new Pair<>("&vc=0", ","));
+                result.put("vm", new Pair<>("&vm=no-consent", ","));
+                result.put("idclient", new Pair<>("&idclient=Consent-NO", ","));
+                break;
+            case Exempt:
+                result.put("vc", new Pair<>("&vc=0", ","));
+                result.put("vm", new Pair<>("&vm=exempt", ","));
+                break;
+            default: /// None
+                break;
         }
 
         return result;
