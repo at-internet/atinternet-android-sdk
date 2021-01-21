@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("UUIDDuration", 1);
         }}, null, true);
         tracker.setMaxHitSize(1500);
-        Privacy.extendIncludeBuffer("events_name","events_data_av_duration", "events_data_av_p*", "stc_test6");
+        tracker.setSendHitWhenOptOutEnabled(false, null, true);
+        Privacy.extendIncludeBuffer("events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
     }
 
     @Override
