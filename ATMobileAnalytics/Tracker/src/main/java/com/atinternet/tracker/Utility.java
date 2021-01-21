@@ -22,7 +22,14 @@
  */
 package com.atinternet.tracker;
 
+import android.text.TextUtils;
+
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
@@ -131,5 +138,109 @@ public class Utility {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    static Map<String, Object[]> toFlatten(Map<String, Object> src, boolean lowercase) {
+        Map<String, Object[]> dst = new HashMap<>();
+        doFlatten(src, "", dst, lowercase);
+        return dst;
+    }
+
+    static Map<String, Object> toObject(Map<String, Object[]> flattened) {
+        Map<String, Object> unflattened = new HashMap<>();
+        for (String key : flattened.keySet()) {
+            doUnflatten(unflattened, key, flattened.get(key));
+        }
+        return unflattened;
+    }
+
+    private static void doFlatten(Map<String, Object> src, String prefix, Map<String, Object[]> dst, boolean lowercase) {
+        for (Map.Entry<String, Object> e : src.entrySet()) {
+            Object value = e.getValue();
+            String completeKey = TextUtils.isEmpty(prefix) ? e.getKey() : prefix + "_" + e.getKey();
+            if (value instanceof Map) {
+                doFlatten((Map<String, Object>) value, completeKey, dst, lowercase);
+            } else if (value instanceof JSONObject) {
+                doFlatten(Tool.toMap((JSONObject) value), completeKey, dst, lowercase);
+            } else {
+                String[] parts = completeKey.split("_");
+                String finalPrefix = "";
+                StringBuilder sb = new StringBuilder();
+                int last = parts.length - 1;
+
+                for (int i = 0; i < parts.length; i++) {
+                    String part = parts[i];
+
+                    String[] splt = splitPrefixKey(part);
+                    String keyPrefix = splt[0];
+                    String key = splt[1];
+
+                    if (!TextUtils.isEmpty(keyPrefix)) {
+                        finalPrefix = keyPrefix;
+                    }
+                    if (i != 0) {
+                        sb.append('_');
+                    }
+                    sb.append(lowercase ? key.toLowerCase() : key);
+
+                    /// test -> test_$ on existing key if the current key is not complete
+                    String s = sb.toString();
+                    if (i != last && dst.containsKey(s)) {
+                        dst.put(s + "_$", dst.remove(s));
+                        continue;
+                    }
+                    ///
+
+                    /// test -> test_$ on current key if the current key is complete
+                    if (i == last && !dst.containsKey(s) && containsKeyPrefix(dst.keySet(), s + "_")) {
+                        sb.append("_$");
+                    }
+                    ///
+
+                }
+                dst.put(sb.toString(), new Object[]{value, lowercase ? finalPrefix.toLowerCase() : finalPrefix});
+            }
+        }
+    }
+
+    private static void doUnflatten(Map<String, Object> current, String key, Object[] originalValueWithPrefix) {
+
+        String[] parts = key.split("_");
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (i == (parts.length - 1)) {
+                current.put(originalValueWithPrefix[1] + part, originalValueWithPrefix[0]);
+                return;
+            }
+
+            Map<String, Object> nestedMap = (Map<String, Object>) current.get(part);
+            if (nestedMap == null) {
+                nestedMap = new HashMap<>();
+                current.put(part, nestedMap);
+            }
+
+            current = nestedMap;
+        }
+    }
+
+    private static String[] splitPrefixKey(String key) {
+        if (key.length() < 2 || key.charAt(1) != ':') {
+            return new String[]{"", key};
+        }
+
+        if (key.length() < 4 || key.charAt(3) != ':') {
+            return new String[]{key.substring(0, 2), key.substring(2)};
+        }
+
+        return new String[]{key.substring(0, 4), key.substring(4)};
+    }
+
+    private static boolean containsKeyPrefix(Set<String> keys, String prefix) {
+        for (String key : keys) {
+            if (key.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

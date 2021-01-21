@@ -311,10 +311,10 @@ class Builder implements Runnable {
             return new Pair<>(hitsList, oltParameter);
         }
 
-        // Calcul pour connaitre la longueur maximum du hit
-        LinkedHashMap<String, Pair<String, String>> dictionary = prepareQuery();
+        LinkedHashMap<String, Pair<String, String>> dictionary = Privacy.apply(prepareQuery());
         Set<String> keySet = dictionary.keySet();
 
+        // Calcul pour connaitre la longueur maximum du hit
         int maxLengthAvailable = Utility.parseInt(configuration.get(TrackerConfigurationKeys.MAX_HIT_SIZE), DEFAULT_MAX_HIT_SIZE) - (configStr.length() + oltParameter.length() + MH_PARAMETER_MAX_LENGTH);
         StringBuilder queryString = new StringBuilder();
         StringBuilder mhCommonQueryContentSb = new StringBuilder();
@@ -973,9 +973,9 @@ class Dispatcher {
 
         Crypt crypt = new Crypt();
         SharedPreferences prefs = Tracker.getPreferences();
-        String visitorNumericID = crypt.decrypt(prefs.getString(IdentifiedVisitor.VISITOR_NUMERIC, null));
-        String visitorCategory = crypt.decrypt(prefs.getString(IdentifiedVisitor.VISITOR_CATEGORY, null));
-        String visitorTextID = crypt.decrypt(prefs.getString(IdentifiedVisitor.VISITOR_TEXT, null));
+        String visitorNumericID = crypt.decrypt(prefs.getString(TrackerConfigurationKeys.VISITOR_NUMERIC, null));
+        String visitorCategory = crypt.decrypt(prefs.getString(TrackerConfigurationKeys.VISITOR_CATEGORY, null));
+        String visitorTextID = crypt.decrypt(prefs.getString(TrackerConfigurationKeys.VISITOR_TEXT, null));
         if (visitorNumericID != null) {
             tracker.setParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue(), visitorNumericID, beforeStcPosition);
         }
@@ -1060,7 +1060,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.19.1";
+            return "2.20.0";
         }
     };
 
