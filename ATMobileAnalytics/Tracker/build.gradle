@@ -4,11 +4,11 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion '29.0.3'
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0.0"
         consumerProguardFiles 'consumer-proguard-rules.pro'
@@ -28,7 +28,7 @@ android {
 def siteUrl = 'https://github.com/at-internet/atinternet-android-sdk'
 def gitUrl = 'https://github.com/at-internet/atinternet-android-sdk.git'
 group = "com.atinternet"
-version = "2.20.1"
+version = "2.20.2"
 
 install {
     repositories.mavenInstaller {

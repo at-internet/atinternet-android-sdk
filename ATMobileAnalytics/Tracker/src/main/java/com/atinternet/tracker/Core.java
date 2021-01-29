@@ -1060,7 +1060,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.20.1";
+            return "2.20.2";
         }
     };
 
@@ -1123,30 +1123,34 @@ class TechnicalContext {
             return ConnectionType.UNKNOWN;
         }
 
-        switch (telephonyManager.getNetworkType()) {
-            case TelephonyManager.NETWORK_TYPE_GPRS:
-                return ConnectionType.GPRS;
-            case TelephonyManager.NETWORK_TYPE_EDGE:
-                return ConnectionType.EDGE;
-            case TelephonyManager.NETWORK_TYPE_1xRTT:
-                return ConnectionType.TWOG;
-            case TelephonyManager.NETWORK_TYPE_CDMA:
-            case TelephonyManager.NETWORK_TYPE_UMTS:
-            case TelephonyManager.NETWORK_TYPE_EVDO_0:
-            case TelephonyManager.NETWORK_TYPE_EVDO_A:
-            case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                return ConnectionType.THREEG;
-            case TelephonyManager.NETWORK_TYPE_HSPA:
-            case TelephonyManager.NETWORK_TYPE_HSDPA:
-            case TelephonyManager.NETWORK_TYPE_HSUPA:
-                return ConnectionType.THREEGPLUS;
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
-            case TelephonyManager.NETWORK_TYPE_LTE:
-                return ConnectionType.FOURG;
-            case TelephonyManager.NETWORK_TYPE_NR:
-                return ConnectionType.FIVEG;
-            default:
-                return ConnectionType.UNKNOWN;
+        try {
+            switch (telephonyManager.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_GPRS:
+                    return ConnectionType.GPRS;
+                case TelephonyManager.NETWORK_TYPE_EDGE:
+                    return ConnectionType.EDGE;
+                case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    return ConnectionType.TWOG;
+                case TelephonyManager.NETWORK_TYPE_CDMA:
+                case TelephonyManager.NETWORK_TYPE_UMTS:
+                case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                    return ConnectionType.THREEG;
+                case TelephonyManager.NETWORK_TYPE_HSPA:
+                case TelephonyManager.NETWORK_TYPE_HSDPA:
+                case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    return ConnectionType.THREEGPLUS;
+                case TelephonyManager.NETWORK_TYPE_HSPAP:
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    return ConnectionType.FOURG;
+                case TelephonyManager.NETWORK_TYPE_NR:
+                    return ConnectionType.FIVEG;
+                default:
+                    return ConnectionType.UNKNOWN;
+            }
+        } catch (Exception ignored) {
+            return ConnectionType.UNKNOWN;
         }
     }
 
