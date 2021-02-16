@@ -34,8 +34,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    //implementation project(':Tracker')
-    implementation 'com.atinternet:Tracker:2.20.1'
+    implementation project(':Tracker')
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
     implementation 'com.huawei.hms:hms-ads-identifier:3.4.26.303'
 
