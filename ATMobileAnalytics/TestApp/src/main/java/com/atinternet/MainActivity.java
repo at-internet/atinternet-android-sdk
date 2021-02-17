@@ -8,9 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Privacy;
+import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,9 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             put("site", 999999);
             put("UUIDDuration", 1);
         }}, null, true);
-        tracker.setMaxHitSize(1500);
-        tracker.setSendHitWhenOptOutEnabled(false, null, true);
         Privacy.extendIncludeBuffer("events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
+        Privacy.extendIncludeBuffer(Privacy.VisitorMode.Exempt, "events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
     }
 
     @Override
