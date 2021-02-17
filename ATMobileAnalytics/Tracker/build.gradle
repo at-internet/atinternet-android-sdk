@@ -4,6 +4,8 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco'
 apply from: './publish-mavencentral.gradle'
 
+def VERSION = '2.20.2'
+
 android {
     compileSdkVersion 30
     buildToolsVersion '29.0.3'
@@ -52,7 +54,7 @@ clean {
     delete project.rootDir.absolutePath + '/delivery/'
     delete project.rootDir.absolutePath + '/documentation/'
     delete project.rootDir.absolutePath + '/build.properties'
-    delete project.rootDir.absolutePath + '/ATInternet_Android_SDK_' + version + '.zip'
+    delete project.rootDir.absolutePath + '/ATInternet_Android_SDK_' + VERSION + '.zip'
 }
 
 install {
@@ -102,11 +104,11 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = project.rootDir.absolutePath + '/Tracker/src/main/java'
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    destinationDir = new File(project.rootDir, "documentation/" + version)
+    destinationDir = new File(project.rootDir, "documentation/" + VERSION)
     failOnError false
 
     options.memberLevel = JavadocMemberLevel.PUBLIC
-    options.header = "ATInternet Android SDK API " + version
+    options.header = "ATInternet Android SDK API " + VERSION
     options.stylesheetFile = new File(projectDir, "docs-res/style.css")
 }
 
@@ -120,7 +122,7 @@ artifacts {
 }
 
 task createDelivery {
-    def destination = project.rootDir.absolutePath + '/delivery/' + version + '/'
+    def destination = project.rootDir.absolutePath + '/delivery/' + VERSION + '/'
     doLast {
         copy {
             from 'build/outputs/aar/'
@@ -150,7 +152,7 @@ task createDelivery {
 task createBuildFile {
     def file = new File(project.rootDir, "build.properties")
     file.createNewFile()
-    file.text = "version=" + version + "\n"
+    file.text = "version=" + VERSION + "\n"
 }
 
 jacoco {
