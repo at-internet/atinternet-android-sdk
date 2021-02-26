@@ -1,6 +1,7 @@
 package com.atinternet.tracker;
 
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -21,28 +22,64 @@ import java.util.Set;
 public final class Privacy {
 
     public enum VisitorMode {
-        OptOut,
-        OptIn,
-        NoConsent,
-        Exempt,
-        None
+        OptOut("optout"),
+        OptIn("optin"),
+        NoConsent("no-consent"),
+        Exempt("exempt"),
+        None(null);
+
+        private final String str;
+
+        VisitorMode(String val) {
+            str = val;
+        }
+
+        public String stringValue() {
+            return str;
+        }
     }
 
     private static final String wildcard = "*";
 
-    private static final Map<VisitorMode, Set<String>> includeBufferByMode = createIncludeBufferByModeMap();
+    private static final int defaultDuration = 397;
+
+    private static final Map<String, Set<String>> includeBufferByMode = initIncludeBufferByModeMap();
+
+    private static final Map<String, Boolean> visitorConsentByMode = initVisitorConsentByModeMap();
+
+    private static final Map<String, String> userIdByMode = initUserIdByModeMap();
 
     private static final List<String> specificKeys = new ArrayList<>(Arrays.asList("stc", "events", "context"));
 
     private static final List<String> JSONParameters = new ArrayList<>(Arrays.asList("events", "context"));
 
-    private static Map<VisitorMode, Set<String>> createIncludeBufferByModeMap() {
-        Map<VisitorMode, Set<String>> m = new HashMap<>();
-        m.put(VisitorMode.None, new HashSet<>(Collections.singletonList("*")));
-        m.put(VisitorMode.OptIn, new HashSet<>(Collections.singletonList("*")));
-        m.put(VisitorMode.OptOut, new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
-        m.put(VisitorMode.NoConsent, new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
-        m.put(VisitorMode.Exempt, new HashSet<>(Arrays.asList("idclient", "p", "olt", "vtag", "ptag", "ts", "click", "type", "cn", "dg", "apvr", "mfmd", "model", "manufacturer", "os", "stc_crash_*")));
+    private static Map<String, Set<String>> initIncludeBufferByModeMap() {
+        Map<String, Set<String>> m = new HashMap<>();
+        m.put(VisitorMode.None.name(), new HashSet<>(Collections.singletonList("*")));
+        m.put(VisitorMode.OptIn.name(), new HashSet<>(Collections.singletonList("*")));
+        m.put(VisitorMode.OptOut.name(), new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
+        m.put(VisitorMode.NoConsent.name(), new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
+        m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList("idclient", "p", "olt", "vtag", "ptag", "ts", "click", "type", "cn", "dg", "apvr", "mfmd", "model", "manufacturer", "os", "stc_crash_*")));
+        return m;
+    }
+
+    private static Map<String, Boolean> initVisitorConsentByModeMap() {
+        Map<String, Boolean> m = new HashMap<>();
+        m.put(VisitorMode.None.name(), true);
+        m.put(VisitorMode.OptIn.name(), true);
+        m.put(VisitorMode.OptOut.name(), false);
+        m.put(VisitorMode.NoConsent.name(), false);
+        m.put(VisitorMode.Exempt.name(), false);
+        return m;
+    }
+
+    private static Map<String, String> initUserIdByModeMap() {
+        Map<String, String> m = new HashMap<>();
+        m.put(VisitorMode.None.name(), null);
+        m.put(VisitorMode.OptIn.name(), null);
+        m.put(VisitorMode.OptOut.name(), "opt-out");
+        m.put(VisitorMode.NoConsent.name(), "Consent-NO");
+        m.put(VisitorMode.Exempt.name(), null);
         return m;
     }
 
@@ -69,7 +106,7 @@ public final class Privacy {
      * @param visitorMode selected mode from user context
      */
     public static void setVisitorMode(VisitorMode visitorMode) {
-        setVisitorMode(visitorMode, 397);
+        setVisitorMode(visitorMode, defaultDuration);
     }
 
     /***
@@ -78,49 +115,114 @@ public final class Privacy {
      * @param duration storage validity for privacy information (in days)
      */
     public static void setVisitorMode(VisitorMode visitorMode, int duration) {
-        SharedPreferences.Editor editor = Tracker.getPreferences().edit();
-        if (visitorMode != VisitorMode.OptIn && visitorMode != VisitorMode.None) {
-            editor.putString(TrackerConfigurationKeys.VISITOR_NUMERIC, null)
-                    .putString(TrackerConfigurationKeys.VISITOR_CATEGORY, null)
-                    .putString(TrackerConfigurationKeys.VISITOR_TEXT, null);
+        Boolean visitorConsent = visitorConsentByMode.get(visitorMode.name());
+        setVisitorMode(visitorMode.name(), visitorConsent, userIdByMode.get(visitorMode.name()), duration);
+    }
+
+    /***
+     * Set User Privacy custom mode
+     * @param visitorMode selected mode from user context
+     * @param visitorConsent visitor consent to tracking
+     * @param customUserIdValue optional custom user id
+     */
+    public static void setVisitorMode(String visitorMode, boolean visitorConsent, String customUserIdValue) {
+        setVisitorMode(visitorMode, visitorConsent, customUserIdValue, defaultDuration);
+    }
+
+    /***
+     * Set User Privacy custom mode
+     * @param visitorMode selected mode from user context
+     * @param visitorConsent visitor consent to tracking
+     * @param customUserIdValue optional custom user id
+     * @param duration storage validity for privacy information (in days)
+     */
+    public static void setVisitorMode(String visitorMode, boolean visitorConsent, String customUserIdValue, int duration) {
+        if (TextUtils.isEmpty(visitorMode)) {
+            return;
         }
 
-        editor.putString(TrackerConfigurationKeys.PRIVACY_MODE, visitorMode.name())
+        SharedPreferences.Editor editor = Tracker.getPreferences().edit();
+        if (!(visitorMode.equals(VisitorMode.None.name()) || visitorMode.equals(VisitorMode.OptIn.name()))) {
+            editor.remove(TrackerConfigurationKeys.VISITOR_NUMERIC)
+                    .remove(TrackerConfigurationKeys.VISITOR_CATEGORY)
+                    .remove(TrackerConfigurationKeys.VISITOR_TEXT);
+        }
+
+        editor.putString(TrackerConfigurationKeys.PRIVACY_MODE, visitorMode)
                 .putLong(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP, Utility.currentTimeMillis() + (duration * 86_400_000L)) /// days to millis
+                .putBoolean(TrackerConfigurationKeys.PRIVACY_VISITOR_CONSENT, visitorConsent)
+                .putString(TrackerConfigurationKeys.PRIVACY_USER_ID, customUserIdValue)
                 .apply();
     }
 
     /***
      * Get current User Privacy mode
      * @return user privacy mode
+     * @deprecated Since 2.21.0, use getVisitorModeString() instead
      */
+    @Deprecated
     public static VisitorMode getVisitorMode() {
+        try {
+            return VisitorMode.valueOf(getVisitorModeString());
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
+    }
+
+    /***
+     * Get current User Privacy mode
+     * @return user privacy mode
+     */
+    public static String getVisitorModeString() {
         SharedPreferences prefs = Tracker.getPreferences();
         long privacyModeExpirationTs = prefs.getLong(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP, -1);
         if (Utility.currentTimeMillis() >= privacyModeExpirationTs) {
             prefs.edit()
-                    .putString(TrackerConfigurationKeys.PRIVACY_MODE, VisitorMode.None.name())
-                    .putLong(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP, -1)
+                    .remove(TrackerConfigurationKeys.PRIVACY_MODE)
+                    .remove(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP)
+                    .remove(TrackerConfigurationKeys.PRIVACY_USER_ID)
+                    .remove(TrackerConfigurationKeys.PRIVACY_VISITOR_CONSENT)
                     .apply();
         }
-        return VisitorMode.valueOf(prefs.getString(TrackerConfigurationKeys.PRIVACY_MODE, VisitorMode.None.name()));
+        return prefs.getString(TrackerConfigurationKeys.PRIVACY_MODE, VisitorMode.None.name());
     }
 
+
     public static void extendIncludeBuffer(String... keys) {
-        extendIncludeBuffer(getVisitorMode(), keys);
+        extendIncludeBufferForVisitorMode(getVisitorModeString(), keys);
     }
 
     public static void extendIncludeBuffer(VisitorMode visitorMode, String... keys) {
+        extendIncludeBufferForVisitorMode(visitorMode.name(), keys);
+    }
+
+    /***
+     * Extend include buffer for visitor mode set in parameter
+     * @param visitorMode selected mode from user context
+     * @param keys keys to include in the hit
+     */
+    public static void extendIncludeBufferForVisitorMode(String visitorMode, String... keys) {
+        if (TextUtils.isEmpty(visitorMode)) {
+            return;
+        }
+
         List<String> lowercaseKeys = new ArrayList<>();
         for (String k : keys) {
             lowercaseKeys.add(k.toLowerCase());
+        }
+
+        if (includeBufferByMode.get(visitorMode) == null) {
+            includeBufferByMode.put(visitorMode, new HashSet<>(includeBufferByMode.get(VisitorMode.OptOut.name())));
         }
         includeBufferByMode.get(visitorMode).addAll(lowercaseKeys);
     }
 
     static LinkedHashMap<String, Pair<String, String>> apply(LinkedHashMap<String, Pair<String, String>> parameters) {
-        VisitorMode currentPrivacyMode = getVisitorMode();
+        String currentPrivacyMode = getVisitorModeString();
         Set<String> includeBufferKeys = includeBufferByMode.get(currentPrivacyMode);
+        if (includeBufferKeys == null) {
+            includeBufferKeys = includeBufferByMode.get(VisitorMode.OptOut.name());
+        }
 
         LinkedHashMap<String, Pair<String, String>> result = new LinkedHashMap<>();
         Map<String, List<String>> specificIncludedKeys = new HashMap<>();
@@ -175,27 +277,40 @@ public final class Privacy {
             }
         }
 
-        switch (currentPrivacyMode) {
-            case OptIn:
-                result.put("vc", new Pair<>("&vc=1", ","));
-                result.put("vm", new Pair<>("&vm=optin", ","));
-                break;
-            case OptOut:
-                result.put("vc", new Pair<>("&vc=0", ","));
-                result.put("vm", new Pair<>("&vm=optout", ","));
-                result.put("idclient", new Pair<>("&idclient=opt-out", ","));
-                break;
-            case NoConsent:
-                result.put("vc", new Pair<>("&vc=0", ","));
-                result.put("vm", new Pair<>("&vm=no-consent", ","));
-                result.put("idclient", new Pair<>("&idclient=Consent-NO", ","));
-                break;
-            case Exempt:
-                result.put("vc", new Pair<>("&vc=0", ","));
-                result.put("vm", new Pair<>("&vm=exempt", ","));
-                break;
-            default: /// None
-                break;
+        if (!currentPrivacyMode.equals(VisitorMode.None.name())) {
+            VisitorMode mode = null;
+            if (currentPrivacyMode.equals(VisitorMode.OptIn.name())) {
+                mode = VisitorMode.OptIn;
+            } else if (currentPrivacyMode.equals(VisitorMode.OptOut.name())) {
+                mode = VisitorMode.OptOut;
+            } else if (currentPrivacyMode.equals(VisitorMode.NoConsent.name())) {
+                mode = VisitorMode.NoConsent;
+            } else if (currentPrivacyMode.equals(VisitorMode.Exempt.name())) {
+                mode = VisitorMode.Exempt;
+            }
+
+            String visitorModeValue;
+            String visitorConsentValue;
+            String userIdValue;
+            if (mode != null) {
+                visitorModeValue = mode.stringValue();
+                visitorConsentValue = visitorConsentByMode.get(mode.name()) ? "1" : "0";
+                userIdValue = userIdByMode.get(mode.name());
+            } else {
+                /// CUSTOM
+                SharedPreferences prefs = Tracker.getPreferences();
+                visitorModeValue = prefs.getString(TrackerConfigurationKeys.PRIVACY_MODE, null);
+                visitorConsentValue = prefs.getBoolean(TrackerConfigurationKeys.PRIVACY_VISITOR_CONSENT, true) ? "1" : "0";
+                userIdValue = prefs.getString(TrackerConfigurationKeys.PRIVACY_USER_ID, null);
+            }
+
+            if (visitorModeValue != null) {
+                result.put("vm", new Pair<>(String.format("&vm=%s", visitorModeValue), ","));
+                result.put("vc", new Pair<>(String.format("&vc=%s", visitorConsentValue), ","));
+                if (userIdValue != null) {
+                    result.put("idclient", new Pair<>(String.format("&idclient=%s", userIdValue), ","));
+                }
+            }
         }
 
         return result;

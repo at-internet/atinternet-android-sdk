@@ -453,7 +453,7 @@ class Builder implements Runnable {
         ArrayList<String> urls = buildResult.first;
         String oltParameter = buildResult.second;
 
-        if ((TechnicalContext.optOutEnabled(Tracker.getAppContext()) || Privacy.getVisitorMode() == Privacy.VisitorMode.OptOut) && !((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT))) {
+        if ((TechnicalContext.optOutEnabled(Tracker.getAppContext()) || Privacy.getVisitorModeString().equals(Privacy.VisitorMode.OptOut.name())) && !((boolean) tracker.getConfiguration().get(TrackerConfigurationKeys.SEND_HIT_WHEN_OPT_OUT))) {
             Tool.executeCallback(tracker.getListener(), Tool.CallbackType.WARNING, "'sendHitWhenOptOut' configuration disabled, hit(s) not sent");
             return;
         }
@@ -1060,7 +1060,7 @@ class TechnicalContext {
     static final Closure VTAG = new Closure() {
         @Override
         public String execute() {
-            return "2.20.2";
+            return "2.21.0";
         }
     };
 

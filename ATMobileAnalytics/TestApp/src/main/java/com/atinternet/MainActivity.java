@@ -8,11 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.atinternet.tracker.ATInternet;
 import com.atinternet.tracker.Privacy;
-import com.atinternet.tracker.Screen;
 import com.atinternet.tracker.Tracker;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,23 +25,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.setVisitorExempt).setOnClickListener(this);
         findViewById(R.id.setVisitorNoConsent).setOnClickListener(this);
         findViewById(R.id.setVisitorNone).setOnClickListener(this);
+        findViewById(R.id.setVisitorCustom1).setOnClickListener(this);
+        findViewById(R.id.setVisitorCustom2).setOnClickListener(this);
         findViewById(R.id.sendHit).setOnClickListener(this);
         findViewById(R.id.sendHitPage).setOnClickListener(this);
         findViewById(R.id.goToSecondScreen).setOnClickListener(this);
 
-        tracker = ATInternet.getInstance().getDefaultTracker()
-                .setDefaultListener();
+        tracker = ATInternet.getInstance().getDefaultTracker().setDefaultListener();
         tracker.setConfig(new HashMap<String, Object>() {{
             put("logSSL", "logs");
-            put("log", "logp");
             put("domain", "xiti.com");
-            put("pixelPath", "/hit.xiti");
             put("identifier", "uuid");
-            put("site", 999999);
-            put("UUIDDuration", 1);
+            put("site", 410501);
         }}, null, true);
-        Privacy.extendIncludeBuffer("events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
-        Privacy.extendIncludeBuffer(Privacy.VisitorMode.Exempt, "events_name", "events_data_av_duration", "events_data_av_p*", "stc_test6");
+        Privacy.extendIncludeBuffer("test");
+        Privacy.extendIncludeBuffer(Privacy.VisitorMode.Exempt, "test");
     }
 
     @Override
@@ -64,6 +60,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.setVisitorNone:
                 Privacy.setVisitorMode(Privacy.VisitorMode.None);
                 break;
+            case R.id.setVisitorCustom1:
+                Privacy.setVisitorMode("custom1", true, null, 1);
+                Privacy.extendIncludeBufferForVisitorMode("custom1", "p");
+                break;
+            case R.id.setVisitorCustom2:
+                Privacy.setVisitorMode("custom2", false, "pas-consent");
+                break;
             case R.id.sendHit:
                 tracker.CustomObjects().add(new HashMap<String, Object>() {{
                     put("test", "12");
@@ -72,10 +75,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tracker.AVInsights().Media().playbackStart(0, null);
                 break;
             case R.id.sendHitPage:
-                tracker.CustomObjects().add(new HashMap<String, Object>() {{
-                    put("test", "12");
-                    put("test6", "2");
-                }});
+                tracker.Screens().add("homepage");
+                tracker.setProps(new HashMap<String, String>() {{
+                    put("n:contentId", "1234");
+                    put("ressort", "politics");
+                }}, false);
                 tracker.Screens().add("test_privacy").sendView();
                 break;
             case R.id.goToSecondScreen:

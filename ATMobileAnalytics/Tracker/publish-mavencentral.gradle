@@ -15,7 +15,7 @@ publishing {
         release(MavenPublication) {
             groupId 'com.atinternet'
             artifactId 'Tracker'
-            version '2.20.2'
+            version '2.21.0'
 
             artifact(project.buildDir.absolutePath + "/outputs/aar/${project.getName()}-release.aar")
             artifact androidSourcesJar
