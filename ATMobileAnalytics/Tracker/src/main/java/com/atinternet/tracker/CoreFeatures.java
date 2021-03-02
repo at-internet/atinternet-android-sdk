@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,27 +51,27 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
     /**
      * Key representing if the app crashed or not
      */
-    private static final String CRASH_DETECTION = "CrashDetection";
+    static final String CRASH_DETECTION = "CrashDetection";
 
     /**
      * Key representing if the crash informations has been got
      */
-    private static final String CRASH_RECOVERY_INFO = "CrashRecoveryInfo";
+    static final String CRASH_RECOVERY_INFO = "CrashRecoveryInfo";
 
     /**
      * Key representing the last track screen before crash
      */
-    private static final String CRASH_LAST_SCREEN = "CrashLastScreen";
+    static final String CRASH_LAST_SCREEN = "CrashLastScreen";
 
     /**
      * Key representing where the app crashed
      */
-    private static final String CRASH_CLASS_CAUSE = "CrashClassCause";
+    static final String CRASH_CLASS_CAUSE = "CrashClassCause";
 
     /**
      * Key representing why the app crashed
      */
-    private static final String CRASH_EXCEPTION_NAME = "CrashExceptionName";
+    static final String CRASH_EXCEPTION_NAME = "CrashExceptionName";
 
     /**
      * Default Handler to show dialog
@@ -120,12 +121,13 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
         String className = (throwable.getCause() != null) ? getClassNameException(throwable.getCause()) : getClassNameException(throwable);
         String exceptionName = (throwable.getCause() != null) ? throwable.getCause().getClass().getName() : throwable.getClass().getName();
 
-        preferences.edit().putBoolean(CRASH_DETECTION, true)
-                .putBoolean(CRASH_RECOVERY_INFO, false)
-                .putString(CRASH_LAST_SCREEN, lastScreen != null ? lastScreen : "")
-                .putString(CRASH_CLASS_CAUSE, className)
-                .putString(CRASH_EXCEPTION_NAME, exceptionName != null ? exceptionName : "")
-                .commit();
+        SharedPreferences.Editor editor = preferences.edit();
+        Privacy.storeData(editor, Privacy.StorageFeature.Crash,
+                new Pair<String, Object>(CRASH_DETECTION, true),
+                new Pair<String, Object>(CRASH_RECOVERY_INFO, false),
+                new Pair<String, Object>(CRASH_LAST_SCREEN, lastScreen != null ? lastScreen : ""),
+                new Pair<String, Object>(CRASH_CLASS_CAUSE, className),
+                new Pair<String, Object>(CRASH_EXCEPTION_NAME, exceptionName != null ? exceptionName : ""));
         defaultHandler.uncaughtException(thread, throwable);
     }
 
@@ -145,7 +147,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
                 map.put("lastscreen", preferences.getString(CRASH_LAST_SCREEN, ""));
                 map.put("classname", preferences.getString(CRASH_CLASS_CAUSE, ""));
                 map.put("error", preferences.getString(CRASH_EXCEPTION_NAME, ""));
-                preferences.edit().putBoolean(CRASH_DETECTION, false).apply();
+                Privacy.storeData(preferences.edit(), Privacy.StorageFeature.Crash, new Pair<String, Object>(CRASH_DETECTION, false));
                 try {
                     return new JSONObject().put("crash", new JSONObject(map)).toString();
                 } catch (JSONException e) {
@@ -179,7 +181,7 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
         map.put("lastscreen", prefs.getString(CRASH_LAST_SCREEN, ""));
         map.put("classname", prefs.getString(CRASH_CLASS_CAUSE, ""));
         map.put("error", prefs.getString(CRASH_EXCEPTION_NAME, ""));
-        prefs.edit().putBoolean(CRASH_RECOVERY_INFO, true).apply();
+        Privacy.storeData(prefs.edit(), Privacy.StorageFeature.Crash, new Pair<String, Object>(CRASH_RECOVERY_INFO, true));
         return map;
     }
 }
@@ -187,9 +189,12 @@ class CrashDetectionHandler implements Thread.UncaughtExceptionHandler {
 final class LifeCycle {
 
     /**
-     * Key representing if it's first launch (backward compat)
+     * Backward compat
      */
-    private static final String AT_FIRST_LAUNCH = "ATFirstLaunch";
+    static final String AT_FIRST_LAUNCH = "ATFirstLaunch";
+    static final String AT_FIRST_INIT_LIFECYCLE_DONE = "ATFirstInitLifecycleDone";
+    static final String AT_LAUNCH_COUNT = "ATLaunchCount";
+    static final String AT_LAST_LAUNCH = "ATLastLaunch";
 
     /**
      * Key representing version code app
@@ -214,12 +219,12 @@ final class LifeCycle {
     /**
      * Key representing first session date after update
      */
-    private static final String FIRST_SESSION_DATE_AFTER_UPDATE = "FirstLaunchDateAfterUpdate";
+    static final String FIRST_SESSION_DATE_AFTER_UPDATE = "FirstLaunchDateAfterUpdate";
 
     /**
      * Key representing last session date
      */
-    private static final String LAST_SESSION_DATE = "LastLaunchDate";
+    static final String LAST_SESSION_DATE = "LastLaunchDate";
 
     /**
      * Key representing the app session count
@@ -239,7 +244,7 @@ final class LifeCycle {
     /**
      * Key representing count of days since first session after update
      */
-    private static final String DAYS_SINCE_UPDATE = "DaysSinceFirstLaunchAfterUpdate";
+    static final String DAYS_SINCE_UPDATE = "DaysSinceFirstLaunchAfterUpdate";
 
     /**
      * Key representing count of days since last session
@@ -282,7 +287,7 @@ final class LifeCycle {
             versionCode = String.valueOf(context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).versionCode);
 
             // Not first session
-            if (!preferences.getBoolean(FIRST_SESSION, true) || preferences.getBoolean("ATFirstInitLifecycleDone", false)) {
+            if (!preferences.getBoolean(FIRST_SESSION, true) || preferences.getBoolean(AT_FIRST_INIT_LIFECYCLE_DONE, false)) {
                 newSessionInit(preferences);
             } else {
                 SharedPreferences backwardPreferences = context.getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
@@ -291,44 +296,47 @@ final class LifeCycle {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        preferences.edit().putBoolean("ATFirstInitLifecycleDone", true).apply();
-        isInitialized = true;
+        isInitialized = Privacy.storeData(preferences.edit(), Privacy.StorageFeature.Lifecycle, new Pair<String, Object>(AT_FIRST_INIT_LIFECYCLE_DONE, true));
+    }
+
+    static void clearV1(Context context) {
+        SharedPreferences backwardPreferences = context.getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
+        backwardPreferences.edit().remove(AT_FIRST_LAUNCH)
+                .remove(AT_LAUNCH_COUNT)
+                .apply();
     }
 
     static void firstSessionInit(SharedPreferences preferences, SharedPreferences backwardPreferences) {
         // If SDKV1 lifecycle exists
+        SharedPreferences.Editor editor = preferences.edit();
         if (backwardPreferences != null && backwardPreferences.getString(AT_FIRST_LAUNCH, null) != null) {
-            preferences.edit().putBoolean(FIRST_SESSION, false)
-                    .putString(FIRST_SESSION_DATE, backwardPreferences.getString(AT_FIRST_LAUNCH, ""))
-                    .putInt(SESSION_COUNT, backwardPreferences.getInt("ATLaunchCount", 0))
-                    .putString(LAST_SESSION_DATE, backwardPreferences.getString("ATLastLaunch", "")).apply();
+            Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle,
+                    new Pair<String, Object>(FIRST_SESSION, false),
+                    new Pair<String, Object>(FIRST_SESSION_DATE, backwardPreferences.getString(AT_FIRST_LAUNCH, "")),
+                    new Pair<String, Object>(SESSION_COUNT, backwardPreferences.getInt(AT_LAUNCH_COUNT, 0)));
 
-            backwardPreferences.edit().putString(AT_FIRST_LAUNCH, null).apply();
+            backwardPreferences.edit().remove(AT_FIRST_LAUNCH).apply();
         } else {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
-            preferences.edit()
-                    .putBoolean(FIRST_SESSION, true)
-                    .putBoolean(FIRST_SESSION_AFTER_UPDATE, false)
-                    .putInt(SESSION_COUNT, 1)
-                    .putInt(SESSION_COUNT_SINCE_UPDATE, 1)
-                    .putInt(DAYS_SINCE_FIRST_SESSION, 0)
-                    .putInt(DAYS_SINCE_LAST_SESSION, 0)
-                    .putString(FIRST_SESSION_DATE, simpleDateFormat.format(new Date()))
-                    .putString(LAST_SESSION_DATE, simpleDateFormat.format(new Date()))
-                    .apply();
+            Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle,
+                    new Pair<String, Object>(FIRST_SESSION, true),
+                    new Pair<String, Object>(FIRST_SESSION_AFTER_UPDATE, false),
+                    new Pair<String, Object>(SESSION_COUNT, 1),
+                    new Pair<String, Object>(SESSION_COUNT_SINCE_UPDATE, 1),
+                    new Pair<String, Object>(DAYS_SINCE_FIRST_SESSION, 0),
+                    new Pair<String, Object>(DAYS_SINCE_LAST_SESSION, 0),
+                    new Pair<String, Object>(FIRST_SESSION_DATE, simpleDateFormat.format(new Date(Utility.currentTimeMillis()))),
+                    new Pair<String, Object>(LAST_SESSION_DATE, simpleDateFormat.format(new Date(Utility.currentTimeMillis()))));
         }
 
-        preferences.edit().putString(LifeCycle.VERSION_CODE_KEY, versionCode)
-                .apply();
-
+        Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle, new Pair<String, Object>(VERSION_CODE_KEY, versionCode));
         sessionId = UUID.randomUUID().toString();
     }
 
     static void updateFirstSession(SharedPreferences preferences) {
-        preferences.edit()
-                .putBoolean(FIRST_SESSION, false)
-                .putBoolean(FIRST_SESSION_AFTER_UPDATE, false)
-                .apply();
+        Privacy.storeData(preferences.edit(), Privacy.StorageFeature.Lifecycle,
+                new Pair<String, Object>(FIRST_SESSION, false),
+                new Pair<String, Object>(FIRST_SESSION_AFTER_UPDATE, false));
     }
 
     static void newSessionInit(SharedPreferences preferences) {
@@ -338,47 +346,45 @@ final class LifeCycle {
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
+        SharedPreferences.Editor editor = preferences.edit();
         try {
             updateFirstSession(preferences);
             // Calcul dsfs
             String firstLaunchDate = preferences.getString(FIRST_SESSION_DATE, "");
             if (!TextUtils.isEmpty(firstLaunchDate)) {
                 long timeSinceFirstLaunch = simpleDateFormat.parse(firstLaunchDate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_FIRST_SESSION, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceFirstLaunch)).apply();
+                Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle, new Pair<String, Object>(DAYS_SINCE_FIRST_SESSION, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceFirstLaunch)));
             }
 
             // Calcul dsu
             String firstLaunchDateAfterUpdate = preferences.getString(FIRST_SESSION_DATE_AFTER_UPDATE, "");
             if (!TextUtils.isEmpty(firstLaunchDateAfterUpdate)) {
                 long timeSinceFirstLaunchAfterUpdate = simpleDateFormat.parse(firstLaunchDateAfterUpdate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_UPDATE, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceFirstLaunchAfterUpdate)).apply();
+                Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle, new Pair<String, Object>(DAYS_SINCE_UPDATE, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceFirstLaunchAfterUpdate)));
             }
 
             // Calcul dsls
             String lastLaunchDate = preferences.getString(LAST_SESSION_DATE, "");
             if (!TextUtils.isEmpty(lastLaunchDate)) {
                 long timeSinceLastUse = simpleDateFormat.parse(lastLaunchDate).getTime();
-                preferences.edit().putInt(DAYS_SINCE_LAST_SESSION, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceLastUse)).apply();
+                Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle, new Pair<String, Object>(DAYS_SINCE_LAST_SESSION, Tool.getDaysBetweenTimes(Utility.currentTimeMillis(), timeSinceLastUse)));
             }
-            preferences.edit().putString(LAST_SESSION_DATE, simpleDateFormat.format(new Date())).apply();
 
-            // sc
-            preferences.edit().putInt(SESSION_COUNT, preferences.getInt(SESSION_COUNT, 0) + 1).apply();
-
-            // Calcul scsu
-            preferences.edit().putInt(SESSION_COUNT_SINCE_UPDATE, preferences.getInt(SESSION_COUNT_SINCE_UPDATE, 0) + 1).apply();
+            Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle,
+                    new Pair<String, Object>(LAST_SESSION_DATE, simpleDateFormat.format(new Date(Utility.currentTimeMillis()))),
+                    new Pair<String, Object>(SESSION_COUNT, preferences.getInt(SESSION_COUNT, 0) + 1), // sc
+                    new Pair<String, Object>(SESSION_COUNT_SINCE_UPDATE, preferences.getInt(SESSION_COUNT_SINCE_UPDATE, 0) + 1)); /// Calcul scsu
 
             // Application version changed
             String savedApvr = preferences.getString(VERSION_CODE_KEY, "");
             // Update detected
             if (!versionCode.equals(savedApvr)) {
-                preferences.edit()
-                        .putString(FIRST_SESSION_DATE_AFTER_UPDATE, simpleDateFormat.format(new Date()))
-                        .putString(VERSION_CODE_KEY, versionCode)
-                        .putInt(SESSION_COUNT_SINCE_UPDATE, 1)
-                        .putInt(DAYS_SINCE_UPDATE, 0)
-                        .putBoolean(FIRST_SESSION_AFTER_UPDATE, true)
-                        .apply();
+                Privacy.storeData(editor, Privacy.StorageFeature.Lifecycle,
+                        new Pair<String, Object>(FIRST_SESSION_DATE_AFTER_UPDATE, simpleDateFormat.format(new Date(Utility.currentTimeMillis()))),
+                        new Pair<String, Object>(VERSION_CODE_KEY, versionCode),
+                        new Pair<String, Object>(SESSION_COUNT_SINCE_UPDATE, 1),
+                        new Pair<String, Object>(DAYS_SINCE_UPDATE, 0),
+                        new Pair<String, Object>(FIRST_SESSION_AFTER_UPDATE, true));
             }
         } catch (ParseException e) {
             Log.e(ATInternet.TAG, e.toString());

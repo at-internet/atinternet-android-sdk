@@ -39,11 +39,24 @@ public final class Privacy {
         }
     }
 
+    public enum StorageFeature {
+        Campaign,
+        UserId,
+        Crash,
+        Lifecycle,
+        IdentifiedVisitor,
+        Privacy
+    }
+
     private static final String wildcard = "*";
 
     private static final int defaultDuration = 397;
 
     private static final Map<String, Set<String>> includeBufferByMode = initIncludeBufferByModeMap();
+
+    private static final Map<String, Set<StorageFeature>> includeStorageFeatureByMode = initIncludeStorageFeatureByModeMap();
+
+    private static final Map<StorageFeature, Set<String>> storageKeysByFeature = initStorageKeysByFeatureMap();
 
     private static final Map<String, Boolean> visitorConsentByMode = initVisitorConsentByModeMap();
 
@@ -60,6 +73,77 @@ public final class Privacy {
         m.put(VisitorMode.OptOut.name(), new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
         m.put(VisitorMode.NoConsent.name(), new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
         m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList("idclient", "p", "olt", "vtag", "ptag", "ts", "click", "type", "cn", "dg", "apvr", "mfmd", "model", "manufacturer", "os", "stc_crash_*")));
+        return m;
+    }
+
+    private static Set<String> getVisitorModeIncludeBuffer(String visitorMode) {
+        if (!includeBufferByMode.containsKey(visitorMode)) {
+            includeBufferByMode.put(visitorMode, new HashSet<>(includeBufferByMode.get(VisitorMode.OptOut.name())));
+        }
+        return includeBufferByMode.get(visitorMode);
+    }
+
+    private static Map<String, Set<StorageFeature>> initIncludeStorageFeatureByModeMap() {
+        Map<String, Set<StorageFeature>> m = new HashMap<>();
+        m.put(VisitorMode.None.name(), new HashSet<>(Arrays.asList(StorageFeature.values())));
+        m.put(VisitorMode.OptIn.name(), new HashSet<>(Arrays.asList(StorageFeature.values())));
+        m.put(VisitorMode.OptOut.name(), new HashSet<>(Collections.singletonList(StorageFeature.Privacy)));
+        m.put(VisitorMode.NoConsent.name(), new HashSet<StorageFeature>());
+        m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList(StorageFeature.Privacy, StorageFeature.UserId)));
+        return m;
+    }
+
+    private static Set<StorageFeature> getVisitorModeIncludeStorageFeature(String visitorMode) {
+        if (!includeStorageFeatureByMode.containsKey(visitorMode)) {
+            includeStorageFeatureByMode.put(visitorMode, new HashSet<>(includeStorageFeatureByMode.get(VisitorMode.Exempt.name())));
+        }
+        return includeStorageFeatureByMode.get(visitorMode);
+    }
+
+    private static Map<StorageFeature, Set<String>> initStorageKeysByFeatureMap() {
+        Map<StorageFeature, Set<String>> m = new HashMap<>();
+        m.put(StorageFeature.Campaign, new HashSet<>(Arrays.asList(
+                TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY,
+                TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY,
+                TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED,
+                TrackerConfigurationKeys.LAST_MARKETING_CAMPAIGN_TIME)));
+
+        m.put(StorageFeature.UserId, new HashSet<>(Arrays.asList(
+                TrackerConfigurationKeys.IDCLIENT_UUID,
+                TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP)));
+
+        m.put(StorageFeature.Privacy, new HashSet<>(Arrays.asList(
+                TrackerConfigurationKeys.PRIVACY_MODE,
+                TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP,
+                TrackerConfigurationKeys.PRIVACY_USER_ID,
+                TrackerConfigurationKeys.PRIVACY_VISITOR_CONSENT)));
+
+        m.put(StorageFeature.IdentifiedVisitor, new HashSet<>(Arrays.asList(
+                TrackerConfigurationKeys.VISITOR_CATEGORY,
+                TrackerConfigurationKeys.VISITOR_NUMERIC,
+                TrackerConfigurationKeys.VISITOR_TEXT)));
+
+        m.put(StorageFeature.Crash, new HashSet<>(Arrays.asList(
+                CrashDetectionHandler.CRASH_RECOVERY_INFO,
+                CrashDetectionHandler.CRASH_CLASS_CAUSE,
+                CrashDetectionHandler.CRASH_DETECTION,
+                CrashDetectionHandler.CRASH_EXCEPTION_NAME,
+                CrashDetectionHandler.CRASH_LAST_SCREEN)));
+
+        m.put(StorageFeature.Lifecycle, new HashSet<>(Arrays.asList(
+                LifeCycle.AT_FIRST_INIT_LIFECYCLE_DONE,
+                LifeCycle.FIRST_SESSION,
+                LifeCycle.FIRST_SESSION_AFTER_UPDATE,
+                LifeCycle.SESSION_COUNT,
+                LifeCycle.SESSION_COUNT_SINCE_UPDATE,
+                LifeCycle.DAYS_SINCE_FIRST_SESSION,
+                LifeCycle.DAYS_SINCE_LAST_SESSION,
+                LifeCycle.DAYS_SINCE_UPDATE,
+                LifeCycle.FIRST_SESSION_DATE,
+                LifeCycle.FIRST_SESSION_DATE_AFTER_UPDATE,
+                LifeCycle.LAST_SESSION_DATE,
+                LifeCycle.VERSION_CODE_KEY
+        )));
         return m;
     }
 
@@ -82,6 +166,8 @@ public final class Privacy {
         m.put(VisitorMode.Exempt.name(), null);
         return m;
     }
+
+    private static boolean inNoConsentMode = false;
 
     private Privacy() {
 
@@ -140,19 +226,27 @@ public final class Privacy {
         if (TextUtils.isEmpty(visitorMode)) {
             return;
         }
+        Privacy.inNoConsentMode = visitorMode.equalsIgnoreCase(VisitorMode.NoConsent.name());
 
         SharedPreferences.Editor editor = Tracker.getPreferences().edit();
-        if (!(visitorMode.equals(VisitorMode.None.name()) || visitorMode.equals(VisitorMode.OptIn.name()))) {
-            editor.remove(TrackerConfigurationKeys.VISITOR_NUMERIC)
-                    .remove(TrackerConfigurationKeys.VISITOR_CATEGORY)
-                    .remove(TrackerConfigurationKeys.VISITOR_TEXT);
-        }
+        editor.remove(TrackerConfigurationKeys.OPT_OUT_ENABLED).apply(); /// Remove old opt out key
 
-        editor.putString(TrackerConfigurationKeys.PRIVACY_MODE, visitorMode)
-                .putLong(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP, Utility.currentTimeMillis() + (duration * 86_400_000L)) /// days to millis
-                .putBoolean(TrackerConfigurationKeys.PRIVACY_VISITOR_CONSENT, visitorConsent)
-                .putString(TrackerConfigurationKeys.PRIVACY_USER_ID, customUserIdValue)
-                .apply();
+        /// Update storage
+        clearStorageFromVisitorMode(visitorMode, editor);
+        storeData(editor, StorageFeature.Privacy,
+                new Pair<String, Object>(TrackerConfigurationKeys.PRIVACY_MODE, visitorMode),
+                new Pair<String, Object>(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP, Utility.currentTimeMillis() + (duration * 86_400_000L)), /// days to millis
+                new Pair<String, Object>(TrackerConfigurationKeys.PRIVACY_VISITOR_CONSENT, visitorConsent),
+                new Pair<String, Object>(TrackerConfigurationKeys.PRIVACY_USER_ID, customUserIdValue));
+
+        if (getVisitorModeIncludeStorageFeature(visitorMode).contains(StorageFeature.Lifecycle)) {
+            if (!LifeCycle.isInitialized) {
+                LifeCycle.initLifeCycle(Tracker.getAppContext());
+            }
+        } else {
+            LifeCycle.clearV1(Tracker.getAppContext());
+            LifeCycle.isInitialized = false;
+        }
     }
 
     /***
@@ -174,6 +268,11 @@ public final class Privacy {
      * @return user privacy mode
      */
     public static String getVisitorModeString() {
+        /// Specific case : no consent must not be stored in device
+        if (Privacy.inNoConsentMode) {
+            return VisitorMode.NoConsent.name();
+        }
+
         SharedPreferences prefs = Tracker.getPreferences();
         long privacyModeExpirationTs = prefs.getLong(TrackerConfigurationKeys.PRIVACY_MODE_EXPIRATION_TIMESTAMP, -1);
         if (Utility.currentTimeMillis() >= privacyModeExpirationTs) {
@@ -187,11 +286,19 @@ public final class Privacy {
         return prefs.getString(TrackerConfigurationKeys.PRIVACY_MODE, VisitorMode.None.name());
     }
 
-
+    /***
+     * Extend include buffer for current visitor mode
+     * @param keys keys to include in the hit
+     */
     public static void extendIncludeBuffer(String... keys) {
         extendIncludeBufferForVisitorMode(getVisitorModeString(), keys);
     }
 
+    /***
+     * Extend include buffer for visitor mode set in parameter
+     * @param visitorMode selected mode from user context
+     * @param keys keys to include in the hit
+     */
     public static void extendIncludeBuffer(VisitorMode visitorMode, String... keys) {
         extendIncludeBufferForVisitorMode(visitorMode.name(), keys);
     }
@@ -210,19 +317,24 @@ public final class Privacy {
         for (String k : keys) {
             lowercaseKeys.add(k.toLowerCase());
         }
+        getVisitorModeIncludeBuffer(visitorMode).addAll(lowercaseKeys);
+    }
 
-        if (includeBufferByMode.get(visitorMode) == null) {
-            includeBufferByMode.put(visitorMode, new HashSet<>(includeBufferByMode.get(VisitorMode.OptOut.name())));
+    /***
+     * Extend include buffer for visitor mode set in parameter (Only for exempt or custom)
+     * @param visitorMode selected mode from user context
+     * @param storageFeatureKeys data can be stored/kept
+     */
+    public static void extendIncludeStorageForVisitorMode(String visitorMode, StorageFeature... storageFeatureKeys) {
+        if (!isExemptOrCustom(visitorMode)) {
+            return;
         }
-        includeBufferByMode.get(visitorMode).addAll(lowercaseKeys);
+        getVisitorModeIncludeStorageFeature(visitorMode).addAll(new HashSet<>(Arrays.asList(storageFeatureKeys)));
     }
 
     static LinkedHashMap<String, Pair<String, String>> apply(LinkedHashMap<String, Pair<String, String>> parameters) {
         String currentPrivacyMode = getVisitorModeString();
-        Set<String> includeBufferKeys = includeBufferByMode.get(currentPrivacyMode);
-        if (includeBufferKeys == null) {
-            includeBufferKeys = includeBufferByMode.get(VisitorMode.OptOut.name());
-        }
+        Set<String> includeBufferKeys = getVisitorModeIncludeBuffer(currentPrivacyMode);
 
         LinkedHashMap<String, Pair<String, String>> result = new LinkedHashMap<>();
         Map<String, List<String>> specificIncludedKeys = new HashMap<>();
@@ -316,6 +428,46 @@ public final class Privacy {
         return result;
     }
 
+    static boolean storeData(SharedPreferences.Editor editor, StorageFeature storageFeature, Pair<String, Object>... pairs) {
+        String visitorMode = getVisitorModeString();
+        if (!getVisitorModeIncludeStorageFeature(visitorMode).contains(storageFeature)) {
+            return false;
+        }
+
+        for (Pair<String, Object> p : pairs) {
+            String key = p.first;
+            Object v = p.second;
+
+            if (v == null) {
+                editor.remove(key);
+            } else if (v instanceof Boolean) {
+                editor.putBoolean(key, (Boolean) v);
+            } else if (v instanceof String) {
+                editor.putString(key, (String) v);
+            } else if (v instanceof Long) {
+                editor.putLong(key, (Long) v);
+            } else if (v instanceof Integer) {
+                editor.putInt(key, (Integer) v);
+            }
+        }
+        editor.apply();
+        return true;
+    }
+
+    private static void clearStorageFromVisitorMode(String visitorMode, SharedPreferences.Editor editor) {
+        for (Map.Entry<StorageFeature, Set<String>> entry : storageKeysByFeature.entrySet()) {
+            StorageFeature storageFeature = entry.getKey();
+            if (getVisitorModeIncludeStorageFeature(visitorMode).contains(storageFeature)) {
+                continue;
+            }
+            Set<String> keys = entry.getValue();
+            for (String key : keys) {
+                editor.remove(key);
+            }
+        }
+        editor.apply();
+    }
+
     private static Pair<String, String> applyToStc(Pair<String, String> stc, List<String> includedStcKeys) {
         int equalsCharIndex = stc.first.indexOf('=');
         if (equalsCharIndex == -1) {
@@ -379,5 +531,14 @@ public final class Privacy {
             Log.e(ATInternet.TAG, e.toString());
         }
         return param;
+    }
+
+    private static boolean isExemptOrCustom(String visitorMode) {
+        String s = null;
+        try {
+            s = VisitorMode.valueOf(visitorMode).name();
+        } catch (IllegalArgumentException ignored) {
+        }
+        return TextUtils.isEmpty(s) || s.equals(VisitorMode.Exempt.name());
     }
 }

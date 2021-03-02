@@ -900,6 +900,8 @@ class Dispatcher {
 
             if (Hit.getHitType(tracker.getBuffer().getVolatileParams(), tracker.getBuffer().getPersistentParams()) == Hit.HitType.Screen) {
                 SharedPreferences preferences = Tracker.getPreferences();
+                SharedPreferences.Editor editor = preferences.edit();
+
                 if (!preferences.getBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false)) {
                     final String xtor = preferences.getString(TrackerConfigurationKeys.MARKETING_CAMPAIGN_SAVED, null);
                     if (xtor != null) {
@@ -910,11 +912,11 @@ class Dispatcher {
 
                         if (preferences.getBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, true)) {
                             tracker.setParam(Hit.HitParam.Source.stringValue(), xtor, beforeStcPositionWithEncoding);
-                            preferences.edit().putBoolean(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false).apply();
+                            Privacy.storeData(editor, Privacy.StorageFeature.Campaign, new Pair<String, Object>(TrackerConfigurationKeys.IS_FIRST_AFTER_INSTALL_HIT_KEY, false));
                         } else {
                             tracker.setParam(Hit.HitParam.RemanentSource.stringValue(), xtor, beforeStcPositionWithEncoding);
                         }
-                        preferences.edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true).apply();
+                        Privacy.storeData(editor, Privacy.StorageFeature.Campaign, new Pair<String, Object>(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, true));
                     }
                 }
             }
@@ -939,7 +941,7 @@ class Dispatcher {
             final String referrer = Tracker.getPreferences().getString(TrackerConfigurationKeys.REFERRER, null);
             if (!TextUtils.isEmpty(referrer)) {
                 tracker.setParam(Hit.HitParam.Refstore.stringValue(), referrer);
-                Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.REFERRER, null).apply();
+                Tracker.getPreferences().edit().remove(TrackerConfigurationKeys.REFERRER).apply();
             }
 
             Builder builder = new Builder(tracker);
@@ -1055,7 +1057,6 @@ class TechnicalContext {
     private static boolean isLevel2Int = false;
 
     private static String applicationIdentifier;
-    private static String generatedUUID;
 
     static final Closure VTAG = new Closure() {
         @Override
@@ -1339,7 +1340,7 @@ class TechnicalContext {
             @Override
             public String execute() {
                 final android.content.Context context = Tracker.getAppContext();
-                SharedPreferences preferences = context.getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences preferences = Tracker.getPreferences();
 
                 if (preferences.getBoolean(TrackerConfigurationKeys.OPT_OUT_ENABLED, false)) {
                     return "opt-out";
@@ -1440,11 +1441,6 @@ class TechnicalContext {
     }
 
     private static String getIdentifierUUID(SharedPreferences preferences, int uuidDuration, String uuidExpirationMode) {
-        /// From context
-        if (TechnicalContext.generatedUUID != null) {
-            return TechnicalContext.generatedUUID;
-        }
-
         long now = Utility.currentTimeMillis();
         String uuid = preferences.getString(TrackerConfigurationKeys.IDCLIENT_UUID, null);
 
@@ -1452,7 +1448,7 @@ class TechnicalContext {
             /// get uuid generation timestamp
             long uuidGenerationTimestamp = preferences.getLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, -1);
             if (uuidGenerationTimestamp == -1) {
-                preferences.edit().putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now).apply();
+                Privacy.storeData(preferences.edit(), Privacy.StorageFeature.UserId, new Pair<String, Object>(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now));
                 uuidGenerationTimestamp = now;
             }
 
@@ -1466,20 +1462,19 @@ class TechnicalContext {
         /// No or expired id
         if (uuid == null) {
             uuid = UUID.randomUUID().toString();
-            preferences.edit()
-                    .putString(TrackerConfigurationKeys.IDCLIENT_UUID, uuid)
-                    .putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now)
-                    .apply();
-            generatedUUID = uuid;
+            SharedPreferences.Editor editor = preferences.edit();
+            Privacy.storeData(editor, Privacy.StorageFeature.UserId,
+                    new Pair<String, Object>(TrackerConfigurationKeys.IDCLIENT_UUID, uuid),
+                    new Pair<String, Object>(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now));
+
             return uuid;
         }
 
         /// expiration relative
         if (uuidExpirationMode.toLowerCase().equals("relative")) {
-            preferences.edit().putLong(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now).apply();
+            Privacy.storeData(preferences.edit(), Privacy.StorageFeature.UserId, new Pair<String, Object>(TrackerConfigurationKeys.IDCLIENT_UUID_GENERATION_TIMESTAMP, now));
         }
 
-        generatedUUID = uuid;
         return uuid;
     }
 
