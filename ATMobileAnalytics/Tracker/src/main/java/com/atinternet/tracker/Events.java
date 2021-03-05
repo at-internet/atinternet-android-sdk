@@ -33,6 +33,8 @@ import java.util.Map;
 
 public class Events extends BusinessObject {
 
+    static final String PROPERTY_SEPARATOR = "_";
+
     private final List<Event> eventLists;
 
     Events(Tracker tracker) {
@@ -75,21 +77,21 @@ public class Events extends BusinessObject {
 
             for (Event e : eventLists) {
 
-                Map<String, Object[]> data = Utility.toFlatten(e.getData(), true);
+                Map<String, Object[]> data = Utility.toFlatten(e.getData(), true, PROPERTY_SEPARATOR);
 
                 if (data.size() != 0) {
                     eventsArray.put(new JSONObject()
                             .put("name", e.getName().toLowerCase())
-                            .put("data", new JSONObject(Utility.toObject(data))));
+                            .put("data", new JSONObject(Utility.toObject(data, PROPERTY_SEPARATOR))));
                 }
 
                 List<Event> additionalEvents = e.getAdditionalEvents();
 
                 for (Event ev : additionalEvents) {
-                    data = Utility.toFlatten(ev.getData(), true);
+                    data = Utility.toFlatten(ev.getData(), true, PROPERTY_SEPARATOR);
                     eventsArray.put(new JSONObject()
                             .put("name", ev.getName().toLowerCase())
-                            .put("data", new JSONObject(Utility.toObject(data))));
+                            .put("data", new JSONObject(Utility.toObject(data, PROPERTY_SEPARATOR))));
                 }
             }
 

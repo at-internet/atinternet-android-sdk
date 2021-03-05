@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Privacy.extendIncludeStorageForVisitorMode("OptOut", Privacy.StorageFeature.Lifecycle, Privacy.StorageFeature.Crash);
         Privacy.extendIncludeStorageForVisitorMode("custom1", Privacy.StorageFeature.Lifecycle, Privacy.StorageFeature.Crash);
 
-        Privacy.extendIncludeBufferForVisitorMode("custom1", "p", "vtag");
+        Privacy.extendIncludeBufferForVisitorMode("custom1", "p", "vtag", "stc*");
     }
 
     @Override
@@ -72,14 +72,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.sendHit:
                 tracker = ATInternet.getInstance().getTracker("test", config).setDefaultListener();
-                tracker.CustomObjects().add(new HashMap<String, Object>() {{
-                    put("test", "12");
-                    put("test6", "2");
-                }});
                 tracker.AVInsights().Media().playbackStart(0, null);
                 break;
             case R.id.sendHitPage:
                 tracker = ATInternet.getInstance().getTracker("test", config).setDefaultListener();
+                tracker.CustomObjects().add(new HashMap<String, Object>() {{
+                    put("test_5", "12");
+                    put("test/6", "2");
+                }});
                 tracker.Screens().add("homepage");
                 tracker.IdentifiedVisitor().set("test", 45);
                 tracker.Campaigns().add("camp");

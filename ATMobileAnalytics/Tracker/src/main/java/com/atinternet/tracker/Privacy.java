@@ -21,6 +21,8 @@ import java.util.Set;
 
 public final class Privacy {
 
+    private static final String STC_SEPARATOR = "/";
+
     public enum VisitorMode {
         OptOut("optout"),
         OptIn("optin"),
@@ -475,12 +477,12 @@ public final class Privacy {
         }
         String value = Tool.percentDecode(stc.first.substring(equalsCharIndex + 1));
         try {
-            Map<String, Object[]> stcFlattened = Utility.toFlatten(Tool.toMap(new JSONObject(value)), true);
+            Map<String, Object[]> stcFlattened = Utility.toFlatten(Tool.toMap(new JSONObject(value)), true, "/");
             Map<String, Object[]> stcResult = new HashMap<>();
             for (String includeKey : includedStcKeys) {
                 for (String stcKey : stcFlattened.keySet()) {
                     int wildcardIndex = includeKey.indexOf(wildcard);
-                    String completeKey = "stc_" + stcKey;
+                    String completeKey = "stc" + STC_SEPARATOR + stcKey;
                     if (wildcardIndex == -1) {
                         if (completeKey.equals(includeKey)) {
                             stcResult.put(stcKey, stcFlattened.get(stcKey));
@@ -490,7 +492,7 @@ public final class Privacy {
                     }
                 }
             }
-            return new Pair<>("&stc=" + Tool.percentEncode(new JSONObject(Utility.toObject(stcResult)).toString()), stc.second);
+            return new Pair<>("&stc=" + Tool.percentEncode(new JSONObject(Utility.toObject(stcResult, STC_SEPARATOR)).toString()), stc.second);
         } catch (JSONException e) {
             Log.e(ATInternet.TAG, e.toString());
         }
@@ -509,12 +511,12 @@ public final class Privacy {
             JSONArray arrayResult = new JSONArray();
             int arrayLength = array.length();
             for (int i = 0; i < arrayLength; i++) {
-                Map<String, Object[]> objectFlattened = Utility.toFlatten(Tool.toMap(array.getJSONObject(i)), true);
+                Map<String, Object[]> objectFlattened = Utility.toFlatten(Tool.toMap(array.getJSONObject(i)), true, Events.PROPERTY_SEPARATOR);
                 Map<String, Object[]> objectResult = new HashMap<>();
                 for (String includeKey : includedKeys) {
                     for (String k : objectFlattened.keySet()) {
                         int wildcardIndex = includeKey.indexOf(wildcard);
-                        String completeKey = paramKey + "_" + k;
+                        String completeKey = paramKey + Events.PROPERTY_SEPARATOR + k;
                         if (wildcardIndex == -1) {
                             if (completeKey.equals(includeKey)) {
                                 objectResult.put(k, objectFlattened.get(k));
@@ -524,7 +526,7 @@ public final class Privacy {
                         }
                     }
                 }
-                arrayResult.put(new JSONObject(Utility.toObject(objectResult)));
+                arrayResult.put(new JSONObject(Utility.toObject(objectResult, Events.PROPERTY_SEPARATOR)));
             }
             return new Pair<>("&" + paramKey + "=" + Tool.percentEncode(arrayResult.toString()), param.second);
         } catch (JSONException e) {
