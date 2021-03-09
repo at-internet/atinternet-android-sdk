@@ -5,7 +5,7 @@ apply plugin: 'jacoco'
 apply from: './publish-mavencentral.gradle'
 
 group = 'com.atinternet'
-version = '2.20.2'
+version = '2.21.0'
 
 android {
     compileSdkVersion 30

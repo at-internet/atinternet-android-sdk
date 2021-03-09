@@ -6,25 +6,24 @@ To help you, the tag makes available classes (helpers) enabling the quick implem
 * Tag Android
 
 ### How to get started
-  - Install our library on your project (see below)
-  - Check out the [documentation page] for an overview of the functionalities and code examples
+* Install our library on your project (see below)
+* Check out the [documentation page] for an overview of the functionalities and code examples
 
 ### Manual integration
 Find the integration information by following [this link]
 
-###Installation with Gradle
+### Installation with Gradle
 
 Gradle can restore 3rd-party libraries in your projects.
 
-###Dependency
+### Dependency
 
-  In your build.gradle module, add in dependencies block :
+In your build.gradle module, add in dependencies block :
 
-   implementation 'com.atinternet:Tracker:2.20.2'
+`implementation 'com.atinternet:Tracker:2.X.X' /// >= 2.14.0`
 
 ### License
 MIT
 
-
-   [this link]: <http://developers.atinternet-solutions.com/android-en/getting-started/operating-principle-android-en//>
-   [documentation page]: <http://developers.atinternet-solutions.com/android-en/getting-started/operating-principle-android-en//>
+[this link]: <http://developers.atinternet-solutions.com/android-en/getting-started/operating-principle-android-en//>
+[documentation page]: <http://developers.atinternet-solutions.com/android-en/getting-started/operating-principle-android-en//>
