@@ -91,7 +91,7 @@ public final class Privacy {
         m.put(VisitorMode.OptIn.name(), new HashSet<>(Arrays.asList(StorageFeature.values())));
         m.put(VisitorMode.OptOut.name(), new HashSet<>(Collections.singletonList(StorageFeature.Privacy)));
         m.put(VisitorMode.NoConsent.name(), new HashSet<StorageFeature>());
-        m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList(StorageFeature.Privacy, StorageFeature.UserId)));
+        m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList(StorageFeature.Privacy, StorageFeature.UserId, StorageFeature.Crash)));
         return m;
     }
 
