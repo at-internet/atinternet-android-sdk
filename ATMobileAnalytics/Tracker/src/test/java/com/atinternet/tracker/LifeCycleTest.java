@@ -60,34 +60,6 @@ public class LifeCycleTest extends AbstractTestClass {
     }
 
     @Test
-    public void retrieveSDKV1LifecycleTest() {
-        preferences.edit().putBoolean("FirstLaunch", true)
-                .putString("FirstLaunchDate", null)
-                .putString("LastLaunchDate", null)
-                .putInt("LaunchCount", 0)
-                .apply();
-
-        SharedPreferences backwardPrefs = ApplicationProvider.getApplicationContext().getSharedPreferences("ATPrefs", Context.MODE_PRIVATE);
-        backwardPrefs.edit()
-                .putString("ATFirstLaunch", "fsd")
-                .putInt("ATLaunchCount", 6)
-                .putString("ATLastLaunch", "yesterday")
-                .apply();
-
-        assertTrue(preferences.getBoolean("FirstLaunch", true));
-        assertTrue(preferences.getString("FirstLaunchDate", "").isEmpty());
-        assertTrue(preferences.getString("LastLaunchDate", "").isEmpty());
-        assertTrue(preferences.getInt("LaunchCount", 0) == 0);
-
-        LifeCycle.firstSessionInit(preferences, backwardPrefs);
-
-        assertFalse(preferences.getBoolean("FirstLaunch", true));
-        assertEquals("fsd", preferences.getString("FirstLaunchDate", ""));
-        assertEquals("yesterday", preferences.getString("LastLaunchDate", ""));
-        assertEquals(6, preferences.getInt("LaunchCount", 0));
-    }
-
-    @Test
     public void firstLaunchInitTest() {
         LifeCycle.firstSessionInit(preferences, null);
         assertTrue(preferences.getBoolean(LifeCycle.FIRST_SESSION, false));

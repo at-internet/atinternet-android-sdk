@@ -65,6 +65,7 @@ public abstract class AbstractTestClass {
         buffer = tracker.getBuffer();
         buffer.getPersistentParams().clear();
         buffer.getVolatileParams().clear();
+        Tracker.getPreferences().edit().clear().apply();
 
     }
 

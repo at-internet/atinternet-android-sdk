@@ -81,11 +81,6 @@ public class TrackerTest extends AbstractTestClass {
 
 
     @Test
-    public void getContextTest() {
-        assertEquals(ApplicationProvider.getApplicationContext(), getAppContext());
-    }
-
-    @Test
     public void getUserIdSyncTest() {
         assertNull(tracker.getUserIdSync());
         tracker.setParam("idclient", "test");
