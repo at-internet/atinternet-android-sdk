@@ -63,6 +63,10 @@ public final class TrackerConfigurationKeys {
     //Global key representing privacy mode
     static final String PRIVACY_MODE = "ATPrivacyMode";
 
+    static final String PRIVACY_VISITOR_CONSENT = "ATPrivacyVisitorConsent";
+
+    static final String PRIVACY_USER_ID = "ATPrivacyUserId";
+
     //Global key representing privacy mode
     static final String PRIVACY_MODE_EXPIRATION_TIMESTAMP = "ATPrivacyModeExpirationTimestamp";
 

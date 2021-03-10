@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -157,13 +158,11 @@ public class Tracker {
 
     Tracker(boolean registerNeeded) {
         try {
-            android.content.Context ctx = ((Application) Class.forName("android.app.ActivityThread")
-                    .getMethod("currentApplication").invoke(null, (Object[]) null));
-            appContext = new WeakReference<>(ctx);
-            configuration = new Configuration(appContext.get());
+            android.content.Context ctx = getAppContext();
+            configuration = new Configuration(ctx);
             initTracker();
             if (!LifeCycle.isInitialized) {
-                LifeCycle.initLifeCycle(appContext.get());
+                LifeCycle.initLifeCycle(ctx);
             }
 
             registerInstanceIfNeeded(registerNeeded);
@@ -182,11 +181,10 @@ public class Tracker {
     }
 
     Tracker(android.content.Context context, boolean registerNeeded) {
-        appContext = new WeakReference<>(context.getApplicationContext());
-        configuration = new Configuration(appContext.get());
+        configuration = new Configuration(context);
         initTracker();
         if (!LifeCycle.isInitialized) {
-            LifeCycle.initLifeCycle(appContext.get());
+            LifeCycle.initLifeCycle(context);
         }
         registerInstanceIfNeeded(registerNeeded);
     }
@@ -201,15 +199,11 @@ public class Tracker {
     }
 
     Tracker(final HashMap<String, Object> configuration, boolean registerNeeded) {
-        android.content.Context context;
         try {
-            context = ((Application) Class.forName("android.app.ActivityThread")
-                    .getMethod("currentApplication").invoke(null, (Object[]) null));
-            appContext = new WeakReference<>(context);
             this.configuration = new Configuration(configuration);
             initTracker();
             if (!LifeCycle.isInitialized) {
-                LifeCycle.initLifeCycle(appContext.get());
+                LifeCycle.initLifeCycle(getAppContext());
             }
             registerInstanceIfNeeded(registerNeeded);
         } catch (Exception e) {
@@ -228,11 +222,10 @@ public class Tracker {
     }
 
     Tracker(android.content.Context context, final HashMap<String, Object> configuration, boolean registerNeeded) {
-        appContext = new WeakReference<>(context.getApplicationContext());
         this.configuration = new Configuration(configuration);
         initTracker();
         if (!LifeCycle.isInitialized) {
-            LifeCycle.initLifeCycle(appContext.get());
+            LifeCycle.initLifeCycle(context);
         }
         registerInstanceIfNeeded(registerNeeded);
     }
@@ -250,11 +243,20 @@ public class Tracker {
     }
 
     static android.content.Context getAppContext() {
-        return appContext.get();
+        if (appContext != null) {
+            return appContext.get();
+        }
+        try {
+            android.content.Context ctx = ((Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null));
+            appContext = new WeakReference<>(ctx);
+            return appContext.get();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     static SharedPreferences getPreferences() {
-        return appContext.get().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
+        return getAppContext().getSharedPreferences(TrackerConfigurationKeys.PREFERENCES, android.content.Context.MODE_PRIVATE);
     }
 
     OfflineMode getOfflineMode() {
@@ -268,8 +270,9 @@ public class Tracker {
     @TargetApi(14)
     private void setTrackerActivityLifecycle() {
         isTrackerActivityLifeCycleEnabled = true;
-        if (Build.VERSION.SDK_INT >= 14 && appContext.get() instanceof Application) {
-            ((Application) appContext.get()).registerActivityLifecycleCallbacks(new TrackerActivityLifeCycle(configuration));
+        android.content.Context ctx = getAppContext();
+        if (Build.VERSION.SDK_INT >= 14 && ctx instanceof Application) {
+            ((Application) ctx).registerActivityLifecycleCallbacks(new TrackerActivityLifeCycle(configuration));
         }
     }
 
@@ -280,9 +283,9 @@ public class Tracker {
             buffer = new Buffer(this);
             dispatcher = new Dispatcher(this);
             if ((boolean) configuration.get(TrackerConfigurationKeys.ENABLE_CRASH_DETECTION) && !(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(getAppContext().getPackageName(), getPreferences(), defaultCrashHandler));
             }
-            getPreferences().edit().putBoolean(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false).apply();
+            Privacy.storeData(getPreferences().edit(), Privacy.StorageFeature.Campaign, new Pair<String, Object>(TrackerConfigurationKeys.CAMPAIGN_ADDED_KEY, false));
 
             if (!isTrackerActivityLifeCycleEnabled) {
                 setTrackerActivityLifecycle();
@@ -394,7 +397,7 @@ public class Tracker {
 
         if (enableCrashDetectionHandler) {
             if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(appContext.get().getPackageName(), getPreferences(), defaultCrashHandler));
+                Thread.setDefaultUncaughtExceptionHandler(new CrashDetectionHandler(getAppContext().getPackageName(), getPreferences(), defaultCrashHandler));
             }
         } else {
             if (Thread.getDefaultUncaughtExceptionHandler() instanceof CrashDetectionHandler) {
@@ -459,7 +462,8 @@ public class Tracker {
                     String uuidExpirationMode = String.valueOf(configuration.get(TrackerConfigurationKeys.UUID_EXPIRATION_MODE));
 
                     String userID = TechnicalContext.getUserId(String.valueOf(configuration.get(TrackerConfigurationKeys.IDENTIFIER)), ignoreLimitedAdTracking, uuidDuration, uuidExpirationMode).execute();
-                    if ((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) && !TechnicalContext.optOutEnabled(getAppContext())) {
+                    if ((boolean) configuration.get(TrackerConfigurationKeys.HASH_USER_ID) &&
+                            !(TechnicalContext.optOutEnabled(getAppContext()) || Privacy.getVisitorModeString().equals(Privacy.VisitorMode.OptOut.name()) ||  Privacy.getVisitorModeString().equals(Privacy.VisitorMode.NoConsent.name()))) {
                         callback.receiveUserId(Tool.sha256(userID));
                     } else {
                         callback.receiveUserId(userID);
@@ -1203,7 +1207,7 @@ public class Tracker {
         TrackerQueue.getInstance().put(new Runnable() {
             @Override
             public void run() {
-                TechnicalContext.optOut(appContext.get(), enabled);
+                TechnicalContext.optOut(getAppContext(), enabled);
             }
         });
     }
@@ -1216,7 +1220,7 @@ public class Tracker {
      */
     @Deprecated
     public static boolean optOutEnabled() {
-        return TechnicalContext.optOutEnabled(appContext.get());
+        return TechnicalContext.optOutEnabled(getAppContext());
     }
 
     /**
@@ -1230,7 +1234,7 @@ public class Tracker {
         TrackerQueue.getInstance().put(new Runnable() {
             @Override
             public void run() {
-                TechnicalContext.optOut(appContext.get(), enabled);
+                TechnicalContext.optOut(getAppContext(), enabled);
             }
         });
     }
@@ -1243,7 +1247,7 @@ public class Tracker {
      */
     @Deprecated
     public static boolean doNotTrackEnabled() {
-        return TechnicalContext.optOutEnabled(appContext.get());
+        return TechnicalContext.optOutEnabled(getAppContext());
     }
 
     /**

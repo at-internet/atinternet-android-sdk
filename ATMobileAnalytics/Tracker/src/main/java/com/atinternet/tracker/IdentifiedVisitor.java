@@ -22,6 +22,8 @@
  */
 package com.atinternet.tracker;
 
+import android.util.Pair;
+
 /**
  * Wrapper class for identified visitor tracking
  */
@@ -120,15 +122,14 @@ public class IdentifiedVisitor {
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierNumeric.stringValue());
         tracker.unsetParam(Hit.HitParam.VisitorIdentifierText.stringValue());
         tracker.unsetParam(Hit.HitParam.VisitorCategory.stringValue());
-        Tracker.getPreferences().edit().putString(TrackerConfigurationKeys.VISITOR_NUMERIC, null)
-                .putString(TrackerConfigurationKeys.VISITOR_CATEGORY, null)
-                .putString(TrackerConfigurationKeys.VISITOR_TEXT, null).apply();
+        Tracker.getPreferences().edit().remove(TrackerConfigurationKeys.VISITOR_NUMERIC)
+                .remove(TrackerConfigurationKeys.VISITOR_CATEGORY)
+                .remove(TrackerConfigurationKeys.VISITOR_TEXT).apply();
     }
 
     private void save(String key, String preferencesKey, String value) {
-        Privacy.VisitorMode visitorMode = Privacy.getVisitorMode();
-        if (persistIdentifiedVisitor && (visitorMode == Privacy.VisitorMode.OptIn || visitorMode == Privacy.VisitorMode.None)) {
-            Tracker.getPreferences().edit().putString(preferencesKey, new Crypt().encrypt(value)).apply();
+        if (persistIdentifiedVisitor) {
+            Privacy.storeData(Tracker.getPreferences().edit(), Privacy.StorageFeature.IdentifiedVisitor, new Pair<String, Object>(preferencesKey, new Crypt().encrypt(value)));
         } else {
             tracker.setParam(key, value, option);
         }
