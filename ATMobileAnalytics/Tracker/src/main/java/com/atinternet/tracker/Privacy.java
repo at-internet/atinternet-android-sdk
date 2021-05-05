@@ -74,7 +74,7 @@ public final class Privacy {
         m.put(VisitorMode.OptIn.name(), new HashSet<>(Collections.singletonList("*")));
         m.put(VisitorMode.OptOut.name(), new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
         m.put(VisitorMode.NoConsent.name(), new HashSet<>(Arrays.asList("idclient", "ts", "olt", "cn", "click", "type")));
-        m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList("idclient", "p", "olt", "vtag", "ptag", "ts", "click", "type", "cn", "dg", "apvr", "mfmd", "model", "manufacturer", "os", "ref", "stc/crash/*")));
+        m.put(VisitorMode.Exempt.name(), new HashSet<>(Arrays.asList("idclient", "p", "olt", "vtag", "ptag", "ts", "click", "type", "cn", "dg", "apvr", "mfmd", "model", "manufacturer", "os", "ref", "stc/crash/*", "pclick", "s2click")));
         return m;
     }
 
