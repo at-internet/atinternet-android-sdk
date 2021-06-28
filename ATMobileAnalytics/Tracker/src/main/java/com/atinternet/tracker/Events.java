@@ -79,11 +79,9 @@ public class Events extends BusinessObject {
 
                 Map<String, Object[]> data = Utility.toFlatten(e.getData(), true, PROPERTY_SEPARATOR);
 
-                if (data.size() != 0) {
-                    eventsArray.put(new JSONObject()
-                            .put("name", e.getName().toLowerCase())
-                            .put("data", new JSONObject(Utility.toObject(data, PROPERTY_SEPARATOR))));
-                }
+                eventsArray.put(new JSONObject()
+                        .put("name", e.getName().toLowerCase())
+                        .put("data", new JSONObject(Utility.toObject(data, PROPERTY_SEPARATOR))));
 
                 List<Event> additionalEvents = e.getAdditionalEvents();
 
