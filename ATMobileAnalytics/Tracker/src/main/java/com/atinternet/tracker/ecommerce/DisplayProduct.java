@@ -44,7 +44,10 @@ public class DisplayProduct extends Event {
 
     @Override
     protected Map<String, Object> getData() {
-        return data;
+        if (!products.isEmpty()) {
+            data.put("product", products.remove(0).getProps());
+        }
+        return super.getData();
     }
 
     @Override
